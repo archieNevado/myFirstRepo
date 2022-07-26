@@ -24,7 +24,9 @@ class AssetDetailsBlobPropertyField extends AssetDetailsBlobPropertyFieldBase {
   static override readonly xtype: string = "com.coremedia.blueprint.assets.studio.config.assetDetailsBlobPropertyField";
 
   constructor(config: Config<AssetDetailsBlobPropertyField> = null) {
-    super((()=> ConfigUtils.apply(Config(AssetDetailsBlobPropertyField, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(AssetDetailsBlobPropertyField, {
 
       ...ConfigUtils.append({
         plugins: [
@@ -32,7 +34,7 @@ class AssetDetailsBlobPropertyField extends AssetDetailsBlobPropertyFieldBase {
             applyTo: AssetDetailsBlobPropertyFieldBase.findBlobDetailsContainer,
             items: [
               Config(Checkbox, {
-                itemId: this.CHECKBOX_ITEM_ID,
+                itemId: this$.CHECKBOX_ITEM_ID,
                 boxLabel: AMStudioPlugin_properties.Rendition_downloadable,
                 ...{ colspan: 3 },
                 plugins: [
@@ -48,7 +50,7 @@ class AssetDetailsBlobPropertyField extends AssetDetailsBlobPropertyFieldBase {
                     reverseTransformer: (checked: boolean): any => checked,
                   }),
                   Config(PropertyFieldPlugin, { propertyName: config.visiblePropertyName }),
-                  Config(BindVisibilityPlugin, { bindTo: this.getCheckboxVisibleVE(config.visiblePropertyName, config.bindTo, config.propertyName) }),
+                  Config(BindVisibilityPlugin, { bindTo: this$.getCheckboxVisibleVE(config.visiblePropertyName, config.bindTo, config.propertyName) }),
                 ],
               }),
             ],
@@ -56,7 +58,7 @@ class AssetDetailsBlobPropertyField extends AssetDetailsBlobPropertyFieldBase {
         ],
       }),
 
-    }), config))());
+    }), config));
   }
 
   /**

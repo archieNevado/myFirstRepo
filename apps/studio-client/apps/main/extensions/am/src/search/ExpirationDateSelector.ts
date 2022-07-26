@@ -25,7 +25,9 @@ class ExpirationDateSelector extends ExpirationDateSelectorBase {
 
   constructor(config: Config<ExpirationDateSelector> = null) {
     config = ConfigUtils.apply({ availableKeys: ["any", "inOneDay", "inOneWeek", "inTwoWeeks", "inOneMonth", "byDate"] }, config);
-    super((()=> ConfigUtils.apply(Config(ExpirationDateSelector, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(ExpirationDateSelector, {
 
       items: [
         Config(ComboBoxAutoWidth, {
@@ -34,7 +36,7 @@ class ExpirationDateSelector extends ExpirationDateSelectorBase {
           encodeItems: true,
           hideLabel: true,
           store: new JsonStore({
-            data: this.comboboxEntryTransformer(config.availableKeys),
+            data: this$.comboboxEntryTransformer(config.availableKeys),
             fields: [
               Config(DataField, {
                 name: "id",
@@ -60,7 +62,7 @@ class ExpirationDateSelector extends ExpirationDateSelectorBase {
           plugins: [
             Config(BindVisibilityPlugin, {
               bindTo: config.selectedKeyValueExpression,
-              transformer: bind(this, this.datefieldVisibilityTransformer),
+              transformer: bind(this$, this$.datefieldVisibilityTransformer),
             }),
           ],
         }),
@@ -73,7 +75,7 @@ class ExpirationDateSelector extends ExpirationDateSelectorBase {
           plugins: [
             Config(BindVisibilityPlugin, {
               bindTo: config.selectedKeyValueExpression,
-              transformer: bind(this, this.datefieldVisibilityTransformer),
+              transformer: bind(this$, this$.datefieldVisibilityTransformer),
             }),
             Config(BindPropertyPlugin, {
               bindTo: config.selectedDateValueExpression,
@@ -83,7 +85,7 @@ class ExpirationDateSelector extends ExpirationDateSelectorBase {
         }),
       ],
       layout: Config(VBoxLayout, { align: "stretch" }),
-    }), config))());
+    }), config));
   }
 
   /**

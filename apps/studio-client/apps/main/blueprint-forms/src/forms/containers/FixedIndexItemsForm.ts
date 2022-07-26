@@ -40,7 +40,9 @@ class FixedIndexItemsForm extends PropertyFieldGroup {
   static readonly ITEMS_ANNOTATION_WIDGET_ITEM_ID: string = "items-annotation-widget";
 
   constructor(config: Config<FixedIndexItemsForm> = null) {
-    super((()=> ConfigUtils.apply(Config(FixedIndexItemsForm, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(FixedIndexItemsForm, {
       title: BlueprintDocumentTypes_properties.CMQueryList_extendedItems_title,
       itemId: "fixedIndexItemsForm",
 
@@ -50,13 +52,13 @@ class FixedIndexItemsForm extends PropertyFieldGroup {
           showThumbnails: true,
           hideLabel: true,
           bindTo: config.bindTo,
-          linkListWrapper: this.#getStructContentLinkListWrapper(config),
+          linkListWrapper: this$.#getStructContentLinkListWrapper(config),
           linkType: ConfigUtils.asString(config.linkType || FixedIndexItemsForm.DEFAULT_LINK_TYPE),
           additionalToolbarItems: [
             Config(Separator),
             Config(QuickCreateLinklistMenu, {
               bindTo: config.bindTo,
-              sourceLinkListVE: this.#getStructContentLinkListWrapper(config).getVE(),
+              sourceLinkListVE: this$.#getStructContentLinkListWrapper(config).getVE(),
             }),
           ],
           fields: [
@@ -87,7 +89,7 @@ class FixedIndexItemsForm extends PropertyFieldGroup {
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 
   #getStructContentLinkListWrapper(config: Config<FixedIndexItemsForm>): ILinkListWrapper {

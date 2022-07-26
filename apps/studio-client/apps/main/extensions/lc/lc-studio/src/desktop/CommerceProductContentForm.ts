@@ -27,72 +27,72 @@ class CommerceProductContentForm extends DocumentForm {
   #augmentedCategoryExpression: ValueExpression = null;
 
   constructor(config: Config<CommerceProductContentForm> = null) {
-    super((()=>{
-      this.#augmentedCategoryExpression = ValueExpressionFactory.createFromFunction((): any =>
-        augmentedCategoryTreeRelation.getParentUnchecked(config.bindTo.getValue()),
-      );
-      return ConfigUtils.apply(Config(CommerceProductContentForm, {
-        title: LivecontextStudioPlugin_properties.Commerce_Tab_content_title,
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#augmentedCategoryExpression = ValueExpressionFactory.createFromFunction((): any =>
+      augmentedCategoryTreeRelation.getParentUnchecked(config.bindTo.getValue()),
+    );
+    super(ConfigUtils.apply(Config(CommerceProductContentForm, {
+      title: LivecontextStudioPlugin_properties.Commerce_Tab_content_title,
 
-        items: [
-          Config(CommerceDetailsForm, { itemId: "productDetails" }),
+      items: [
+        Config(CommerceDetailsForm, { itemId: "productDetails" }),
 
-          Config(CommerceAugmentedPageGridForm, {
-            itemId: "pdpPagegrid",
-            showLocal: true,
-            forceReadOnlyValueExpression: ValueExpressionFactory.createFromValue(true),
-            bindTo: this.#augmentedCategoryExpression,
-            pageGridPropertyName: "pdpPagegrid",
-            fallbackPageGridPropertyName: "placement",
-          }),
+        Config(CommerceAugmentedPageGridForm, {
+          itemId: "pdpPagegrid",
+          showLocal: true,
+          forceReadOnlyValueExpression: ValueExpressionFactory.createFromValue(true),
+          bindTo: this$.#augmentedCategoryExpression,
+          pageGridPropertyName: "pdpPagegrid",
+          fallbackPageGridPropertyName: "placement",
+        }),
 
-          Config(CommercePricesPropertyFieldGroup, {
-            bindTo: config.bindTo,
-            itemId: "prices",
-          }),
+        Config(CommercePricesPropertyFieldGroup, {
+          bindTo: config.bindTo,
+          itemId: "prices",
+        }),
 
-          Config(PropertyFieldGroup, {
-            title: LivecontextStudioPlugin_properties.Commerce_PropertyGroup_thumbnail_title,
-            itemId: "thumbnail",
-            items: [
-              Config(ImageComponent, {
-                width: 120,
-                plugins: [
-                  Config(BindPropertyPlugin, {
-                    componentProperty: "src",
-                    bindTo: CatalogThumbnailResolver.imageValueExpression(config.bindTo),
-                  }),
-                ],
-              }),
-            ],
-            layout: Config(VBoxLayout),
-          }),
-          Config(PropertyFieldGroup, {
-            title: LivecontextStudioPlugin_properties.Commerce_Product_PropertyGroup_richMedia_title,
-            itemId: "richMedia",
-            items: [
-              Config(CatalogAssetsProperty, {
-                propertyName: CatalogObjectPropertyNames.VISUALS,
-                assetContentTypes: ["CMPicture", "CMVideo", "CMSpinner"],
-                emptyText: LivecontextStudioPlugin_properties.Commerce_Product_richMedia_emptyText,
-              }),
-            ],
-          }),
-          Config(PropertyFieldGroup, {
-            title: LivecontextStudioPlugin_properties.Commerce_Product_PropertyGroup_downloads_title,
-            itemId: "downloads",
-            items: [
-              Config(CatalogAssetsProperty, {
-                propertyName: CatalogObjectPropertyNames.DOWNLOADS,
-                assetContentTypes: ["CMDownload"],
-                emptyText: LivecontextStudioPlugin_properties.Commerce_Product_downloads_emptyText,
-              }),
-            ],
-          }),
-        ],
+        Config(PropertyFieldGroup, {
+          title: LivecontextStudioPlugin_properties.Commerce_PropertyGroup_thumbnail_title,
+          itemId: "thumbnail",
+          items: [
+            Config(ImageComponent, {
+              width: 120,
+              plugins: [
+                Config(BindPropertyPlugin, {
+                  componentProperty: "src",
+                  bindTo: CatalogThumbnailResolver.imageValueExpression(config.bindTo),
+                }),
+              ],
+            }),
+          ],
+          layout: Config(VBoxLayout),
+        }),
+        Config(PropertyFieldGroup, {
+          title: LivecontextStudioPlugin_properties.Commerce_Product_PropertyGroup_richMedia_title,
+          itemId: "richMedia",
+          items: [
+            Config(CatalogAssetsProperty, {
+              propertyName: CatalogObjectPropertyNames.VISUALS,
+              assetContentTypes: ["CMPicture", "CMVideo", "CMSpinner"],
+              emptyText: LivecontextStudioPlugin_properties.Commerce_Product_richMedia_emptyText,
+            }),
+          ],
+        }),
+        Config(PropertyFieldGroup, {
+          title: LivecontextStudioPlugin_properties.Commerce_Product_PropertyGroup_downloads_title,
+          itemId: "downloads",
+          items: [
+            Config(CatalogAssetsProperty, {
+              propertyName: CatalogObjectPropertyNames.DOWNLOADS,
+              assetContentTypes: ["CMDownload"],
+              emptyText: LivecontextStudioPlugin_properties.Commerce_Product_downloads_emptyText,
+            }),
+          ],
+        }),
+      ],
 
-      }), config);
-    })());
+    }), config));
   }
 }
 

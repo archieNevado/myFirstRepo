@@ -42,11 +42,13 @@ class TaxonomySelectionWindow extends TaxonomySelectionWindowBase {
   static readonly ID: string = "taxonomySelectionDialog";
 
   constructor(config: Config<TaxonomySelectionWindow> = null) {
-    super((()=> ConfigUtils.apply(Config(TaxonomySelectionWindow, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(TaxonomySelectionWindow, {
       id: TaxonomySelectionWindow.ID,
       stateId: "taxonomySelectionState",
       stateful: true,
-      title: this.resolveTitle(config),
+      title: this$.resolveTitle(config),
       width: 510,
       height: 550,
       modal: true,
@@ -59,7 +61,7 @@ class TaxonomySelectionWindow extends TaxonomySelectionWindowBase {
           items: [
             Config(IconDisplayField, { iconCls: CoreIcons_properties.search }),
             Config(TaxonomySearchField, {
-              searchResultExpression: this.getSearchResultExpression(),
+              searchResultExpression: this$.getSearchResultExpression(),
               siteSelectionExpression: config.siteSelectionExpression,
               taxonomyIdExpression: config.taxonomyIdExpression,
               resetOnBlur: true,
@@ -76,7 +78,7 @@ class TaxonomySelectionWindow extends TaxonomySelectionWindowBase {
         Config(FieldContainer, {
           labelAlign: "top",
           labelSeparator: "",
-          fieldLabel: this.resolveSelectionTitle(config.singleSelection),
+          fieldLabel: this$.resolveSelectionTitle(config.singleSelection),
           height: 128,
           layout: Config(FitLayout),
           items: [
@@ -85,12 +87,12 @@ class TaxonomySelectionWindow extends TaxonomySelectionWindowBase {
               scrollable: true,
               selectionMode: "SINGLE",
               bindTo: config.bindTo,
-              removeCallback: bind(this, this.removedFromLinkListCallback),
+              removeCallback: bind(this$, this$.removedFromLinkListCallback),
               taxonomyIdExpression: config.taxonomyIdExpression,
-              readOnlyValueExpression: this.getLoadingExpression(),
+              readOnlyValueExpression: this$.getLoadingExpression(),
               emptyText: TaxonomyStudioPlugin_properties.TaxonomyLinkList_empty_chooser_text,
               linkListWrapper: new MemoryLinkListWrapper({
-                linksVE: this.getSelectionExpression(),
+                linksVE: this$.getSelectionExpression(),
                 linkTypeName: "CMTaxonomy",
               }),
             }),
@@ -104,11 +106,11 @@ class TaxonomySelectionWindow extends TaxonomySelectionWindowBase {
           layout: Config(FitLayout),
           items: [
             Config(TaxonomySelector, {
-              selectionExpression: this.getSelectionExpression(),
+              selectionExpression: this$.getSelectionExpression(),
               singleSelection: config.singleSelection ? "SINGLE" : "MULTI",
               taxonomyIdExpression: config.taxonomyIdExpression,
-              loadingExpression: this.getLoadingExpression(),
-              nodePathExpression: this.getNodePathExpression(),
+              loadingExpression: this$.getLoadingExpression(),
+              nodePathExpression: this$.getNodePathExpression(),
               forceReadOnlyValueExpression: config.forceReadOnlyValueExpression,
             }),
           ],
@@ -123,11 +125,11 @@ class TaxonomySelectionWindow extends TaxonomySelectionWindowBase {
             ui: ButtonSkin.FOOTER_PRIMARY.getSkin(),
             scale: "small",
             text: Editor_properties.btn_ok,
-            handler: bind(this, this.okPressed),
+            handler: bind(this$, this$.okPressed),
             plugins: [
               Config(BindPropertyPlugin, {
                 componentProperty: "disabled",
-                bindTo: this.getLoadingExpression(),
+                bindTo: this$.getLoadingExpression(),
               }),
             ],
           }),
@@ -135,11 +137,11 @@ class TaxonomySelectionWindow extends TaxonomySelectionWindowBase {
             ui: ButtonSkin.FOOTER_SECONDARY.getSkin(),
             scale: "small",
             text: Editor_properties.dialog_defaultCancelButton_text,
-            handler: (): void => this.cancelPressed(),
+            handler: (): void => this$.cancelPressed(),
           }),
         ],
       }),
-    }), config))());
+    }), config));
   }
 
   /**

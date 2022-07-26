@@ -24,9 +24,11 @@ class RepositoryCatalogSearchListContainer extends RepositoryCatalogSearchListCo
   selectedItemsValueExpression: ValueExpression = null;
 
   constructor(config: Config<RepositoryCatalogSearchListContainer> = null) {
-    super((()=> ConfigUtils.apply(Config(RepositoryCatalogSearchListContainer, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(RepositoryCatalogSearchListContainer, {
       itemId: RepositoryCatalogSearchListContainer.VIEW_CONTAINER_ITEM_ID,
-      activeItemValueExpression: this.getActiveViewExpression(),
+      activeItemValueExpression: this$.getActiveViewExpression(),
 
       items: [
         Config(SearchList, {
@@ -42,7 +44,7 @@ class RepositoryCatalogSearchListContainer extends RepositoryCatalogSearchListCo
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 }
 

@@ -19,5 +19,5 @@ import org.springframework.context.annotation.ImportResource;
         "com.coremedia.elastic.social",
         "com.coremedia.blueprint.elastic.social"
 })
-public class ESBlueprintStudioConfiguration {
+public class ESBlueprintStudioAutoConfiguration {
 }

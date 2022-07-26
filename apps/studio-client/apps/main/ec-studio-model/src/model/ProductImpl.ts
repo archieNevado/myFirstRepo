@@ -78,7 +78,7 @@ class ProductImpl extends CatalogObjectImpl implements Product {
     return this.get(ProductPropertyNames.DESCRIBING_ATTRIBUTES);
   }
 
-  override invalidate(callback: AnyFunction = null): void {
+  override invalidate(callback: AnyFunction = null): any {
     if (!this.hasListeners()) {
       super.invalidate();
       return;

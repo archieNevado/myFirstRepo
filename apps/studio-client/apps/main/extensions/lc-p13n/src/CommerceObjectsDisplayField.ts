@@ -18,16 +18,18 @@ class CommerceObjectsDisplayField extends CommerceObjectsDisplayFieldBase {
   static override readonly xtype: string = "com.coremedia.livecontext.p13n.studio.config.commerceObjectsLabel";
 
   constructor(config: Config<CommerceObjectsDisplayField> = null) {
-    super((()=> ConfigUtils.apply(Config(CommerceObjectsDisplayField, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CommerceObjectsDisplayField, {
 
       plugins: [
         Config(BindPropertyPlugin, {
           componentProperty: "value",
-          bindTo: this.getCommerceObjectsExpression(),
+          bindTo: this$.getCommerceObjectsExpression(),
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 
   /**

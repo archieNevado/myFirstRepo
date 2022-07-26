@@ -24,11 +24,11 @@ class AugmentationUtil {
   // lc rest error, see CatalogRestErrorCodes.java
   static readonly LC_ERROR_CODE_ROOT_CATEGORY_NOT_AUGMENTED = "LC-01005";
 
-  static #static = (() =>{
+  static {
     RemoteErrorHandlerRegistryImpl
       .initRemoteErrorHandlerRegistry()
       .registerErrorHandler(AugmentationUtil.#remoteErrorHandler);
-  })();
+  }
 
   static #remoteErrorHandler(error: RemoteError, source: any): void {
     const errorCode = error.errorCode;

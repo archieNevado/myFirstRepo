@@ -28,9 +28,11 @@ class AssetSearchListContainer extends AssetSearchListContainerBase {
   selectedItemsValueExpression: ValueExpression = null;
 
   constructor(config: Config<AssetSearchListContainer> = null) {
-    super((()=> ConfigUtils.apply(Config(AssetSearchListContainer, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(AssetSearchListContainer, {
       itemId: AssetSearchListContainer.ITEM_ID,
-      activeItemValueExpression: this.getActiveViewExpression(),
+      activeItemValueExpression: this$.getActiveViewExpression(),
 
       items: [
         Config(SearchList, {
@@ -46,7 +48,7 @@ class AssetSearchListContainer extends AssetSearchListContainerBase {
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 }
 

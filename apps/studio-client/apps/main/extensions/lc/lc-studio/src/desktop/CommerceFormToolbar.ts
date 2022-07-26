@@ -30,7 +30,9 @@ class CommerceFormToolbar extends CommerceFormToolbarBase {
   static readonly COLLAPSE_BUTTON_ITEM_ID: string = "collapseButton";
 
   constructor(config: Config<CommerceFormToolbar> = null) {
-    super((()=> ConfigUtils.apply(Config(CommerceFormToolbar, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CommerceFormToolbar, {
       items: [
         Config(Spacer, { width: 12 }),
         /*Locale name*/
@@ -41,7 +43,7 @@ class CommerceFormToolbar extends CommerceFormToolbarBase {
           ui: IconDisplayFieldSkin.WORKAREA.getSkin(),
           plugins: [
             Config(BindPlugin, {
-              bindTo: this.getLocaleValueExpression(),
+              bindTo: this$.getLocaleValueExpression(),
               boundValueChanged: CommerceFormToolbarBase.changeLocale,
             }),
           ],
@@ -73,7 +75,7 @@ class CommerceFormToolbar extends CommerceFormToolbarBase {
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 
   /** The function that will be called on collapse */

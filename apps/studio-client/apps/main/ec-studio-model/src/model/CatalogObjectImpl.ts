@@ -69,7 +69,7 @@ class CatalogObjectImpl extends RemoteBeanImpl implements CatalogObject, Content
     return this.getCustomAttributes() ? this.getCustomAttributes()[attribute] : null;
   }
 
-  override invalidate(callback: AnyFunction = null): void {
+  override invalidate(callback: AnyFunction = null): any {
     if (!this.hasListeners()) {
       super.invalidate();
       return;

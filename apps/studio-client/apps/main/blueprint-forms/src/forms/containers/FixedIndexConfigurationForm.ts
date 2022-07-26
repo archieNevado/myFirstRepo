@@ -28,7 +28,9 @@ class FixedIndexConfigurationForm extends FixedIndexConfigurationFormBase {
   static override readonly xtype: string = "com.coremedia.blueprint.studio.config.fixedIndexConfigurationForm";
 
   constructor(config: Config<FixedIndexConfigurationForm> = null) {
-    super((()=> ConfigUtils.apply(Config(FixedIndexConfigurationForm, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(FixedIndexConfigurationForm, {
       itemId: "fixedIndexConfigurationForm",
       header: false,
       hideSingleComponentLabel: false,
@@ -66,7 +68,7 @@ class FixedIndexConfigurationForm extends FixedIndexConfigurationFormBase {
                   plugins: [
                     Config(BlockEnterPlugin),
                     Config(BindPropertyPlugin, {
-                      bindTo: ValueExpressionFactory.create(FixedIndexViewModel.INDEX_PROPERTY_NAME, this.indexViewModel),
+                      bindTo: ValueExpressionFactory.create(FixedIndexViewModel.INDEX_PROPERTY_NAME, this$.indexViewModel),
                       bidirectional: true,
                     }),
                   ],
@@ -76,7 +78,7 @@ class FixedIndexConfigurationForm extends FixedIndexConfigurationFormBase {
           ],
         }),
       ],
-    }), config))());
+    }), config));
   }
 
   /** the property of the Bean to bind in this field */

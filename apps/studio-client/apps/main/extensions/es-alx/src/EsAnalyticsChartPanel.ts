@@ -15,21 +15,23 @@ class EsAnalyticsChartPanel extends EsAnalyticsChartPanelBase {
   static readonly ES_ALX_CHART: string = "esAlxChartItemId";
 
   constructor(config: Config<EsAnalyticsChartPanel> = null) {
-    super((()=> ConfigUtils.apply(Config(EsAnalyticsChartPanel, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(EsAnalyticsChartPanel, {
       title: EsAnalyticsStudioPlugin_properties.chart_container_label,
       itemId: "esAnalyticsChartForm",
 
       items: [
         Config(EsAnalyticsChart, {
           itemId: EsAnalyticsChartPanel.ES_ALX_CHART,
-          bindTo: this.getAlxData("data"),
-          timeRangeValueExpression: this.getTimeRangeValueExpression(),
-          timeStampValueExpression: this.getAlxData("timeStamp"),
+          bindTo: this$.getAlxData("data"),
+          timeRangeValueExpression: this$.getTimeRangeValueExpression(),
+          timeStampValueExpression: this$.getAlxData("timeStamp"),
           chartHeight: 200,
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 }
 

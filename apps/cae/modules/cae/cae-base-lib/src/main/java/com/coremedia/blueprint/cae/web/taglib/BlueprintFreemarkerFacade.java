@@ -558,7 +558,9 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
    * @param blob the blob the link should be generated for
    * @param filename the filename
    * @return a link to the given blob ending with the given filename
+   * @deprecated use default "cm.getLink()" in templates instead
    */
+  @Deprecated(since = "2207")
   public String getBlobLink(Blob blob, String filename) {
     HttpServletRequest request = FreemarkerEnvironment.getCurrentRequest();
     LinkFormatter linkFormatter = (LinkFormatter) request.getAttribute(RequestServices.LINK_FORMATTER);

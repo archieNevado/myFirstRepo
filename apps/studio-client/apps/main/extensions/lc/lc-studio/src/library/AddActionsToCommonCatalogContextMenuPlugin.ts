@@ -17,12 +17,12 @@ import SearchProductVariantsAction from "../action/SearchProductVariantsAction";
 interface AddActionsToCatalogRepositoryContextMenuPluginConfig extends Config<AddItemsPlugin> {
 }
 
-class AddActionsToCatalogRepositoryContextMenuPlugin extends AddItemsPlugin {
+class AddActionsToCommonCatalogContextMenuPlugin extends AddItemsPlugin {
   declare Config: AddActionsToCatalogRepositoryContextMenuPluginConfig;
 
-  constructor(config: Config<AddActionsToCatalogRepositoryContextMenuPlugin> = null) {
+  constructor(config: Config<AddActionsToCommonCatalogContextMenuPlugin> = null) {
     const componentConfig = cast(CatalogRepositoryContextMenu, config.cmp.initialConfig);
-    super(ConfigUtils.apply(Config(AddActionsToCatalogRepositoryContextMenuPlugin, {
+    super(ConfigUtils.apply(Config(AddActionsToCommonCatalogContextMenuPlugin, {
       items: [
         Config(Item, {
           itemId: LivecontextStudioPlugin.SEARCH_PRODUCT_VARIANTS_MENU_ITEM_ID,
@@ -53,4 +53,4 @@ class AddActionsToCatalogRepositoryContextMenuPlugin extends AddItemsPlugin {
   }
 }
 
-export default AddActionsToCatalogRepositoryContextMenuPlugin;
+export default AddActionsToCommonCatalogContextMenuPlugin;

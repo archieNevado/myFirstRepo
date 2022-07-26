@@ -38,7 +38,7 @@ interface AbstractTaxonomyConditionBaseConfig extends Config<AbstractCondition> 
 class AbstractTaxonomyConditionBase extends AbstractCondition {
   declare Config: AbstractTaxonomyConditionBaseConfig;
 
-  static #static = (() =>{
+  static {
     // introduce new vtypes for keywords and values
     VTypes["keywordConditionKeywordVal"] = /^[a-zA-Z_][a-zA-Z_0-9.]*$/;
     VTypes["keywordConditionKeywordMask"] = /^[a-zA-Z_0-9.]/;
@@ -52,7 +52,7 @@ class AbstractTaxonomyConditionBase extends AbstractCondition {
     VTypes["keywordConditionValue"] = ((v: any): any =>
       VTypes["keywordConditionValueVal"].test(v)
     );
-  })();
+  }
 
   static readonly #VALUE_EMPTY_TEXT: string = Personalization_properties.p13n_op_value;
 

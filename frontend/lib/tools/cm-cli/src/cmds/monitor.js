@@ -49,7 +49,7 @@ const handler = (argv) => {
 
   const startWebpackWatchMode = () => {
     const args = ["run", "build"];
-    if (PACKAGE_MANAGER_EXECUTABLE.includes("npm")) {
+    if (PACKAGE_MANAGER_EXECUTABLE.startsWith("npm")) {
       args.push("--");
     }
     args.push("--mode=development");

@@ -17,12 +17,12 @@ import SearchProductVariantsAction from "../action/SearchProductVariantsAction";
 interface AddActionsToCatalogRepositoryToolbarPluginConfig extends Config<AddItemsPlugin> {
 }
 
-class AddActionsToCatalogRepositoryToolbarPlugin extends AddItemsPlugin {
+class AddActionsToCatalogToolbarPlugin extends AddItemsPlugin {
   declare Config: AddActionsToCatalogRepositoryToolbarPluginConfig;
 
-  constructor(config: Config<AddActionsToCatalogRepositoryToolbarPlugin> = null) {
+  constructor(config: Config<AddActionsToCatalogToolbarPlugin> = null) {
     const componentConfig = cast(CatalogRepositoryToolbar, config.cmp.initialConfig);
-    super(ConfigUtils.apply(Config(AddActionsToCatalogRepositoryToolbarPlugin, {
+    super(ConfigUtils.apply(Config(AddActionsToCatalogToolbarPlugin, {
       items: [
         Config(Separator, { itemId: "searchProductVariantsSeparator" }),
         Config(IconButton, {
@@ -54,4 +54,4 @@ class AddActionsToCatalogRepositoryToolbarPlugin extends AddItemsPlugin {
   }
 }
 
-export default AddActionsToCatalogRepositoryToolbarPlugin;
+export default AddActionsToCatalogToolbarPlugin;

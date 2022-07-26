@@ -23,10 +23,10 @@ class CommerceObjectSelectorBase extends LocalComboBox {
   #quote: boolean = false;
 
   constructor(config: Config<CommerceObjectSelector> = null) {
-    super((()=>{
-      this.#quote = config.quote;
-      return config;
-    })());
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#quote = config.quote;
+    super(config);
 
     // reset the current selection if the store has been modified
     this.getStore().addListener("add", bind(this, this.#resetSelection));

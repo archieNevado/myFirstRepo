@@ -30,48 +30,48 @@ class CommerceAugmentedCategoryStructureForm extends DocumentForm {
   #catalogObjectExpression: ValueExpression = null;
 
   constructor(config: Config<CommerceAugmentedCategoryStructureForm> = null) {
-    super((()=>{
-      this.#catalogObjectExpression = AugmentationUtil.getCatalogObjectExpression(config.bindTo);
-      return ConfigUtils.apply(Config(CommerceAugmentedCategoryStructureForm, {
-        title: LivecontextStudioPlugin_properties.Commerce_Tab_structure_title,
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#catalogObjectExpression = AugmentationUtil.getCatalogObjectExpression(config.bindTo);
+    super(ConfigUtils.apply(Config(CommerceAugmentedCategoryStructureForm, {
+      title: LivecontextStudioPlugin_properties.Commerce_Tab_structure_title,
 
-        items: [
-          Config(PropertyFieldGroup, {
-            title: LivecontextStudioPlugin_properties.Commerce_Category_Website_Navigation,
-            itemId: "websiteNavigation",
-            ...ConfigUtils.append({
-              plugins: [
-                Config(BindVisibilityPlugin, { bindTo: LivecontextStudioPluginBase.isContentLedValueExpression(config.bindTo) }),
-              ],
-            }),
-            items: [
-              Config(CommerceChildCategoriesForm, { itemId: "commerceChildCategories" }),
-              Config(Component, { height: 6 }),
-              Config(VisibilityDocumentForm, { itemId: CommerceAugmentedCategoryStructureForm.VISIBILITY_ITEM_ID }),
+      items: [
+        Config(PropertyFieldGroup, {
+          title: LivecontextStudioPlugin_properties.Commerce_Category_Website_Navigation,
+          itemId: "websiteNavigation",
+          ...ConfigUtils.append({
+            plugins: [
+              Config(BindVisibilityPlugin, { bindTo: LivecontextStudioPluginBase.isContentLedValueExpression(config.bindTo) }),
             ],
           }),
-          /* let's have a property editor to fix legacy content (new children are stored in struct) */
-          Config(PropertyFieldGroup, {
-            title: BlueprintDocumentTypes_properties.CMExternalChannel_legacy_children_text,
-            itemId: "navigationChildren",
-            ...ConfigUtils.append({
-              plugins: [
-                Config(BindVisibilityPlugin, { bindTo: AugmentationUtil.hasChildCategoriesExpression(config.bindTo) }),
-              ],
-            }),
-            items: [
-              Config(LinkListPropertyField, {
-                bindTo: config.bindTo,
-                propertyName: "children",
-                itemId: "navigationChildrenLinkList",
-              }),
+          items: [
+            Config(CommerceChildCategoriesForm, { itemId: "commerceChildCategories" }),
+            Config(Component, { height: 6 }),
+            Config(VisibilityDocumentForm, { itemId: CommerceAugmentedCategoryStructureForm.VISIBILITY_ITEM_ID }),
+          ],
+        }),
+        /* let's have a property editor to fix legacy content (new children are stored in struct) */
+        Config(PropertyFieldGroup, {
+          title: BlueprintDocumentTypes_properties.CMExternalChannel_legacy_children_text,
+          itemId: "navigationChildren",
+          ...ConfigUtils.append({
+            plugins: [
+              Config(BindVisibilityPlugin, { bindTo: AugmentationUtil.hasChildCategoriesExpression(config.bindTo) }),
             ],
           }),
-          Config(CommerceCatalogHierarchyForm, { bindTo: this.#catalogObjectExpression }),
-        ],
+          items: [
+            Config(LinkListPropertyField, {
+              bindTo: config.bindTo,
+              propertyName: "children",
+              itemId: "navigationChildrenLinkList",
+            }),
+          ],
+        }),
+        Config(CommerceCatalogHierarchyForm, { bindTo: this$.#catalogObjectExpression }),
+      ],
 
-      }), config);
-    })());
+    }), config));
   }
 }
 

@@ -45,19 +45,19 @@ class MetadataToEntitiesActionAdapterBase extends MetadataBeanAction {
   constructor(config: Config<MetadataToEntitiesActionAdapter> = null) {
     let setEntities: string;
     let newConfig: Config<MetadataToEntitiesActionAdapter>;
-    super((()=>{
-      this.#backingAction = as(config.backingAction, Action);
-      setEntities = config.setEntities || "setContents";
-      if (!is(this.#backingAction[setEntities], Function)) {
-        throw new Error("config param setEntities cannot be resolved to a function");
-      }
-      newConfig = Config(MetadataToEntitiesActionAdapter, Ext.apply({
-        iconCls: this.#backingAction.getIconCls(),
-        text: this.#backingAction.getText(),
-        handler: bind(this, this.#delegateToBackingAction),
-      }, config));
-      return newConfig;
-    })());
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#backingAction = as(config.backingAction, Action);
+    setEntities = config.setEntities || "setContents";
+    if (!is(this$.#backingAction[setEntities], Function)) {
+      throw new Error("config param setEntities cannot be resolved to a function");
+    }
+    newConfig = Config(MetadataToEntitiesActionAdapter, Ext.apply({
+      iconCls: this$.#backingAction.getIconCls(),
+      text: this$.#backingAction.getText(),
+      handler: bind(this$, this$.#delegateToBackingAction),
+    }, config));
+    super(newConfig);
 
     this.resolvedBeanValueExpression.addChangeListener((ve: ValueExpression): void => {
       const resolvedBean = ve.getValue();

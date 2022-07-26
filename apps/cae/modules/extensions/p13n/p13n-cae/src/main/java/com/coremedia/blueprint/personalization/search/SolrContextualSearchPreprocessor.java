@@ -10,11 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-public class SolrContextualSearchPreprocessor implements SearchPreprocessor<SearchQueryBean> {
+public class SolrContextualSearchPreprocessor implements SearchPreprocessor {
+
+  private static final Logger LOG = LoggerFactory.getLogger(SolrContextualSearchPreprocessor.class);
 
   private SearchFunctionPreprocessor searchPreprocessor;
   private ContextCollection contextCollection;
-  private static final Logger LOG = LoggerFactory.getLogger(SolrContextualSearchPreprocessor.class);
 
   /**
    * Sets the {@link com.coremedia.personalization.search.SearchFunctionPreprocessor} to be used. This

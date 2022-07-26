@@ -25,7 +25,9 @@ class CategoryFacetsFieldGroup extends CategoryFacetsFieldGroupBase {
   static readonly FACET_FIELDS_ITEM_ID: string = "categoryFacetTags";
 
   constructor(config: Config<CategoryFacetsFieldGroup> = null) {
-    super((()=> ConfigUtils.apply(Config(CategoryFacetsFieldGroup, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CategoryFacetsFieldGroup, {
 
       items: [
         Config(DisplayField, {
@@ -35,7 +37,7 @@ class CategoryFacetsFieldGroup extends CategoryFacetsFieldGroupBase {
           plugins: [
             Config(BindPropertyPlugin, {
               componentProperty: "hidden",
-              bindTo: this.getHideNoFacetsMsgExpression(config),
+              bindTo: this$.getHideNoFacetsMsgExpression(config),
             }),
           ],
         }),
@@ -72,7 +74,7 @@ class CategoryFacetsFieldGroup extends CategoryFacetsFieldGroupBase {
         ],
       }),
       layout: Config(AnchorLayout, { manageOverflow: false }),
-    }), config))());
+    }), config));
   }
 }
 

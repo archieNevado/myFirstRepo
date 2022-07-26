@@ -31,11 +31,11 @@ class PercentageTaxonomyConditionBase extends AbstractTaxonomyCondition {
     const operator: any = config.operator;
     let opSelector: OperatorSelector;
 
-    super((()=>{
-      opSelector = this.initOpSelector(null, config.operatorNames, config.operatorEmptyText, operator,
-        PercentageTaxonomyConditionBase.#OPERATORS, AbstractConditionBase.DEFAULT_OPERATOR_DISPLAY_NAMES);
-      return config;
-    })());
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    opSelector = this$.initOpSelector(null, config.operatorNames, config.operatorEmptyText, operator,
+      PercentageTaxonomyConditionBase.#OPERATORS, AbstractConditionBase.DEFAULT_OPERATOR_DISPLAY_NAMES);
+    super(config);
 
     this.addKeywordField();
     this.addTaxonomyButton();

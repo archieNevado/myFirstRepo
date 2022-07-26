@@ -32,7 +32,9 @@ class CMPersonaFormCheckboxField extends Checkbox {
   }
 
   constructor(config: Config<CMPersonaFormCheckboxField> = null) {
-    super((()=> ConfigUtils.apply(Config(CMPersonaFormCheckboxField, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CMPersonaFormCheckboxField, {
 
       plugins: [
         Config(BindPropertyPlugin, {
@@ -42,12 +44,12 @@ class CMPersonaFormCheckboxField extends Checkbox {
           bidirectional: true,
         }),
         Config(BindDisablePlugin, {
-          bindTo: this.bindTo,
+          bindTo: this$.bindTo,
           forceReadOnlyValueExpression: config.forceReadOnlyValueExpression,
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 
   /**

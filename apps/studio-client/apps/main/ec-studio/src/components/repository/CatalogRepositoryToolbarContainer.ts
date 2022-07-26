@@ -10,8 +10,6 @@ import ConfigUtils from "@jangaroo/runtime/ConfigUtils";
 import CatalogRepositoryToolbar from "./CatalogRepositoryToolbar";
 
 interface CatalogRepositoryToolbarContainerConfig extends Config<Container>, Partial<Pick<CatalogRepositoryToolbarContainer,
-  "selectedFolderValueExpression" |
-  "createdContentValueExpression" |
   "selectedItemsValueExpression"
 >> {
 }
@@ -27,38 +25,26 @@ class CatalogRepositoryToolbarContainer extends Container {
   static readonly CATALOG_REPOSITORY_TOOLBAR_ITEM_ID: string = "catalogRepositoryToolbar";
 
   constructor(config: Config<CatalogRepositoryToolbarContainer> = null) {
-    super((()=> ConfigUtils.apply(Config(CatalogRepositoryToolbarContainer, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CatalogRepositoryToolbarContainer, {
       itemId: CatalogRepositoryToolbarContainer.CATALOG_REPOSITORY_TOOLBAR_ITEM_ID,
 
       items: [
-        Config(CatalogRepositoryToolbar, {
-          createdContentValueExpression: config.createdContentValueExpression,
-          selectedFolderValueExpression: config.selectedFolderValueExpression,
-          selectedItemsValueExpression: config.selectedItemsValueExpression,
-        }),
+        Config(CatalogRepositoryToolbar, { selectedItemsValueExpression: config.selectedItemsValueExpression }),
         Config(Toolbar, {
           itemId: "switchViewButtonsToolbar",
           ariaLabel: Editor_properties.CollectionView_switchView_toolbar_label,
           ui: ToolbarSkin.LIGHT.getSkin(),
           items: [
-            Config(SwitchViewButtonsContainer, { scope: this }),
+            Config(SwitchViewButtonsContainer, { scope: this$ }),
           ],
         }),
       ],
       layout: Config(HBoxLayout),
 
-    }), config))());
+    }), config));
   }
-
-  /**
-   * value expression for the selected folder in the library tree
-   */
-  selectedFolderValueExpression: ValueExpression = null;
-
-  /**
-   * value expression that acts as a model for informing a view of a newly created content object.
-   */
-  createdContentValueExpression: ValueExpression = null;
 
   /**
    * value expression for the selected items, either in the list view, or - if the selection there is empty - the

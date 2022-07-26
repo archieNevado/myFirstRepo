@@ -30,7 +30,9 @@ class CatalogAssetsProperty extends CatalogAssetsPropertyBase {
   static override readonly xtype: string = "com.coremedia.livecontext.studio.config.catalogAssetsProperty";
 
   constructor(config: Config<CatalogAssetsProperty> = null) {
-    super((()=> ConfigUtils.apply(Config(CatalogAssetsProperty, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CatalogAssetsProperty, {
       activeItemValueExpression: CatalogAssetsPropertyBase.getActiveCatalogAssetPropertyValueExpression(config),
 
       items: [
@@ -38,15 +40,15 @@ class CatalogAssetsProperty extends CatalogAssetsPropertyBase {
           itemId: CatalogAssetsPropertyBase.CATALOG_ASSET_PROPERTY_ITEM_ID,
           enableColumnMove: false,
           showThumbnails: true,
-          selectedValuesExpression: this.getSelectedExpression(),
+          selectedValuesExpression: this$.getSelectedExpression(),
           hideDropArea: true,
-          readOnlyValueExpression: this.getReadOnlyVE(),
+          readOnlyValueExpression: this$.getReadOnlyVE(),
           linkListWrapper: new CatalogAssetsLinkListWrapper({
             bindTo: config.bindTo,
             linksVE: config.bindTo.extendBy(config.propertyName),
             assetContentTypes: config.assetContentTypes,
             maxCardinality: config.maxCardinality,
-            readOnlyVE: this.getReadOnlyVE(),
+            readOnlyVE: this$.getReadOnlyVE(),
           }),
           tbar: Config(Toolbar, {
             itemId: "catalogAssetsToolbar",
@@ -54,22 +56,22 @@ class CatalogAssetsProperty extends CatalogAssetsPropertyBase {
             items: [
               Config(IconButton, {
                 itemId: "openInTab",
-                baseAction: new OpenInTabAction({ contentValueExpression: this.getSelectedExpression() }),
+                baseAction: new OpenInTabAction({ contentValueExpression: this$.getSelectedExpression() }),
               }),
               Config(IconButton, {
                 itemId: "open",
-                baseAction: new ShowInRepositoryAction({ contentValueExpression: this.getSelectedExpression() }),
+                baseAction: new ShowInRepositoryAction({ contentValueExpression: this$.getSelectedExpression() }),
               }),
               Config(Separator, { itemId: "openActionsSeparator" }),
               Config(IconButton, {
                 itemId: "copyToClipboard",
-                baseAction: new CopyToClipboardAction({ contentValueExpression: this.getSelectedExpression() }),
+                baseAction: new CopyToClipboardAction({ contentValueExpression: this$.getSelectedExpression() }),
               }),
             ],
           }),
           ...ConfigUtils.append({
             plugins: [
-              Config(ContextMenuPlugin, { contextMenu: Config(PropertyFieldContextMenu, { selectedItemsVE: this.getSelectedExpression() }) }),
+              Config(ContextMenuPlugin, { contextMenu: Config(PropertyFieldContextMenu, { selectedItemsVE: this$.getSelectedExpression() }) }),
             ],
           }),
         }),
@@ -80,7 +82,7 @@ class CatalogAssetsProperty extends CatalogAssetsPropertyBase {
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 
   /**

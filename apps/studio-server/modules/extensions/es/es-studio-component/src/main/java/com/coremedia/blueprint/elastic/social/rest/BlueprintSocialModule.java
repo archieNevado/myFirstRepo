@@ -3,18 +3,18 @@ package com.coremedia.blueprint.elastic.social.rest;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.Collection;
 
-@Named
+@Component
 public class BlueprintSocialModule extends SimpleModule {
   @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
 
   private Collection<JsonSerializer<?>> jsonSerializers;
 
-  @Inject
+  @Autowired // not necessary for spring but maven likes it
   public BlueprintSocialModule(Collection<JsonSerializer<?>> jsonSerializers) {
     super("BlueprintSocial", new Version(1, 0, 0, null, null, null));
     this.jsonSerializers = jsonSerializers;

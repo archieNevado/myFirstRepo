@@ -24,54 +24,54 @@ class AMAssetForm extends DocumentTabPanel {
   #localItems: Array<any> = null;
 
   constructor(config: Config<AMAssetForm> = null) {
-    super((()=>{
-      this.#localItems = [
-        Config(PropertyFieldGroup, {
-          itemId: "original",
-          title: AMStudioPlugin_properties.PropertyGroup_original_label,
-          expandOnValues: AssetConstants.PROPERTY_ASSET_ORIGINAL,
-          items: [
-            Config(AssetDetailsBlobPropertyField, {
-              propertyName: AssetConstants.PROPERTY_ASSET_ORIGINAL,
-              hideLabel: true,
-              showImageThumbnail: false,
-              blobIconCls: config.originalIconCls,
-              visiblePropertyName: "metadata.renditions.original.show",
-            }),
-          ],
-        }),
-
-        Config(PropertyFieldGroup, {
-          itemId: "thumbnail",
-          title: AMStudioPlugin_properties.PropertyGroup_thumbnail_label,
-          collapsed: true,
-          items: [
-            Config(AssetDetailsBlobPropertyField, {
-              propertyName: AssetConstants.PROPERTY_ASSET_THUMBNAIL,
-              hideLabel: true,
-              showImageThumbnail: false,
-            }),
-          ],
-        }),
-      ];
-      config = ConfigUtils.apply({
-        renditions: null,
-        originalIconCls: "content-type-l content-type-AMAsset-icon",
-        downloadIconCls: "content-type-l content-type-AMAsset-icon",
-      }, config);
-      return ConfigUtils.apply(Config(AMAssetForm, {
-
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#localItems = [
+      Config(PropertyFieldGroup, {
+        itemId: "original",
+        title: AMStudioPlugin_properties.PropertyGroup_original_label,
+        expandOnValues: AssetConstants.PROPERTY_ASSET_ORIGINAL,
         items: [
-          Config(DocumentForm, {
-            title: AMStudioPlugin_properties.Tab_renditions_title,
-            items: this.#localItems.concat(config.renditions || []),
+          Config(AssetDetailsBlobPropertyField, {
+            propertyName: AssetConstants.PROPERTY_ASSET_ORIGINAL,
+            hideLabel: true,
+            showImageThumbnail: false,
+            blobIconCls: config.originalIconCls,
+            visiblePropertyName: "metadata.renditions.original.show",
           }),
-          Config(AMAssetMetaDataTab),
-          Config(AMAssetSystemTab),
         ],
+      }),
 
-      }), config);
-    })());
+      Config(PropertyFieldGroup, {
+        itemId: "thumbnail",
+        title: AMStudioPlugin_properties.PropertyGroup_thumbnail_label,
+        collapsed: true,
+        items: [
+          Config(AssetDetailsBlobPropertyField, {
+            propertyName: AssetConstants.PROPERTY_ASSET_THUMBNAIL,
+            hideLabel: true,
+            showImageThumbnail: false,
+          }),
+        ],
+      }),
+    ];
+    config = ConfigUtils.apply({
+      renditions: null,
+      originalIconCls: "content-type-l content-type-AMAsset-icon",
+      downloadIconCls: "content-type-l content-type-AMAsset-icon",
+    }, config);
+    super(ConfigUtils.apply(Config(AMAssetForm, {
+
+      items: [
+        Config(DocumentForm, {
+          title: AMStudioPlugin_properties.Tab_renditions_title,
+          items: this$.#localItems.concat(config.renditions || []),
+        }),
+        Config(AMAssetMetaDataTab),
+        Config(AMAssetSystemTab),
+      ],
+
+    }), config));
   }
 
   /**

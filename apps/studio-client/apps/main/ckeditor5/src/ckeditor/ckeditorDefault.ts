@@ -6,9 +6,13 @@ import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
 import Indent from '@ckeditor/ckeditor5-indent/src/indent';
 import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote';
-import List from '@ckeditor/ckeditor5-list/src/list';
+//@ts-expect-error
+import DocumentList from '@ckeditor/ckeditor5-list/src/documentlist';
 import Heading from '@ckeditor/ckeditor5-heading/src/heading';
 import Link from '@ckeditor/ckeditor5-link/src/link';
+import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
+import ImageStyle from "@ckeditor/ckeditor5-image/src/imagestyle";
+import ImageToolbar from "@ckeditor/ckeditor5-image/src/imagetoolbar";
 import AutoLink from "@ckeditor/ckeditor5-link/src/autolink";
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import Table from '@ckeditor/ckeditor5-table/src/table';
@@ -23,11 +27,44 @@ import ContentImagePlugin from "@coremedia/ckeditor5-coremedia-images/ContentIma
 import ContentLinks from "@coremedia/ckeditor5-coremedia-link/contentlink/ContentLinks";
 import LinkTarget from "@coremedia/ckeditor5-coremedia-link/linktarget/LinkTarget";
 import CoreMediaStudioEssentials from "@coremedia/ckeditor5-studio-essentials/CoreMediaStudioEssentials";
-import CoreMediaSymbolOnPasteMapper from '@coremedia/ckeditor5-symbol-on-paste-mapper/SymbolOnPasteMapper';
+import CoreMediaFontMapper from '@coremedia/ckeditor5-font-mapper/FontMapper';
 
 import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave';
 import { CKEditorPluginConfig } from "./ckeditor";
+import { icons } from '@ckeditor/ckeditor5-core';
+import { localization, localize } from "../lang/LocalizationUtils";
 
+const {
+  //@ts-expect-error
+  objectInline: withinTextIcon,
+  objectLeft: alignLeftIcon,
+  objectRight: alignRightIcon,
+  objectSizeFull: pageDefaultIcon
+} = icons;
+
+/**
+ * Localization for the image alignment entries in
+ * the editor configuration.
+ */
+localization.add({
+  "de": {
+    "Left-aligned": "Linksbündig",
+    "Right-aligned": "Rechtsbündig",
+    "Within Text": "Im Text",
+    "Page default": "Standardeinstellung"
+  }
+})
+
+/**
+ * This is the default configuration for the CKEditor 5 in CoreMedia Studio.
+ * Please be advised, that
+ *
+ * *** THIS CONFIGURATION MUST NOT BE CHANGED ***
+ *
+ * Any misconfiguration of this editor might cause issues in CoreMedia Studio.
+ * If you want to add a custom configuration, you should create a separate module
+ * and add the exported editor in {@link ckeditor.ts} accordingly.
+ */
 export function createDefaultCKEditor (domElement:(string | HTMLElement), language: string, placeholderText:string | undefined, pluginConfig: CKEditorPluginConfig): Promise<ClassicEditor> {
 
   const defaultToolbarItems = [
@@ -71,14 +108,17 @@ export function createDefaultCKEditor (domElement:(string | HTMLElement), langua
       ContentClipboard,
       ContentImagePlugin,
       CoreMediaStudioEssentials,
-      CoreMediaSymbolOnPasteMapper,
+      CoreMediaFontMapper,
       Essentials,
       Heading,
+      ImageInline,
+      ImageStyle,
+      ImageToolbar,
       Indent,
       Italic,
       Link,
       LinkTarget,
-      List,
+      DocumentList,
       Paragraph,
       RemoveFormat,
       Strikethrough,
@@ -113,6 +153,45 @@ export function createDefaultCKEditor (domElement:(string | HTMLElement), langua
           className: "align--justify",
         },
       ],
+    },
+    image: {
+      styles: {
+        // Defining custom styling options for the images.
+        options: [
+          {
+            name: 'float-left',
+            icon: alignLeftIcon,
+            title: localize('Left-aligned', language),
+            className: 'float--left',
+            modelElements: [ 'imageInline' ]
+          },
+          {
+            name: 'float-right',
+            icon: alignRightIcon,
+            title: localize('Right-aligned', language),
+            className: 'float--right',
+            modelElements: [ 'imageInline' ]
+          },
+          {
+            name: 'float-none',
+            icon: withinTextIcon,
+            title: localize('Within Text', language),
+            className: 'float--none',
+            modelElements: [ 'imageInline' ]
+          },
+          {
+            name: 'inline',
+            title: localize('Page default', language),
+            icon: pageDefaultIcon,
+          }
+        ]
+      },
+      toolbar: [
+        'imageStyle:float-left',
+        'imageStyle:float-right',
+        'imageStyle:float-none',
+        'imageStyle:inline',
+      ]
     },
     table: {
       contentToolbar: [

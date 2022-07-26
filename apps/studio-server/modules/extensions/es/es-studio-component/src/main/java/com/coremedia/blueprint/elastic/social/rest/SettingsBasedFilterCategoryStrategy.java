@@ -9,8 +9,8 @@ import com.coremedia.elastic.social.rest.api.FilterCategoryStrategy;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
-import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.Map;
  * A list of {@link CategoryResolver CategoryResolvers} is used to determine a {@link com.coremedia.elastic.social.rest.api.CategoryKeyAndDisplay}
  * for a linked {@link Content}.
  **/
-@Named
+@Component
 public class SettingsBasedFilterCategoryStrategy implements FilterCategoryStrategy {
 
   private static final Logger LOG = LoggerFactory.getLogger(SettingsBasedFilterCategoryStrategy.class);

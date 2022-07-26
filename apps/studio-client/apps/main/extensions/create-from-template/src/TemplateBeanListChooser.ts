@@ -14,22 +14,24 @@ class TemplateBeanListChooser extends TemplateBeanListChooserBase {
   static override readonly xtype: string = "com.coremedia.blueprint.studio.template.TemplateBeanListChooser";
 
   constructor(config: Config<TemplateBeanListChooser> = null) {
-    super((()=> ConfigUtils.apply(Config(TemplateBeanListChooser, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(TemplateBeanListChooser, {
       propertyName: CreateFromTemplateStudioPluginSettings_properties.template_property,
 
       dataFields: [
         Config(DataField, {
           name: "iconUri",
           mapping: "name",
-          convert: bind(this, this.computeIconURL),
+          convert: bind(this$, this$.computeIconURL),
         }),
         Config(DataField, {
           name: "description",
           mapping: "name",
-          convert: bind(this, this.getDescription),
+          convert: bind(this$, this$.getDescription),
         }),
       ],
-    }), config))());
+    }), config));
   }
 }
 

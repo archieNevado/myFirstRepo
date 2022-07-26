@@ -30,6 +30,7 @@ import { as, mixin } from "@jangaroo/runtime";
 import Class from "@jangaroo/runtime/Class";
 import joo from "@jangaroo/runtime/joo";
 import { AnyFunction } from "@jangaroo/runtime/types";
+import RemoteService from "@coremedia/studio-client.client-core-impl/data/impl/RemoteService";
 
 class AbstractCatalogTest extends AbstractRemoteTest {
 
@@ -69,9 +70,9 @@ class AbstractCatalogTest extends AbstractRemoteTest {
 
   #preferredSiteExpression: ValueExpression = null;
 
-  static #static = (() =>{
+  static {
     EditorContextImpl.initEditorContext();
-  })();
+  }
 
   protected resetCatalogHelper(): void {
     const clazz: Class = joo.getQualifiedObject("com.coremedia.ecommerce.studio.helper.CatalogHelper");
@@ -159,6 +160,9 @@ class AbstractCatalogTest extends AbstractRemoteTest {
 
             }, mixin(class {}, WorkflowRepository).prototype),
 
+          calculateRequestURI: (uri: string): string =>
+            RemoteService.calculateRequestURI(uri)
+          ,
         })
       ,
       getUser: (): User =>
@@ -258,7 +262,7 @@ class AbstractCatalogTest extends AbstractRemoteTest {
       (): boolean =>
         true
       ,
-      (): void =>
+      () =>
         this.#contentRepository.load(),
     );
   }
@@ -277,7 +281,7 @@ class AbstractCatalogTest extends AbstractRemoteTest {
         true
       ,
       (): void =>
-        this.#contentRepository.getContentTypes().forEach((contentType: RemoteBean): void =>
+        this.#contentRepository.getContentTypes().forEach((contentType: RemoteBean) =>
           contentType.load(),
         ),
     );

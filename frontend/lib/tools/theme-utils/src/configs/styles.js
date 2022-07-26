@@ -19,8 +19,6 @@ const {
 
 const themeConfig = getThemeConfig();
 
-sassSmartImport.enableDuplicateSassImportsFix = themeConfig.enableDuplicateSassImportsFix;
-
 const PREVIEW_ENTRY_NAME = "preview";
 const CSS_PATH = path.dirname(generateCssFileNameFromEntryPointName("test"));
 

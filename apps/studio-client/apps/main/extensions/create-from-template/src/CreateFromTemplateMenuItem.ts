@@ -21,17 +21,20 @@ class CreateFromTemplateMenuItem extends Item {
   static override readonly xtype: string = "com.coremedia.blueprint.studio.template.config.createFromTemplateMenuItem";
 
   constructor(config: Config<CreateFromTemplateMenuItem> = null) {
-    super((()=> ConfigUtils.apply(Config(CreateFromTemplateMenuItem, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CreateFromTemplateMenuItem, {
       itemId: "createFromTemplate",
 
       baseAction: new OpenDialogAction({
+        actionId: "CreateFromTemplateDialog",
         iconCls: ContentLocalizationUtil.getIconStyleClassForContentTypeName(CreateFromTemplateStudioPluginSettings_properties.doctype),
         toggleDialog: true,
         text: CreateFromTemplateStudioPlugin_properties.text,
-        dialog: Config(CreateFromTemplateDialog, { positionFun: bind(this, this.getPosition) }),
+        dialog: Config(CreateFromTemplateDialog, { positionFun: bind(this$, this$.getPosition) }),
       }),
 
-    }), config))());
+    }), config));
   }
 
   /**

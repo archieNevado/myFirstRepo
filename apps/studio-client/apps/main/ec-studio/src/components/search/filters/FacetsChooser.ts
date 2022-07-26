@@ -16,7 +16,9 @@ class FacetsChooser extends FacetsChooserBase {
   static override readonly xtype: string = "com.coremedia.ecommerce.studio.components.search.filters.facetsChooser";
 
   constructor(config: Config<FacetsChooser> = null) {
-    super((()=> ConfigUtils.apply(Config(FacetsChooser, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(FacetsChooser, {
       emptyText: ECommerceStudioPlugin_properties.CollectionView_search_filter_combo_emptyText,
       allowBlank: true,
       valueField: "key",
@@ -31,7 +33,7 @@ class FacetsChooser extends FacetsChooserBase {
       ...ConfigUtils.append({
         plugins: [
           Config(BindListPlugin, {
-            bindTo: this.getFacetListExpression(config),
+            bindTo: this$.getFacetListExpression(config),
             fields: [
               Config(DataField, {
                 name: "key",
@@ -46,16 +48,16 @@ class FacetsChooser extends FacetsChooserBase {
           }),
           Config(BindPropertyPlugin, {
             componentProperty: "disabled",
-            bindTo: this.getDisabledExpression(config),
+            bindTo: this$.getDisabledExpression(config),
           }),
           Config(BindPropertyPlugin, {
             componentProperty: "emptyText",
-            bindTo: this.getEmptyTextExpression(config),
+            bindTo: this$.getEmptyTextExpression(config),
           }),
         ],
       }),
 
-    }), config))());
+    }), config));
   }
 }
 

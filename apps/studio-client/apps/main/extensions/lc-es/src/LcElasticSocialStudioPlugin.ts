@@ -21,25 +21,25 @@ class LcElasticSocialStudioPlugin extends StudioPlugin {
   static readonly #PRODUCT_INFORMATION_CONTAINER_ITEM_ID: string = "com-coremedia-ecommerce-studio-model-ProductImpl";
 
   constructor(config: Config<LcElasticSocialStudioPlugin> = null) {
-    super((()=>{
-      this.#__initialize__(config);
-      return ConfigUtils.apply(Config(LcElasticSocialStudioPlugin, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#__initialize__(config);
+    super(ConfigUtils.apply(Config(LcElasticSocialStudioPlugin, {
 
-        rules: [
-          Config(CommentMetaDataPanel, {
-            plugins: [
-              Config(AddLazyItemsPlugin, {
-                applyTo: (container: Container): Component => container.queryById(CommentMetaDataPanel.TARGET_INFORMATION_CONTAINER_ITEM_ID),
-                items: [
-                  Config(ProductInformationContainer, { itemId: LcElasticSocialStudioPlugin.#PRODUCT_INFORMATION_CONTAINER_ITEM_ID }),
-                ],
-              }),
-            ],
-          }),
-        ],
+      rules: [
+        Config(CommentMetaDataPanel, {
+          plugins: [
+            Config(AddLazyItemsPlugin, {
+              applyTo: (container: Container): Component => container.queryById(CommentMetaDataPanel.TARGET_INFORMATION_CONTAINER_ITEM_ID),
+              items: [
+                Config(ProductInformationContainer, { itemId: LcElasticSocialStudioPlugin.#PRODUCT_INFORMATION_CONTAINER_ITEM_ID }),
+              ],
+            }),
+          ],
+        }),
+      ],
 
-      }), config);
-    })());
+    }), config));
   }
 
   #__initialize__(config: Config<LcElasticSocialStudioPlugin>): void {

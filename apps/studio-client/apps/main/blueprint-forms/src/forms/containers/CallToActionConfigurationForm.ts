@@ -34,7 +34,9 @@ class CallToActionConfigurationForm extends CallToActionConfigurationFormBase {
   static override readonly xtype: string = "com.coremedia.blueprint.studio.config.callToActionConfigurationForm";
 
   constructor(config: Config<CallToActionConfigurationForm> = null) {
-    super((()=> ConfigUtils.apply(Config(CallToActionConfigurationForm, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CallToActionConfigurationForm, {
       itemId: "callToActionConfigurationForm",
       title: BlueprintDocumentTypes_properties.CMTeasable_callToActionConfiguration_text,
       propertyNames: [],
@@ -82,7 +84,7 @@ class CallToActionConfigurationForm extends CallToActionConfigurationFormBase {
           plugins: [
             Config(BindPropertyPlugin, {
               bidirectional: true,
-              bindTo: ValueExpressionFactory.create(CallToActionViewModel.CTA_ENABLED_PROPERTY_NAME, this.ctaViewModel),
+              bindTo: ValueExpressionFactory.create(CallToActionViewModel.CTA_ENABLED_PROPERTY_NAME, this$.ctaViewModel),
             }),
             Config(BindReadOnlyPlugin, {
               bindTo: config.bindTo,
@@ -106,19 +108,19 @@ class CallToActionConfigurationForm extends CallToActionConfigurationFormBase {
           checkChangeBuffer: 500,
           plugins: [
             Config(BindPropertyPlugin, {
-              bindTo: ValueExpressionFactory.create(CallToActionViewModel.CTA_TEXT_PROPERTY_NAME, this.ctaViewModel),
+              bindTo: ValueExpressionFactory.create(CallToActionViewModel.CTA_TEXT_PROPERTY_NAME, this$.ctaViewModel),
               bidirectional: true,
             }),
             /* Do not use BindDisablePlugin here, as it expects content as a value of bindTo.getValue() */
             Config(BindPropertyPlugin, {
               componentProperty: "disabled",
-              bindTo: ValueExpressionFactory.create(CallToActionViewModel.CTA_ENABLED_PROPERTY_NAME, this.ctaViewModel),
+              bindTo: ValueExpressionFactory.create(CallToActionViewModel.CTA_ENABLED_PROPERTY_NAME, this$.ctaViewModel),
               transformer: (value: boolean): boolean => !value,
             }),
             Config(BindPropertyPlugin, {
               componentProperty: "emptyText",
-              bindTo: ValueExpressionFactory.create(CallToActionViewModel.CTA_ENABLED_PROPERTY_NAME, this.ctaViewModel),
-              transformer: bind(this, this.#transformEnabledToEmptyTextForText),
+              bindTo: ValueExpressionFactory.create(CallToActionViewModel.CTA_ENABLED_PROPERTY_NAME, this$.ctaViewModel),
+              transformer: bind(this$, this$.#transformEnabledToEmptyTextForText),
             }),
             Config(BlockEnterPlugin),
             Config(BindReadOnlyPlugin, {
@@ -144,19 +146,19 @@ class CallToActionConfigurationForm extends CallToActionConfigurationFormBase {
           helpIconText: BlueprintDocumentTypes_properties.CMTeasable_CTAHash_helpText,
           plugins: [
             Config(BindPropertyPlugin, {
-              bindTo: ValueExpressionFactory.create(CallToActionViewModel.CTA_HASH_PROPERTY_NAME, this.ctaViewModel),
+              bindTo: ValueExpressionFactory.create(CallToActionViewModel.CTA_HASH_PROPERTY_NAME, this$.ctaViewModel),
               bidirectional: true,
             }),
             /* Do not use BindDisablePlugin here, as it expects content as a value of bindTo.getValue() */
             Config(BindPropertyPlugin, {
               componentProperty: "disabled",
-              bindTo: ValueExpressionFactory.create(CallToActionViewModel.CTA_ENABLED_PROPERTY_NAME, this.ctaViewModel),
+              bindTo: ValueExpressionFactory.create(CallToActionViewModel.CTA_ENABLED_PROPERTY_NAME, this$.ctaViewModel),
               transformer: (value: boolean): boolean => !value,
             }),
             Config(BindPropertyPlugin, {
               componentProperty: "emptyText",
-              bindTo: ValueExpressionFactory.create(CallToActionViewModel.CTA_ENABLED_PROPERTY_NAME, this.ctaViewModel),
-              transformer: bind(this, this.#transformEnabledToEmptyTextForHash),
+              bindTo: ValueExpressionFactory.create(CallToActionViewModel.CTA_ENABLED_PROPERTY_NAME, this$.ctaViewModel),
+              transformer: bind(this$, this$.#transformEnabledToEmptyTextForHash),
             }),
             Config(BlockEnterPlugin),
             Config(BindReadOnlyPlugin, {
@@ -174,7 +176,7 @@ class CallToActionConfigurationForm extends CallToActionConfigurationFormBase {
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 
   #transformEnabledToEmptyTextForText(enabled: boolean): string {

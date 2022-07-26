@@ -31,7 +31,9 @@ class FacetFilterFieldWrapper extends FacetFilterFieldWrapperBase {
   static override readonly xtype: string = "com.coremedia.ecommerce.studio.components.search.filters.facetFilterFieldWrapper";
 
   constructor(config: Config<FacetFilterFieldWrapper> = null) {
-    super((()=> ConfigUtils.apply(Config(FacetFilterFieldWrapper, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(FacetFilterFieldWrapper, {
       ui: PanelSkin.FILTER.getSkin(),
       style: "margin-bottom:12px;",
       ariaLabel: FacetUtil.localizeFacetLabel(config.facet.getLabel()),
@@ -44,7 +46,7 @@ class FacetFilterFieldWrapper extends FacetFilterFieldWrapperBase {
         Config(BEMPlugin, {
           block: FacetFilterFieldWrapperBase.BLOCK.getIdentifier(),
           bodyElement: FacetFilterFieldWrapperBase.ELEMENT_BODY,
-          modifier: this.getModifierVE(),
+          modifier: this$.getModifierVE(),
         }),
       ],
       header: Config(PanelHeader, {
@@ -65,7 +67,7 @@ class FacetFilterFieldWrapper extends FacetFilterFieldWrapperBase {
                   Config(DisplayField, {
                     plugins: [
                       Config(BadgePlugin, {
-                        bindTo: this.getSelectedFacetValuesExpression(config),
+                        bindTo: this$.getSelectedFacetValuesExpression(config),
                         maxValue: 99,
                         x: 2,
                         y: 3,
@@ -80,7 +82,7 @@ class FacetFilterFieldWrapper extends FacetFilterFieldWrapperBase {
               Config(Tool, {
                 itemId: "resetButton",
                 ui: ButtonSkin.SIMPLE.getSkin(),
-                handler: bind(this, this.removeFilter),
+                handler: bind(this$, this$.removeFilter),
                 tooltip: Editor_properties.Filter_remove_btn_text,
                 type: "close",
                 ...Config<BEMMixin>({ bemElement: FacetFilterFieldWrapperBase.ELEMENT_REMOVE }),
@@ -89,7 +91,7 @@ class FacetFilterFieldWrapper extends FacetFilterFieldWrapperBase {
           }),
         ],
       }),
-    }), config))());
+    }), config));
   }
 }
 

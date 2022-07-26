@@ -31,9 +31,11 @@ class RemoveCommerceObjectActionBase extends ContentUpdateAction {
    * @param config the configuration object
    */
   constructor(config: Config<RemoveCommerceObjectAction> = null) {
-    super((()=>ActionConfigUtil.extendConfiguration(resourceManager.getResourceBundle(null, ECommerceStudioPlugin_properties).content,
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ActionConfigUtil.extendConfiguration(resourceManager.getResourceBundle(null, ECommerceStudioPlugin_properties).content,
       config, config.actionName,
-      { handler: bind(this, this.#removeCommerceObject) }))());
+      { handler: bind(this$, this$.#removeCommerceObject) }));
 
     this.#commerceObject = config.commerceObject;
     this.#catalogObjectIdListName = config.catalogObjectIdListName;

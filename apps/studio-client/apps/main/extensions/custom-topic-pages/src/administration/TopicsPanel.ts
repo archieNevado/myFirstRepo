@@ -35,7 +35,9 @@ class TopicsPanel extends TopicsPanelBase {
   static override readonly xtype: string = "com.coremedia.blueprint.studio.topicpages.config.topicsPanel";
 
   constructor(config: Config<TopicsPanel> = null) {
-    super((()=> ConfigUtils.apply(Config(TopicsPanel, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(TopicsPanel, {
       layout: "border",
       items: [
         Config(Container, {
@@ -51,9 +53,9 @@ class TopicsPanel extends TopicsPanelBase {
                   fieldLabel: TopicPages_properties.TopicPages_search_title,
                   items: [
                     Config(FilterPanel, {
-                      filterExpression: this.getFilterValueExpression(),
+                      filterExpression: this$.getFilterValueExpression(),
                       id: "topicPagesFilterPanel",
-                      applyFilterFunction: bind(this, this.reload),
+                      applyFilterFunction: bind(this$, this$.reload),
                       emptyText: TopicPages_properties.TopicPages_search_emptyText,
                     }),
 
@@ -62,8 +64,8 @@ class TopicsPanel extends TopicsPanelBase {
                 Config(TaxonomyCombo, {
                   id: "topicPagesTaxonomyCombo",
                   flex: 1,
-                  filterExpression: this.getFilterValueExpression(),
-                  selectionExpression: this.getTaxonomySelectionExpression(),
+                  filterExpression: this$.getFilterValueExpression(),
+                  selectionExpression: this$.getTaxonomySelectionExpression(),
                 }),
               ],
               layout: Config(HBoxLayout, { align: "stretch" }),
@@ -96,11 +98,11 @@ class TopicsPanel extends TopicsPanelBase {
               forceFit: true,
               plugins: [
                 Config(BindDisablePlugin, {
-                  bindTo: this.getTopicsExpression(),
+                  bindTo: this$.getTopicsExpression(),
                   componentProperty: "disableSelection",
                 }),
                 Config(BindListPlugin, {
-                  bindTo: this.getTopicsExpression(),
+                  bindTo: this$.getTopicsExpression(),
                   fields: [
                     Config(DataField, { name: "name" }),
                     Config(DataField, { name: "topic" }),
@@ -126,8 +128,8 @@ class TopicsPanel extends TopicsPanelBase {
                   sortable: false,
                   width: 200,
                   dataIndex: "name",
-                  listeners: { "click": bind(this, this.onPageColumnClick) },
-                  renderer: bind(this, this.pageRenderer),
+                  listeners: { "click": bind(this$, this$.onPageColumnClick) },
+                  renderer: bind(this$, this$.pageRenderer),
                 }),
               ],
               selModel: new RowSelectionModel({ mode: "SINGLE" }),
@@ -142,7 +144,7 @@ class TopicsPanel extends TopicsPanelBase {
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 }
 

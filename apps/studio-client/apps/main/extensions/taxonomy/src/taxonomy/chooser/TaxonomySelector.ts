@@ -22,7 +22,9 @@ class TaxonomySelector extends TaxonomySelectorBase {
   static override readonly xtype: string = "com.coremedia.blueprint.studio.config.taxonomy.taxonomySelector";
 
   constructor(config: Config<TaxonomySelector> = null) {
-    super((()=> ConfigUtils.apply(Config(TaxonomySelector, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(TaxonomySelector, {
 
       layout: Config(VBoxLayout, { align: "stretch" }),
       items: [
@@ -40,9 +42,9 @@ class TaxonomySelector extends TaxonomySelectorBase {
           items: [
             /* Column Grid*/
             Config(LetterListPanel, {
-              activeLetters: this.getActiveLettersExpression(),
-              selectedLetter: this.getSelectedLetterExpression(),
-              selectedNodeList: this.getSelectedNodeListValueExpression(),
+              activeLetters: this$.getActiveLettersExpression(),
+              selectedLetter: this$.getSelectedLetterExpression(),
+              selectedNodeList: this$.getSelectedNodeListValueExpression(),
               loadingExpression: config.loadingExpression,
               selectionExpression: config.selectionExpression,
               singleSelection: config.singleSelection,
@@ -64,7 +66,7 @@ class TaxonomySelector extends TaxonomySelectorBase {
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 
   /**

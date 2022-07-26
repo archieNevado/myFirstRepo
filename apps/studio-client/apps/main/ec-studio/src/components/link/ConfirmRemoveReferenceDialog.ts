@@ -41,7 +41,9 @@ class ConfirmRemoveReferenceDialog extends StudioDialog {
   closeCallback: AnyFunction = null;
 
   constructor(config: Config<ConfirmRemoveReferenceDialog> = null) {
-    super((()=> ConfigUtils.apply(Config(ConfirmRemoveReferenceDialog, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(ConfirmRemoveReferenceDialog, {
       modal: true,
       stateful: true,
       resizable: false,
@@ -79,10 +81,10 @@ class ConfirmRemoveReferenceDialog extends StudioDialog {
             scale: "small",
             text: ECommerceStudioPlugin_properties.Catalog_remove_reference_button_confirm,
             handler: (): void => {
-              if (this.changeFunction) {
-                this.changeFunction();
+              if (this$.changeFunction) {
+                this$.changeFunction();
               }
-              this.close() ;
+              this$.close() ;
             },
           }),
           Config(Button, {
@@ -91,15 +93,15 @@ class ConfirmRemoveReferenceDialog extends StudioDialog {
             scale: "small",
             text: ECommerceStudioPlugin_properties.Catalog_remove_reference_button_abort,
             handler: (): void => {
-              if (this.closeCallback) {
-                this.closeCallback();
+              if (this$.closeCallback) {
+                this$.closeCallback();
               }
-              this.close() ;
+              this$.close() ;
             },
           }),
         ],
       }),
-    }), config))());
+    }), config));
   }
 }
 

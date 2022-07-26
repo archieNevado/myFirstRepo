@@ -34,16 +34,18 @@ class CommerceCatalogObjectsSelectForm extends CommerceCatalogObjectsSelectFormB
   static readonly NO_STORE_LABEL: string = "noStoreLabel";
 
   constructor(config: Config<CommerceCatalogObjectsSelectForm> = null) {
-    super((()=> ConfigUtils.apply(Config(CommerceCatalogObjectsSelectForm, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CommerceCatalogObjectsSelectForm, {
 
       layout: Config(VBoxLayout, { align: "stretch" }),
       plugins: [
         Config(BindComponentsPlugin, {
           configBeanParameterName: "commerceObject",
-          valueExpression: this.getCatalogObjectsExpression(config),
+          valueExpression: this$.getCatalogObjectsExpression(config),
           reuseComponents: false,
-          removeFunction: bind(this, this.removeCommerceObjectFields),
-          addFunction: bind(this, this.addCommerceObjectFields),
+          removeFunction: bind(this$, this$.removeCommerceObjectFields),
+          addFunction: bind(this$, this$.addCommerceObjectFields),
           getKey: CommerceCatalogObjectsSelectFormBase.getCatalogObjectKey,
           template: Config(CommerceObjectField, {
             catalogObjectIdListName: config.catalogObjectIdListName,
@@ -60,9 +62,9 @@ class CommerceCatalogObjectsSelectForm extends CommerceCatalogObjectsSelectFormB
           forceSelection: true,
           queryMode: "local",
           triggerAction: "all",
-          listeners: { "select": this.getHandleSelectFunction(config) },
+          listeners: { "select": this$.getHandleSelectFunction(config) },
           contentValueExpression: config.bindTo,
-          selectedCatalogObjectsExpression: this.getCatalogObjectsExpression(config),
+          selectedCatalogObjectsExpression: this$.getCatalogObjectsExpression(config),
           getCommerceObjectsFunction: config.getCommerceObjectsFunction,
           emptyText: config.emptyText,
           noStoreMessage: config.noStoreMessage,
@@ -82,7 +84,7 @@ class CommerceCatalogObjectsSelectForm extends CommerceCatalogObjectsSelectFormB
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 
   catalogObjectIdsExpression: ValueExpression = null;

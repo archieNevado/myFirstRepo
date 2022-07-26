@@ -18,26 +18,26 @@ class BookmarkProjectContentViewPlugin extends NestedRulesPlugin {
   #projectContentContainer: ProjectContentContainer = null;
 
   constructor(config: Config<BookmarkProjectContentViewPlugin> = null) {
-    super((()=>{
-      this.#projectContentContainer = as(config.cmp, ProjectContentContainer);
-      return ConfigUtils.apply(Config(BookmarkProjectContentViewPlugin, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#projectContentContainer = as(config.cmp, ProjectContentContainer);
+    super(ConfigUtils.apply(Config(BookmarkProjectContentViewPlugin, {
 
-        rules: [
-          Config(ProjectContentContextMenu, {
-            plugins: [
-              Config(AddItemsPlugin, {
-                index: 3,
-                items: [
-                  Config(BookmarkMenuItem, { contentValueExpression: this.#projectContentContainer.selectedItemsVE }),
-                  Config(Separator),
-                ],
-              }),
-            ],
-          }),
-        ],
+      rules: [
+        Config(ProjectContentContextMenu, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              index: 3,
+              items: [
+                Config(BookmarkMenuItem, { contentValueExpression: this$.#projectContentContainer.selectedItemsVE }),
+                Config(Separator),
+              ],
+            }),
+          ],
+        }),
+      ],
 
-      }), config);
-    })());
+    }), config));
   }
 }
 

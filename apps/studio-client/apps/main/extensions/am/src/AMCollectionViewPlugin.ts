@@ -31,155 +31,155 @@ class AMCollectionViewPlugin extends NestedRulesPlugin {
   #selectionHolder: ICollectionView = null;
 
   constructor(config: Config<AMCollectionViewPlugin> = null) {
-    super((()=>{
-      this.#selectionHolder = as(config.cmp, ICollectionView);
-      return ConfigUtils.apply(Config(AMCollectionViewPlugin, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#selectionHolder = as(config.cmp, ICollectionView);
+    super(ConfigUtils.apply(Config(AMCollectionViewPlugin, {
 
-        rules: [
-          Config(FolderContentSwitchingContainer, {
-            plugins: [
-              Config(AddItemsPlugin, {
-                items: [
-                  Config(AssetRepositoryListContainer, {
-                    selectionHolder: this.#selectionHolder,
-                    selectedFolderValueExpression: this.#selectionHolder.getSelectedFolderValueExpression(),
-                    selectedRepositoryItemsValueExpression: this.#selectionHolder.getSelectedRepositoryItemsValueExpression(),
-                    newContentDisabledValueExpression: this.#selectionHolder.getNewContentActionDisabledExpression(),
-                    createdContentValueExpression: this.#selectionHolder.getCreatedContentValueExpression(),
-                  }),
-                ],
-              }),
-            ],
-          }),
+      rules: [
+        Config(FolderContentSwitchingContainer, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              items: [
+                Config(AssetRepositoryListContainer, {
+                  selectionHolder: this$.#selectionHolder,
+                  selectedFolderValueExpression: this$.#selectionHolder.getSelectedFolderValueExpression(),
+                  selectedRepositoryItemsValueExpression: this$.#selectionHolder.getSelectedRepositoryItemsValueExpression(),
+                  newContentDisabledValueExpression: this$.#selectionHolder.getNewContentActionDisabledExpression(),
+                  createdContentValueExpression: this$.#selectionHolder.getCreatedContentValueExpression(),
+                }),
+              ],
+            }),
+          ],
+        }),
 
-          Config(SearchSwitchingContainer, {
-            plugins: [
-              Config(AddItemsPlugin, {
-                items: [
-                  Config(AssetSearchListContainer, {
-                    searchResultHitsValueExpression: this.#selectionHolder.getSearchResultHitsValueExpression(),
-                    selectedItemsValueExpression: this.#selectionHolder.getSelectedSearchItemsValueExpression(),
-                  }),
-                ],
-              }),
-            ],
-          }),
+        Config(SearchSwitchingContainer, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              items: [
+                Config(AssetSearchListContainer, {
+                  searchResultHitsValueExpression: this$.#selectionHolder.getSearchResultHitsValueExpression(),
+                  selectedItemsValueExpression: this$.#selectionHolder.getSelectedSearchItemsValueExpression(),
+                }),
+              ],
+            }),
+          ],
+        }),
 
-          Config(CollectionRepositoryContextMenu, {
-            plugins: [
-              Config(AddItemsPlugin, {
-                items: [
-                  Config(ext_menu_Separator),
-                  Config(Item, {
-                    itemId: "createPictureFromAsset",
-                    baseAction: new CreatePictureFromPictureAssetAction({
-                      contentValueExpression: this.#selectionHolder.getSelectedRepositoryItemsValueExpression(),
-                      ...{ hideForContentProxy: true },
-                    }),
+        Config(CollectionRepositoryContextMenu, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              items: [
+                Config(ext_menu_Separator),
+                Config(Item, {
+                  itemId: "createPictureFromAsset",
+                  baseAction: new CreatePictureFromPictureAssetAction({
+                    contentValueExpression: this$.#selectionHolder.getSelectedRepositoryItemsValueExpression(),
+                    ...{ hideForContentProxy: true },
                   }),
-                  Config(Item, {
-                    itemId: "createVideoFromAsset",
-                    baseAction: new CreateVideoFromVideoAssetAction({
-                      contentValueExpression: this.#selectionHolder.getSelectedRepositoryItemsValueExpression(),
-                      ...{ hideForContentProxy: true },
-                    }),
+                }),
+                Config(Item, {
+                  itemId: "createVideoFromAsset",
+                  baseAction: new CreateVideoFromVideoAssetAction({
+                    contentValueExpression: this$.#selectionHolder.getSelectedRepositoryItemsValueExpression(),
+                    ...{ hideForContentProxy: true },
                   }),
-                ],
-                after: [
-                  Config(Component, { itemId: "openInTab" }),
-                ],
-              }),
-            ],
-          }),
+                }),
+              ],
+              after: [
+                Config(Component, { itemId: "openInTab" }),
+              ],
+            }),
+          ],
+        }),
 
-          Config(CollectionSearchContextMenu, {
-            plugins: [
-              Config(AddItemsPlugin, {
-                items: [
-                  Config(ext_menu_Separator),
-                  Config(Item, {
-                    itemId: "createPictureFromAsset",
-                    baseAction: new CreatePictureFromPictureAssetAction({
-                      contentValueExpression: this.#selectionHolder.getSelectedSearchItemsValueExpression(),
-                      ...{ hideForContentProxy: true },
-                    }),
+        Config(CollectionSearchContextMenu, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              items: [
+                Config(ext_menu_Separator),
+                Config(Item, {
+                  itemId: "createPictureFromAsset",
+                  baseAction: new CreatePictureFromPictureAssetAction({
+                    contentValueExpression: this$.#selectionHolder.getSelectedSearchItemsValueExpression(),
+                    ...{ hideForContentProxy: true },
                   }),
-                  Config(Item, {
-                    itemId: "createVideoFromAsset",
-                    baseAction: new CreateVideoFromVideoAssetAction({
-                      contentValueExpression: this.#selectionHolder.getSelectedSearchItemsValueExpression(),
-                      ...{ hideForContentProxy: true },
-                    }),
+                }),
+                Config(Item, {
+                  itemId: "createVideoFromAsset",
+                  baseAction: new CreateVideoFromVideoAssetAction({
+                    contentValueExpression: this$.#selectionHolder.getSelectedSearchItemsValueExpression(),
+                    ...{ hideForContentProxy: true },
                   }),
-                  Config(ext_menu_Separator),
-                ],
-                after: [
-                  Config(Component, { itemId: "showInFolder" }),
-                ],
-              }),
-            ],
-          }),
+                }),
+                Config(ext_menu_Separator),
+              ],
+              after: [
+                Config(Component, { itemId: "showInFolder" }),
+              ],
+            }),
+          ],
+        }),
 
-          Config(RepositoryToolbar, {
-            plugins: [
-              Config(AddItemsPlugin, {
-                items: [
-                  Config(IconButton, {
-                    itemId: "createPictureFromAsset",
-                    baseAction: new CreatePictureFromPictureAssetAction({
-                      contentValueExpression: this.#selectionHolder.getSelectedItemsValueExpression(),
-                      ...{ hideForContentProxy: true },
-                    }),
+        Config(RepositoryToolbar, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              items: [
+                Config(IconButton, {
+                  itemId: "createPictureFromAsset",
+                  baseAction: new CreatePictureFromPictureAssetAction({
+                    contentValueExpression: this$.#selectionHolder.getSelectedItemsValueExpression(),
+                    ...{ hideForContentProxy: true },
                   }),
-                  Config(IconButton, {
-                    itemId: "createVideoFromAsset",
-                    baseAction: new CreateVideoFromVideoAssetAction({
-                      contentValueExpression: this.#selectionHolder.getSelectedItemsValueExpression(),
-                      ...{ hideForContentProxy: true },
-                    }),
+                }),
+                Config(IconButton, {
+                  itemId: "createVideoFromAsset",
+                  baseAction: new CreateVideoFromVideoAssetAction({
+                    contentValueExpression: this$.#selectionHolder.getSelectedItemsValueExpression(),
+                    ...{ hideForContentProxy: true },
                   }),
-                ],
-                after: [
-                  Config(Component, { itemId: "createImageMap" }),
-                ],
-              }),
-            ],
-          }),
+                }),
+              ],
+              after: [
+                Config(Component, { itemId: "createImageMap" }),
+              ],
+            }),
+          ],
+        }),
 
-          Config(SearchToolbar, {
-            plugins: [
-              Config(AddItemsPlugin, {
-                items: [
-                  Config(ext_toolbar_Separator),
-                  Config(IconButton, {
-                    itemId: "createPictureFromAsset",
-                    baseAction: new CreatePictureFromPictureAssetAction({ contentValueExpression: this.#selectionHolder.getSelectedSearchItemsValueExpression() }),
-                  }),
-                  Config(IconButton, {
-                    itemId: "createVideoFromAsset",
-                    baseAction: new CreateVideoFromVideoAssetAction({ contentValueExpression: this.#selectionHolder.getSelectedSearchItemsValueExpression() }),
-                  }),
-                ],
-                after: [
-                  Config(Component, { itemId: "createImageMap" }),
-                ],
-              }),
-            ],
-          }),
+        Config(SearchToolbar, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              items: [
+                Config(ext_toolbar_Separator),
+                Config(IconButton, {
+                  itemId: "createPictureFromAsset",
+                  baseAction: new CreatePictureFromPictureAssetAction({ contentValueExpression: this$.#selectionHolder.getSelectedSearchItemsValueExpression() }),
+                }),
+                Config(IconButton, {
+                  itemId: "createVideoFromAsset",
+                  baseAction: new CreateVideoFromVideoAssetAction({ contentValueExpression: this$.#selectionHolder.getSelectedSearchItemsValueExpression() }),
+                }),
+              ],
+              after: [
+                Config(Component, { itemId: "createImageMap" }),
+              ],
+            }),
+          ],
+        }),
 
-          Config(SearchFiltersSwitchingContainer, {
-            plugins: [
-              Config(AddItemsPlugin, {
-                items: [
-                  Config(AssetSearchFilters, { itemId: AssetSearchFilters.ITEM_ID }),
-                ],
-              }),
-            ],
-          }),
-        ],
+        Config(SearchFiltersSwitchingContainer, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              items: [
+                Config(AssetSearchFilters, { itemId: AssetSearchFilters.ITEM_ID }),
+              ],
+            }),
+          ],
+        }),
+      ],
 
-      }), config);
-    })());
+    }), config));
   }
 }
 

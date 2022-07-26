@@ -39,7 +39,9 @@ class TaxonomySuggestionsLinkListPanel extends TaxonomySuggestionsLinkListPanelB
   static override readonly xtype: string = "com.coremedia.blueprint.studio.config.taxonomy.taxonomySuggestionsLinkListPanel";
 
   constructor(config: Config<TaxonomySuggestionsLinkListPanel> = null) {
-    super((()=> ConfigUtils.apply(Config(TaxonomySuggestionsLinkListPanel, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(TaxonomySuggestionsLinkListPanel, {
       hideHeaders: true,
 
       plugins: [
@@ -48,11 +50,11 @@ class TaxonomySuggestionsLinkListPanel extends TaxonomySuggestionsLinkListPanelB
           bindTo: config.bindTo,
         }),
         Config(BindListPlugin, {
-          bindTo: this.getSuggestionsExpression(),
+          bindTo: this$.getSuggestionsExpression(),
           fields: [
             Config(DataField, {
               name: "name",
-              ifUnreadable: bind(this, this.formatUnreadableName),
+              ifUnreadable: bind(this$, this$.formatUnreadableName),
               mapping: (config["contentPropertyPath"] ? config["contentPropertyPath"] + "." : "") + "name",
             }),
             Config(DataField, { name: "id" }),
@@ -60,8 +62,8 @@ class TaxonomySuggestionsLinkListPanel extends TaxonomySuggestionsLinkListPanelB
           ],
         }),
         Config(BindSelectionPlugin, {
-          selectedPositions: this.getSelectedPositionsExpression(),
-          selectedValues: this.getSelectedValuesExpression(),
+          selectedPositions: this$.getSelectedPositionsExpression(),
+          selectedValues: this$.getSelectedValuesExpression(),
         }),
         Config(BEMPlugin, {
           block: LinkListBEMEntities.BLOCK,
@@ -83,10 +85,10 @@ class TaxonomySuggestionsLinkListPanel extends TaxonomySuggestionsLinkListPanelB
             Config(Button, {
               ui: ButtonSkin.SIMPLE.getSkin(),
               text: TaxonomyStudioPlugin_properties.TaxonomyLinkList_suggestions_add_all,
-              handler: bind(this, this.addAllKeywordsHandler),
+              handler: bind(this$, this$.addAllKeywordsHandler),
               plugins: [
                 Config(BindDisablePlugin, {
-                  forceReadOnlyValueExpression: this.getAddAllDisabledVE(config.forceReadOnlyValueExpression),
+                  forceReadOnlyValueExpression: this$.getAddAllDisabledVE(config.forceReadOnlyValueExpression),
                   bindTo: config.bindTo,
                 }),
               ],
@@ -103,7 +105,7 @@ class TaxonomySuggestionsLinkListPanel extends TaxonomySuggestionsLinkListPanelB
             Config(Button, {
               ui: ButtonSkin.SIMPLE.getSkin(),
               text: TaxonomyStudioPlugin_properties.TaxonomyLinkList_suggestions_reload,
-              handler: bind(this, this.reloadKeywordsHandler),
+              handler: bind(this$, this$.reloadKeywordsHandler),
             }),
           ],
         }),
@@ -113,7 +115,7 @@ class TaxonomySuggestionsLinkListPanel extends TaxonomySuggestionsLinkListPanelB
           stateId: "name",
           sortable: false,
           dataIndex: "name",
-          renderer: bind(this, this.taxonomyRenderer),
+          renderer: bind(this$, this$.taxonomyRenderer),
           flex: 1,
         }),
       ],
@@ -136,7 +138,7 @@ class TaxonomySuggestionsLinkListPanel extends TaxonomySuggestionsLinkListPanelB
         ],
       }),
 
-    }), config))());
+    }), config));
   }
 
   /**

@@ -21,10 +21,10 @@ class TaxonomyPropertyFieldBase extends FieldContainer {
   #disableSuggestions: boolean = false;
 
   constructor(config: Config<TaxonomyPropertyField> = null) {
-    super((()=>{
-      this.#disableSuggestions = config.disableSuggestions;
-      return config;
-    })());
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#disableSuggestions = config.disableSuggestions;
+    super(config);
   }
 
   protected override initComponent(): void {

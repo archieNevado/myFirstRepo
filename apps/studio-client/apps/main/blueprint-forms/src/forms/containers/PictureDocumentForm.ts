@@ -32,7 +32,9 @@ class PictureDocumentForm extends PictureDocumentFormBase {
       picturePropertyName: "pictures",
       contentType: "CMPicture",
     }, config);
-    super((()=> ConfigUtils.apply(Config(PictureDocumentForm, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(PictureDocumentForm, {
       title: CustomLabels_properties.PropertyGroup_Picture_label,
       itemId: "pictureDocumentForm",
 
@@ -50,7 +52,7 @@ class PictureDocumentForm extends PictureDocumentFormBase {
             Config(QuickCreateToolbarButton, {
               contentType: config.contentType,
               propertyName: config.picturePropertyName,
-              forceReadOnlyValueExpression: this.getGridEmptyValueExpression(config),
+              forceReadOnlyValueExpression: this$.getGridEmptyValueExpression(config),
               bindTo: config.bindTo,
             }),
           ],
@@ -71,7 +73,7 @@ class PictureDocumentForm extends PictureDocumentFormBase {
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 
   /** Maximum amount of items in the list */

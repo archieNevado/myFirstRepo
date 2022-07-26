@@ -31,7 +31,9 @@ class TimelineConfigurationForm extends TimelineConfigurationFormBase {
   static override readonly xtype: string = "com.coremedia.blueprint.studio.config.timelineConfigurationForm";
 
   constructor(config: Config<TimelineConfigurationForm> = null) {
-    super((()=> ConfigUtils.apply(Config(TimelineConfigurationForm, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(TimelineConfigurationForm, {
       itemId: "timelineConfigurationForm",
       header: false,
       hideSingleComponentLabel: false,
@@ -64,7 +66,7 @@ class TimelineConfigurationForm extends TimelineConfigurationFormBase {
               plugins: [
                 Config(BlockEnterPlugin),
                 Config(BindPropertyPlugin, {
-                  bindTo: ValueExpressionFactory.create(TimelineViewModel.TIMELINE_PROPERTY_NAME, this.timelineViewModel),
+                  bindTo: ValueExpressionFactory.create(TimelineViewModel.TIMELINE_PROPERTY_NAME, this$.timelineViewModel),
                   bidirectional: true,
                   reverseTransformer: (v: number): number => v * 1000,
                   transformer: (v: number): number => v / 1000,
@@ -76,7 +78,7 @@ class TimelineConfigurationForm extends TimelineConfigurationFormBase {
           layout: Config(HBoxLayout),
         }),
       ],
-    }), config))());
+    }), config));
   }
 
   /** the property of the Bean to bind in this field */

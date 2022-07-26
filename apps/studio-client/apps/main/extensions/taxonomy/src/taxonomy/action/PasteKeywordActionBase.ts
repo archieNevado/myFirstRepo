@@ -22,12 +22,12 @@ class PasteKeywordActionBase extends Action {
   readonly items: Array<any>;
 
   constructor(config: Config<PasteKeywordAction> = null) {
-    super((()=>{
-      config.handler = bind(this, this.pasteNodes);
-      config.text = TaxonomyStudioPlugin_properties.TaxonomyExplorerPanel_paste_button_label;
-      config.disabled = true;
-      return config;
-    })());
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    config.handler = bind(this$, this$.pasteNodes);
+    config.text = TaxonomyStudioPlugin_properties.TaxonomyExplorerPanel_paste_button_label;
+    config.disabled = true;
+    super(config);
     this.#clipboardValueExpression = config.clipboardValueExpression;
     this.#selectionExpression = config.selectionExpression;
     this.#selectionExpression.addChangeListener(bind(this, this.#updateDisabled));

@@ -15,7 +15,9 @@ class CatalogLinkListColumn extends CatalogLinkListColumnBase {
   declare Config: CatalogLinkListColumnConfig;
 
   constructor(config: Config<CatalogLinkListColumn> = null) {
-    super((()=> ConfigUtils.apply(Config(CatalogLinkListColumn, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CatalogLinkListColumn, {
       header: GridColumns_properties.type_header,
       catalogToolTipText: ECommerceStudioPlugin_properties.catalog_header,
       catalogIconText: ECommerceStudioPlugin_properties.catalog_header,
@@ -24,10 +26,10 @@ class CatalogLinkListColumn extends CatalogLinkListColumnBase {
       stateId: "catalog",
       fixed: false,
       iconOnly: false,
-      renderer: bind(this, this.getRenderer),
+      renderer: bind(this$, this$.getRenderer),
       tpl: CatalogLinkListColumnBase.getXTemplate(),
 
-    }), config))());
+    }), config));
   }
 
   /** @private */

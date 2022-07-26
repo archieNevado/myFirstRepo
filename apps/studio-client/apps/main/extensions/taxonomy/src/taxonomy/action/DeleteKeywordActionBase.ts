@@ -20,12 +20,12 @@ class DeleteKeywordActionBase extends Action {
   readonly items: Array<any>;
 
   constructor(config: Config<DeleteKeywordAction> = null) {
-    super((()=>{
-      config.handler = bind(this, this.#deleteNodes);
-      config.disabled = true;
-      config.text = TaxonomyStudioPlugin_properties.TaxonomyExplorerPanel_delete_button_label;
-      return config;
-    })());
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    config.handler = bind(this$, this$.#deleteNodes);
+    config.disabled = true;
+    config.text = TaxonomyStudioPlugin_properties.TaxonomyExplorerPanel_delete_button_label;
+    super(config);
     this.#selectionExpression = config.selectionExpression;
     this.#selectionExpression.addChangeListener(bind(this, this.#updateDisabled));
   }

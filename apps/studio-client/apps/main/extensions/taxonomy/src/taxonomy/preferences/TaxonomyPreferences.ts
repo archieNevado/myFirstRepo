@@ -18,7 +18,9 @@ class TaxonomyPreferences extends TaxonomyPreferencesBase {
   static override readonly xtype: string = "com.coremedia.blueprint.studio.config.taxonomy.taxonomyPreferences";
 
   constructor(config: Config<TaxonomyPreferences> = null) {
-    super((()=> ConfigUtils.apply(Config(TaxonomyPreferences, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(TaxonomyPreferences, {
       title: TaxonomyStudioPlugin_properties.TaxonomyPreferences_tab_title,
 
       items: [
@@ -30,7 +32,7 @@ class TaxonomyPreferences extends TaxonomyPreferencesBase {
               valueField: "value",
               hideEmptyLabel: true,
               displayField: "name",
-              store: this.getStore(),
+              store: this$.getStore(),
               flex: 1,
               helpIconText: TaxonomyStudioPlugin_properties.TaxonomyPreferences_settings_tooltip,
               ...ConfigUtils.append({
@@ -38,7 +40,7 @@ class TaxonomyPreferences extends TaxonomyPreferencesBase {
                   Config(BindPropertyPlugin, {
                     componentEvent: "change",
                     componentProperty: "value",
-                    bindTo: this.getSuggestionTypesValueExpression(),
+                    bindTo: this$.getSuggestionTypesValueExpression(),
                     bidirectional: true,
                   }),
                 ],
@@ -50,7 +52,7 @@ class TaxonomyPreferences extends TaxonomyPreferencesBase {
         }),
       ],
       layout: Config(AnchorLayout),
-    }), config))());
+    }), config));
   }
 }
 

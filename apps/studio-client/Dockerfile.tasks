@@ -25,7 +25,7 @@ ARG SKIP_GENERATE_LOCK_FILE=true
 RUN --mount=type=secret,mode=0644,id=npmrc,target=/ws-root/apps/studio-client/.npmrc pnpm install --frozen-lockfile=${SKIP_GENERATE_LOCK_FILE}
 ## set build version
 ARG BUILD_VERSION
-RUN if [ -n "${BUILD_VERSION}" ] ; then pnpm run set-version -- ${BUILD_VERSION} ; else echo 'Skip set version.' ; fi
+RUN if [ -n "${BUILD_VERSION}" ] ; then pnpm run set-version ${BUILD_VERSION} ; else echo 'Skip set version.' ; fi
 # build
 RUN pnpm -r run build
 
@@ -34,7 +34,7 @@ FROM ${STUDIO_CLIENT_BUILD_IMAGE} as test-task
 WORKDIR /ws-root/apps/studio-client
 RUN mkdir -p /junit-files
 ARG SKIP_TESTS
-RUN if [ "${SKIP_TESTS:-false}" = "true" ] ; then echo "Skip tests." ; else pnpm -r run test -- --testFailureExitCode 0; fi
+RUN if [ "${SKIP_TESTS:-false}" = "true" ] ; then echo "Skip tests." ; else pnpm -r run test --testFailureExitCode 0; fi
 RUN find /ws-root/apps/studio-client -name "node_modules" -type d -prune -exec rm -rf {} \;
 RUN cd /ws-root/apps/studio-client && find . -type f -name 'junit.xml'  -exec cp --parent -R {} /junit-files \;
 
@@ -45,7 +45,7 @@ COPY --from=test-task /junit-files/ /junit-files/
 
 FROM ${STUDIO_CLIENT_BUILD_IMAGE} as package-task
 WORKDIR /ws-root/apps/studio-client
-RUN pnpm -r run package --filter @coremedia-blueprint/studio-client.studio
+RUN pnpm -r --filter @coremedia-blueprint/studio-client.studio run package
 RUN cp $(pnpm -r --filter @coremedia-blueprint/studio-client.studio exec pwd)/build/studio-client.studio-*.zip /tmp/studio-client.studio.zip
 
 

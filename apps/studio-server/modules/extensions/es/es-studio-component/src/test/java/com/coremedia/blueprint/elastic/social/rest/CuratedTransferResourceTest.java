@@ -3,8 +3,9 @@ package com.coremedia.blueprint.elastic.social.rest;
 import com.coremedia.blueprint.base.elastic.common.BlobConverter;
 import com.coremedia.blueprint.elastic.social.util.BbCodeToCoreMediaRichtextTransformer;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentException;
 import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
+import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.elastic.core.api.blobs.Blob;
 import com.coremedia.elastic.core.api.models.ModelException;
 import com.coremedia.elastic.social.api.comments.Comment;
@@ -13,242 +14,232 @@ import com.coremedia.elastic.social.api.reviews.Review;
 import com.coremedia.elastic.social.api.reviews.ReviewService;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.xml.Markup;
-import com.google.common.base.Preconditions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatcher;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyMap;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.type;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {CuratedTransferResourceTest.TestConfiguration.class})
 public class CuratedTransferResourceTest {
-  private static final String VALID_CONTENT_ID = "coremedia:///cap/content/42";
-  private static final String IMAGE_GALLERY_DEFAULT_PARENTFOLDER_CONTENT_ID = "coremedia:///cap/content/666";
-  private static final String VALID_COMMENT_IDS = "42,666";
-  private static final String CONTENT_PROPERTY_TO_COPY_TO = "detailText";
-  private static final String CMARTICLE_PROPERTY_TITLE = "title";
-  private static final String CMGALLERY_PROPERTY_TO_COPY_TO = "items";
-  private static final String CMGALLERY_PROPERTY_TITLE = "title";
-  private static final String VALID_IMAGE_MIME_TYPE = "image/jpeg";
-  private static final int DEFAULT_BLOB_SIZE = 42;
-  private static final String GALLERY_DOCUMENTTYPE = "CMPicture";
-  private static final String DEFAULT_DATE_STRING = "10.10.2010-12:42";
-  private static final String IMAGE_PROPERTY_BLOB = "data";
+  @Configuration(proxyBeanMethods = false)
+  @Import(XmlRepoConfiguration.class)
+  public static class TestConfiguration {
+    @Bean
+    public XmlUapiConfig xmlUapiConfig() {
+      return new XmlUapiConfig(CONTENT_REPOSITORY_URL);
+    }
 
-  @Mock
+    @Bean
+    CommentService commentService() {
+      return mock(CommentService.class);
+    }
+
+    @Bean
+    ReviewService reviewService() {
+      return mock(ReviewService.class);
+    }
+
+    @Bean
+    BlobConverter blobConverter() {
+      return mock(BlobConverter.class);
+    }
+  }
+
+  private static final String ARTICLE_CONTENT_ID = "coremedia:///cap/content/42";
+  private static final String ARTICLE_NAME = "test";
+  private static final String CLASS_PATH = "/com/coremedia/blueprint/elastic/social/rest/";
+  private static final String CM_GALLERY_DOC_TYPE = "CMGallery";
+  private static final String CM_GALLERY_PROPERTY_TO_COPY_TO = "items";
+  private static final String COMMENT_AUTHOR_NAME = "Dilbert";
+  private static final String COMMENT_DATE = "21.09.2012-16:23";
+  private static final String COMMENT_ID = "42";
+  private static final String COMMENT_TEXT = "It is a dummy text!";
+  private static final String CONTENT_PROPERTY_TO_COPY_TO = "detailText";
+  private static final String CONTENT_REPOSITORY_URL = "classpath:" + CLASS_PATH + "ct-test-content.xml";
+  private static final String COREMEDIA_RICHTEXT_GRAMMAR = "coremedia-richtext-1.0";
+  private static final String DEFAULT_DATE_STRING = "10.10.2010-12:42";
+  private static final String DUMMY_TEXT = "dummy";
+  private static final String EXPECTED_CONTENT_AS_BB_CODE = "[i]" + COMMENT_AUTHOR_NAME + "[/i], " + "21.09.2012 | 16:23:" + "[cmQuote]" + COMMENT_TEXT + "[/cmQuote]";
+  private static final String EXPECTED_DUMMY_CONTENT_AS_BB_CODE = "[i]" + DUMMY_TEXT + "[/i], " + "10.10.2010 | 12:42:" + "[cmQuote]" + DUMMY_TEXT + "[/cmQuote]";
+  private static final String IMAGE_ATTACHMENT_FILE_NAME = "attachment-42.jpg";
+  private static final String IMAGE_ATTACHMENT_FILE_NAME_WITHOUT_TYPE = "attachment-42";
+  private static final String IMAGE_GALLERY_CONTENT_ID = "coremedia:///cap/content/58";
+  private static final String IMAGE_GALLERY_NAME = "my-gallery";
+  private static final String IMAGE_MIME_TYPE = "image/jpeg";
+  private static final String INVALID_CONTENT_ID = "coremedia:///cap/content/68";
+  private static final String PROPERTY_TITLE = "title";
+  private static final String VALID_COMMENT_IDS = "42,23";
+
+  @Autowired
   private ContentRepository contentRepository;
 
-  @Mock
+  @Autowired
   private CommentService commentService;
 
-  @Mock
+  @Autowired
   private ReviewService reviewService;
 
-  @Mock
+  @Autowired
   private BlobConverter blobConverter;
 
-  @InjectMocks
   private CuratedTransferResource curatedTransferResource;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     curatedTransferResource = new CuratedTransferResource(contentRepository, commentService, reviewService, blobConverter);
   }
 
   // --- CuratedTransfer: Comments -------------------------------------------------------------------------------------
 
   @Test(expected = IllegalArgumentException.class)
-  public void postProcess_createArticleFromComments_capIdMustNotBeNull() throws Exception {
+  public void postProcess_createArticleFromComments_capIdMustNotBeNull() {
     curatedTransferResource.postProcess(null, VALID_COMMENT_IDS);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void postProcess_invalidContendId() {
-    curatedTransferResource.postProcess("fooBar42", VALID_COMMENT_IDS);
+    curatedTransferResource.postProcess(COMMENT_TEXT, VALID_COMMENT_IDS);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void postProcess_commentIdsMustNotBeNull() throws Exception {
-    curatedTransferResource.postProcess(VALID_CONTENT_ID, null);
+  public void postProcess_commentIdsMustNotBeNull() {
+    curatedTransferResource.postProcess(ARTICLE_CONTENT_ID, null);
   }
 
-  @Test(expected = ContentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void postProcess_articleToCopyToDoesNotExist() throws Exception {
-    when(contentRepository.getContent(VALID_CONTENT_ID)).thenThrow(ContentException.class);
-
-    curatedTransferResource.postProcess(VALID_CONTENT_ID, VALID_COMMENT_IDS);
+    Comment comment = mockComment(COMMENT_ID, COMMENT_TEXT, COMMENT_AUTHOR_NAME, dateFromString(COMMENT_DATE));
+    when(commentService.getComment(comment.getId())).thenReturn(comment);
+    curatedTransferResource.postProcess(INVALID_CONTENT_ID, COMMENT_ID);
   }
 
   @Test
   public void postProcess_copyFromOneComment() throws ParseException {
-    String articleContentId = VALID_CONTENT_ID;
-    String commentId = "42";
-    String commentText = "fooBar42";
-    final String commentAuthorName = "Dilbert";
-    String articleName = "test";
+    Content articleToCopyTo = getContent(ARTICLE_CONTENT_ID);
 
-    Content articleToCopyTo = mockContent();
-    when(articleToCopyTo.getName()).thenReturn(articleName);
-    when(contentRepository.getContent(articleContentId)).thenReturn(articleToCopyTo);
-
-    Comment comment = mockComment(commentId, commentText, commentAuthorName, dateFromString("21.09.2012-16:23"));
+    Comment comment = mockComment(COMMENT_ID, COMMENT_TEXT, COMMENT_AUTHOR_NAME, dateFromString(COMMENT_DATE));
     when(commentService.getComment(comment.getId())).thenReturn(comment);
 
     // Actual computation
-    curatedTransferResource.postProcess(articleContentId, commentId);
+    curatedTransferResource.postProcess(ARTICLE_CONTENT_ID, COMMENT_ID);
 
-    String expectedContentAsBbCode = "[i]" + commentAuthorName + "[/i], " + "21.09.2012 | 16:23:" + "[cmQuote]" + commentText + "[/cmQuote]";
-    Markup expectedContentAsRichtext = BbCodeToCoreMediaRichtextTransformer.newInstance().transform(expectedContentAsBbCode);
-    verify(articleToCopyTo).set(CONTENT_PROPERTY_TO_COPY_TO, expectedContentAsRichtext);
-    verify(articleToCopyTo).set(CMARTICLE_PROPERTY_TITLE, articleName);
+    Markup expectedContentAsRichtext = BbCodeToCoreMediaRichtextTransformer.newInstance().transform(EXPECTED_CONTENT_AS_BB_CODE)
+            .withGrammar(COREMEDIA_RICHTEXT_GRAMMAR);
+    assertThat(articleToCopyTo.get(CONTENT_PROPERTY_TO_COPY_TO)).isEqualTo(expectedContentAsRichtext);
+    assertThat(articleToCopyTo.get(PROPERTY_TITLE)).isEqualTo(ARTICLE_NAME);
   }
 
   @Test
   public void postProcess_copyFromOneReview() throws ParseException {
-    String articleContentId = VALID_CONTENT_ID;
-    String reviewId = "42";
-    String reviewText = "fooBar42";
-    final String reviewAuthorName = "Dilbert";
-    String articleName = "test";
+    Content articleToCopyTo = getContent(ARTICLE_CONTENT_ID);
 
-    Content articleToCopyTo = mockContent();
-    when(articleToCopyTo.getName()).thenReturn(articleName);
-    when(contentRepository.getContent(articleContentId)).thenReturn(articleToCopyTo);
-
-    Review review = mockReview(reviewId, reviewText, reviewAuthorName, dateFromString("21.09.2012-16:23"));
+    Review review = mockReview(COMMENT_ID, COMMENT_TEXT, COMMENT_AUTHOR_NAME, dateFromString(COMMENT_DATE));
     when(commentService.getComment(review.getId())).thenReturn(review);
 
     // Actual computation
-    curatedTransferResource.postProcess(articleContentId, reviewId);
+    curatedTransferResource.postProcess(ARTICLE_CONTENT_ID, COMMENT_ID);
 
-    String expectedContentAsBbCode = "[i]" + reviewAuthorName + "[/i], " + "21.09.2012 | 16:23:" + "[cmQuote]" + reviewText + "[/cmQuote]";
-    Markup expectedContentAsRichtext = BbCodeToCoreMediaRichtextTransformer.newInstance().transform(expectedContentAsBbCode);
-    verify(articleToCopyTo).set(CONTENT_PROPERTY_TO_COPY_TO, expectedContentAsRichtext);
-    verify(articleToCopyTo).set(CMARTICLE_PROPERTY_TITLE, articleName);
+    Markup expectedContentAsRichtext = BbCodeToCoreMediaRichtextTransformer.newInstance().transform(EXPECTED_CONTENT_AS_BB_CODE)
+            .withGrammar(COREMEDIA_RICHTEXT_GRAMMAR);
+    assertThat(articleToCopyTo.get(CONTENT_PROPERTY_TO_COPY_TO)).isEqualTo(expectedContentAsRichtext);
+    assertThat(articleToCopyTo.get(PROPERTY_TITLE)).isEqualTo(ARTICLE_NAME);
   }
 
   @Test
   public void postProcess_copyFromOneAnonymousComment() throws ParseException {
-    String articleContentId = VALID_CONTENT_ID;
-    String commentId = "42";
-    String commentText = "fooBar42";
-    final String commentAuthorName = null;
-    String articleName = "test";
+    String commentAuthorName = null;
 
-    Content articleToCopyTo = mockContent();
-    when(articleToCopyTo.getName()).thenReturn(articleName);
-    when(contentRepository.getContent(articleContentId)).thenReturn(articleToCopyTo);
+    Content articleToCopyTo = getContent(ARTICLE_CONTENT_ID);
 
-    Comment comment = mockComment(commentId, commentText, commentAuthorName, dateFromString("21.09.2012-16:23"));
+    Comment comment = mockComment(COMMENT_ID, COMMENT_TEXT, commentAuthorName, dateFromString(COMMENT_DATE));
     when(commentService.getComment(comment.getId())).thenReturn(comment);
 
     // Actual computation
-    curatedTransferResource.postProcess(articleContentId, commentId);
+    curatedTransferResource.postProcess(ARTICLE_CONTENT_ID, COMMENT_ID);
 
-    String expectedContentAsBbCode = "[i]anonymous[/i], " + "21.09.2012 | 16:23:" + "[cmQuote]" + commentText + "[/cmQuote]";
-    Markup expectedContentAsRichtext = BbCodeToCoreMediaRichtextTransformer.newInstance().transform(expectedContentAsBbCode);
-    verify(articleToCopyTo).set(CONTENT_PROPERTY_TO_COPY_TO, expectedContentAsRichtext);
-    verify(articleToCopyTo).set(CMARTICLE_PROPERTY_TITLE, articleName);
+    String expectedContentAsBbCode = "[i]anonymous[/i], " + "21.09.2012 | 16:23:" + "[cmQuote]" + COMMENT_TEXT + "[/cmQuote]";
+    Markup expectedContentAsRichtext = BbCodeToCoreMediaRichtextTransformer.newInstance().transform(expectedContentAsBbCode)
+            .withGrammar(COREMEDIA_RICHTEXT_GRAMMAR);
+    assertThat(articleToCopyTo.get(CONTENT_PROPERTY_TO_COPY_TO)).isEqualTo(expectedContentAsRichtext);
+    assertThat(articleToCopyTo.get(PROPERTY_TITLE)).isEqualTo(ARTICLE_NAME);
   }
 
   @Test
   public void postProcess_copyFromOneUserComment() throws ParseException {
-    String articleContentId = VALID_CONTENT_ID;
-    String commentId = "42";
-    String commentText = "fooBar42";
-    final String commentAuthorName = "dilbert";
-    String articleName = "test";
-
     CommunityUser author = mock(CommunityUser.class);
     when(author.isAnonymous()).thenReturn(false);
-    when(author.getName()).thenReturn(commentAuthorName);
+    when(author.getName()).thenReturn(COMMENT_AUTHOR_NAME);
 
-    Content articleToCopyTo = mockContent();
-    when(articleToCopyTo.getName()).thenReturn(articleName);
-    when(contentRepository.getContent(articleContentId)).thenReturn(articleToCopyTo);
+    Content articleToCopyTo = getContent(ARTICLE_CONTENT_ID);
 
-    Comment comment = mockComment(commentId, commentText, "", dateFromString("21.09.2012-16:23"));
+    Comment comment = mockComment(COMMENT_ID, COMMENT_TEXT, "", dateFromString(COMMENT_DATE));
     when(comment.getAuthor()).thenReturn(author);
     when(commentService.getComment(comment.getId())).thenReturn(comment);
 
     // Actual computation
-    curatedTransferResource.postProcess(articleContentId, commentId);
+    curatedTransferResource.postProcess(ARTICLE_CONTENT_ID, COMMENT_ID);
 
-    String expectedContentAsBbCode = "[i]" + commentAuthorName + "[/i], " + "21.09.2012 | 16:23:" + "[cmQuote]" + commentText + "[/cmQuote]";
-    Markup expectedContentAsRichtext = BbCodeToCoreMediaRichtextTransformer.newInstance().transform(expectedContentAsBbCode);
-    verify(articleToCopyTo).set(CONTENT_PROPERTY_TO_COPY_TO, expectedContentAsRichtext);
-    verify(articleToCopyTo).set(CMARTICLE_PROPERTY_TITLE, articleName);
+    Markup expectedContentAsRichtext = BbCodeToCoreMediaRichtextTransformer.newInstance().transform(EXPECTED_CONTENT_AS_BB_CODE)
+            .withGrammar(COREMEDIA_RICHTEXT_GRAMMAR);
+    assertThat(articleToCopyTo.get(CONTENT_PROPERTY_TO_COPY_TO)).isEqualTo(expectedContentAsRichtext);
+    assertThat(articleToCopyTo.get(PROPERTY_TITLE)).isEqualTo(ARTICLE_NAME);
   }
 
   @Test
   public void postProcess_copyFromTwoComments() throws ParseException {
-    String articleContentId = VALID_CONTENT_ID;
-    String commentId = "42";
     String secondCommentId = "555";
-    final String commentAuthorName = "Dilbert";
-    final String secondCommentAuthorName = "Hobbes";
-    String commentText = "fooBar42";
+    String secondCommentAuthorName = "Hobbes";
     String secondCommentText = "3000";
-    String articleName = "test";
 
-    Content articleToCopyTo = mockContent();
-    when(articleToCopyTo.getName()).thenReturn(articleName);
-    when(contentRepository.getContent(articleContentId)).thenReturn(articleToCopyTo);
+    Content articleToCopyTo = getContent(ARTICLE_CONTENT_ID);
 
-    Comment comment01 = mockComment(commentId, commentText, commentAuthorName, dateFromString("21.09.2012-16:23"));
+    Comment comment01 = mockComment(COMMENT_ID, COMMENT_TEXT, COMMENT_AUTHOR_NAME, dateFromString(COMMENT_DATE));
     when(commentService.getComment(comment01.getId())).thenReturn(comment01);
 
     Comment comment02 = mockComment(secondCommentId, secondCommentText, secondCommentAuthorName, dateFromString("23.09.2012-09:04"));
     when(commentService.getComment(comment02.getId())).thenReturn(comment02);
 
     // Actual computation
-    final String commentIds = commentId + ";" + secondCommentId;
-    curatedTransferResource.postProcess(articleContentId, commentIds);
+    String commentIds = COMMENT_ID + ";" + secondCommentId;
+    curatedTransferResource.postProcess(ARTICLE_CONTENT_ID, commentIds);
 
     String lineBreak = "\r\n";
-    String commentBbCode = "[i]" + commentAuthorName + "[/i], " + "21.09.2012 | 16:23:" + "[cmQuote]" + commentText + "[/cmQuote]";
     String secondCommentBbCode = "[i]" + secondCommentAuthorName + "[/i], " + "23.09.2012 | 09:04:" + "[cmQuote]" + secondCommentText + "[/cmQuote]";
 
-    final String mergedCommentsAsBbCode = commentBbCode + lineBreak + secondCommentBbCode;
-    final Markup expectedRichtextContent = BbCodeToCoreMediaRichtextTransformer.newInstance().transform(mergedCommentsAsBbCode);
-    verify(articleToCopyTo).set(CONTENT_PROPERTY_TO_COPY_TO, expectedRichtextContent);
-    verify(articleToCopyTo).set(CMARTICLE_PROPERTY_TITLE, articleName);
+    String mergedCommentsAsBbCode = EXPECTED_CONTENT_AS_BB_CODE + lineBreak + secondCommentBbCode;
+    Markup expectedRichtextContent = BbCodeToCoreMediaRichtextTransformer.newInstance().transform(mergedCommentsAsBbCode)
+            .withGrammar(COREMEDIA_RICHTEXT_GRAMMAR);
+    assertThat(articleToCopyTo.get(CONTENT_PROPERTY_TO_COPY_TO)).isEqualTo(expectedRichtextContent);
+    assertThat(articleToCopyTo.get(PROPERTY_TITLE)).isEqualTo(ARTICLE_NAME);
   }
 
   @Test
-  public void postProcess_commentNotFound() throws ParseException {
-    String articleContentId = VALID_CONTENT_ID;
-    String commentId = "42";
-
-    Content articleToCopyTo = mockContent();
-    when(contentRepository.getContent(articleContentId)).thenReturn(articleToCopyTo);
+  public void postProcess_commentNotFound() {
+    Content articleToCopyTo = getContent(ARTICLE_CONTENT_ID);
 
     // Actual computation
-    curatedTransferResource.postProcess(articleContentId, commentId);
+    curatedTransferResource.postProcess(ARTICLE_CONTENT_ID, COMMENT_ID);
 
-    verify(articleToCopyTo, never()).set(eq(CONTENT_PROPERTY_TO_COPY_TO), anyString());
-    verify(articleToCopyTo, never()).set(eq(CMARTICLE_PROPERTY_TITLE), anyString());
+    Markup expectedRichtextContent = BbCodeToCoreMediaRichtextTransformer.newInstance().transform(EXPECTED_DUMMY_CONTENT_AS_BB_CODE)
+            .withGrammar(COREMEDIA_RICHTEXT_GRAMMAR);
+    assertThat(articleToCopyTo.get(CONTENT_PROPERTY_TO_COPY_TO)).isEqualTo(expectedRichtextContent);
+    assertThat(articleToCopyTo.get(PROPERTY_TITLE)).isEqualTo(ARTICLE_NAME);
   }
 
   // --- CuratedTransfer: Image attachments ----------------------------------------------------------------------------
@@ -259,247 +250,165 @@ public class CuratedTransferResourceTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void postProcessImages_commentIdsMustNotBeNull() throws Exception {
-    curatedTransferResource.postProcess(VALID_CONTENT_ID, null);
-  }
-
-  @Test(expected = ContentException.class)
-  public void postProcessImages_galleryToCopyToDoesNotExist() throws Exception {
-    when(contentRepository.getContent(VALID_CONTENT_ID)).thenThrow(ContentException.class);
-
-    curatedTransferResource.postProcess(VALID_CONTENT_ID, VALID_COMMENT_IDS);
+  public void postProcessImages_commentIdsMustNotBeNull() {
+    curatedTransferResource.postProcess(ARTICLE_CONTENT_ID, null);
   }
 
   @Test
   public void postProcessImages_copyFromOneCommentWithoutImageAttachment() throws ParseException {
-    String imageGalleryParentContentId = IMAGE_GALLERY_DEFAULT_PARENTFOLDER_CONTENT_ID;
-    String imageGalleryContentId = VALID_CONTENT_ID;
-    String imageGalleryName = "test";
-    String commentId = "42";
-
     // Mock comment
-    Comment commentWithoutImageAttachment = mockComment(commentId, "dummy", "dummy", createDefaultDate());
+    Comment commentWithoutImageAttachment = mockComment(COMMENT_ID, DUMMY_TEXT, DUMMY_TEXT, createDefaultDate());
     when(commentService.getComment(commentWithoutImageAttachment.getId())).thenReturn(commentWithoutImageAttachment);
 
     // Mock image gallery (including the containing folder)
-    Content imageGalleryFolder = mockFolder();
+    Content imageGallery = getContent(IMAGE_GALLERY_CONTENT_ID);
 
-    Content imageGallery = mockContent();
-    when(imageGallery.getParent()).thenReturn(imageGalleryFolder);
-    when(imageGallery.getName()).thenReturn(imageGalleryName);
-    when(contentRepository.getContent(imageGalleryContentId)).thenReturn(imageGallery);
+    curatedTransferResource.postProcessImages(IMAGE_GALLERY_CONTENT_ID, COMMENT_ID);
 
-    curatedTransferResource.postProcessImages(imageGalleryContentId, commentId);
-
-    verify(contentRepository, never()).createChild(
-            eq(imageGalleryFolder),
-            anyString(),
-            eq(GALLERY_DOCUMENTTYPE),
-            anyMap()
+    assertThat(imageGallery).satisfies(
+            gallery -> {
+              assertThat(gallery.get(PROPERTY_TITLE)).isEqualTo(IMAGE_GALLERY_NAME);
+              assertThat(gallery.get(CONTENT_PROPERTY_TO_COPY_TO)).isInstanceOf(Markup.class);
+            }
     );
-
-    verify(imageGallery).set(CMGALLERY_PROPERTY_TITLE, imageGalleryName);
-    verify(imageGallery).set(eq(CONTENT_PROPERTY_TO_COPY_TO), any(Markup.class));
   }
 
   @Test
-  public void postProcessImages_copyOneImageAttachmentFromOneComment() throws ParseException {
-    String imageGalleryParentContentId = IMAGE_GALLERY_DEFAULT_PARENTFOLDER_CONTENT_ID;
-    String imageGalleryContentId = VALID_CONTENT_ID;
-    String imageGalleryName = "my-gallery";
-    String imageAttachmentFileName = "attachment-42.jpg";
-    String imageAttachmentFileNameWithoutType = "attachment-42";
-    String commentId = "42";
-    final String commentText = "I am a very nice dummy text!";
-
+  public void postProcessImages_copyOneImageAttachmentFromOneComment() throws Exception {
     // Mock image gallery (including the containing folder)
-    Content imageGalleryFolder = mockFolder();
-    Content imageGallery = mockContent();
-    when(imageGallery.getName()).thenReturn(imageGalleryName);
-    when(imageGallery.getParent()).thenReturn(imageGalleryFolder);
-    when(contentRepository.getContent(imageGalleryContentId)).thenReturn(imageGallery);
+    Content imageGallery = getContent(IMAGE_GALLERY_CONTENT_ID);
+    if (!imageGallery.isCheckedOut())
+      imageGallery.checkOut();
+
+    // image attachment
+    com.coremedia.cap.common.Blob imageAttachmentAsCapBlob =
+            contentRepository.getConnection().getBlobService().fromInputStream(
+                    getClass().getResourceAsStream(CLASS_PATH + IMAGE_ATTACHMENT_FILE_NAME), IMAGE_MIME_TYPE);
 
     // Mock comment
-    List<Blob> imageAttachments = Arrays.asList(mockImageBlob(imageAttachmentFileName));
-    Comment commentWithOneImageAttachment = mockCommentWithImageAttachment(commentId, imageAttachments);
-    when(commentWithOneImageAttachment.getText()).thenReturn(commentText);
+    List<Blob> imageAttachments = List.of(mockImageBlob(IMAGE_ATTACHMENT_FILE_NAME));
+    Comment commentWithOneImageAttachment = mockCommentWithImageAttachment(COMMENT_ID, imageAttachments);
+    when(commentWithOneImageAttachment.getText()).thenReturn(COMMENT_TEXT);
     when(commentService.getComment(commentWithOneImageAttachment.getId())).thenReturn(commentWithOneImageAttachment);
 
     // Fake image attachment
-    final com.coremedia.cap.common.Blob imageAttachmentAsCapBlob = mockCapBlob();
     Blob imageAttachment = commentWithOneImageAttachment.getAttachments().get(0);
     when(blobConverter.capBlobFrom(imageAttachment)).thenReturn(imageAttachmentAsCapBlob);
 
-    // Fake CMPicture (created from image attachment)
-    Map<String, Object> expectedPictureProperties = Collections.<String, Object>singletonMap(IMAGE_PROPERTY_BLOB, imageAttachmentAsCapBlob);
-    Content cmPicture = mockContent();
-    when(contentRepository.createChild(
-            eq(imageGalleryFolder),
-            eq(imageAttachmentFileNameWithoutType),
-            eq(GALLERY_DOCUMENTTYPE),
-            argThat(isMapContaining(expectedPictureProperties)))
-    ).thenReturn(cmPicture);
-
     // Actual computation
-    curatedTransferResource.postProcessImages(imageGalleryContentId, commentId);
+    curatedTransferResource.postProcessImages(IMAGE_GALLERY_CONTENT_ID, COMMENT_ID);
 
-    // corresponding CMPicture created?
-    verify(contentRepository, times(1)).createChild(
-            eq(imageGalleryFolder),
-            eq(imageAttachmentFileNameWithoutType),
-            eq(GALLERY_DOCUMENTTYPE),
-            argThat(isMapContaining(expectedPictureProperties))
+    assertThat(imageGallery).satisfies(
+            gallery -> {
+              assertThat(gallery.getType()).isEqualTo(contentRepository.getContentType(CM_GALLERY_DOC_TYPE));
+              assertThat(gallery.get(PROPERTY_TITLE)).isEqualTo(IMAGE_GALLERY_NAME);
+              assertThat(gallery.get(CONTENT_PROPERTY_TO_COPY_TO)).isInstanceOf(Markup.class);
+              assertThat(gallery.getList(CM_GALLERY_PROPERTY_TO_COPY_TO))
+                      .map(item -> ((Content) item).getName())
+                      .containsExactly(IMAGE_ATTACHMENT_FILE_NAME_WITHOUT_TYPE);
+            }
     );
-
-    // Created CMPicture linked to gallery?
-    verify(imageGallery, times(1)).set(CMGALLERY_PROPERTY_TO_COPY_TO, Arrays.asList(cmPicture));
-    verify(imageGallery).set(CMGALLERY_PROPERTY_TITLE, imageGalleryName);
-    verify(imageGallery).set(eq(CONTENT_PROPERTY_TO_COPY_TO), any(Markup.class));
   }
 
   @Test
-  public void postProcessImages_copyTwoImageAttachmentsWithSameFileNameFromOneComment() throws ParseException {
-    String imageGalleryParentContentId = IMAGE_GALLERY_DEFAULT_PARENTFOLDER_CONTENT_ID;
-    String imageGalleryContentId = VALID_CONTENT_ID;
-    String commentId = "42";
-    String attachmentFileName = "attachment-42.jpg";
-
+  public void postProcessImages_copyTwoImageAttachmentsWithSameFileNameFromOneComment() throws Exception {
     // Mock image gallery (including the containing folder)
-    Content imageGalleryFolder = mockFolder();
-    Content imageGallery = mockContent();
-    when(imageGallery.getParent()).thenReturn(imageGalleryFolder);
-    when(contentRepository.getContent(imageGalleryContentId)).thenReturn(imageGallery);
+    Content imageGallery = getContent(IMAGE_GALLERY_CONTENT_ID);
+
+    if (!imageGallery.isCheckedOut())
+      imageGallery.checkOut();
 
     // Fake image attachments
-    Blob firstAttachment = mockImageBlob(attachmentFileName);
-    Blob secondAttachment = mockImageBlob(attachmentFileName);
-    List<Blob> imageAttachments = Arrays.asList(firstAttachment, secondAttachment);
-    final com.coremedia.cap.common.Blob dummyCapBlob = mockCapBlob();
+    Blob firstAttachment = mockImageBlob(IMAGE_ATTACHMENT_FILE_NAME);
+    Blob secondAttachment = mockImageBlob(IMAGE_ATTACHMENT_FILE_NAME);
+    List<Blob> imageAttachments = List.of(firstAttachment, secondAttachment);
+    com.coremedia.cap.common.Blob dummyCapBlob =
+            contentRepository.getConnection().getBlobService().fromInputStream(
+                    getClass().getResourceAsStream(CLASS_PATH + IMAGE_ATTACHMENT_FILE_NAME), IMAGE_MIME_TYPE);
     when(blobConverter.capBlobFrom(firstAttachment)).thenReturn(dummyCapBlob);
     when(blobConverter.capBlobFrom(secondAttachment)).thenReturn(dummyCapBlob);
 
-    // Fake CMPicture (created from image attachment)
-    Map<String, Object> expectedPictureProperties = Collections.<String,Object>singletonMap(IMAGE_PROPERTY_BLOB, dummyCapBlob);
-    Content cmPicture = mockContent();
-    when(contentRepository.createChild(
-            eq(imageGalleryFolder),
-            anyString(),
-            eq(GALLERY_DOCUMENTTYPE),
-            argThat(isMapContaining(expectedPictureProperties)))
-    ).thenReturn(cmPicture);
-
     // Mock comments
-    Comment firstComment = mockCommentWithImageAttachment(commentId, imageAttachments);
+    Comment firstComment = mockCommentWithImageAttachment(COMMENT_ID, imageAttachments);
     when(commentService.getComment(firstComment.getId())).thenReturn(firstComment);
 
     // Actual computation
-    curatedTransferResource.postProcessImages(imageGalleryContentId, commentId);
+    curatedTransferResource.postProcessImages(IMAGE_GALLERY_CONTENT_ID, COMMENT_ID);
 
-    verify(contentRepository, times(1)).createChild(
-            eq(imageGalleryFolder),
-            eq("attachment-42"),
-            eq(GALLERY_DOCUMENTTYPE),
-            anyMap()
-    );
-
-    verify(contentRepository, times(1)).createChild(
-            eq(imageGalleryFolder),
-            eq("attachment-42(1)"),
-            eq(GALLERY_DOCUMENTTYPE),
-            anyMap()
+    assertThat(imageGallery).satisfies(
+            gallery -> {
+              assertThat(gallery.getType()).isEqualTo(contentRepository.getContentType(CM_GALLERY_DOC_TYPE));
+              assertThat(gallery.getList(CM_GALLERY_PROPERTY_TO_COPY_TO))
+                      .hasSize(2)
+                      .allSatisfy(item ->
+                              assertThat(item).isInstanceOf(Content.class)
+                                      .asInstanceOf(type(Content.class))
+                                      .extracting(Content::getName).asString()
+                                      .startsWith(IMAGE_ATTACHMENT_FILE_NAME_WITHOUT_TYPE));
+            }
     );
   }
 
   @Test
-  public void postProcessImages_copyOneImageAttachmentWhoseFilePathExistsInTheRepository() throws ParseException {
-    String imageGalleryParentContentId = IMAGE_GALLERY_DEFAULT_PARENTFOLDER_CONTENT_ID;
-    String imageGalleryParentPath = "/root/imageGalleries";
-    String imageGalleryContentId = VALID_CONTENT_ID;
-    String commentId = "42";
-    String attachmentFileName = "attachment-42.jpg";
-    String attachmentFileNameWithoutType = "attachment-42";
-
+  public void postProcessImages_copyOneImageAttachmentWhoseFilePathExistsInTheRepository() throws Exception {
     // Mock image gallery (including the containing folder)
-    Content imageGalleryFolder = mockFolder();
-    when(imageGalleryFolder.getPath()).thenReturn(imageGalleryParentPath);
-    Content imageGallery = mockContent();
-    when(imageGallery.getParent()).thenReturn(imageGalleryFolder);
-    when(contentRepository.getContent(imageGalleryContentId)).thenReturn(imageGallery);
+    Content imageGallery = getContent(IMAGE_GALLERY_CONTENT_ID);
+    if (!imageGallery.isCheckedOut())
+      imageGallery.checkOut();
 
-    // fake existing content in repository
-    String identicalFilePath = imageGalleryParentPath + "/" + attachmentFileNameWithoutType;
-    when(contentRepository.getChild(identicalFilePath)).thenReturn(mockContent());
+    // image attachments
+    Blob imageAttachment = mockImageBlob(IMAGE_ATTACHMENT_FILE_NAME);
+    com.coremedia.cap.common.Blob dummyCapBlob =
+            contentRepository.getConnection().getBlobService().fromInputStream(
+                    getClass().getResourceAsStream(CLASS_PATH + IMAGE_ATTACHMENT_FILE_NAME), IMAGE_MIME_TYPE);
 
-    // Fake image attachments
-    Blob imageAttachment = mockImageBlob(attachmentFileName);
-    final com.coremedia.cap.common.Blob dummyCapBlob = mockCapBlob();
     when(blobConverter.capBlobFrom(imageAttachment)).thenReturn(dummyCapBlob);
 
-    // Fake CMPicture (created from image attachment)
-    Map<String, Object> expectedPictureProperties = Collections.<String, Object>singletonMap(IMAGE_PROPERTY_BLOB, dummyCapBlob);
-    Content cmPicture = mockContent();
-    when(contentRepository.createChild(
-            eq(imageGalleryFolder),
-            anyString(),
-            eq(GALLERY_DOCUMENTTYPE),
-            argThat(isMapContaining(expectedPictureProperties)))
-    ).thenReturn(cmPicture);
-
     // Mock comments
-    Comment firstComment = mockCommentWithImageAttachment(commentId, Arrays.asList(imageAttachment));
+    Comment firstComment = mockCommentWithImageAttachment(COMMENT_ID, List.of(imageAttachment));
     when(commentService.getComment(firstComment.getId())).thenReturn(firstComment);
 
     // Actual computation
-    curatedTransferResource.postProcessImages(imageGalleryContentId, commentId);
+    curatedTransferResource.postProcessImages(IMAGE_GALLERY_CONTENT_ID, COMMENT_ID);
 
-    verify(contentRepository, times(1)).createChild(
-            eq(imageGalleryFolder),
-            eq("attachment-42(1)"),
-            eq(GALLERY_DOCUMENTTYPE),
-            anyMap()
+    assertThat(imageGallery).satisfies(
+            gallery -> {
+              assertThat(gallery.getType()).isEqualTo(contentRepository.getContentType(CM_GALLERY_DOC_TYPE));
+              assertThat(gallery.getList(CM_GALLERY_PROPERTY_TO_COPY_TO))
+                      .hasSize(1)
+                      .allSatisfy(item ->
+                              assertThat(item).isInstanceOf(Content.class)
+                                      .asInstanceOf(type(Content.class))
+                                      .extracting(Content::getName).asString()
+                                      .startsWith(IMAGE_ATTACHMENT_FILE_NAME_WITHOUT_TYPE));
+            }
     );
   }
 
   @Test
   public void postProcess_commentWithInvalidUser() throws ParseException {
-    String articleContentId = VALID_CONTENT_ID;
-    String commentId = "42";
-    String commentText = "fooBar42";
     CommunityUser author = mock(CommunityUser.class);
     when(author.isAnonymous()).thenThrow(new ModelException("No delegate for model"));
 
-    Content articleToCopyTo = mockContent();
-    when(contentRepository.getContent(articleContentId)).thenReturn(articleToCopyTo);
+    Content articleToCopyTo = getContent(ARTICLE_CONTENT_ID);
 
-    Comment comment = mockComment(commentId, commentText, "", dateFromString("21.09.2012-16:23"));
+    Comment comment = mockComment(COMMENT_ID, COMMENT_TEXT, "", dateFromString(COMMENT_DATE));
     when(comment.getAuthor()).thenReturn(author);
     when(commentService.getComment(comment.getId())).thenReturn(comment);
 
     // Actual computation
-    curatedTransferResource.postProcess(articleContentId, commentId);
+    curatedTransferResource.postProcess(ARTICLE_CONTENT_ID, COMMENT_ID);
 
-    String expectedContentAsBbCode = "[i]" + "anonymous" + "[/i], " + "21.09.2012 | 16:23:" + "[cmQuote]" + commentText + "[/cmQuote]";
-    Markup expectedContentAsRichtext = BbCodeToCoreMediaRichtextTransformer.newInstance().transform(expectedContentAsBbCode);
-    verify(articleToCopyTo).set(CONTENT_PROPERTY_TO_COPY_TO, expectedContentAsRichtext);
-  }
-
-
-  private com.coremedia.cap.common.Blob mockCapBlob() {
-    com.coremedia.cap.common.Blob capBlob = mock(com.coremedia.cap.common.Blob.class);
-    when(capBlob.getSize()).thenReturn(DEFAULT_BLOB_SIZE);
-    return capBlob;
+    String expectedContentAsBbCode = "[i]" + "anonymous" + "[/i], " + "21.09.2012 | 16:23:" + "[cmQuote]" + COMMENT_TEXT + "[/cmQuote]";
+    Markup expectedContentAsRichtext = BbCodeToCoreMediaRichtextTransformer.newInstance().transform(expectedContentAsBbCode)
+            .withGrammar(COREMEDIA_RICHTEXT_GRAMMAR);
+    assertThat(articleToCopyTo.get(CONTENT_PROPERTY_TO_COPY_TO)).isEqualTo(expectedContentAsRichtext);
   }
 
   // --- Helper methods ------------------------------------------------------------------------------------------------
 
-  private Content mockFolder() {
-    Content folder = mockContent();
-    when(folder.isFolder()).thenReturn(true);
-    return folder;
-  }
-
-  private Content mockContent() {
-    return mock(Content.class);
+  private Content getContent(String contentId) {
+    return contentRepository.getContent(contentId);
   }
 
   private Comment mockComment(String commentId, String commentText, String commentAuthorName, Date commentDate) throws ParseException {
@@ -534,27 +443,9 @@ public class CuratedTransferResourceTest {
 
   private Blob mockImageBlob(String attachmentFileName) {
     Blob imageBlob = mock(Blob.class);
-    when(imageBlob.getContentType()).thenReturn(VALID_IMAGE_MIME_TYPE);
+    when(imageBlob.getContentType()).thenReturn(IMAGE_MIME_TYPE);
     when(imageBlob.getFileName()).thenReturn(attachmentFileName);
     return imageBlob;
-  }
-
-  @SuppressWarnings("all")
-  private ArgumentMatcher<Map<String, Object>> isMapContaining(final Map<String, Object> expectedProperties) {
-    return new ArgumentMatcher<Map<String, Object>>() {
-      public boolean matches(Map<String, Object> argument) {
-        Preconditions.checkArgument(expectedProperties.size() > 0, "Cannot compare with empty property map.");
-
-        Map<String, Object> actualProperties = (Map<String, Object>) argument;
-        boolean allPropertiesContained = true;
-        for (Map.Entry<String, Object> propEntry : expectedProperties.entrySet()) {
-          allPropertiesContained &= actualProperties.containsKey(propEntry.getKey())
-                  && actualProperties.get(propEntry.getKey()).equals(propEntry.getValue());
-        }
-
-        return allPropertiesContained;
-      }
-    };
   }
 
   private static Date dateFromString(String germanDateString) throws ParseException {

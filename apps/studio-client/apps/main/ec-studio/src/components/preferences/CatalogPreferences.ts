@@ -18,7 +18,9 @@ class CatalogPreferences extends CatalogPreferencesBase {
   static readonly CATALOG_PREFERENCES_ITEM_ID: string = "contentCatalogPreferences";
 
   constructor(config: Config<CatalogPreferences> = null) {
-    super((()=> ConfigUtils.apply(Config(CatalogPreferences, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CatalogPreferences, {
       title: ECommerceStudioPlugin_properties.EcCatalogPreferences_tab_title,
       itemId: CatalogPreferences.CATALOG_PREFERENCES_ITEM_ID,
 
@@ -34,7 +36,7 @@ class CatalogPreferences extends CatalogPreferencesBase {
                 Config(BindPropertyPlugin, {
                   bidirectional: true,
                   ifUndefined: "false",
-                  bindTo: this.getShowCatalogValueExpression(),
+                  bindTo: this$.getShowCatalogValueExpression(),
                 }),
               ],
             }),
@@ -45,7 +47,7 @@ class CatalogPreferences extends CatalogPreferencesBase {
                 Config(BindPropertyPlugin, {
                   bidirectional: true,
                   ifUndefined: "false",
-                  bindTo: this.getSortCategoriesByNameExpression(),
+                  bindTo: this$.getSortCategoriesByNameExpression(),
                 }),
               ],
             }),
@@ -53,7 +55,7 @@ class CatalogPreferences extends CatalogPreferencesBase {
         }),
       ],
       layout: Config(AnchorLayout),
-    }), config))());
+    }), config));
   }
 }
 

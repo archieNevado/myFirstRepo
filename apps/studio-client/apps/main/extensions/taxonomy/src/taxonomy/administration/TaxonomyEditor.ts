@@ -13,7 +13,9 @@ class TaxonomyEditor extends TaxonomyEditorBase {
   static override readonly xtype: string = "com.coremedia.blueprint.studio.config.taxonomy.taxonomyEditor";
 
   constructor(config: Config<TaxonomyEditor> = null) {
-    super((()=> ConfigUtils.apply(Config(TaxonomyEditor, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(TaxonomyEditor, {
       title: TaxonomyStudioPlugin_properties.TaxonomyEditor_title,
       id: "taxonomyEditor",
       iconCls: TaxonomyStudioPlugin_properties.TaxonomyEditor_icon,
@@ -22,12 +24,12 @@ class TaxonomyEditor extends TaxonomyEditorBase {
       items: [
         Config(TaxonomyExplorerPanel, {
           id: "taxonomyExplorerPanel",
-          searchResultExpression: this.getSearchResultExpression(),
-          siteSelectionExpression: this.getSiteSelectionExpression(),
+          searchResultExpression: this$.getSearchResultExpression(),
+          siteSelectionExpression: this$.getSiteSelectionExpression(),
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 }
 

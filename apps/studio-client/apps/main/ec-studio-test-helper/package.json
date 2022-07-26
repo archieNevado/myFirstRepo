@@ -5,13 +5,13 @@
   "license": "CoreMedia Open Source License",
   "private": true,
   "dependencies": {
-    "@coremedia/studio-client.cap-rest-client": "2204.2.0",
-    "@coremedia/studio-client.cap-rest-client-impl": "2204.2.0",
-    "@coremedia/studio-client.client-core": "2204.2.0",
-    "@coremedia/studio-client.client-core-impl": "2204.2.0",
-    "@coremedia/studio-client.client-core-test-helper": "2204.2.0",
-    "@coremedia/studio-client.main.editor-components": "2204.2.0",
-    "@coremedia/studio-client.multi-site-models": "2204.2.0",
+    "@coremedia/studio-client.cap-rest-client": "2207.1.0",
+    "@coremedia/studio-client.cap-rest-client-impl": "2207.1.0",
+    "@coremedia/studio-client.client-core": "2207.1.0",
+    "@coremedia/studio-client.client-core-impl": "2207.1.0",
+    "@coremedia/studio-client.client-core-test-helper": "2207.1.0",
+    "@coremedia/studio-client.main.editor-components": "2207.1.0",
+    "@coremedia/studio-client.multi-site-models": "2207.1.0",
     "@jangaroo/runtime": "^1.2.1"
   },
   "devDependencies": {

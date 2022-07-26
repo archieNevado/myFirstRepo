@@ -40,7 +40,9 @@ class CreateFromTemplateDialog extends CreateFromTemplateDialogBase {
   positionFun: AnyFunction = null;
 
   constructor(config: Config<CreateFromTemplateDialog> = null) {
-    super((()=> ConfigUtils.apply(Config(CreateFromTemplateDialog, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CreateFromTemplateDialog, {
       title: CreateFromTemplateStudioPlugin_properties.text,
       id: "createFromTemplate",
       resizable: true,
@@ -81,7 +83,7 @@ class CreateFromTemplateDialog extends CreateFromTemplateDialogBase {
                         Config(BindPropertyPlugin, {
                           bidirectional: true,
                           bindTo: new ConfigBasedValueExpression({
-                            context: this.getModel(),
+                            context: this$.getModel(),
                             expression: ProcessingData.NAME_PROPERTY,
                           }),
                         }),
@@ -98,7 +100,7 @@ class CreateFromTemplateDialog extends CreateFromTemplateDialogBase {
             Config(NavigationLinkFieldWrapper, {
               label: CreateFromTemplateStudioPlugin_properties.parent_label,
               doctype: CreateFromTemplateStudioPluginSettings_properties.doctype,
-              model: this.getModel(),
+              model: this$.getModel(),
               labelAlign: "top",
               itemId: CreateFromTemplateDialogBase.PARENT_PAGE_FIELD_ID,
               propertyName: CreateFromTemplateStudioPluginSettings_properties.parent_property,
@@ -110,9 +112,9 @@ class CreateFromTemplateDialog extends CreateFromTemplateDialogBase {
                 Config(TemplateBeanListChooser, {
                   height: 230,
                   itemId: CreateFromTemplateDialogBase.TEMPLATE_CHOOSER_FIELD_ID,
-                  validate: bind(this, this.templateChooserNonEmptyValidator),
+                  validate: bind(this$, this$.templateChooserNonEmptyValidator),
                   configPaths: CreateFromTemplateStudioPlugin_properties.template_paths,
-                  bindTo: ValueExpressionFactory.createFromValue(this.getModel()),
+                  bindTo: ValueExpressionFactory.createFromValue(this$.getModel()),
                 }),
               ],
               layout: Config(AnchorLayout),
@@ -120,11 +122,11 @@ class CreateFromTemplateDialog extends CreateFromTemplateDialogBase {
             Config(FieldContainer, {
               items: [
                 Config(FolderChooserListView, {
-                  bindTo: this.getFolderValueExpression(),
+                  bindTo: this$.getFolderValueExpression(),
                   title: CreateFromTemplateStudioPlugin_properties.channel_folder_text,
                   itemId: CreateFromTemplateDialogBase.BASE_FOLDER_CHOOSER_ID,
-                  contentTypeToCreate: this.getContentType(CreateFromTemplateStudioPluginSettings_properties.doctype),
-                  folderPathsExpression: ValueExpressionFactory.createFromFunction(bind(this, this.getNavigationFolders)),
+                  contentTypeToCreate: this$.getContentType(CreateFromTemplateStudioPluginSettings_properties.doctype),
+                  folderPathsExpression: ValueExpressionFactory.createFromFunction(bind(this$, this$.getNavigationFolders)),
                 }),
               ],
             }),
@@ -132,10 +134,10 @@ class CreateFromTemplateDialog extends CreateFromTemplateDialogBase {
               items: [
                 Config(FolderChooserListView, {
                   title: CreateFromTemplateStudioPlugin_properties.editorial_folder_text,
-                  bindTo: this.getEditorialFolderValueExpression(),
+                  bindTo: this$.getEditorialFolderValueExpression(),
                   itemId: CreateFromTemplateDialogBase.CONTENT_BASE_FOLDER_CHOOSER_ID,
-                  contentTypeToCreate: this.getContentType("CMArticle"),
-                  folderPathsExpression: ValueExpressionFactory.createFromFunction(bind(this, this.getEditorialFolders)),
+                  contentTypeToCreate: this$.getContentType("CMArticle"),
+                  folderPathsExpression: ValueExpressionFactory.createFromFunction(bind(this$, this$.getEditorialFolders)),
                 }),
               ],
             }),
@@ -158,11 +160,11 @@ class CreateFromTemplateDialog extends CreateFromTemplateDialogBase {
           ui: ButtonSkin.FOOTER_PRIMARY.getSkin(),
           scale: "small",
           text: Editor_properties.dialog_defaultCreateButton_text,
-          handler: bind(this, this.handleSubmit),
+          handler: bind(this$, this$.handleSubmit),
           plugins: [
             Config(BindPropertyPlugin, {
               componentProperty: "disabled",
-              bindTo: this.getDisabledValueExpression(),
+              bindTo: this$.getDisabledValueExpression(),
             }),
           ],
         }),
@@ -171,11 +173,11 @@ class CreateFromTemplateDialog extends CreateFromTemplateDialogBase {
           ui: ButtonSkin.FOOTER_SECONDARY.getSkin(),
           scale: "small",
           text: Editor_properties.dialog_defaultCancelButton_text,
-          handler: bind(this, this.close),
+          handler: bind(this$, this$.close),
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 }
 

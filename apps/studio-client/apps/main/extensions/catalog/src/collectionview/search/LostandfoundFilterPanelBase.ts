@@ -14,9 +14,9 @@ class LostandfoundFilterPanelBase extends ConditionalFilterPanel {
 
   static readonly DEFAULT_STATE: Record<string, any> = {};
 
-  static #static = (() => {
+  static {
     LostandfoundFilterPanelBase.DEFAULT_STATE[LostandfoundFilterPanelBase.LOSTANDFOUND_CHECKBOX_SELECTED] = false;
-  })();
+  }
 
   /**
    * The query fragment to be passed to Solr.

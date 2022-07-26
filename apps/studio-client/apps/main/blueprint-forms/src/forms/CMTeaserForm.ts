@@ -42,7 +42,9 @@ class CMTeaserForm extends DocumentTabPanel {
   #structContentLinkListWrapper: StructContentLinkListWrapper = null;
 
   constructor(config: Config<CMTeaserForm> = null) {
-    super((()=> ConfigUtils.apply(Config(CMTeaserForm, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CMTeaserForm, {
 
       items: [
         Config(DocumentForm, {
@@ -58,7 +60,7 @@ class CMTeaserForm extends DocumentTabPanel {
                   showThumbnails: true,
                   hideLabel: true,
                   bindTo: config.bindTo,
-                  linkListWrapper: this.#getStructContentLinkListWrapper(config),
+                  linkListWrapper: this$.#getStructContentLinkListWrapper(config),
                   linkType: "CMTeasable",
                   rowWidgetsAnnotatedPredicates: [CallToActionConfigurationForm.isAnnotated],
                   additionalToolbarItems: [
@@ -66,7 +68,7 @@ class CMTeaserForm extends DocumentTabPanel {
                     Config(QuickCreateToolbarButton, {
                       contentType: "CMArticle",
                       bindTo: config.bindTo,
-                      linkListWrapper: this.#getStructContentLinkListWrapper(config),
+                      linkListWrapper: this$.#getStructContentLinkListWrapper(config),
                     }),
                   ],
                   fields: [
@@ -119,7 +121,7 @@ class CMTeaserForm extends DocumentTabPanel {
         Config(MetaDataWithoutSearchableForm),
       ],
 
-    }), config))());
+    }), config));
   }
 
   #getStructContentLinkListWrapper(config: Config<CMTeaserForm>): ILinkListWrapper {

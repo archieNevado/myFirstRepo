@@ -36,13 +36,15 @@ class CommerceChildCategoriesForm extends CommerceChildCategoriesFormBase {
   }
 
   constructor(config: Config<CommerceChildCategoriesForm> = null) {
-    super((()=> ConfigUtils.apply(Config(CommerceChildCategoriesForm, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CommerceChildCategoriesForm, {
 
       items: [
         Config(SelectSubCategoriesRadioGroup, {
           itemId: "inheritOrSelectRadioGroup",
           toValue: CommerceChildCategoriesForm.#stringToBoolean,
-          bindTo: this.isSelectChildrenExpression(config.bindTo),
+          bindTo: this$.isSelectChildrenExpression(config.bindTo),
           ...ConfigUtils.append({
             plugins: [
               Config(BindDisablePlugin, {
@@ -55,12 +57,12 @@ class CommerceChildCategoriesForm extends CommerceChildCategoriesFormBase {
         Config(Component, { height: 6 }),
         Config(ReadOnlyCatalogLinkPropertyField, {
           itemId: CommerceChildCategoriesForm.INHERITED_CATEGORIES_ITEM_ID,
-          bindTo: this.getCategoryExpression(config.bindTo),
+          bindTo: this$.getCategoryExpression(config.bindTo),
           propertyName: CatalogObjectPropertyNames.SUB_CATEGORIES,
           emptyText: LivecontextStudioPlugin_properties.Commerce_Category_subcategories_emptyText,
           ...ConfigUtils.append({
             plugins: [
-              Config(BindVisibilityPlugin, { bindTo: this.isInheritExpression(config.bindTo) }),
+              Config(BindVisibilityPlugin, { bindTo: this$.isInheritExpression(config.bindTo) }),
             ],
           }),
         }),
@@ -73,12 +75,12 @@ class CommerceChildCategoriesForm extends CommerceChildCategoriesFormBase {
           dropAreaText: LivecontextStudioPlugin_properties.Category_Link_empty_text,
           ...ConfigUtils.append({
             plugins: [
-              Config(BindVisibilityPlugin, { bindTo: this.isSelectChildrenExpression(config.bindTo) }),
+              Config(BindVisibilityPlugin, { bindTo: this$.isSelectChildrenExpression(config.bindTo) }),
             ],
           }),
         }),
       ],
-    }), config))());
+    }), config));
   }
 }
 

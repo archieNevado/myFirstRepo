@@ -60,7 +60,9 @@ class TaxonomyExplorerPanel extends TaxonomyExplorerPanelBase {
   static readonly TAXONOMY_DOCUMENT_VIEW_ITEM_ID: string = "taxonomyStandaloneDocumentView";
 
   constructor(config: Config<TaxonomyExplorerPanel> = null) {
-    super((()=> ConfigUtils.apply(Config(TaxonomyExplorerPanel, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(TaxonomyExplorerPanel, {
       ui: PanelSkin.FRAME.getSkin(),
       bodyCls: TaxonomyExplorerPanel.TAXONOMY_EXPLORER_PANEL_ELEMENT.getCSSClass(),
       layout: Config(HBoxLayout, { align: "stretch" }),
@@ -79,8 +81,8 @@ class TaxonomyExplorerPanel extends TaxonomyExplorerPanelBase {
               id: "taxonomyRootsColumn",
               itemId: "taxonomyRootsColumn",
               siteSelectionExpression: config.siteSelectionExpression,
-              clipboardValueExpression: this.getClipboardValueExpression(),
-              selectedNodeExpression: this.getSelectedValueExpression(),
+              clipboardValueExpression: this$.getClipboardValueExpression(),
+              selectedNodeExpression: this$.getSelectedValueExpression(),
               ...Config<BEMMixin>({ bemElement: "root" }),
             }),
             /*Dynamic columns panel*/
@@ -124,8 +126,8 @@ class TaxonomyExplorerPanel extends TaxonomyExplorerPanelBase {
               width: 400,
               flex: 1,
               minWidth: 200,
-              bindTo: this.getDisplayedTaxonomyContentExpression(),
-              forceReadOnlyValueExpression: this.getForceReadOnlyValueExpression(),
+              bindTo: this$.getDisplayedTaxonomyContentExpression(),
+              forceReadOnlyValueExpression: this$.getForceReadOnlyValueExpression(),
               ...Config<BEMMixin>({ bemElement: "form" }),
             }),
           ],
@@ -139,7 +141,7 @@ class TaxonomyExplorerPanel extends TaxonomyExplorerPanelBase {
             disabled: true,
             text: TaxonomyStudioPlugin_properties.TaxonomyExplorerPanel_remove_button_label,
             tooltip: TaxonomyStudioPlugin_properties.TaxonomyExplorerPanel_remove_button_label,
-            handler: bind(this, this.deleteNodes),
+            handler: bind(this$, this$.deleteNodes),
             iconCls: CoreIcons_properties.trash_bin,
           }),
           Config(IconButton, {
@@ -148,7 +150,7 @@ class TaxonomyExplorerPanel extends TaxonomyExplorerPanelBase {
             text: TaxonomyStudioPlugin_properties.TaxonomyExplorerPanel_add_button_label,
             tooltip: TaxonomyStudioPlugin_properties.TaxonomyExplorerPanel_add_button_label,
             iconCls: CoreIcons_properties.add_tag,
-            handler: bind(this, this.createChildNode),
+            handler: bind(this$, this$.createChildNode),
           }),
           Config(Separator, {
             itemId: TaxonomyExplorerPanel.TAXONOMY_EXPLORER_SEP_FIRST_ITEM_ID,
@@ -161,7 +163,7 @@ class TaxonomyExplorerPanel extends TaxonomyExplorerPanelBase {
             text: TaxonomyStudioPlugin_properties.TaxonomyExplorerPanel_reload_button_label,
             tooltip: TaxonomyStudioPlugin_properties.TaxonomyExplorerPanel_reload_button_label,
             iconCls: CoreIcons_properties.reload,
-            handler: bind(this, this.reload),
+            handler: bind(this$, this$.reload),
           }),
           Config(Separator, {
             itemId: TaxonomyExplorerPanel.TAXONOMY_EXPLORER_SEP_SECOND_ITEM_ID,
@@ -174,8 +176,8 @@ class TaxonomyExplorerPanel extends TaxonomyExplorerPanelBase {
             tooltip: TaxonomyStudioPlugin_properties.TaxonomyExplorerPanel_cut_button_label,
             iconCls: CoreIcons_properties.cut,
             baseAction: new CutKeywordAction({
-              clipboardValueExpression: this.getClipboardValueExpression(),
-              selectionExpression: this.getSelectedValueExpression(),
+              clipboardValueExpression: this$.getClipboardValueExpression(),
+              selectionExpression: this$.getSelectedValueExpression(),
             }),
           }),
           Config(IconButton, {
@@ -185,8 +187,8 @@ class TaxonomyExplorerPanel extends TaxonomyExplorerPanelBase {
             tooltip: TaxonomyStudioPlugin_properties.TaxonomyExplorerPanel_paste_button_label,
             iconCls: CoreIcons_properties.paste,
             baseAction: new PasteKeywordAction({
-              clipboardValueExpression: this.getClipboardValueExpression(),
-              selectionExpression: this.getSelectedValueExpression(),
+              clipboardValueExpression: this$.getClipboardValueExpression(),
+              selectionExpression: this$.getSelectedValueExpression(),
             }),
           }),
           Config(Spacer),
@@ -207,7 +209,7 @@ class TaxonomyExplorerPanel extends TaxonomyExplorerPanelBase {
         }),
       }),
 
-    }), config))());
+    }), config));
   }
 
   /**

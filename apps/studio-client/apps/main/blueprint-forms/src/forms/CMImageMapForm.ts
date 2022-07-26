@@ -52,7 +52,9 @@ class CMImageMapForm extends DocumentTabPanel {
   #structContentLinkListWrapper: StructContentLinkListWrapper = null;
 
   constructor(config: Config<CMImageMapForm> = null) {
-    super((()=> ConfigUtils.apply(Config(CMImageMapForm, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CMImageMapForm, {
 
       items: [
         Config(DocumentForm, {
@@ -82,7 +84,7 @@ class CMImageMapForm extends DocumentTabPanel {
                   propertyName: "targets",
                   hideLabel: true,
                   showThumbnails: true,
-                  linkListWrapper: this.#getStructContentLinkListWrapper(config),
+                  linkListWrapper: this$.#getStructContentLinkListWrapper(config),
                   linkType: "CMTeasable",
                   rowWidgetsAnnotatedPredicates: [CallToActionConfigurationForm.isAnnotated],
                   additionalToolbarItems: [
@@ -184,7 +186,7 @@ class CMImageMapForm extends DocumentTabPanel {
         Config(MetaDataWithoutSearchableForm),
       ],
 
-    }), config))());
+    }), config));
   }
 
   #getStructContentLinkListWrapper(config: Config<CMImageMapForm>): ILinkListWrapper {

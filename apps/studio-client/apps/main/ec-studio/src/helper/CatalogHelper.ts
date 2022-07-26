@@ -9,7 +9,8 @@ import ProductVariant from "@coremedia-blueprint/studio-client.main.ec-studio-mo
 import Store from "@coremedia-blueprint/studio-client.main.ec-studio-model/model/Store";
 import Content from "@coremedia/studio-client.cap-rest-client/content/Content";
 import Struct from "@coremedia/studio-client.cap-rest-client/struct/Struct";
-import RemoteErrorHandlerRegistryImpl from "@coremedia/studio-client.client-core-impl/data/impl/RemoteErrorHandlerRegistryImpl";
+import RemoteErrorHandlerRegistryImpl
+  from "@coremedia/studio-client.client-core-impl/data/impl/RemoteErrorHandlerRegistryImpl";
 import Bean from "@coremedia/studio-client.client-core/data/Bean";
 import RemoteBean from "@coremedia/studio-client.client-core/data/RemoteBean";
 import ValueExpression from "@coremedia/studio-client.client-core/data/ValueExpression";
@@ -18,8 +19,10 @@ import beanFactory from "@coremedia/studio-client.client-core/data/beanFactory";
 import NotExistsError from "@coremedia/studio-client.client-core/data/error/NotExistsError";
 import RemoteError from "@coremedia/studio-client.client-core/data/error/RemoteError";
 import EditorContextImpl from "@coremedia/studio-client.main.editor-components/sdk/EditorContextImpl";
-import CollectionViewManagerInternal from "@coremedia/studio-client.main.editor-components/sdk/collectionview/CollectionViewManagerInternal";
-import CollectionViewModel from "@coremedia/studio-client.main.editor-components/sdk/collectionview/CollectionViewModel";
+import CollectionViewManagerInternal
+  from "@coremedia/studio-client.main.editor-components/sdk/collectionview/CollectionViewManagerInternal";
+import CollectionViewModel
+  from "@coremedia/studio-client.main.editor-components/sdk/collectionview/CollectionViewModel";
 import editorContext from "@coremedia/studio-client.main.editor-components/sdk/editorContext";
 import MessageBoxUtil from "@coremedia/studio-client.main.editor-components/sdk/util/MessageBoxUtil";
 import StringUtil from "@jangaroo/ext-ts/String";
@@ -90,11 +93,11 @@ class CatalogHelper {
 
   #storeExpression: ValueExpression = null;
 
-  static #static = (() =>{
+  static {
     RemoteErrorHandlerRegistryImpl
       .initRemoteErrorHandlerRegistry()
       .registerErrorHandler(CatalogHelper.#remoteErrorHandler);
-  })();
+  }
 
   static getInstance(): CatalogHelper {
     if (!CatalogHelper.#instance) {
@@ -487,7 +490,7 @@ class CatalogHelper {
         } else {
           attributesStr += ", ";
         }
-        attributesStr += attribute.value;
+        attributesStr += attribute.value ?? `[${attribute.values}]`;
       }
       if (attributesStr) {
         attributesStr += ")";

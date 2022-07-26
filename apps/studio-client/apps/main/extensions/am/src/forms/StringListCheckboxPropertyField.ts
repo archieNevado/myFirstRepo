@@ -30,7 +30,9 @@ class StringListCheckboxPropertyField extends StringListCheckboxPropertyFieldBas
   static readonly CHECKBOX_GROUP_ITEM_ID: string = "checkboxGroup";
 
   constructor(config: Config<StringListCheckboxPropertyField> = null) {
-    super((()=> ConfigUtils.apply(Config(StringListCheckboxPropertyField, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(StringListCheckboxPropertyField, {
       labelSeparator: "",
       labelAlign: "top",
       defaultField: createComponentSelector().itemId(StringListCheckboxPropertyField.CHECKBOX_GROUP_ITEM_ID).build(),
@@ -53,10 +55,10 @@ class StringListCheckboxPropertyField extends StringListCheckboxPropertyFieldBas
               Config(BindPropertyPlugin, {
                 bindTo: config.bindTo.extendBy("properties").extendBy(config.structName).extendBy(config.propertyName),
                 bidirectional: true,
-                transformer: bind(this, this.transformer),
-                reverseTransformer: bind(this, this.reverseTransformer),
+                transformer: bind(this$, this$.transformer),
+                reverseTransformer: bind(this$, this$.reverseTransformer),
               }),
-              Config(BindItemsPlugin, { valueExpression: ValueExpressionFactory.createFromFunction(bind(this, this.computeCheckboxConfigs)) }),
+              Config(BindItemsPlugin, { valueExpression: ValueExpressionFactory.createFromFunction(bind(this$, this$.computeCheckboxConfigs)) }),
               Config(ShowIssuesPlugin, {
                 bindTo: config.bindTo,
                 propertyName: config.structName + "." + config.propertyName,
@@ -70,7 +72,7 @@ class StringListCheckboxPropertyField extends StringListCheckboxPropertyFieldBas
         }),
       ],
       layout: Config(VBoxLayout),
-    }), config))());
+    }), config));
   }
 
   forceReadOnlyValueExpression: ValueExpression = null;

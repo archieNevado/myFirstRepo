@@ -27,12 +27,14 @@ class LetterListPanel extends LetterListPanelBase {
   static readonly ITEM_ID: string = "letterListPanel";
 
   constructor(config: Config<LetterListPanel> = null) {
-    super((()=> ConfigUtils.apply(Config(LetterListPanel, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(LetterListPanel, {
       scrollable: true,
 
       plugins: [
         Config(BindDisablePlugin, {
-          bindTo: this.getListValuesExpression(),
+          bindTo: this$.getListValuesExpression(),
           forceReadOnlyValueExpression: config.forceReadOnlyValueExpression,
         }),
       ],
@@ -43,14 +45,14 @@ class LetterListPanel extends LetterListPanelBase {
           items: [
             Config(DataView, {
               itemSelector: LetterListPanelBase.LIST_ELEMENT_ENTRY.getCSSSelector(),
-              itemId: this.ITEMS_CONTAINER_ITEM_ID,
+              itemId: this$.ITEMS_CONTAINER_ITEM_ID,
               singleSelect: true,
               multiSelect: false,
               deferEmptyText: true,
               tpl: LetterListPanelBase.TEMPLATE,
               plugins: [
                 Config(BindListPlugin, {
-                  bindTo: this.getListValuesExpression(),
+                  bindTo: this$.getListValuesExpression(),
                   fields: [
                     Config(DataField, { name: "letter" }),
                     Config(DataField, { name: "name" }),
@@ -68,7 +70,7 @@ class LetterListPanel extends LetterListPanelBase {
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 
   /**

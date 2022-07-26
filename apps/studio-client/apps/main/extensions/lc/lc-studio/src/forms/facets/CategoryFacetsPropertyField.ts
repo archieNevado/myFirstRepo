@@ -30,7 +30,9 @@ class CategoryFacetsPropertyField extends CategoryFacetsPropertyFieldBase {
   static readonly FIX_BUTTON_ITEM_ID: string = "autoFixButton";
 
   constructor(config: Config<CategoryFacetsPropertyField> = null) {
-    super((()=> ConfigUtils.apply(Config(CategoryFacetsPropertyField, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CategoryFacetsPropertyField, {
       title: LivecontextStudioPlugin_properties.CMProductList_facets_text,
       itemId: "categoryFacetsPropertyField",
 
@@ -43,20 +45,20 @@ class CategoryFacetsPropertyField extends CategoryFacetsPropertyFieldBase {
               plugins: [
                 Config(BindPropertyPlugin, {
                   componentProperty: "visible",
-                  bindTo: this.getAutoFixExpression(config),
+                  bindTo: this$.getAutoFixExpression(config),
                 }),
               ],
             }),
             Config(Button, {
               hidden: true,
               ui: ButtonSkin.LINK.getSkin(),
-              handler: bind(this, this.autoFixFormat),
+              handler: bind(this$, this$.autoFixFormat),
               itemId: CategoryFacetsPropertyField.FIX_BUTTON_ITEM_ID,
               text: LivecontextStudioPlugin_properties.CMProductList_facets_remove_invalid_values,
               plugins: [
                 Config(BindPropertyPlugin, {
                   componentProperty: "visible",
-                  bindTo: this.getAutoFixExpression(config),
+                  bindTo: this$.getAutoFixExpression(config),
                 }),
                 Config(BindDisablePlugin, {
                   forceReadOnlyValueExpression: config.forceReadOnlyValueExpression,
@@ -71,7 +73,7 @@ class CategoryFacetsPropertyField extends CategoryFacetsPropertyFieldBase {
           }),
         }),
         Config(SwitchingContainer, {
-          activeItemValueExpression: this.getActiveEditorExpression(config),
+          activeItemValueExpression: this$.getActiveEditorExpression(config),
           items: [
             Config(ExtendedDisplayField, {
               itemId: CategoryFacetsPropertyFieldBase.NO_CATEGORY_MSG_ITEM_ID,
@@ -82,7 +84,7 @@ class CategoryFacetsPropertyField extends CategoryFacetsPropertyFieldBase {
             Config(CategoryFacetsFieldGroup, {
               itemId: CategoryFacetsPropertyFieldBase.NEW_EDITOR_ITEM_ID,
               bindTo: config.bindTo,
-              facetsExpression: this.getFacetsExpression(config),
+              facetsExpression: this$.getFacetsExpression(config),
               structPropertyName: config.structPropertyName,
               externalIdPropertyName: config.externalIdPropertyName,
               forceReadOnlyValueExpression: config.forceReadOnlyValueExpression,
@@ -95,7 +97,7 @@ class CategoryFacetsPropertyField extends CategoryFacetsPropertyFieldBase {
         Config(VerticalSpacingPlugin, { modifier: SpacingBEMEntities.VERTICAL_SPACING_MODIFIER_200 }),
       ],
       layout: Config(VBoxLayout, { align: "stretch" }),
-    }), config))());
+    }), config));
   }
 }
 

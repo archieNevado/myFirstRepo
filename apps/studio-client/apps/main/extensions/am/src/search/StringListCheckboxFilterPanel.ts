@@ -18,7 +18,9 @@ class StringListCheckboxFilterPanel extends StringListCheckboxFilterPanelBase {
   static override readonly xtype: string = "com.coremedia.blueprint.assets.studio.config.stringListCheckboxFilterPanel";
 
   constructor(config: Config<StringListCheckboxFilterPanel> = null) {
-    super((()=> ConfigUtils.apply(Config(StringListCheckboxFilterPanel, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(StringListCheckboxFilterPanel, {
       itemId: config.filterId,
 
       items: [
@@ -29,17 +31,17 @@ class StringListCheckboxFilterPanel extends StringListCheckboxFilterPanelBase {
             columns: 1,
             plugins: [
               Config(BindPropertyPlugin, {
-                bindTo: ValueExpressionFactory.create(config.filterId, this.getStateBean()),
+                bindTo: ValueExpressionFactory.create(config.filterId, this$.getStateBean()),
                 bidirectional: true,
-                transformer: bind(this, this.transformer),
-                reverseTransformer: bind(this, this.reverseTransformer),
+                transformer: bind(this$, this$.transformer),
+                reverseTransformer: bind(this$, this$.reverseTransformer),
               }),
             ],
           }),
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 
   /**

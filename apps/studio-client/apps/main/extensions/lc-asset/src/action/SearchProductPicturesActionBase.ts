@@ -25,7 +25,9 @@ class SearchProductPicturesActionBase extends LiveContextCatalogObjectAction {
    * @param config the configuration object
    */
   constructor(config: Config<SearchProductPicturesAction> = null) {
-    super((()=>ActionConfigUtil.extendConfiguration(resourceManager.getResourceBundle(null, ECommerceStudioPlugin_properties).content, config, "searchProductPictures", { handler: bind(this, this.#myHandler) }))());
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ActionConfigUtil.extendConfiguration(resourceManager.getResourceBundle(null, ECommerceStudioPlugin_properties).content, config, "searchProductPictures", { handler: bind(this$, this$.#myHandler) }));
   }
 
   protected override isDisabledFor(catalogObjects: Array<any>): boolean {

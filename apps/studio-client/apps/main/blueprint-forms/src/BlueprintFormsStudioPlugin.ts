@@ -121,391 +121,391 @@ class BlueprintFormsStudioPlugin extends BlueprintFormsStudioPluginBase {
   #root: Content = null;
 
   constructor(config: Config<BlueprintFormsStudioPlugin> = null) {
-    super((()=>{
-      this.#root = session._.getConnection().getContentRepository().getRoot();
-      return ConfigUtils.apply(Config(BlueprintFormsStudioPlugin, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#root = session._.getConnection().getContentRepository().getRoot();
+    super(ConfigUtils.apply(Config(BlueprintFormsStudioPlugin, {
 
-        rules: [
+      rules: [
 
-          Config(EditorStartup, {
-            plugins: [
-              Config(ConfigureCollectionViewColumnsPlugin),
-            ],
-          }),
+        Config(EditorStartup, {
+          plugins: [
+            Config(ConfigureCollectionViewColumnsPlugin),
+          ],
+        }),
 
-          Config(CollectionView, {
-            plugins: [
-              Config(PictureUtilsPlugin),
-            ],
-          }),
+        Config(CollectionView, {
+          plugins: [
+            Config(PictureUtilsPlugin),
+          ],
+        }),
 
-          Config(PreviewPanel, {
-            plugins: [
-              Config(AddPreviewDateSelectorButtonPlugin),
-            ],
-          }),
+        Config(PreviewPanel, {
+          plugins: [
+            Config(AddPreviewDateSelectorButtonPlugin),
+          ],
+        }),
 
-          Config(PreviewIFrameToolbar, {
-            plugins: [
-              Config(AddPlacementHighlightButtonPlugin),
-            ],
-          }),
+        Config(PreviewIFrameToolbar, {
+          plugins: [
+            Config(AddPlacementHighlightButtonPlugin),
+          ],
+        }),
 
-          Config(PlacementLinkListPropertyField, {
-            plugins: [
-              Config(NestedRulesPlugin, {
-                rules: [
-                  Config(LinkListPropertyField, {
-                    plugins: [
-                      Config(AddQuickCreateLinklistMenuPlugin),
-                    ],
-                  }),
-                ],
-              }),
-            ],
-          }),
-
-          Config(EditorMainView, {
-            plugins: [
-              Config(AddDefaultFolderChooserEntry, { lookup: BlueprintFormsStudioPluginBase.calculateQuickCreateFolder }),
-            ],
-          }),
-
-          Config(TabbedDocumentFormDispatcher, {
-            plugins: [
-              Config(AddTabbedDocumentFormsPlugin, {
-                documentTabPanels: [
-                  Config(EditorPreferencesForm, { itemId: "EditorPreferences" }),
-                  Config(CMActionForm, { itemId: "CMAction" }),
-                  Config(CMArticleForm, { itemId: "CMArticle" }),
-                  Config(CMAudioForm, { itemId: "CMAudio" }),
-                  Config(CMCSSForm, { itemId: "CMCSS" }),
-                  Config(CMChannelForm, { itemId: "CMChannel" }),
-                  Config(CMCollectionForm, { itemId: "CMCollection" }),
-                  Config(CMExternalLinkForm, { itemId: "CMExternalLink" }),
-                  Config(CMFolderPropertiesForm, { itemId: "CMFolderProperties" }),
-                  Config(CMJavaScriptForm, { itemId: "CMJavaScript" }),
-                  Config(CMGalleryForm, { itemId: "CMGallery" }),
-                  Config(CMDownloadForm, { itemId: "CMDownload" }),
-                  Config(CMHTMLForm, { itemId: "CMHTML" }),
-                  Config(CMInteractiveForm, { itemId: "CMInteractive" }),
-                  Config(CMImageForm, { itemId: "CMImage" }),
-                  Config(CMImageMapForm, { itemId: "CMImageMap" }),
-                  Config(CMLocTaxonomyForm, { itemId: "CMLocTaxonomy" }),
-                  Config(CMPersonForm, { itemId: "CMPerson" }),
-                  Config(CMPictureForm, { itemId: "CMPicture" }),
-                  Config(CMPlaceholderForm, { itemId: "CMPlaceholder" }),
-                  Config(CMResourceBundleForm, { itemId: "CMResourceBundle" }),
-                  Config(CMSettingsForm, { itemId: "CMSettings" }),
-                  Config(CMSiteForm, { itemId: "CMSite" }),
-                  Config(CMSitemapForm, { itemId: "CMSitemap" }),
-                  Config(CMSpinnerForm, { itemId: "CMSpinner" }),
-                  Config(CMSymbolForm, { itemId: "CMSymbol" }),
-                  Config(CMTaxonomyForm, { itemId: "CMTaxonomy" }),
-                  Config(CMTemplateSetForm, { itemId: "CMTemplateSet" }),
-                  Config(CMTeaserForm, { itemId: "CMTeaser" }),
-                  Config(CMThemeForm, { itemId: "CMTheme" }),
-                  Config(CMVideoForm, { itemId: "CMVideo" }),
-                  Config(CMViewtypeForm, { itemId: "CMViewtype" }),
-                ],
-              }),
-            ],
-          }),
-
-          Config(DocumentTabPanel, {
-            plugins: [
-              Config(NestedRulesPlugin, {
-                rules: [
-                  Config(LocalComboBox, {
-                    plugins: [
-                      Config(SyncComboBoxValueWithStorePlugin),
-                    ],
-                  }),
-                ],
-              }),
-            ],
-          }),
-
-          Config(DocumentForm, {
-            plugins: [
-              Config(ResetInactiveDocumentFormsPlugin),
-            ],
-          }),
-
-          Config(FavoritesButton, {
-            plugins: [
-              new AddArrayItemsPlugin({
-                arrayProperty: "defaultItems",
-                items:
-                  [ {
-                    "_main": {
-                      "searchText": "",
-                      "contentType": "Document_",
-                      "mode": "search",
-                      "view": "list",
-                      "folder": this.#root,
-                      "orderBy": "freshness desc",
-                      "limit": 50,
-                    },
-                    "status": {
-                      "inProduction": true,
-                      "editedByMe": true,
-                      "editedByOthers": true,
-                      "notEdited": true,
-                      "approved": true,
-                      "published": true,
-                      "deleted": false,
-                    },
-                    "lastEdited": { "lastEditedBy": "me" },
-                    "_name": BlueprintStudio_properties.FavoritesToolbarDefaultSearchFolderNames_lastEdited,
-                  },
-                  {
-                    "_main": {
-                      "searchText": "",
-                      "contentType": "CMArticle",
-                      "mode": "search",
-                      "view": "list",
-                      "folder": this.#root,
-                      "orderBy": "freshness desc",
-                      "limit": 50,
-                    },
-                    "site": { "site": "PREFERRED" },
-                    "status": {
-                      "inProduction": true,
-                      "editedByMe": true,
-                      "editedByOthers": true,
-                      "notEdited": true,
-                      "approved": true,
-                      "published": true,
-                      "deleted": false,
-                    },
-                    "lastEdited": { "lastEditedBy": "anyone" },
-                    "_name": BlueprintStudio_properties.FavoritesToolbarDefaultSearchFolderNames_articles,
-                  },
-                  {
-                    "_main": {
-                      "searchText": "",
-                      "contentType": "CMPicture",
-                      "mode": "search",
-                      "view": "thumbnails",
-                      "folder": this.#root,
-                      "orderBy": "freshness desc",
-                      "limit": 50,
-                    },
-                    "site": { "site": "PREFERRED" },
-                    "status": {
-                      "inProduction": true,
-                      "editedByMe": true,
-                      "editedByOthers": true,
-                      "notEdited": true,
-                      "approved": true,
-                      "published": true,
-                      "deleted": false,
-                    },
-                    "lastEdited": { "lastEditedBy": "anyone" },
-                    "_name": BlueprintStudio_properties.FavoritesToolbarDefaultSearchFolderNames_pictures,
-                  },
-                  {
-                    "_main": {
-                      "searchText": "",
-                      "contentType": "CMChannel",
-                      "mode": "search",
-                      "view": "list",
-                      "folder": this.#root,
-                      "orderBy": "freshness desc",
-                      "limit": 50,
-                    },
-                    "site": { "site": "PREFERRED" },
-                    "status": {
-                      "inProduction": true,
-                      "editedByMe": true,
-                      "editedByOthers": true,
-                      "notEdited": true,
-                      "approved": true,
-                      "published": true,
-                      "deleted": false,
-                    },
-                    "lastEdited": { "lastEditedBy": "anyone" },
-                    "_name": BlueprintStudio_properties.FavoritesToolbarDefaultSearchFolderNames_pages,
-                  }],
-              }),
-            ],
-          }),
-        ],
-
-        configuration: [
-        /* override the standard studio labels with custom properties */
-          new CopyResourceBundleProperties({
-            destination: resourceManager.getResourceBundle(null, ImageEditor_properties),
-            source: resourceManager.getResourceBundle(null, BlueprintImageEditor_properties),
-          }),
-          new CopyResourceBundleProperties({
-            destination: resourceManager.getResourceBundle(null, ContentTypes_properties),
-            source: resourceManager.getResourceBundle(null, BlueprintDocumentTypes_properties),
-          }),
-          new CopyResourceBundleProperties({
-            destination: resourceManager.getResourceBundle(null, ContentTypes_properties),
-            source: resourceManager.getResourceBundle(null, Placements_properties),
-          }),
-          new CopyResourceBundleProperties({
-            destination: resourceManager.getResourceBundle(null, Actions_properties),
-            source: resourceManager.getResourceBundle(null, CustomLabels_properties),
-          }),
-          new CopyResourceBundleProperties({
-            destination: resourceManager.getResourceBundle(null, TimeZones_properties),
-            source: resourceManager.getResourceBundle(null, CustomTimeZones_properties),
-          }),
-          new CopyResourceBundleProperties({
-            destination: resourceManager.getResourceBundle(null, QuickCreateSettings_properties),
-            source: resourceManager.getResourceBundle(null, NewContentSettingsStudioPlugin_properties),
-          }),
-          new CopyResourceBundleProperties({
-            destination: resourceManager.getResourceBundle(null, Validators_properties),
-            source: resourceManager.getResourceBundle(null, Validation_properties),
-          }),
-          new CopyResourceBundleProperties({
-            destination: resourceManager.getResourceBundle(null, DeviceTypes_properties),
-            source: resourceManager.getResourceBundle(null, BlueprintDeviceTypes_properties),
-          }),
-          new CopyResourceBundleProperties({
-            destination: resourceManager.getResourceBundle(null, Viewtypes_properties),
-            source: resourceManager.getResourceBundle(null, BlueprintViewtypes_properties),
-          }),
-          new CopyResourceBundleProperties({
-            destination: resourceManager.getResourceBundle(null, PageGridLayouts_properties),
-            source: resourceManager.getResourceBundle(null, BlueprintPageGridLayouts_properties),
-          }),
-          new CopyResourceBundleProperties({
-            destination: resourceManager.getResourceBundle(null, IssueCategories_properties),
-            source: resourceManager.getResourceBundle(null, BlueprintIssueCategories_properties),
-          }),
-          /* enable studio shortcuts, override Shortcut.properties to specify different shortcut keys */
-          new AddShortcutsPlugin({}),
-
-          new EnableStateBasedPublicationButtonsPlugin({ adminOnly: true }),
-
-          new ContentUtilConfigurationPlugin({ expandFolderLimit: 100 }),
-
-          new ConfigureDocumentTypes({
-            names: "CMLinkable",
-            previewUrlTransformers: [
-              new AddDependingParameterPreviewUrlTransformer({
-                name: "contentType",
-                valueExpression: BlueprintFormsStudioPluginBase.getContentTypeVE(),
-              }),
-            ],
-          }),
-
-          /* Register document types to be allowed to be dropped */
-          new ConfigureDocumentTypes({
-            names: "CMLinkable",
-            richTextLinkable: true,
-          }),
-
-          /* register Image Types for thumbnail view and RichText Drag'n'Drop */
-          new ConfigureDocumentTypes({
-            names: "CMMedia,CMImage",
-            imageProperty: "data",
-            richTextImageBlobProperty: "data",
-          }),
-          new ConfigureDefaultRichTextImageDocumentType({ defaultRichTextImageType: "CMPicture" }),
-
-          /* exclude DocTypes from the create new documents menu */
-          new ConfigureDocumentTypes({
-            names: "Dictionary,Preferences,Query,CMDynamicList,CMVisual,EditorPreferences,EditorProfile",
-            exclude: true,
-            excludeFromSearch: true,
-          }),
-
-          /* there is no preview available for these DocTypes */
-          new ConfigureDocumentTypes({
-            names: "CMAction,CMCSS,CMFolderProperties,CMImage,CMInteractive,CMJavaScript,\n                                            CMPlaceholder,CMResourceBundle,CMSettings,CMSite,CMSymbol,EditorPreferences,EditorProfile,\n                                            CMTemplateSet,CMViewtype,CMTaxonomy,CMLocTaxonomy",
-            preview: false,
-          }),
-          /* there may be no preview available for these DocTypes */
-          new ConfigureDocumentTypes({
-            names: "CMObject",
-            mayPreview: BlueprintFormsStudioPluginBase.isValidCMLinkable,
-          }),
-
-          /* All CMHasContexts documents (essentially non-CMContext/CMChannel) are shown in "fragment preview" */
-          new ConfigureDocumentTypes({
-            names: "CMHasContexts",
-            previewUrlTransformers: [
-              new AddParameterPreviewUrlTransformer({
-                name: "view",
-                value: "fragmentPreview",
-              }),
-            ],
-          }),
-
-          new ConfigureDocumentTypes({
-            names: "CMTheme",
-            previewUrlTransformers: [
-              new AddParameterPreviewUrlTransformer({
-                name: "view",
-                value: "",
-              }),
-            ],
-          }),
-
-          new ConfigureDocumentTypes({
-            names: "CMSitemap",
-            previewUrlTransformers: [
-              new AddParameterPreviewUrlTransformer({
-                name: "view",
-                value: "",
-              }),
-            ],
-          }),
-
-          new ConfigureDashboardPlugin({
-            widgets: [
-              new SimpleSearchWidgetState({ contentType: "CMChannel" }),
-              new SimpleSearchWidgetState({ contentType: "CMArticle" }),
-              new SimpleSearchWidgetState({ contentType: "CMPicture" }),
-              new WidgetState({
-                widgetTypeId: BlueprintFormsStudioPlugin.EDITED_BY_ME_TYPE,
-                column: WidgetState.NEXT,
-                rowspan: 1,
-              }),
-              new WidgetState({ widgetTypeId: BlueprintFormsStudioPlugin.EDITED_BY_OTHERS_TYPE }),
-              new TranslationStatusWidgetState({}),
-            ],
-
-            types: [
-              new SimpleSearchWidgetType({}),
-
-              new FixedSearchWidgetType({
-                id_: BlueprintFormsStudioPlugin.EDITED_BY_ME_TYPE,
-                name: BlueprintStudio_properties.Dashboard_standardConfiguration_lastEdited,
-                search: new SearchState({ lastEditedBy: "me" }),
-              }),
-
-              new FixedSearchWidgetType({
-                id_: BlueprintFormsStudioPlugin.EDITED_BY_OTHERS_TYPE,
-                name: BlueprintStudio_properties.Dashboard_standardConfiguration_editedByOthers,
-                search: new SearchState({
-                  editedByOthers: true,
-                  editedByMe: false,
-                  notEdited: false,
-                  approved: false,
-                  published: false,
+        Config(PlacementLinkListPropertyField, {
+          plugins: [
+            Config(NestedRulesPlugin, {
+              rules: [
+                Config(LinkListPropertyField, {
+                  plugins: [
+                    Config(AddQuickCreateLinklistMenuPlugin),
+                  ],
                 }),
+              ],
+            }),
+          ],
+        }),
+
+        Config(EditorMainView, {
+          plugins: [
+            Config(AddDefaultFolderChooserEntry, { lookup: BlueprintFormsStudioPluginBase.calculateQuickCreateFolder }),
+          ],
+        }),
+
+        Config(TabbedDocumentFormDispatcher, {
+          plugins: [
+            Config(AddTabbedDocumentFormsPlugin, {
+              documentTabPanels: [
+                Config(EditorPreferencesForm, { itemId: "EditorPreferences" }),
+                Config(CMActionForm, { itemId: "CMAction" }),
+                Config(CMArticleForm, { itemId: "CMArticle" }),
+                Config(CMAudioForm, { itemId: "CMAudio" }),
+                Config(CMCSSForm, { itemId: "CMCSS" }),
+                Config(CMChannelForm, { itemId: "CMChannel" }),
+                Config(CMCollectionForm, { itemId: "CMCollection" }),
+                Config(CMExternalLinkForm, { itemId: "CMExternalLink" }),
+                Config(CMFolderPropertiesForm, { itemId: "CMFolderProperties" }),
+                Config(CMJavaScriptForm, { itemId: "CMJavaScript" }),
+                Config(CMGalleryForm, { itemId: "CMGallery" }),
+                Config(CMDownloadForm, { itemId: "CMDownload" }),
+                Config(CMHTMLForm, { itemId: "CMHTML" }),
+                Config(CMInteractiveForm, { itemId: "CMInteractive" }),
+                Config(CMImageForm, { itemId: "CMImage" }),
+                Config(CMImageMapForm, { itemId: "CMImageMap" }),
+                Config(CMLocTaxonomyForm, { itemId: "CMLocTaxonomy" }),
+                Config(CMPersonForm, { itemId: "CMPerson" }),
+                Config(CMPictureForm, { itemId: "CMPicture" }),
+                Config(CMPlaceholderForm, { itemId: "CMPlaceholder" }),
+                Config(CMResourceBundleForm, { itemId: "CMResourceBundle" }),
+                Config(CMSettingsForm, { itemId: "CMSettings" }),
+                Config(CMSiteForm, { itemId: "CMSite" }),
+                Config(CMSitemapForm, { itemId: "CMSitemap" }),
+                Config(CMSpinnerForm, { itemId: "CMSpinner" }),
+                Config(CMSymbolForm, { itemId: "CMSymbol" }),
+                Config(CMTaxonomyForm, { itemId: "CMTaxonomy" }),
+                Config(CMTemplateSetForm, { itemId: "CMTemplateSet" }),
+                Config(CMTeaserForm, { itemId: "CMTeaser" }),
+                Config(CMThemeForm, { itemId: "CMTheme" }),
+                Config(CMVideoForm, { itemId: "CMVideo" }),
+                Config(CMViewtypeForm, { itemId: "CMViewtype" }),
+              ],
+            }),
+          ],
+        }),
+
+        Config(DocumentTabPanel, {
+          plugins: [
+            Config(NestedRulesPlugin, {
+              rules: [
+                Config(LocalComboBox, {
+                  plugins: [
+                    Config(SyncComboBoxValueWithStorePlugin),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        }),
+
+        Config(DocumentForm, {
+          plugins: [
+            Config(ResetInactiveDocumentFormsPlugin),
+          ],
+        }),
+
+        Config(FavoritesButton, {
+          plugins: [
+            new AddArrayItemsPlugin({
+              arrayProperty: "defaultItems",
+              items:
+                [ {
+                  "_main": {
+                    "searchText": "",
+                    "contentType": "Document_",
+                    "mode": "search",
+                    "view": "list",
+                    "folder": this$.#root,
+                    "orderBy": "freshness desc",
+                    "limit": 50,
+                  },
+                  "status": {
+                    "inProduction": true,
+                    "editedByMe": true,
+                    "editedByOthers": true,
+                    "notEdited": true,
+                    "approved": true,
+                    "published": true,
+                    "deleted": false,
+                  },
+                  "lastEdited": { "lastEditedBy": "me" },
+                  "_name": BlueprintStudio_properties.FavoritesToolbarDefaultSearchFolderNames_lastEdited,
+                },
+                {
+                  "_main": {
+                    "searchText": "",
+                    "contentType": "CMArticle",
+                    "mode": "search",
+                    "view": "list",
+                    "folder": this$.#root,
+                    "orderBy": "freshness desc",
+                    "limit": 50,
+                  },
+                  "site": { "site": "PREFERRED" },
+                  "status": {
+                    "inProduction": true,
+                    "editedByMe": true,
+                    "editedByOthers": true,
+                    "notEdited": true,
+                    "approved": true,
+                    "published": true,
+                    "deleted": false,
+                  },
+                  "lastEdited": { "lastEditedBy": "anyone" },
+                  "_name": BlueprintStudio_properties.FavoritesToolbarDefaultSearchFolderNames_articles,
+                },
+                {
+                  "_main": {
+                    "searchText": "",
+                    "contentType": "CMPicture",
+                    "mode": "search",
+                    "view": "thumbnails",
+                    "folder": this$.#root,
+                    "orderBy": "freshness desc",
+                    "limit": 50,
+                  },
+                  "site": { "site": "PREFERRED" },
+                  "status": {
+                    "inProduction": true,
+                    "editedByMe": true,
+                    "editedByOthers": true,
+                    "notEdited": true,
+                    "approved": true,
+                    "published": true,
+                    "deleted": false,
+                  },
+                  "lastEdited": { "lastEditedBy": "anyone" },
+                  "_name": BlueprintStudio_properties.FavoritesToolbarDefaultSearchFolderNames_pictures,
+                },
+                {
+                  "_main": {
+                    "searchText": "",
+                    "contentType": "CMChannel",
+                    "mode": "search",
+                    "view": "list",
+                    "folder": this$.#root,
+                    "orderBy": "freshness desc",
+                    "limit": 50,
+                  },
+                  "site": { "site": "PREFERRED" },
+                  "status": {
+                    "inProduction": true,
+                    "editedByMe": true,
+                    "editedByOthers": true,
+                    "notEdited": true,
+                    "approved": true,
+                    "published": true,
+                    "deleted": false,
+                  },
+                  "lastEdited": { "lastEditedBy": "anyone" },
+                  "_name": BlueprintStudio_properties.FavoritesToolbarDefaultSearchFolderNames_pages,
+                }],
+            }),
+          ],
+        }),
+      ],
+
+      configuration: [
+      /* override the standard studio labels with custom properties */
+        new CopyResourceBundleProperties({
+          destination: resourceManager.getResourceBundle(null, ImageEditor_properties),
+          source: resourceManager.getResourceBundle(null, BlueprintImageEditor_properties),
+        }),
+        new CopyResourceBundleProperties({
+          destination: resourceManager.getResourceBundle(null, ContentTypes_properties),
+          source: resourceManager.getResourceBundle(null, BlueprintDocumentTypes_properties),
+        }),
+        new CopyResourceBundleProperties({
+          destination: resourceManager.getResourceBundle(null, ContentTypes_properties),
+          source: resourceManager.getResourceBundle(null, Placements_properties),
+        }),
+        new CopyResourceBundleProperties({
+          destination: resourceManager.getResourceBundle(null, Actions_properties),
+          source: resourceManager.getResourceBundle(null, CustomLabels_properties),
+        }),
+        new CopyResourceBundleProperties({
+          destination: resourceManager.getResourceBundle(null, TimeZones_properties),
+          source: resourceManager.getResourceBundle(null, CustomTimeZones_properties),
+        }),
+        new CopyResourceBundleProperties({
+          destination: resourceManager.getResourceBundle(null, QuickCreateSettings_properties),
+          source: resourceManager.getResourceBundle(null, NewContentSettingsStudioPlugin_properties),
+        }),
+        new CopyResourceBundleProperties({
+          destination: resourceManager.getResourceBundle(null, Validators_properties),
+          source: resourceManager.getResourceBundle(null, Validation_properties),
+        }),
+        new CopyResourceBundleProperties({
+          destination: resourceManager.getResourceBundle(null, DeviceTypes_properties),
+          source: resourceManager.getResourceBundle(null, BlueprintDeviceTypes_properties),
+        }),
+        new CopyResourceBundleProperties({
+          destination: resourceManager.getResourceBundle(null, Viewtypes_properties),
+          source: resourceManager.getResourceBundle(null, BlueprintViewtypes_properties),
+        }),
+        new CopyResourceBundleProperties({
+          destination: resourceManager.getResourceBundle(null, PageGridLayouts_properties),
+          source: resourceManager.getResourceBundle(null, BlueprintPageGridLayouts_properties),
+        }),
+        new CopyResourceBundleProperties({
+          destination: resourceManager.getResourceBundle(null, IssueCategories_properties),
+          source: resourceManager.getResourceBundle(null, BlueprintIssueCategories_properties),
+        }),
+        /* enable studio shortcuts, override Shortcut.properties to specify different shortcut keys */
+        new AddShortcutsPlugin({}),
+
+        new EnableStateBasedPublicationButtonsPlugin({ adminOnly: true }),
+
+        new ContentUtilConfigurationPlugin({ expandFolderLimit: 100 }),
+
+        new ConfigureDocumentTypes({
+          names: "CMLinkable",
+          previewUrlTransformers: [
+            new AddDependingParameterPreviewUrlTransformer({
+              name: "contentType",
+              valueExpression: BlueprintFormsStudioPluginBase.getContentTypeVE(),
+            }),
+          ],
+        }),
+
+        /* Register document types to be allowed to be dropped */
+        new ConfigureDocumentTypes({
+          names: "CMLinkable",
+          richTextLinkable: true,
+        }),
+
+        /* register Image Types for thumbnail view and RichText Drag'n'Drop */
+        new ConfigureDocumentTypes({
+          names: "CMMedia,CMImage",
+          imageProperty: "data",
+          richTextImageBlobProperty: "data",
+        }),
+        new ConfigureDefaultRichTextImageDocumentType({ defaultRichTextImageType: "CMPicture" }),
+
+        /* exclude DocTypes from the create new documents menu */
+        new ConfigureDocumentTypes({
+          names: "Dictionary,Preferences,Query,CMDynamicList,CMVisual,EditorPreferences,EditorProfile",
+          exclude: true,
+          excludeFromSearch: true,
+        }),
+
+        /* there is no preview available for these DocTypes */
+        new ConfigureDocumentTypes({
+          names: "CMAction,CMCSS,CMFolderProperties,CMImage,CMInteractive,CMJavaScript,\n                                            CMPlaceholder,CMResourceBundle,CMSettings,CMSite,CMSymbol,EditorPreferences,EditorProfile,\n                                            CMTemplateSet,CMViewtype,CMTaxonomy,CMLocTaxonomy",
+          preview: false,
+        }),
+        /* there may be no preview available for these DocTypes */
+        new ConfigureDocumentTypes({
+          names: "CMObject",
+          mayPreview: BlueprintFormsStudioPluginBase.isValidCMLinkable,
+        }),
+
+        /* All CMHasContexts documents (essentially non-CMContext/CMChannel) are shown in "fragment preview" */
+        new ConfigureDocumentTypes({
+          names: "CMHasContexts",
+          previewUrlTransformers: [
+            new AddParameterPreviewUrlTransformer({
+              name: "view",
+              value: "fragmentPreview",
+            }),
+          ],
+        }),
+
+        new ConfigureDocumentTypes({
+          names: "CMTheme",
+          previewUrlTransformers: [
+            new AddParameterPreviewUrlTransformer({
+              name: "view",
+              value: "",
+            }),
+          ],
+        }),
+
+        new ConfigureDocumentTypes({
+          names: "CMSitemap",
+          previewUrlTransformers: [
+            new AddParameterPreviewUrlTransformer({
+              name: "view",
+              value: "",
+            }),
+          ],
+        }),
+
+        new ConfigureDashboardPlugin({
+          widgets: [
+            new SimpleSearchWidgetState({ contentType: "CMChannel" }),
+            new SimpleSearchWidgetState({ contentType: "CMArticle" }),
+            new SimpleSearchWidgetState({ contentType: "CMPicture" }),
+            new WidgetState({
+              widgetTypeId: BlueprintFormsStudioPlugin.EDITED_BY_ME_TYPE,
+              column: WidgetState.NEXT,
+              rowspan: 1,
+            }),
+            new WidgetState({ widgetTypeId: BlueprintFormsStudioPlugin.EDITED_BY_OTHERS_TYPE }),
+            new TranslationStatusWidgetState({}),
+          ],
+
+          types: [
+            new SimpleSearchWidgetType({}),
+
+            new FixedSearchWidgetType({
+              id_: BlueprintFormsStudioPlugin.EDITED_BY_ME_TYPE,
+              name: BlueprintStudio_properties.Dashboard_standardConfiguration_lastEdited,
+              search: new SearchState({ lastEditedBy: "me" }),
+            }),
+
+            new FixedSearchWidgetType({
+              id_: BlueprintFormsStudioPlugin.EDITED_BY_OTHERS_TYPE,
+              name: BlueprintStudio_properties.Dashboard_standardConfiguration_editedByOthers,
+              search: new SearchState({
+                editedByOthers: true,
+                editedByMe: false,
+                notEdited: false,
+                approved: false,
+                published: false,
               }),
+            }),
 
-              new TranslationStatusWidgetType({}),
-            ],
-          }),
+            new TranslationStatusWidgetType({}),
+          ],
+        }),
 
-          new ReusableDocumentFormTabsPlugin({ defaultLimit: 2 }),
+        new ReusableDocumentFormTabsPlugin({ defaultLimit: 2 }),
 
-          new RegisterLibraryTreeFilter({ path: "/Home/$USER/EditorProfile" }),
+        new RegisterLibraryTreeFilter({ path: "/Home/$USER/EditorProfile" }),
 
-        ],
+      ],
 
-      }), config);
-    })());
+    }), config));
   }
 }
 

@@ -29,11 +29,11 @@ class EditTaxonomyActionBase extends Action {
   readonly items: Array<any>;
 
   constructor(config: Config<EditTaxonomyAction> = null) {
-    super((()=>{
-      config.handler = bind(this, this.showTaxonomy);
-      config.text = TaxonomyStudioPlugin_properties.TaxonomyLinkList_edit_action_text;
-      return config;
-    })());
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    config.handler = bind(this$, this$.showTaxonomy);
+    config.text = TaxonomyStudioPlugin_properties.TaxonomyLinkList_edit_action_text;
+    super(config);
     this.#taxonomyId = config.taxonomyId;
     this.#bindTo = config.bindTo;
     this.#bindTo.addChangeListener(bind(this, this.#updateDisabled));

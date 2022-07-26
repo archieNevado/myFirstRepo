@@ -37,71 +37,71 @@ class ViewSettingsRadioGroup extends ViewSettingsRadioGroupBase {
   }
 
   constructor(config: Config<ViewSettingsRadioGroup> = null) {
-    super((()=>{
-      const this$ = this;this.#__initialize__(config);
-      config = ConfigUtils.apply({ propertyName: "localSettings.shopNow" }, config);
-      return ConfigUtils.apply(Config(ViewSettingsRadioGroup, {
-        columns: 1,
-        itemId: "viewSettingsPropertyField",
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#__initialize__(config);
+    config = ConfigUtils.apply({ propertyName: "localSettings.shopNow" }, config);
+    super(ConfigUtils.apply(Config(ViewSettingsRadioGroup, {
+      columns: 1,
+      itemId: "viewSettingsPropertyField",
 
-        plugins: [
-          Config(SetPropertyLabelPlugin, {
-            bindTo: config.bindTo,
-            propertyName: config.propertyName,
-          }),
-          Config(BindPropertyPlugin, {
-            componentProperty: "value",
-            bindTo: this.getRadioGroupValueExpression(),
-            transformer: (state: string): any => {
-              const radioValueObject: Record<string, any> = {};
-              radioValueObject[this.radioButtonFormName] = state;
-              return radioValueObject;
-            },
-            reverseTransformer: (radio: Radio): string =>
-              (radio ? radio[this.radioButtonFormName] : ""),
-            bidirectional: true,
-          }),
-        ],
-        items: [
-          Config(Radio, {
-            inputValue: ViewSettingsRadioGroup.INHERITED_SETTING,
-            itemId: ViewSettingsRadioGroup.INHERITED_SETTING,
-            boxLabel: ConfigUtils.asString(config.inheritLabel || LivecontextStudioPlugin_properties.CMProductTeaser_settings_inherit),
-            plugins: [
-              Config(BindDisablePlugin, {
-                bindTo: config.bindTo,
-                forceReadOnlyValueExpression: config.forceReadOnlyValueExpression,
-              }),
-              Config(BindVisibilityPlugin, { bindTo: this.getInheritOptionVisibleExpression(config.bindTo) }),
-            ],
-          }),
-          Config(Radio, {
-            inputValue: ViewSettingsRadioGroup.ENABLED_SETTING,
-            itemId: ViewSettingsRadioGroup.ENABLED_SETTING,
-
-            boxLabel: LivecontextStudioPlugin_properties.CMProductTeaser_settings_enabled,
-          }),
-          Config(Radio, {
-            inputValue: ViewSettingsRadioGroup.DISABLED_SETTING,
-            itemId: ViewSettingsRadioGroup.DISABLED_SETTING,
-            boxLabel: LivecontextStudioPlugin_properties.CMProductTeaser_settings_disabled,
-          }),
-        ],
-        defaultType: Radio["xtype"],
-        defaults: Config<Radio>({
-          name: this.radioButtonFormName,
-          hideLabel: true,
-          ...{ inGroup: true },
+      plugins: [
+        Config(SetPropertyLabelPlugin, {
+          bindTo: config.bindTo,
+          propertyName: config.propertyName,
+        }),
+        Config(BindPropertyPlugin, {
+          componentProperty: "value",
+          bindTo: this$.getRadioGroupValueExpression(),
+          transformer: (state: string): any => {
+            const radioValueObject: Record<string, any> = {};
+            radioValueObject[this$.radioButtonFormName] = state;
+            return radioValueObject;
+          },
+          reverseTransformer: (radio: Radio): string =>
+            (radio ? radio[this$.radioButtonFormName] : ""),
+          bidirectional: true,
+        }),
+      ],
+      items: [
+        Config(Radio, {
+          inputValue: ViewSettingsRadioGroup.INHERITED_SETTING,
+          itemId: ViewSettingsRadioGroup.INHERITED_SETTING,
+          boxLabel: ConfigUtils.asString(config.inheritLabel || LivecontextStudioPlugin_properties.CMProductTeaser_settings_inherit),
           plugins: [
             Config(BindDisablePlugin, {
               bindTo: config.bindTo,
               forceReadOnlyValueExpression: config.forceReadOnlyValueExpression,
             }),
+            Config(BindVisibilityPlugin, { bindTo: this$.getInheritOptionVisibleExpression(config.bindTo) }),
           ],
         }),
+        Config(Radio, {
+          inputValue: ViewSettingsRadioGroup.ENABLED_SETTING,
+          itemId: ViewSettingsRadioGroup.ENABLED_SETTING,
 
-      }), config);
-    })());
+          boxLabel: LivecontextStudioPlugin_properties.CMProductTeaser_settings_enabled,
+        }),
+        Config(Radio, {
+          inputValue: ViewSettingsRadioGroup.DISABLED_SETTING,
+          itemId: ViewSettingsRadioGroup.DISABLED_SETTING,
+          boxLabel: LivecontextStudioPlugin_properties.CMProductTeaser_settings_disabled,
+        }),
+      ],
+      defaultType: Radio["xtype"],
+      defaults: Config<Radio>({
+        name: this$.radioButtonFormName,
+        hideLabel: true,
+        ...{ inGroup: true },
+        plugins: [
+          Config(BindDisablePlugin, {
+            bindTo: config.bindTo,
+            forceReadOnlyValueExpression: config.forceReadOnlyValueExpression,
+          }),
+        ],
+      }),
+
+    }), config));
   }
 
   /**

@@ -20,68 +20,68 @@ class CommerceSystemForm extends DocumentForm {
   #catalogNameExpression: ValueExpression = null;
 
   constructor(config: Config<CommerceSystemForm> = null) {
-    super((()=>{
-      this.#catalogNameExpression = config.bindTo.extendBy(CatalogObjectPropertyNames.CATALOG + ".name");
-      return ConfigUtils.apply(Config(CommerceSystemForm, {
-        title: LivecontextStudioPlugin_properties.Commerce_Tab_system_title,
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#catalogNameExpression = config.bindTo.extendBy(CatalogObjectPropertyNames.CATALOG + ".name");
+    super(ConfigUtils.apply(Config(CommerceSystemForm, {
+      title: LivecontextStudioPlugin_properties.Commerce_Tab_system_title,
 
-        items: [
-          Config(PropertyFieldGroup, {
-            title: LivecontextStudioPlugin_properties.Commerce_PropertyGroup_filing_title,
-            itemId: "filing",
-            items: [
-              Config(DisplayField, {
-                itemId: "store",
-                fieldLabel: LivecontextStudioPlugin_properties.Commerce_store_label,
-                labelAlign: "left",
-                labelSeparator: ":",
-                plugins: [
-                  Config(BindPropertyPlugin, { bindTo: config.bindTo.extendBy(CatalogObjectPropertyNames.STORE + ".name") }),
-                ],
-              }),
-              Config(DisplayField, {
-                itemId: "catalog",
-                fieldLabel: LivecontextStudioPlugin_properties.Commerce_catalog_label,
-                labelAlign: "left",
-                labelSeparator: ":",
-                plugins: [
-                  Config(BindPropertyPlugin, { bindTo: this.#catalogNameExpression }),
-                  Config(BindVisibilityPlugin, { bindTo: this.#catalogNameExpression }),
-                ],
-              }),
-              Config(DisplayField, {
-                itemId: "id",
-                labelAlign: "left",
-                fieldLabel: LivecontextStudioPlugin_properties.Commerce_id_label,
-                labelSeparator: ":",
-                plugins: [
-                  Config(BindPropertyPlugin, { bindTo: config.bindTo.extendBy(CatalogObjectPropertyNames.ID) }),
-                ],
-              }),
-              Config(DisplayField, {
-                itemId: "externalId",
-                labelAlign: "left",
-                fieldLabel: LivecontextStudioPlugin_properties.Commerce_externalId_label,
-                labelSeparator: ":",
-                plugins: [
-                  Config(BindPropertyPlugin, { bindTo: config.bindTo.extendBy(CatalogObjectPropertyNames.EXTERNAL_ID) }),
-                ],
-              }),
-              Config(DisplayField, {
-                itemId: "externalTechId",
-                labelAlign: "left",
-                fieldLabel: LivecontextStudioPlugin_properties.Commerce_externalTechId_label,
-                labelSeparator: ":",
-                plugins: [
-                  Config(BindPropertyPlugin, { bindTo: config.bindTo.extendBy(CatalogObjectPropertyNames.EXTERNAL_TECH_ID) }),
-                ],
-              }),
-            ],
-          }),
-        ],
+      items: [
+        Config(PropertyFieldGroup, {
+          title: LivecontextStudioPlugin_properties.Commerce_PropertyGroup_filing_title,
+          itemId: "filing",
+          items: [
+            Config(DisplayField, {
+              itemId: "store",
+              fieldLabel: LivecontextStudioPlugin_properties.Commerce_store_label,
+              labelAlign: "left",
+              labelSeparator: ":",
+              plugins: [
+                Config(BindPropertyPlugin, { bindTo: config.bindTo.extendBy(CatalogObjectPropertyNames.STORE + ".name") }),
+              ],
+            }),
+            Config(DisplayField, {
+              itemId: "catalog",
+              fieldLabel: LivecontextStudioPlugin_properties.Commerce_catalog_label,
+              labelAlign: "left",
+              labelSeparator: ":",
+              plugins: [
+                Config(BindPropertyPlugin, { bindTo: this$.#catalogNameExpression }),
+                Config(BindVisibilityPlugin, { bindTo: this$.#catalogNameExpression }),
+              ],
+            }),
+            Config(DisplayField, {
+              itemId: "id",
+              labelAlign: "left",
+              fieldLabel: LivecontextStudioPlugin_properties.Commerce_id_label,
+              labelSeparator: ":",
+              plugins: [
+                Config(BindPropertyPlugin, { bindTo: config.bindTo.extendBy(CatalogObjectPropertyNames.ID) }),
+              ],
+            }),
+            Config(DisplayField, {
+              itemId: "externalId",
+              labelAlign: "left",
+              fieldLabel: LivecontextStudioPlugin_properties.Commerce_externalId_label,
+              labelSeparator: ":",
+              plugins: [
+                Config(BindPropertyPlugin, { bindTo: config.bindTo.extendBy(CatalogObjectPropertyNames.EXTERNAL_ID) }),
+              ],
+            }),
+            Config(DisplayField, {
+              itemId: "externalTechId",
+              labelAlign: "left",
+              fieldLabel: LivecontextStudioPlugin_properties.Commerce_externalTechId_label,
+              labelSeparator: ":",
+              plugins: [
+                Config(BindPropertyPlugin, { bindTo: config.bindTo.extendBy(CatalogObjectPropertyNames.EXTERNAL_TECH_ID) }),
+              ],
+            }),
+          ],
+        }),
+      ],
 
-      }), config);
-    })());
+    }), config));
   }
 }
 

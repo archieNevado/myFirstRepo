@@ -27,7 +27,9 @@ class TaxonomyLinkListGridPanel extends TaxonomyLinkListGridPanelBase {
   protected static readonly DRAG_GROUPS: Array<any> = ["ContentLinkDD"];
 
   constructor(config: Config<TaxonomyLinkListGridPanel> = null) {
-    super((()=> ConfigUtils.apply(Config(TaxonomyLinkListGridPanel, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(TaxonomyLinkListGridPanel, {
       hideHeaders: true,
       ui: PanelSkin.NO_VALIDATION.getSkin(),
       forceFit: true,
@@ -45,7 +47,7 @@ class TaxonomyLinkListGridPanel extends TaxonomyLinkListGridPanelBase {
           stateId: "name",
           sortable: false,
           dataIndex: "name",
-          renderer: bind(this, this.taxonomyRenderer),
+          renderer: bind(this$, this$.taxonomyRenderer),
         }),
       ],
       selModel: new RowSelectionModel({ mode: config.selectionMode || "MULTI" }),
@@ -66,7 +68,7 @@ class TaxonomyLinkListGridPanel extends TaxonomyLinkListGridPanelBase {
         ],
       }),
 
-    }), config))());
+    }), config));
   }
 }
 

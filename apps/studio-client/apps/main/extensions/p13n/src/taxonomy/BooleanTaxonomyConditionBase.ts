@@ -26,10 +26,10 @@ class BooleanTaxonomyConditionBase extends AbstractTaxonomyCondition {
 
   protected static readonly NO_VALUE_OPERATOR_DISPLAY_NAMES: Record<string, any> = {};
 
-  static #static = (() =>{
+  static {
     BooleanTaxonomyConditionBase.NO_VALUE_OPERATOR_DISPLAY_NAMES[SelectionRuleHelper.OP_EQUAL] = Personalization_properties.p13n_op_contains;
     BooleanTaxonomyConditionBase.NO_VALUE_OPERATOR_DISPLAY_NAMES[SelectionRuleHelper.OP_NOTEQUAL] = Personalization_properties.p13n_op_contains_not;
-  })();
+  }
 
   constructor(config: Config<BooleanTaxonomyCondition> = null) {
     // create operator combo
@@ -37,11 +37,11 @@ class BooleanTaxonomyConditionBase extends AbstractTaxonomyCondition {
     const operator: any = config.operator;
     let opSelector: OperatorSelector;
 
-    super((()=>{
-      opSelector = this.initOpSelector(null, config.operatorNames, config.operatorEmptyText, operator,
-        BooleanTaxonomyConditionBase.#NO_VALUE_OPERATORS, BooleanTaxonomyConditionBase.NO_VALUE_OPERATOR_DISPLAY_NAMES);
-      return config;
-    })());
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    opSelector = this$.initOpSelector(null, config.operatorNames, config.operatorEmptyText, operator,
+      BooleanTaxonomyConditionBase.#NO_VALUE_OPERATORS, BooleanTaxonomyConditionBase.NO_VALUE_OPERATOR_DISPLAY_NAMES);
+    super(config);
 
     this.#addOpSelector(opSelector, operators, operator);
 

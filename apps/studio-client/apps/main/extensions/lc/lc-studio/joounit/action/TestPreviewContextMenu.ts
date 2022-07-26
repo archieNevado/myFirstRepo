@@ -20,7 +20,9 @@ class TestPreviewContextMenu extends PreviewContextMenu {
   static override readonly xtype: string = "com.coremedia.livecontext.studio.config.testPreviewContextMenu";
 
   constructor(config: Config<TestPreviewContextMenu> = null) {
-    super((()=> ConfigUtils.apply(Config(TestPreviewContextMenu, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(TestPreviewContextMenu, {
 
       items: [
         Config(Breadcrumb, {
@@ -31,7 +33,7 @@ class TestPreviewContextMenu extends PreviewContextMenu {
           disableNavigation: true,
           hideElementTexts: true,
           hideOnEmpty: false,
-          disableElementStrategy: this["disableBreadcrumbElementStrategy"],
+          disableElementStrategy: this$["disableBreadcrumbElementStrategy"],
           selectedNodeValueExpression: config.selectedNodeValueExpression,
         }),
 
@@ -47,7 +49,7 @@ class TestPreviewContextMenu extends PreviewContextMenu {
         Config(ShopPageShowInLibraryMenuItem),
       ],
 
-    }), config))());
+    }), config));
   }
 
   bindTo: ValueExpression = null;

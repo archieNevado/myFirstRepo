@@ -5,8 +5,8 @@ import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.elastic.social.rest.api.JsonCustomizer;
 import com.coremedia.elastic.social.rest.api.JsonProperties;
 import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 
-import javax.inject.Named;
 import java.util.Map;
 
 /**
@@ -14,7 +14,7 @@ import java.util.Map;
  * users in the Studio moderation. This bean may be removed if a preview
  * for user information is desired (templates required!).
  */
-@Named
+@Component
 @Order(0)
 public class CommunityUserJsonCustomizer implements JsonCustomizer<CommunityUser> {
   @Override

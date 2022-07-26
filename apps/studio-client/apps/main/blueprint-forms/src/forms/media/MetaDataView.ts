@@ -20,7 +20,9 @@ class MetaDataView extends MetaDataViewBase {
   static override readonly xtype: string = "com.coremedia.blueprint.studio.config.components.metaDataView";
 
   constructor(config: Config<MetaDataView> = null) {
-    super((()=> ConfigUtils.apply(Config(MetaDataView, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(MetaDataView, {
 
       items: [
         Config(DisplayField, {
@@ -37,7 +39,7 @@ class MetaDataView extends MetaDataViewBase {
           tpl: MetaDataViewBase.getXTemplate(),
           plugins: [
             Config(BindListPlugin, {
-              bindTo: this.getMetaDataExpression(config.metaDataSection),
+              bindTo: this$.getMetaDataExpression(config.metaDataSection),
               fields: [
                 Config(DataField, { name: "property" }),
                 Config(DataField, { name: "value" }),
@@ -48,7 +50,7 @@ class MetaDataView extends MetaDataViewBase {
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 
   metaDataSection: MetaDataSection = null;

@@ -16,11 +16,13 @@ class ProjectQuickCreateLinklistMenu extends ProjectQuickCreateLinklistMenuBase 
   static override readonly xtype: string = "com.coremedia.blueprint.studio.config.controlroom.projectQuickCreateLinklistMenu";
 
   constructor(config: Config<ProjectQuickCreateLinklistMenu> = null) {
-    super((()=> ConfigUtils.apply(Config(ProjectQuickCreateLinklistMenu, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(ProjectQuickCreateLinklistMenu, {
       text: ProjectStudioPlugin_properties.Project_create_content_tooltip,
       tooltip: ProjectStudioPlugin_properties.Project_create_content_tooltip,
       iconCls: CoreIcons_properties.create_content,
-      onSuccess: bind(this, this.updateProject),
+      onSuccess: bind(this$, this$.updateProject),
       contentTypes: ProjectStudioPluginSettings_properties.default_project_content_quickcreate_contentTypes,
 
       menu: Config(Menu, {
@@ -29,7 +31,7 @@ class ProjectQuickCreateLinklistMenu extends ProjectQuickCreateLinklistMenuBase 
         ],
       }),
 
-    }), config))());
+    }), config));
   }
 }
 

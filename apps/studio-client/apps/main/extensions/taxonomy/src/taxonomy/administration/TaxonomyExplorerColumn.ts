@@ -35,13 +35,15 @@ class TaxonomyExplorerColumn extends TaxonomyExplorerColumnBase {
   static override readonly xtype: string = "com.coremedia.blueprint.studio.config.taxonomy.taxonomyExplorerColumn";
 
   constructor(config: Config<TaxonomyExplorerColumn> = null) {
-    super((()=> ConfigUtils.apply(Config(TaxonomyExplorerColumn, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(TaxonomyExplorerColumn, {
       hideHeaders: true,
       forceFit: true,
 
       plugins: [
         Config(BindListPlugin, {
-          bindTo: this.getEntriesValueExpression(),
+          bindTo: this$.getEntriesValueExpression(),
           fields: [
             Config(DataField, { name: "name" }),
             Config(DataField, { name: "siteId" }),
@@ -92,7 +94,7 @@ class TaxonomyExplorerColumn extends TaxonomyExplorerColumnBase {
           sortable: false,
           fixed: true,
           dataIndex: "name",
-          renderer: bind(this, this.nameColRenderer),
+          renderer: bind(this$, this$.nameColRenderer),
         }),
         Config(Column, {
           stateId: "leaf",
@@ -100,7 +102,7 @@ class TaxonomyExplorerColumn extends TaxonomyExplorerColumnBase {
           sortable: false,
           fixed: true,
           dataIndex: "leaf",
-          renderer: bind(this, this.pointerColRenderer),
+          renderer: bind(this$, this$.pointerColRenderer),
         }),
       ],
       selModel: new RowSelectionModel({ mode: "MULTI" }),
@@ -118,7 +120,7 @@ class TaxonomyExplorerColumn extends TaxonomyExplorerColumnBase {
         ],
       }),
 
-    }), config))());
+    }), config));
   }
 
   /**

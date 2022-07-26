@@ -34,20 +34,22 @@ class FacetsFilterPanel extends FacetsFilterPanelBase {
   static readonly DISABLED_ITEM_ID: string = "disabledFilter";
 
   constructor(config: Config<FacetsFilterPanel> = null) {
-    super((()=> ConfigUtils.apply(Config(FacetsFilterPanel, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(FacetsFilterPanel, {
       itemId: config.filterId,
 
       items: [
         Config(FacetsChooser, {
-          facetsExpression: this.getFacetsExpression(),
+          facetsExpression: this$.getFacetsExpression(),
           itemId: FacetsFilterPanel.FACETS_CHOOSER_ITEM_ID,
-          selectedFacetsExpression: this.getSelectedFacetsExpression(),
+          selectedFacetsExpression: this$.getSelectedFacetsExpression(),
         }),
 
         Config(Component, { height: 12 }),
 
         Config(SwitchingContainer, {
-          activeItemValueExpression: this.getActiveStateExpression(),
+          activeItemValueExpression: this$.getActiveStateExpression(),
           items: [
 
             Config(EmptyContainer, {
@@ -77,13 +79,13 @@ class FacetsFilterPanel extends FacetsFilterPanelBase {
                       ui: ButtonSkin.LINK.getSkin(),
                       itemId: "resetAllFilters",
                       text: ECommerceStudioPlugin_properties.CollectionView_search_filter_resetAll_text,
-                      handler: bind(this, this.resetAllFilters),
+                      handler: bind(this$, this$.resetAllFilters),
                       ...ConfigUtils.append({
                         plugins: [
                           Config(BindPropertyPlugin, {
                             componentProperty: "hidden",
-                            bindTo: this.getSelectedFacetsExpression(),
-                            transformer: bind(this, this.emptyTransformer),
+                            bindTo: this$.getSelectedFacetsExpression(),
+                            transformer: bind(this$, this$.emptyTransformer),
                           }),
                         ],
                       }),
@@ -98,13 +100,13 @@ class FacetsFilterPanel extends FacetsFilterPanelBase {
                   itemId: "facetsContainer",
                   plugins: [
                     Config(BindComponentsPlugin, {
-                      valueExpression: this.getSelectedFacetsExpression(),
+                      valueExpression: this$.getSelectedFacetsExpression(),
                       configBeanParameterName: "facet",
                       reuseComponents: true,
                       clearBeforeUpdate: false,
                       template: Config(FacetFilterFieldWrapper, {
-                        removeHandler: bind(this, this.removeFromSelection),
-                        stateBean: this.getStateBean(),
+                        removeHandler: bind(this$, this$.removeFromSelection),
+                        stateBean: this$.getStateBean(),
                       }),
                     }),
                   ],
@@ -120,7 +122,7 @@ class FacetsFilterPanel extends FacetsFilterPanelBase {
       ],
       layout: Config(VBoxLayout, { align: "stretch" }),
 
-    }), config))());
+    }), config));
   }
 }
 

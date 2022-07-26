@@ -65,11 +65,11 @@ class TemplateBeanListChooserBase extends BeanListChooser {
   constructor(config: Config<TemplateBeanListChooserBase> = null) {
     config.template = TemplateBeanListChooserBase.getXTemplateForRendering();
     config.itemSelector = TemplateBeanListChooserBase.getContentItemSelector();
-    super((()=>{
-      config.beanList = this.getTemplates();
-      config.cls = TemplateBeanListChooserBase.TEMPLATE_BEAN_LIST_CHOOSER_BLOCK.getCSSClass();
-      return config;
-    })());
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    config.beanList = this$.getTemplates();
+    config.cls = TemplateBeanListChooserBase.TEMPLATE_BEAN_LIST_CHOOSER_BLOCK.getCSSClass();
+    super(config);
   }
 
   /**

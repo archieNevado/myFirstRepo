@@ -16,23 +16,25 @@ class EsAnalyticsChartWidget extends EsAnalyticsChartWidgetBase {
   static readonly ES_ALX_CHART: string = "esAlxChartItemId";
 
   constructor(config: Config<EsAnalyticsChartWidget> = null) {
-    super((()=> ConfigUtils.apply(Config(EsAnalyticsChartWidget, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(EsAnalyticsChartWidget, {
       layout: "anchor",
       scrollable: true,
 
       items: [
         Config(EsAnalyticsChart, {
           itemId: EsAnalyticsChartWidget.ES_ALX_CHART,
-          bindTo: this.getAlxData("data"),
-          timeRangeValueExpression: this.getTimeRangeValueExpression(),
+          bindTo: this$.getAlxData("data"),
+          timeRangeValueExpression: this$.getTimeRangeValueExpression(),
           chartTitle: EsAnalyticsStudioPlugin_properties.chart_title_page_views,
-          timeStampValueExpression: this.getAlxData("timeStamp"),
+          timeStampValueExpression: this$.getAlxData("timeStamp"),
           chartHeight: 240,
         }),
 
         Config(EsChart, {
-          bindTo: this.getPublicationData("data"),
-          timeStampValueExpression: this.getPublicationData("timeStamp"),
+          bindTo: this$.getPublicationData("data"),
+          timeStampValueExpression: this$.getPublicationData("timeStamp"),
           chartHeight: 200,
           color: "#7ed900",
           fieldLabel: EsAnalyticsStudioPlugin_properties.chart_title_publications,
@@ -41,7 +43,7 @@ class EsAnalyticsChartWidget extends EsAnalyticsChartWidgetBase {
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 }
 

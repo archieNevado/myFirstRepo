@@ -1,6 +1,8 @@
 package com.coremedia.ecommerce.studio.rest.configuration;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceServicesConfiguration;
+import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.ecommerce.studio.preview.CommerceAppPreviewProvider;
 import com.coremedia.ecommerce.studio.preview.CommerceHeadlessPreviewProvider;
 import com.coremedia.ecommerce.studio.rest.filter.EcStudioFilters;
 import com.coremedia.rest.cap.CapRestServiceConfiguration;
@@ -27,6 +29,12 @@ public class ECommerceStudioConfiguration {
   @Bean
   public PreviewProvider commerceHeadlessPreviewProvider(PreviewUrlServiceConfigurationProperties previewUrlServiceConfigurationProperties) {
     return new CommerceHeadlessPreviewProvider(previewUrlServiceConfigurationProperties);
+  }
+
+  @Bean
+  public PreviewProvider commerceAppPreviewProvider(PreviewUrlServiceConfigurationProperties previewUrlServiceConfigurationProperties,
+                                                    SitesService sitesService) {
+    return new CommerceAppPreviewProvider(sitesService);
   }
 
 }

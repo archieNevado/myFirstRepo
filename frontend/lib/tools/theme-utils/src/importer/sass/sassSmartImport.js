@@ -78,7 +78,7 @@ function calculateSmartImport(prev) {
   };
 }
 
-function sassSmartImport(url, prev, done) {
+module.exports = function (url, prev, done) {
   // take the prev of the first import to get variant information (prev is the entry point)
   this._sassSmartImport = this._sassSmartImport || calculateSmartImport(prev);
 
@@ -134,11 +134,9 @@ function sassSmartImport(url, prev, done) {
       file: path.resolve(
         path.dirname(pkgJson),
         "smart-import-" + varsOrPartials + ".scss"
-      ) + (sassSmartImport.enableDuplicateSassImportsFix ? "?" + new Date().getTime() : ""),
+      ) + "?" + new Date().getTime(),
     });
   } else {
     done(nodeSass.types.NULL);
   }
 };
-
-module.exports = sassSmartImport;

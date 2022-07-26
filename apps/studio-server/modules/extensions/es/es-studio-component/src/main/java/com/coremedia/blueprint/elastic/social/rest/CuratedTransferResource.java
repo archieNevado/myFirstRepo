@@ -19,12 +19,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.inject.Named;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,7 +39,7 @@ import static com.coremedia.elastic.social.rest.api.ElasticSocialRestConstants.E
  * Copies {@link Comment Comments} and associated image attachements from Elastic Social into {@link Content}
  * in the {@link com.coremedia.cap.common.CapRepository repository}.
  */
-@Named
+@Component
 @RestController
 @RequestMapping(value = CuratedTransferResource.PATH, produces = MediaType.APPLICATION_JSON_VALUE)
 public class CuratedTransferResource {
@@ -134,7 +134,11 @@ public class CuratedTransferResource {
   }
 
   private Content fetchContent(final String capId) {
-    return contentRepository.getContent(capId);
+    Content content = contentRepository.getContent(capId);
+    if (content == null) {
+      throw new IllegalArgumentException(String.format("'%s' is not a valid ContentId for argument 'capId', because the content doesn't exist.", capId));
+    }
+    return content;
   }
 
   private void copyCommentsTextTo(Content contentToCopyTo, final List<Comment> comments) {

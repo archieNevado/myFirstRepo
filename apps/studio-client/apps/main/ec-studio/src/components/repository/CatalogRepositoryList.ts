@@ -55,111 +55,109 @@ class CatalogRepositoryList extends CatalogRepositoryListBase {
   newContentDisabledValueExpression: ValueExpression = null;
 
   constructor(config: Config<CatalogRepositoryList> = null) {
-    super((()=>{
-      this.#catalogHelper = CatalogHelper.getInstance();
-      return ConfigUtils.apply(Config(CatalogRepositoryList, {
-        emptyText: ECommerceStudioPlugin_properties.CatalogView_empty_text,
-        header: false,
-        ddGroup: "ContentDD",
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#catalogHelper = CatalogHelper.getInstance();
+    super(ConfigUtils.apply(Config(CatalogRepositoryList, {
+      emptyText: ECommerceStudioPlugin_properties.CatalogView_empty_text,
+      header: false,
+      ddGroup: "ContentDD",
 
-        ...ConfigUtils.prepend({
-          plugins: [
-            Config(BindListPlugin, {
-              bindTo: this.getCatalogItemsValueExpression(),
-              lazy: true,
-              fields: [
-                Config(DataField, {
-                  name: "type",
-                  mapping: "",
-                  convert: AugmentationUtil.getTypeLabel,
-                }),
-                Config(DataField, {
-                  name: "typeCls",
-                  mapping: "",
-                  convert: AugmentationUtil.getIconFunctionWithLink(config.selectedNodeValueExpression),
-                }),
-                Config(DataField, {
-                  name: "id",
-                  ifUnreadable: "",
-                  mapping: "externalId",
-                }),
-                Config(DataField, {
-                  name: "name",
-                  mapping: "",
-                  convert: bind(this.#catalogHelper, this.#catalogHelper.getDecoratedName),
-                }),
-                Config(DataField, {
-                  name: "description",
-                  ifUnreadable: "",
-                  mapping: "shortDescription",
-                  convert: (v: string, catalogObject: CatalogObject): string =>
-                    RichTextPlainTextTransformer.convertToPlainText(catalogObject.getShortDescription()),
-                }),
-              ],
-            }),
-            Config(ContextMenuPlugin, {
-              lastClickedCellVE: this.getLastClickedCellVE(),
-              contextMenu: Config(CatalogRepositoryContextMenu, {
-                selectedItemsValueExpression: config.mySelectedItemsValueExpression,
-                selectedFolderValueExpression: config.selectedNodeValueExpression,
-                newContentDisabledValueExpression: config.newContentDisabledValueExpression,
-                createdContentValueExpression: config.createdContentValueExpression,
-                ...ConfigUtils.append({
-                  plugins: [
-                    Config(AddItemsPlugin, {
-                      items: [
-                        Config(Item, {
-                          itemId: CatalogRepositoryList.COPY_COLUMN_CONTENT_TO_SYSTEM_CLIPBOARD,
-                          baseAction: new CopyCellContentToSystemClipboardAction({
-                            lastClickedCellVE: this.getLastClickedCellVE(),
-                            selectedItemsValueExpression: config.mySelectedItemsValueExpression,
-                          }),
+      ...ConfigUtils.prepend({
+        plugins: [
+          Config(BindListPlugin, {
+            bindTo: this$.getCatalogItemsValueExpression(),
+            lazy: true,
+            fields: [
+              Config(DataField, {
+                name: "type",
+                mapping: "",
+                convert: AugmentationUtil.getTypeLabel,
+              }),
+              Config(DataField, {
+                name: "typeCls",
+                mapping: "",
+                convert: AugmentationUtil.getIconFunctionWithLink(config.selectedNodeValueExpression),
+              }),
+              Config(DataField, {
+                name: "id",
+                ifUnreadable: "",
+                mapping: "externalId",
+              }),
+              Config(DataField, {
+                name: "name",
+                mapping: "",
+                convert: bind(this$.#catalogHelper, this$.#catalogHelper.getDecoratedName),
+              }),
+              Config(DataField, {
+                name: "description",
+                ifUnreadable: "",
+                mapping: "shortDescription",
+                convert: (v: string, catalogObject: CatalogObject): string =>
+                  RichTextPlainTextTransformer.convertToPlainText(catalogObject.getShortDescription()),
+              }),
+            ],
+          }),
+          Config(ContextMenuPlugin, {
+            lastClickedCellVE: this$.getLastClickedCellVE(),
+            contextMenu: Config(CatalogRepositoryContextMenu, {
+              selectedItemsValueExpression: config.mySelectedItemsValueExpression,
+              selectedFolderValueExpression: config.selectedNodeValueExpression,
+              ...ConfigUtils.append({
+                plugins: [
+                  Config(AddItemsPlugin, {
+                    items: [
+                      Config(Item, {
+                        itemId: CatalogRepositoryList.COPY_COLUMN_CONTENT_TO_SYSTEM_CLIPBOARD,
+                        baseAction: new CopyCellContentToSystemClipboardAction({
+                          lastClickedCellVE: this$.getLastClickedCellVE(),
+                          selectedItemsValueExpression: config.mySelectedItemsValueExpression,
                         }),
-                      ],
-                    }),
-                  ],
-                }),
+                      }),
+                    ],
+                  }),
+                ],
               }),
             }),
-          ],
-        }),
-        columns: [
-          Config(TypeIconColumn, {
-            showTypeName: true,
-            sortable: true,
-            ...{ sortField: "type" },
-            width: 125,
-          }),
-          Config(Column, {
-            header: ECommerceStudioPlugin_properties.id_header,
-            stateId: "id",
-            dataIndex: "id",
-            sortable: true,
-            hideable: false,
-            menuDisabled: true,
-            width: 125,
-          }),
-          Config(Column, {
-            header: GridColumns_properties.name_header,
-            stateId: "name",
-            dataIndex: "name",
-            sortable: true,
-            hideable: false,
-            menuDisabled: true,
-            width: 200,
-          }),
-          Config(Column, {
-            header: ECommerceStudioPlugin_properties.description_header,
-            stateId: "description",
-            dataIndex: "description",
-            hideable: false,
-            menuDisabled: true,
-            flex: 1,
           }),
         ],
+      }),
+      columns: [
+        Config(TypeIconColumn, {
+          showTypeName: true,
+          sortable: true,
+          ...{ sortField: "type" },
+          width: 125,
+        }),
+        Config(Column, {
+          header: ECommerceStudioPlugin_properties.id_header,
+          stateId: "id",
+          dataIndex: "id",
+          sortable: true,
+          hideable: false,
+          menuDisabled: true,
+          width: 125,
+        }),
+        Config(Column, {
+          header: GridColumns_properties.name_header,
+          stateId: "name",
+          dataIndex: "name",
+          sortable: true,
+          hideable: false,
+          menuDisabled: true,
+          width: 200,
+        }),
+        Config(Column, {
+          header: ECommerceStudioPlugin_properties.description_header,
+          stateId: "description",
+          dataIndex: "description",
+          hideable: false,
+          menuDisabled: true,
+          flex: 1,
+        }),
+      ],
 
-      }), config);
-    })());
+    }), config));
   }
 }
 

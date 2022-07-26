@@ -22,7 +22,9 @@ class UnlinkActionBase extends ContentAction {
   #folderValueExpression: ValueExpression = null;
 
   constructor(config: Config<UnlinkAction> = null) {
-    super((()=>ActionConfigUtil.extendConfiguration(resourceManager.getResourceBundle(null, CatalogActions_properties).content, config, "unlink", { handler: bind(this, this.#startUnlink) }))());
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ActionConfigUtil.extendConfiguration(resourceManager.getResourceBundle(null, CatalogActions_properties).content, config, "unlink", { handler: bind(this$, this$.#startUnlink) }));
     this.#folderValueExpression = config.folderValueExpression;
   }
 

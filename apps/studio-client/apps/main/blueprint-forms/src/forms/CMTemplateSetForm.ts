@@ -36,99 +36,99 @@ class CMTemplateSetForm extends DocumentTabPanel {
   #metadata: ValueExpression = null;
 
   constructor(config: Config<CMTemplateSetForm> = null) {
-    super((()=>{
-      this.#metadata = config.bindTo.extendBy("properties.archive.metadata");
-      return ConfigUtils.apply(Config(CMTemplateSetForm, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#metadata = config.bindTo.extendBy("properties.archive.metadata");
+    super(ConfigUtils.apply(Config(CMTemplateSetForm, {
 
-        items: [
-          Config(DocumentForm, {
-            title: BlueprintTabs_properties.Tab_content_title,
-            itemId: "contentTab",
-            items: [
-              Config(CollapsibleStringPropertyForm, {
-                propertyName: "description",
-                title: BlueprintDocumentTypes_properties.CMTemplateSet_description_text,
-              }),
-              Config(PropertyFieldGroup, {
-                title: BlueprintDocumentTypes_properties.CMTemplateSet_archive_text,
-                itemId: "cmTemplateArchiveForm",
-                items: [
-                  Config(BlobPropertyField, {
-                    propertyName: "archive",
-                    hideLabel: true,
-                    helpText: BlueprintDocumentTypes_properties.CMTemplateSet_archive_helpText,
-                  }),
-                  Config(Container, {
-                    items: [
-                      Config(Label, { text: BlueprintDocumentTypes_properties.CMTemplateSet_metadata_archiveLabel_text + ": " }),
-                      Config(FormSpacerElement),
-                      Config(Label, {
-                        plugins: [
-                          Config(BindPropertyPlugin, {
-                            componentProperty: "text",
-                            bindTo: this.#metadata.extendBy("archive.label"),
-                            ifUndefined: "",
-                          }),
-                        ],
-                      }),
-                    ],
-                    layout: Config(TableLayout, { columns: 3 }),
-                  }),
-                  Config(TreePanel, {
-                    ...{ colspan: 3 },
-                    collapsible: false,
-                    rootVisible: false,
-                    bodyBorder: true,
-                    useArrows: true,
-                    listeners: { "rowdblclick": BlobMetadataUtil.rowDblClick },
-                    lines: true,
-                    plugins: [
-                      Config(BindPropertyPlugin, {
-                        componentProperty: "rootNode",
-                        bindTo: this.#metadata.extendBy("archive.files"),
-                        ifUndefined: BlobMetadataUtil.emptyRootNode(),
-                        transformer: BlobMetadataUtil.convertDirectoryTree,
-                      }),
-                      Config(BindPropertyPlugin, {
-                        componentProperty: "visible",
-                        bindTo: this.#metadata.extendBy("archive.files"),
-                        ifUndefined: false,
-                        transformer: bind(Ext, Ext.isArray),
-                      }),
-                    ],
-                    columns: [
-                      Config(TreeColumn, {
-                        dataIndex: "name",
-                        flex: 1,
-                        width: 300,
-                        header: BlueprintDocumentTypes_properties.CMTemplateSet_metadata_files_nameHeader_text,
-                        renderer: BlobMetadataUtil.fileNameRenderer,
-                      }),
-                      Config(DateColumn, {
-                        dataIndex: "time",
-                        width: 130,
-                        header: BlueprintDocumentTypes_properties.CMTemplateSet_metadata_files_timeHeader_text,
-                        renderer: BlobMetadataUtil.fileDateRenderer,
-                      }),
-                      Config(Column, {
-                        dataIndex: "size",
-                        width: 80,
-                        align: "right",
-                        header: BlueprintDocumentTypes_properties.CMTemplateSet_metadata_files_sizeHeader_text,
-                        renderer: BlobMetadataUtil.fileSizeRenderer,
-                      }),
-                    ],
-                  }),
-                ],
-              }),
-            ],
-          }),
+      items: [
+        Config(DocumentForm, {
+          title: BlueprintTabs_properties.Tab_content_title,
+          itemId: "contentTab",
+          items: [
+            Config(CollapsibleStringPropertyForm, {
+              propertyName: "description",
+              title: BlueprintDocumentTypes_properties.CMTemplateSet_description_text,
+            }),
+            Config(PropertyFieldGroup, {
+              title: BlueprintDocumentTypes_properties.CMTemplateSet_archive_text,
+              itemId: "cmTemplateArchiveForm",
+              items: [
+                Config(BlobPropertyField, {
+                  propertyName: "archive",
+                  hideLabel: true,
+                  helpText: BlueprintDocumentTypes_properties.CMTemplateSet_archive_helpText,
+                }),
+                Config(Container, {
+                  items: [
+                    Config(Label, { text: BlueprintDocumentTypes_properties.CMTemplateSet_metadata_archiveLabel_text + ": " }),
+                    Config(FormSpacerElement),
+                    Config(Label, {
+                      plugins: [
+                        Config(BindPropertyPlugin, {
+                          componentProperty: "text",
+                          bindTo: this$.#metadata.extendBy("archive.label"),
+                          ifUndefined: "",
+                        }),
+                      ],
+                    }),
+                  ],
+                  layout: Config(TableLayout, { columns: 3 }),
+                }),
+                Config(TreePanel, {
+                  ...{ colspan: 3 },
+                  collapsible: false,
+                  rootVisible: false,
+                  bodyBorder: true,
+                  useArrows: true,
+                  listeners: { "rowdblclick": BlobMetadataUtil.rowDblClick },
+                  lines: true,
+                  plugins: [
+                    Config(BindPropertyPlugin, {
+                      componentProperty: "rootNode",
+                      bindTo: this$.#metadata.extendBy("archive.files"),
+                      ifUndefined: BlobMetadataUtil.emptyRootNode(),
+                      transformer: BlobMetadataUtil.convertDirectoryTree,
+                    }),
+                    Config(BindPropertyPlugin, {
+                      componentProperty: "visible",
+                      bindTo: this$.#metadata.extendBy("archive.files"),
+                      ifUndefined: false,
+                      transformer: bind(Ext, Ext.isArray),
+                    }),
+                  ],
+                  columns: [
+                    Config(TreeColumn, {
+                      dataIndex: "name",
+                      flex: 1,
+                      width: 300,
+                      header: BlueprintDocumentTypes_properties.CMTemplateSet_metadata_files_nameHeader_text,
+                      renderer: BlobMetadataUtil.fileNameRenderer,
+                    }),
+                    Config(DateColumn, {
+                      dataIndex: "time",
+                      width: 130,
+                      header: BlueprintDocumentTypes_properties.CMTemplateSet_metadata_files_timeHeader_text,
+                      renderer: BlobMetadataUtil.fileDateRenderer,
+                    }),
+                    Config(Column, {
+                      dataIndex: "size",
+                      width: 80,
+                      align: "right",
+                      header: BlueprintDocumentTypes_properties.CMTemplateSet_metadata_files_sizeHeader_text,
+                      renderer: BlobMetadataUtil.fileSizeRenderer,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        }),
 
-          Config(MetaDataWithoutSettingsForm),
-        ],
+        Config(MetaDataWithoutSettingsForm),
+      ],
 
-      }), config);
-    })());
+    }), config));
   }
 }
 

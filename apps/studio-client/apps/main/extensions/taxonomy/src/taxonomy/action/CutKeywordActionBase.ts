@@ -22,12 +22,12 @@ class CutKeywordActionBase extends Action {
   readonly items: Array<any>;
 
   constructor(config: Config<CutKeywordAction> = null) {
-    super((()=>{
-      config.handler = bind(this, this.#cutNode);
-      config.disabled = true;
-      config.text = TaxonomyStudioPlugin_properties.TaxonomyExplorerPanel_cut_button_label;
-      return config;
-    })());
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    config.handler = bind(this$, this$.#cutNode);
+    config.disabled = true;
+    config.text = TaxonomyStudioPlugin_properties.TaxonomyExplorerPanel_cut_button_label;
+    super(config);
     this.#clipboardValueExpression = config.clipboardValueExpression;
     this.#selectionExpression = config.selectionExpression;
     this.#selectionExpression.addChangeListener(bind(this, this.#updateDisabled));

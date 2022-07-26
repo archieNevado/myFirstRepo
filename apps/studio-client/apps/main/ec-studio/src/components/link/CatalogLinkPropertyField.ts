@@ -43,31 +43,33 @@ class CatalogLinkPropertyField extends CatalogLinkPropertyFieldBase {
     if (config.showRemoveReferenceButton) {
       config.replaceOnDrop = false;
     }
-    super((() => ConfigUtils.apply(Config(CatalogLinkPropertyField, {
-      readOnlyValueExpression: this.getReadOnlyVE(config),
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CatalogLinkPropertyField, {
+      readOnlyValueExpression: this$.getReadOnlyVE(config),
       dropAreaHandler: CatalogHelper.getInstance().openCatalog,
       htmlFeedback: CatalogDragDropVisualFeedback.getHtmlFeedback,
-      selectedPositionsExpression: this.getSelectedPositionsVE(),
-      selectedValuesExpression: this.getSelectedVE(),
-      linkListWrapper: this.getLinkListWrapper(config),
+      selectedPositionsExpression: this$.getSelectedPositionsVE(),
+      selectedValuesExpression: this$.getSelectedVE(),
+      linkListWrapper: this$.getLinkListWrapper(config),
 
       ...ConfigUtils.append({
         actionList: [
           new LinkListRemoveAction({
             text: Actions_properties.Action_deleteSelectedLinks_text,
             tooltip: Actions_properties.Action_deleteSelectedLinks_tooltip,
-            linkListWrapper: this.getLinkListWrapper(config),
-            selectedValuesExpression: this.getSelectedVE(),
-            selectedPositionsExpression: this.getSelectedPositionsVE(),
+            linkListWrapper: this$.getLinkListWrapper(config),
+            selectedValuesExpression: this$.getSelectedVE(),
+            selectedPositionsExpression: this$.getSelectedPositionsVE(),
             forceHiddenExpression: ValueExpressionFactory.createFromFunction(() => {
               const isHideActive = ValueExpressionFactory.createFromValue(config.hideRemove).getValue();
-              const isReadOnly = this.getReadOnlyVE(config).getValue();
+              const isReadOnly = this$.getReadOnlyVE(config).getValue();
               return !!(isHideActive || isReadOnly);
             }),
           }),
           new OpenEntitiesInTabsAction({
             preventHide: !config.hideOpenInTab,
-            entitiesValueExpression: this.getSelectedVE(),
+            entitiesValueExpression: this$.getSelectedVE(),
             forceHiddenExpression: ValueExpressionFactory.createFromValue(config.hideOpenInTab),
           }),
         ],
@@ -128,7 +130,7 @@ class CatalogLinkPropertyField extends CatalogLinkPropertyFieldBase {
         Config(StatusColumn),
       ],
       tbar: Config(CatalogLinkToolbar, {
-        linkListWrapper: this.getLinkListWrapper(config),
+        linkListWrapper: this$.getLinkListWrapper(config),
         additionalToolbarItems: config.additionalToolbarItems,
         bindTo: config.bindTo,
         hideOpenInTab: config.hideOpenInTab,
@@ -153,7 +155,7 @@ class CatalogLinkPropertyField extends CatalogLinkPropertyFieldBase {
               itemId: "removeCategoryReferenceButton",
               ui: ButtonSkin.SIMPLE.getSkin(),
               text: ECommerceStudioPlugin_properties.Catalog_remove_reference_button,
-              handler: bind(this, this.removeCategoryReference),
+              handler: bind(this$, this$.removeCategoryReference),
               plugins: [
                 Config(BindPropertyPlugin, {
                   bindTo: ValueExpressionFactory.createFromValue(!config.showRemoveReferenceButton),
@@ -161,7 +163,7 @@ class CatalogLinkPropertyField extends CatalogLinkPropertyFieldBase {
                   componentProperty: "hidden",
                 }),
                 Config(BindPropertyPlugin, {
-                  bindTo: this.isRemoveReferenceDisabledVE(),
+                  bindTo: this$.isRemoveReferenceDisabledVE(),
                   componentProperty: "disabled",
                 }),
               ],
@@ -184,7 +186,7 @@ class CatalogLinkPropertyField extends CatalogLinkPropertyFieldBase {
             then: [
               Config(ContextMenuPlugin, {
                 contextMenu: Config(CatalogLinkContextMenu, {
-                  linkListWrapper: this.getLinkListWrapper(config),
+                  linkListWrapper: this$.getLinkListWrapper(config),
                   hideOpenInTab: config.hideOpenInTab,
                   hideRemove: config.hideRemove,
                 }),
@@ -193,7 +195,7 @@ class CatalogLinkPropertyField extends CatalogLinkPropertyFieldBase {
           }),
         ],
       }),
-    }), config))());
+    }), config));
   }
 
   additionalToolbarItems: Array<any> = null;

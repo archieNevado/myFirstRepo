@@ -12,20 +12,6 @@
 <StringProperty Name="displayName">CAE Preview</StringProperty>
 <BooleanProperty Name="enabled">false</BooleanProperty>
 </Struct>
-<Struct>
-<StringProperty Name="id">localhostPreview</StringProperty>
-<StringProperty Name="providerId">genericStudioPreviewProvider</StringProperty>
-<StringProperty Name="displayName">Localhost:3000 Preview</StringProperty>
-<BooleanProperty Name="enabled">false</BooleanProperty>
-<StringListProperty Name="userGroupAllowList">
-<String>developer</String>
-</StringListProperty>
-<StructProperty Name="config">
-<Struct>
-<StringProperty Name="uriTemplate">http://localhost:3000/preview/{rootSegment}/{numericContentId}</StringProperty>
-</Struct>
-</StructProperty>
-</Struct>
 </StructListProperty>
 </Struct>
 </settings>

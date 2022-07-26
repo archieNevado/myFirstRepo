@@ -27,7 +27,9 @@ class ExternallyVisibleDateForm extends ExternallyVisibleDateFormBase {
   static override readonly xtype: string = "com.coremedia.blueprint.studio.config.externallyVisibleDateForm";
 
   constructor(config: Config<ExternallyVisibleDateForm> = null) {
-    super((()=> ConfigUtils.apply(Config(ExternallyVisibleDateForm, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(ExternallyVisibleDateForm, {
       itemId: "externallyVisibleDateForm",
       title: BlueprintDocumentTypes_properties.CMLinkable_externally_visible_date_text,
       propertyNames: ["extDisplayedDate"],
@@ -53,7 +55,7 @@ class ExternallyVisibleDateForm extends ExternallyVisibleDateFormBase {
           hideLabel: true,
           toValue: ExternallyVisibleDateFormBase.toValue,
           defaultValue: "publicationDate",
-          bindTo: this.getModelExpression().extendBy("innerUseCustomExternalDisplayedDate"),
+          bindTo: this$.getModelExpression().extendBy("innerUseCustomExternalDisplayedDate"),
           ...ConfigUtils.append({
             plugins: [
               Config(BindDisablePlugin, {
@@ -65,8 +67,8 @@ class ExternallyVisibleDateForm extends ExternallyVisibleDateFormBase {
                 bindTo: config.bindTo,
                 statefulSubComponentsFunction: (): Array<any> =>
                   [
-                    this.queryById(ExternallyVisibleDateFormBase.PUBLICATION_DATE_RADIO_ITEM_ID),
-                    this.queryById(ExternallyVisibleDateFormBase.OWN_DATE_RADIO_ITEM_ID),
+                    this$.queryById(ExternallyVisibleDateFormBase.PUBLICATION_DATE_RADIO_ITEM_ID),
+                    this$.queryById(ExternallyVisibleDateFormBase.OWN_DATE_RADIO_ITEM_ID),
                   ],
               }),
             ],
@@ -92,7 +94,7 @@ class ExternallyVisibleDateForm extends ExternallyVisibleDateFormBase {
               height: 22,
             }),
             Config(DateTimePropertyField, {
-              bindTo: this.getModelExpression(),
+              bindTo: this$.getModelExpression(),
               flex: 1,
               hideLabel: true,
               forceReadOnlyValueExpression: config.forceReadOnlyValueExpression,
@@ -106,9 +108,9 @@ class ExternallyVisibleDateForm extends ExternallyVisibleDateFormBase {
                     bindTo: config.bindTo,
                     statefulSubComponentsFunction: (): Array<any> =>
                       [
-                        this.queryById(DateTimePropertyFieldBase.DATE_ITEM_ID),
-                        this.queryById(DateTimePropertyFieldBase.TIME_ITEM_ID),
-                        this.queryById(DateTimePropertyFieldBase.TIME_ZONE_ITEM_ID),
+                        this$.queryById(DateTimePropertyFieldBase.DATE_ITEM_ID),
+                        this$.queryById(DateTimePropertyFieldBase.TIME_ITEM_ID),
+                        this$.queryById(DateTimePropertyFieldBase.TIME_ZONE_ITEM_ID),
                       ],
                   }),
                 ],
@@ -118,7 +120,7 @@ class ExternallyVisibleDateForm extends ExternallyVisibleDateFormBase {
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 }
 

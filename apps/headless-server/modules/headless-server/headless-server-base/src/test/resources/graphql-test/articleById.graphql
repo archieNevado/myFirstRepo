@@ -1,0 +1,57 @@
+query getArticleById($id: String!) {
+  content {
+    article(id: $id) {
+      id
+      repositoryPath
+      locale
+      name
+      type
+      teaserText {
+        text
+        textAsTree
+        textReferencedContent {
+          id
+        }
+      }
+      teaserTextLegacy
+      teaserTextAsTree
+      teaserTextReferencedContent {
+        id
+      }
+      detailText {
+        text
+        textAsTree
+        textReferencedContent {
+          id
+        }
+      }
+      detailTextLegacy
+      detailTextAsTree
+      detailTextReferencedContent {
+        id
+      }
+      ...MainNavigationFragment
+
+      onePath1:settings(paths: "p1")
+      onePath2:settings(paths: ["p1"])
+      twoPaths1:settings(paths: ["p1", "p2"])
+      twoPaths2: settings(paths: [ ["p1"], ["p2"] ])
+      twoPaths3: settings(paths: [ ["p1", "p11"], ["p2", "p21"] ])
+      tree1: settings(paths: [ ["p1", "p11"], ["p1", "p12"] ])
+      tree2: settings(paths: [ ["p1", "p11"], ["p1", "p12", "p121"], ["p1", "p12", "p122"] ])
+    }
+  }
+}
+
+fragment MainNavigationFragment on CMTeasable {
+  mainNavigation: root {
+    children {
+      id
+      name
+      segment
+      ... on CMNavigation {
+        hidden
+      }
+    }
+  }
+}

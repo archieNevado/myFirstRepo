@@ -1,0 +1,160 @@
+package com.coremedia.blueprint.headlessserver.contentschema;
+
+import com.coremedia.blueprint.base.caas.web.BlueprintBaseMediaConfig;
+import com.coremedia.blueprint.coderesources.ThemeService;
+import com.coremedia.blueprint.headlessserver.CaasConfig;
+import com.coremedia.caas.media.TransformationService;
+import com.coremedia.caas.media.TransformationServiceConfiguration;
+import com.coremedia.caas.plugin.PluginConfiguration;
+import com.coremedia.caas.web.GraphQLRestMappingConfig;
+import com.coremedia.caas.web.controller.ViewController;
+import com.coremedia.caas.web.controller.graphql.GraphQLController;
+import com.coremedia.caas.web.filter.GraphQlControllerFilter;
+import com.coremedia.caas.wrapper.UrlPathFormater;
+import com.coremedia.image.ImageDimensionsExtractor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.restassured.module.webtestclient.RestAssuredWebTestClient;
+import org.dataloader.CacheMap;
+import org.dataloader.DataLoader;
+import org.dataloader.Try;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.ArgumentMatchers;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.reactive.server.WebTestClient;
+
+import java.util.concurrent.CompletableFuture;
+
+import static com.coremedia.blueprint.headlessserver.contentschema.TestRepoConstants.MASTER_SITE_ID;
+import static io.restassured.module.webtestclient.RestAssuredWebTestClient.given;
+import static org.hamcrest.Matchers.blankOrNullString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Mockito.lenient;
+
+@SpringBootTest(classes = {
+        CaasConfig.class,
+        BlueprintBaseMediaConfig.class,
+        GraphQLController.class,
+        GraphQlControllerFilter.class,
+        GraphQLRestMappingConfig.class,
+        ViewController.class,
+        PluginConfiguration.class,
+        TransformationServiceConfiguration.class,
+}, properties = {
+        "repository.factoryClassName=com.coremedia.cap.xmlrepo.XmlCapConnectionFactory",
+        "repository.params.contentxml=classpath:/content/contentrepository.xml",
+        "repository.params.userxml=classpath:/com/coremedia/cap/common/xml/users-default.xml"
+})
+@AutoConfigureMockMvc
+@AutoConfigureWebTestClient
+@ContextConfiguration(classes = ContentSchemaRestApiTest.LocalTestConfiguration.class)
+@ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+class ContentSchemaRestApiTest {
+
+  @MockBean
+  TransformationService transformationService;
+  @MockBean
+  UrlPathFormater urlPathFormater;
+  @MockBean
+  CacheMap remoteLinkCacheMap;
+  @MockBean
+  ThemeService themeService;
+  @MockBean
+  ImageDimensionsExtractor imageDimensionsExtractor;
+  @MockBean
+  DataLoader<String, Try<String>> remoteLinkDataLoader;
+
+  @Autowired
+  private WebTestClient webTestClient;
+
+  @BeforeAll
+  public void setUp() {
+    RestAssuredWebTestClient.webTestClient(webTestClient
+            .mutate()
+            .defaultHeader("Content-Type", "application/json")
+            .baseUrl("/caas/v1").build());
+  }
+
+  @Test
+  void testGetSiteById() {
+    // Note: As ContentSchemaGraphQLTest already tests in detail, we don't have to do it here. Just check some basics.
+    given()
+            .when()
+            .get("/site/{siteId}", MASTER_SITE_ID).then()
+            .status(HttpStatus.OK)
+            .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename("api.json").build().toString())
+            .body("site.id", equalTo(MASTER_SITE_ID))
+            .body("errors", blankOrNullString());
+  }
+
+  @ParameterizedTest
+  @CsvSource(delimiter = ';', value = {
+          "page;111112;CMChannel;200",
+          "article;111116;CMArticle;200",
+          "picture;111114;CMPicture;200",
+          "page;888888;CMChannel;404", // invalid content id
+          "article;888888;CMArticle;404", // invalid content id
+          "picture;888888;CMPicture;404", // invalid content id
+  })
+  void testGetEndpointsById(String restEndpoint, String contentId, String expectedDocType, Integer expectedHttpStatus) {
+    // mock a remote link for 'page' endpoint
+    lenient().when(remoteLinkDataLoader.load(ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(CompletableFuture.completedFuture(Try.succeeded("dummy")));
+
+    // Note: As ContentSchemaGraphQLTest already tests in detail, we don't have to do it here. Just check some basics.
+    if (HttpStatus.resolve(expectedHttpStatus).is2xxSuccessful()) {
+      given()
+              .when()
+              .get("/{restEndpoint}/{contentId}", restEndpoint, contentId).then()
+              .status(HttpStatus.OK)
+              .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename("api.json").build().toString())
+              .body(restEndpoint + ".id", equalTo(contentId))
+              .body(restEndpoint + ".type", equalTo(expectedDocType))
+              .body("errors", blankOrNullString());
+    } else {
+      // just check http status
+      given()
+              .when()
+              .get("/{restEndpoint}/{contentId}", restEndpoint, contentId).then()
+              .status(HttpStatus.resolve(expectedHttpStatus))
+              .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename("api.json").build().toString());
+    }
+  }
+
+  @Test
+  @SuppressWarnings("java:S2699")
+    // status assertion from rest-assured is not detected by sonar
+  void testGetNoneExistingEndpoint() {
+    given()
+            .when()
+            .get("/notAnEndpoint")
+            .then()
+            .status(HttpStatus.NOT_FOUND)
+            .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename("api.json").build().toString());
+  }
+
+  @Configuration(proxyBeanMethods = false)
+  public static class LocalTestConfiguration {
+    @Bean
+    ObjectMapper objectMapper() {
+      return new ObjectMapper();
+    }
+  }
+}

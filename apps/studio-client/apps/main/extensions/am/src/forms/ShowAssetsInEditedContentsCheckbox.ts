@@ -13,18 +13,20 @@ class ShowAssetsInEditedContentsCheckbox extends ShowAssetsInEditedContentsCheck
   static override readonly xtype: string = "com.coremedia.blueprint.assets.studio.config.showAssetsInEditedContentsCheckbox";
 
   constructor(config: Config<ShowAssetsInEditedContentsCheckbox> = null) {
-    super((()=> ConfigUtils.apply(Config(ShowAssetsInEditedContentsCheckbox, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(ShowAssetsInEditedContentsCheckbox, {
       boxLabel: AMStudioPlugin_properties.EditedContents_showAssets_label,
 
       plugins: [
         Config(BindPropertyPlugin, {
-          bindTo: this.getCheckedValueExpression(),
+          bindTo: this$.getCheckedValueExpression(),
           componentProperty: "value",
           bidirectional: true,
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 }
 

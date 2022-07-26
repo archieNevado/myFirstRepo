@@ -26,7 +26,7 @@ https://pnpm.io/installation for details or install it via npm:
 
 [source,shell]
 ----
-npm install -g pnpm@6
+npm install -g pnpm@7
 ----
 
 === Sencha Cmd
@@ -98,7 +98,7 @@ compiles the modified files. To start this watch task, go to the folder
 
 [source,shell]
 ----
-pnpm run watch -- --recursive --skipInitialBuild
+pnpm run watch --recursive --skipInitialBuild
 ----
 
 This will watch the package and its dependencies. The `skipInitialBuild`
@@ -134,7 +134,7 @@ with:
 
 [source,shell]
 ----
-pnpm -r run lint --no-bail
+pnpm -r --no-bail run lint
 ----
 
 == npm Packages
@@ -205,12 +205,12 @@ gives an overview of available scripts.
 |===
 |Command |Description
 |`pnpm -r run build` |Runs the build script for all packages.
-|`pnpm -r run start --filter @coremedia-blueprint/studio-client.studio` |Runs the start script for studio-resources, similar to: `mvn jangaroo:run -pl :studio-resources`
-|`pnpm -r run test --filter "@coremedia/*"` |The option `filter` can utilize glob patterns matched against the package name. It runs the tests of all core modules (as their name starts with `@coremedia/`). In this particular case similar to `mvn test -f core`.
-|`pnpm -r run build --filter @coremedia/studio-client.ext.ui-components...` |Builds `ui-components` and its dependencies, similar to `mvn package -am -pl :ui-components`.
-|`pnpm -r run build --filter ...@coremedia-blueprint/studio-client.main.studio-base-app` |Builds the `studio-base-app` and all packages depending on it, similar to `mvn package -amd -pl :studio-base-app`.
-|`pnpm -r run build --filter=!@coremedia/studio-client.studio` |In some shells the `!` needs to be escaped: `!`. It builds everything in the workspace except for `studio-resources` and is similar to `mvn package -pl !:studio-resources`.
-|`pnpm -r run build --filter=!@coremedia-blueprint/studio-client.main.blueprint-forms^...` |In some shells the `!` needs to be escaped: `!` builds everything in the workspace except for the dependencies of `blueprint-forms` similar to `mvn package -rf :blueprint-forms`
+|`pnpm -r --filter @coremedia-blueprint/studio-client.studio run start` |Runs the start script for studio-resources, similar to: `mvn jangaroo:run -pl :studio-resources`
+|`pnpm -r --filter "@coremedia/*" run test` |The option `filter` can utilize glob patterns matched against the package name. It runs the tests of all core modules (as their name starts with `@coremedia/`). In this particular case similar to `mvn test -f core`.
+|`pnpm -r --filter @coremedia/studio-client.ext.ui-components... run build` |Builds `ui-components` and its dependencies, similar to `mvn package -am -pl :ui-components`.
+|`pnpm -r --filter ...@coremedia-blueprint/studio-client.main.studio-base-app run build` |Builds the `studio-base-app` and all packages depending on it, similar to `mvn package -amd -pl :studio-base-app`.
+|`pnpm -r --filter=!@coremedia/studio-client.studio run build` |In some shells the `!` needs to be escaped: `!`. It builds everything in the workspace except for `studio-resources` and is similar to `mvn package -pl !:studio-resources`.
+|`pnpm -r --filter=!@coremedia-blueprint/studio-client.main.blueprint-forms^... run build` |In some shells the `!` needs to be escaped: `!` builds everything in the workspace except for the dependencies of `blueprint-forms` similar to `mvn package -rf :blueprint-forms`
 |===
 
 For more details see also https://pnpm.io/filtering.
@@ -223,7 +223,7 @@ For more details see also https://pnpm.io/filtering.
 
 [source,shell]
 ----
-pnpm run start -- --proxyTargetUri=https://studio.some-host.com/
+pnpm run start --proxyTargetUri=https://studio.some-host.com/
 ----
 
 This will fail with:

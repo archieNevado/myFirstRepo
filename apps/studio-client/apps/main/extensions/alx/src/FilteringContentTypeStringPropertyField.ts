@@ -33,29 +33,29 @@ class FilteringContentTypeStringPropertyField extends ContentTypeStringPropertyF
   baseType: string = null;
 
   constructor(config: Config<FilteringContentTypeStringPropertyField> = null) {
-    super((()=>{
-      this.#contentType = session._.getConnection().getContentRepository().getContentType(config.baseType);
-      this.#filterFunction = ((record: Model): any =>
-        session._.getConnection().getContentRepository().getContentType(String(record.get("name"))).isSubtypeOf(this.#contentType)
-      );
-      this.#storeFilterer = ((): void => {
-        const store = cast(Store, this.getStore());
-        store.suspendEvents(false);
-        store.filterBy(this.#filterFunction);
-        store.resumeEvents();
-      });
-      config = ConfigUtils.apply({ baseType: "_Document" }, config);
-      return ConfigUtils.apply(Config(FilteringContentTypeStringPropertyField, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#contentType = session._.getConnection().getContentRepository().getContentType(config.baseType);
+    this$.#filterFunction = ((record: Model): any =>
+      session._.getConnection().getContentRepository().getContentType(String(record.get("name"))).isSubtypeOf(this$.#contentType)
+    );
+    this$.#storeFilterer = ((): void => {
+      const store = cast(Store, this$.getStore());
+      store.suspendEvents(false);
+      store.filterBy(this$.#filterFunction);
+      store.resumeEvents();
+    });
+    config = ConfigUtils.apply({ baseType: "_Document" }, config);
+    super(ConfigUtils.apply(Config(FilteringContentTypeStringPropertyField, {
 
-        listeners: {
-          afterRender: (): void =>{
-            this.getStore().addListener("datachanged", this.#storeFilterer);
-            this.#storeFilterer();
-          },
+      listeners: {
+        afterRender: (): void =>{
+          this$.getStore().addListener("datachanged", this$.#storeFilterer);
+          this$.#storeFilterer();
         },
+      },
 
-      }), config);
-    })());
+    }), config));
   }
 }
 

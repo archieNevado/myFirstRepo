@@ -69,7 +69,7 @@ class AbstractProductTeaserComponentsTest extends AbstractCatalogTest {
       (): boolean =>
         true
       ,
-      (): void =>
+      () =>
         this.productTeaser.load(),
 
     );

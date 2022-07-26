@@ -17,7 +17,9 @@ class FacetComboField extends FacetComboFieldBase {
   static override readonly xtype: string = "com.coremedia.ecommerce.studio.components.search.filters.facetComboField";
 
   constructor(config: Config<FacetComboField> = null) {
-    super((()=> ConfigUtils.apply(Config(FacetComboField, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(FacetComboField, {
       emptyText: ECommerceStudioPlugin_properties.CollectionView_search_filter_empty_facet_text,
       labelSeparator: "",
       itemId: "facetComboField",
@@ -32,7 +34,7 @@ class FacetComboField extends FacetComboFieldBase {
       ...ConfigUtils.append({
         plugins: [
           Config(BindListPlugin, {
-            bindTo: this.getComboValuesExpression(config),
+            bindTo: this$.getComboValuesExpression(config),
             ifUndefined: null,
             sortDirection: "ASC",
             sortField: FacetComboFieldBase.LABEL,
@@ -49,7 +51,7 @@ class FacetComboField extends FacetComboFieldBase {
           }),
         ],
       }),
-    }), config))());
+    }), config));
   }
 }
 

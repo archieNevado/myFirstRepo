@@ -21,14 +21,13 @@ class CommerceDetailsFormBase extends PropertyFieldGroup {
   contentBindTo: ValueExpression = null;
 
   constructor(config: Config<CommerceDetailsForm> = null) {
-    super((()=>{
-    //need to use a different stateSaveExpression for ecommerce objects as the default impl in PropertyFieldGroupBase expects catalogObject
-      const formType = this.#getFormType(config);
-      if (formType) {
-        this.stateSaveExpression = ValueExpressionFactory.create("forms." + formType + "." + config.itemId, editorContext._.getPreferences());
-      }
-      return config;
-    })());
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    const formType = this$.#getFormType(config);
+    if (formType) {
+      this$.stateSaveExpression = ValueExpressionFactory.create("forms." + formType + "." + config.itemId, editorContext._.getPreferences());
+    }
+    super(config);
   }
 
   protected override getCollapsedStateFromPremularConfig(config: Config<PropertyFieldGroup>): boolean {

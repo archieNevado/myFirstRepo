@@ -21,20 +21,22 @@ class TaxonomyStandAloneDocumentView extends StandAloneDocumentViewBase {
   forceReadOnlyValueExpression: ValueExpression = null;
 
   constructor(config: Config<TaxonomyStandAloneDocumentView> = null) {
-    super((()=> ConfigUtils.apply(Config(TaxonomyStandAloneDocumentView, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(TaxonomyStandAloneDocumentView, {
       scrollable: true,
 
       items: [
         Config(TabbedDocumentFormDispatcher, {
           itemId: "documentFormDispatcher",
-          focusForwarder: this.getFocusForwarder(),
-          propertyFieldRegistry: this.getPropertyFieldRegistry(),
+          focusForwarder: this$.getFocusForwarder(),
+          propertyFieldRegistry: this$.getPropertyFieldRegistry(),
           bindTo: config.bindTo,
           forceReadOnlyValueExpression: config.forceReadOnlyValueExpression,
         }),
       ],
       layout: Config(FitLayout),
-    }), config))());
+    }), config));
   }
 }
 

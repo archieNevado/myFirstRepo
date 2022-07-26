@@ -21,7 +21,9 @@ class TopicPagesEditor extends TopicPagesEditorBase {
   static override readonly xtype: string = "com.coremedia.blueprint.studio.topicpages.config.topicPagesEditor";
 
   constructor(config: Config<TopicPagesEditor> = null) {
-    super((()=> ConfigUtils.apply(Config(TopicPagesEditor, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(TopicPagesEditor, {
       title: TopicPages_properties.TopicPages_administration_title,
       closable: true,
       id: TopicPagesEditorBase.TOPIC_PAGES_EDITOR_ID,
@@ -35,7 +37,7 @@ class TopicPagesEditor extends TopicPagesEditorBase {
           items: [
             Config(TopicsPanel, {
               id: "topicsPanel",
-              selectionExpression: this.getSelectionExpression(),
+              selectionExpression: this$.getSelectionExpression(),
               width: 550,
             }),
             Config(Splitter, {
@@ -43,7 +45,7 @@ class TopicPagesEditor extends TopicPagesEditorBase {
               ui: SplitterSkin.DARK.getSkin(),
             }),
             Config(TopicPreviewPanel, {
-              selectionExpression: this.getSelectionExpression(),
+              selectionExpression: this$.getSelectionExpression(),
               id: "topicPreviewPanel",
               flex: 1,
             }),
@@ -56,7 +58,7 @@ class TopicPagesEditor extends TopicPagesEditorBase {
         ui: ToolbarSkin.WORKAREA.getSkin(),
       }),
 
-    }), config))());
+    }), config));
   }
 }
 

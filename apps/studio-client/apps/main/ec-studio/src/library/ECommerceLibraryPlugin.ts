@@ -24,79 +24,75 @@ class ECommerceLibraryPlugin extends NestedRulesPlugin {
   #selectionHolder: ICollectionView = null;
 
   constructor(config: Config<ECommerceLibraryPlugin> = null) {
-    super((()=>{
-      this.#selectionHolder = as(config.cmp, ICollectionView);
-      return ConfigUtils.apply(Config(ECommerceLibraryPlugin, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#selectionHolder = as(config.cmp, ICollectionView);
+    super(ConfigUtils.apply(Config(ECommerceLibraryPlugin, {
 
-        rules: [
+      rules: [
 
-          Config(FolderContentSwitchingContainer, {
-            plugins: [
-              Config(AddItemsPlugin, {
-                items: [
-                  Config(CatalogRepositoryListContainer, {
-                    selectedItemsValueExpression: this.#selectionHolder.getSelectedItemsValueExpression(),
-                    selectedFolderValueExpression: this.#selectionHolder.getSelectedFolderValueExpression(),
-                    selectedRepositoryItemsValueExpression: this.#selectionHolder.getSelectedRepositoryItemsValueExpression(),
-                    newContentDisabledValueExpression: this.#selectionHolder.getNewContentActionDisabledExpression(),
-                    createdContentValueExpression: this.#selectionHolder.getCreatedContentValueExpression(),
-                  }),
-                ],
-              }),
-            ],
-          }),
+        Config(FolderContentSwitchingContainer, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              items: [
+                Config(CatalogRepositoryListContainer, {
+                  selectedItemsValueExpression: this$.#selectionHolder.getSelectedItemsValueExpression(),
+                  selectedFolderValueExpression: this$.#selectionHolder.getSelectedFolderValueExpression(),
+                  selectedRepositoryItemsValueExpression: this$.#selectionHolder.getSelectedRepositoryItemsValueExpression(),
+                  newContentDisabledValueExpression: this$.#selectionHolder.getNewContentActionDisabledExpression(),
+                  createdContentValueExpression: this$.#selectionHolder.getCreatedContentValueExpression(),
+                }),
+              ],
+            }),
+          ],
+        }),
 
-          Config(SearchSwitchingContainer, {
-            plugins: [
-              Config(AddItemsPlugin, {
-                items: [
-                  Config(CatalogSearchListContainer, {
-                    searchResultHitsValueExpression: this.#selectionHolder.getSearchResultHitsValueExpression(),
-                    selectedItemsValueExpression: this.#selectionHolder.getSelectedSearchItemsValueExpression(),
-                  }),
-                ],
-              }),
-            ],
-          }),
+        Config(SearchSwitchingContainer, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              items: [
+                Config(CatalogSearchListContainer, {
+                  searchResultHitsValueExpression: this$.#selectionHolder.getSearchResultHitsValueExpression(),
+                  selectedItemsValueExpression: this$.#selectionHolder.getSelectedSearchItemsValueExpression(),
+                }),
+              ],
+            }),
+          ],
+        }),
 
-          Config(SearchFiltersSwitchingContainer, {
-            plugins: [
-              Config(AddItemsPlugin, {
-                items: [
-                  Config(CatalogSearchFilters, { itemId: CatalogSearchFilters.ITEM_ID }),
-                ],
-              }),
-            ],
-          }),
+        Config(SearchFiltersSwitchingContainer, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              items: [
+                Config(CatalogSearchFilters, { itemId: CatalogSearchFilters.ITEM_ID }),
+              ],
+            }),
+          ],
+        }),
 
-          Config(RepositoryToolbarSwitchingContainer, {
-            plugins: [
-              Config(AddItemsPlugin, {
-                items: [
-                  Config(CatalogRepositoryToolbarContainer, {
-                    selectedFolderValueExpression: this.#selectionHolder.getSelectedFolderValueExpression(),
-                    createdContentValueExpression: this.#selectionHolder.getCreatedContentValueExpression(),
-                    selectedItemsValueExpression: this.#selectionHolder.getSelectedItemsValueExpression(),
-                  }),
-                ],
-              }),
-            ],
-          }),
+        Config(RepositoryToolbarSwitchingContainer, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              items: [
+                Config(CatalogRepositoryToolbarContainer, { selectedItemsValueExpression: this$.#selectionHolder.getSelectedItemsValueExpression() }),
+              ],
+            }),
+          ],
+        }),
 
-          Config(SearchToolbarSwitchingContainer, {
-            plugins: [
-              Config(AddItemsPlugin, {
-                items: [
-                  Config(CatalogSearchToolbarContainer, { selectedSearchItemsValueExpression: this.#selectionHolder.getSelectedSearchItemsValueExpression() }),
-                ],
-              }),
-            ],
-          }),
+        Config(SearchToolbarSwitchingContainer, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              items: [
+                Config(CatalogSearchToolbarContainer, { selectedSearchItemsValueExpression: this$.#selectionHolder.getSelectedSearchItemsValueExpression() }),
+              ],
+            }),
+          ],
+        }),
 
-        ],
+      ],
 
-      }), config);
-    })());
+    }), config));
   }
 }
 

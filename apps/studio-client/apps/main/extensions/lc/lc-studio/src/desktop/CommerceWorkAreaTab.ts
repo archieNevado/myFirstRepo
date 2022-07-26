@@ -27,7 +27,9 @@ class CommerceWorkAreaTab extends CommerceWorkAreaTabBase {
   static override readonly xtype: string = "com.coremedia.livecontext.studio.config.commerceWorkAreaTab";
 
   constructor(config: Config<CommerceWorkAreaTab> = null) {
-    super((()=> ConfigUtils.apply(Config(CommerceWorkAreaTab, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CommerceWorkAreaTab, {
 
       items: [
         Config(Container, {
@@ -38,10 +40,10 @@ class CommerceWorkAreaTab extends CommerceWorkAreaTabBase {
           minWidth: 470,
           items: [
             Config(CommerceFormToolbar, {
-              bindTo: this.getEntityExpression(),
+              bindTo: this$.getEntityExpression(),
               width: "100%",
               ui: ToolbarSkin.WORKAREA.getSkin(),
-              collapseHandler: (): void => this.collapsePanel(CommerceWorkAreaTabBase.DOCUMENT_CONTAINER_ITEM_ID),
+              collapseHandler: (): void => this$.collapsePanel(CommerceWorkAreaTabBase.DOCUMENT_CONTAINER_ITEM_ID),
             }),
             Config(TabPanel, {
               collapsible: false,
@@ -56,7 +58,7 @@ class CommerceWorkAreaTab extends CommerceWorkAreaTabBase {
                 Config(TabExpandPlugin),
               ],
               defaultType: DocumentForm.xtype,
-              defaults: Config<DocumentForm>({ bindTo: this.getEntityExpression() }),
+              defaults: Config<DocumentForm>({ bindTo: this$.getEntityExpression() }),
               tabBar: Config(TabBar, { ui: TabBarSkin.WORKAREA_PANEL.getSkin() }),
             }),
           ],
@@ -77,8 +79,8 @@ class CommerceWorkAreaTab extends CommerceWorkAreaTabBase {
           height: "100%",
           minWidth: 300,
           collapsible: true,
-          collapseHandler: (): void => this.collapsePanel(CommerceWorkAreaTabBase.PREVIEW_PANEL_ITEM_ID),
-          bindTo: this.getEntityExpression(),
+          collapseHandler: (): void => this$.collapsePanel(CommerceWorkAreaTabBase.PREVIEW_PANEL_ITEM_ID),
+          bindTo: this$.getEntityExpression(),
           reloadAfterChangesDelay: 1000,
         }),
 
@@ -86,7 +88,7 @@ class CommerceWorkAreaTab extends CommerceWorkAreaTabBase {
         Config(ActionsToolbarContainer),
       ],
       layout: Config(HBoxLayout),
-    }), config))());
+    }), config));
   }
 
   subTabs: Array<any> = null;

@@ -19,11 +19,11 @@ class AddKeywordActionBase extends Action {
   readonly items: Array<any>;
 
   constructor(config: Config<AddKeywordAction> = null) {
-    super((()=>{
-      config.handler = bind(this, this.applySelection);
-      config.text = TaxonomyStudioPlugin_properties.TaxonomyLinkList_add_suggestion_action_text;
-      return config;
-    })());
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    config.handler = bind(this$, this$.applySelection);
+    config.text = TaxonomyStudioPlugin_properties.TaxonomyLinkList_add_suggestion_action_text;
+    super(config);
     this.#selectionExpression = config.selectionExpression;
     this.#propertyValueExpression = config.bindTo.extendBy("properties." + config.propertyName);
     this.#selectionExpression.addChangeListener(bind(this, this.#updateDisabled));

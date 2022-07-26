@@ -66,11 +66,13 @@ class PlayerSettingsPropertyGroup extends PlayerSettingsPropertyGroupBase {
   static readonly #HIDE_CONTROLS_PROPERTY_NAME: string = PlayerSettingsPropertyGroup.#PLAYER_SETTINGS_PROPERTY + ".hideControls";
 
   constructor(config: Config<PlayerSettingsPropertyGroup> = null) {
-    super((()=> ConfigUtils.apply(Config(PlayerSettingsPropertyGroup, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(PlayerSettingsPropertyGroup, {
 
       items: [
         Config(StatefulCheckboxGroup, {
-          itemId: this.#CHECKBOXGROUP_ITEM_ID,
+          itemId: this$.#CHECKBOXGROUP_ITEM_ID,
           columns: config.columns || 1,
           items: [
             Config(StatefulCheckbox, {
@@ -186,7 +188,7 @@ class PlayerSettingsPropertyGroup extends PlayerSettingsPropertyGroupBase {
           defaults: Config<StatefulCheckbox>({ hideLabel: true }),
         }),
       ],
-    }), config))());
+    }), config));
   }
 }
 

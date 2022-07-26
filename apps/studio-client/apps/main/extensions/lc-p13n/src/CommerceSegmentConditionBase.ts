@@ -40,11 +40,10 @@ class CommerceSegmentConditionBase extends AbstractCondition {
 
   constructor(config: Config<CommerceSegmentCondition> = null) {
 
-    super((()=>{
-
-      this.#initSegmentSelector(config);
-      return config;
-    })());
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#initSegmentSelector(config);
+    super(config);
 
     // check the supplied configuration
     if (config.propertyPrefix === null || config.propertyPrefix === undefined) {

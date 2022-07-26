@@ -20,7 +20,9 @@ class CatalogThumbDataView extends ThumbDataView {
   static override readonly xtype: string = "com.coremedia.ecommerce.studio.config.catalogThumbDataView";
 
   constructor(config: Config<CatalogThumbDataView> = null) {
-    super((()=> ConfigUtils.apply(Config(CatalogThumbDataView, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CatalogThumbDataView, {
       ddHtmlFeedbackFunction: CatalogDragDropVisualFeedback.getHtmlFeedback,
       dragDDGroup: "ContentDD",
       editable: false,
@@ -45,7 +47,7 @@ class CatalogThumbDataView extends ThumbDataView {
         Config(com_coremedia_ui_store_DataField, {
           name: "thumbnailImage",
           mapping: "",
-          convert: bind(this, this.#computeCatalogThumbnailImage),
+          convert: bind(this$, this$.#computeCatalogThumbnailImage),
           ifUnreadable: null,
           allowNull: true,
         }),
@@ -57,7 +59,7 @@ class CatalogThumbDataView extends ThumbDataView {
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 
   #computeCatalogThumbnailImage(v: string, catalogObject: CatalogObject): ThumbnailImage {

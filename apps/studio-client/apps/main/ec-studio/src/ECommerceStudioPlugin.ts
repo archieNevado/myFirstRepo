@@ -77,7 +77,9 @@ class ECommerceStudioPlugin extends ECommerceStudioPluginBase {
   static readonly COPY_TO_CLIPBOARD_ITEM_ID: string = "copyToClipboard";
 
   constructor(config: Config<ECommerceStudioPlugin> = null) {
-    super((()=> ConfigUtils.apply(Config(ECommerceStudioPlugin, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(ECommerceStudioPlugin, {
 
       rules: [
 
@@ -120,7 +122,7 @@ class ECommerceStudioPlugin extends ECommerceStudioPluginBase {
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 
   static #handleStoreOrCategory(mainStateBean: Bean): string {

@@ -25,7 +25,7 @@ class ProductAttributeLabel extends FieldContainer {
           fieldLabel: config.productAttribute.displayName,
           labelSeparator: ":",
           labelAlign: "left",
-          value: config.productAttribute.value.toLocaleString() + "",
+          value: config.productAttribute.value?.toLocaleString() ?? config.productAttribute.values?.toLocaleString() ?? "",
         }),
       ],
 

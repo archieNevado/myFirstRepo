@@ -41,110 +41,110 @@ class CatalogSearchList extends AbstractCatalogList {
   #lastClickedCellVE: ValueExpression = null;
 
   constructor(config: Config<CatalogSearchList> = null) {
-    super((()=>{
-      this.#catalogHelper = CatalogHelper.getInstance();
-      this.#lastClickedCellVE = ValueExpressionFactory.createFromValue();
-      return ConfigUtils.apply(Config(CatalogSearchList, {
-        emptyText: Editor_properties.CollectionView_emptySearch_text,
-        header: false,
-        ddGroup: "ContentDD",
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#catalogHelper = CatalogHelper.getInstance();
+    this$.#lastClickedCellVE = ValueExpressionFactory.createFromValue();
+    super(ConfigUtils.apply(Config(CatalogSearchList, {
+      emptyText: Editor_properties.CollectionView_emptySearch_text,
+      header: false,
+      ddGroup: "ContentDD",
 
-        ...ConfigUtils.prepend({
-          plugins: [
-            Config(BindListPlugin, {
-              lazy: true,
-              bindTo: config.searchResultHitsValueExpression,
-              initialViewLimit: 50,
-              viewLimitIncrement: 100,
-              fields: [
-                Config(DataField, {
-                  name: "type",
-                  mapping: "",
-                  convert: AugmentationUtil.getTypeLabel,
-                }),
-                Config(DataField, {
-                  name: "typeCls",
-                  mapping: "",
-                  convert: AugmentationUtil.getTypeCls,
-                }),
-                Config(DataField, {
-                  name: "id",
-                  ifUnreadable: "",
-                  mapping: "externalId",
-                }),
-                Config(DataField, {
-                  name: "name",
-                  mapping: "",
-                  convert: bind(this.#catalogHelper, this.#catalogHelper.getDecoratedName),
-                }),
-                Config(DataField, {
-                  name: "description",
-                  ifUnreadable: "",
-                  mapping: "shortDescription",
-                  convert: (v: string, catalogObject: CatalogObject): string =>
-                    RichTextPlainTextTransformer.convertToPlainText(catalogObject.getShortDescription()),
-                }),
-              ],
-            }),
-            Config(ContextMenuPlugin, {
-              lastClickedCellVE: this.#lastClickedCellVE,
-              contextMenu: Config(CatalogSearchContextMenu, {
-                selectedSearchItemsValueExpression: config.selectedItemsValueExpression,
-                ...ConfigUtils.append({
-                  plugins: [
-                    Config(AddItemsPlugin, {
-                      items: [
-                        Config(Item, {
-                          itemId: CatalogSearchList.COPY_COLUMN_CONTENT_TO_SYSTEM_CLIPBOARD,
-                          baseAction: new CopyCellContentToSystemClipboardAction({
-                            lastClickedCellVE: this.#lastClickedCellVE,
-                            selectedItemsValueExpression: config.selectedItemsValueExpression,
-                          }),
+      ...ConfigUtils.prepend({
+        plugins: [
+          Config(BindListPlugin, {
+            lazy: true,
+            bindTo: config.searchResultHitsValueExpression,
+            initialViewLimit: 50,
+            viewLimitIncrement: 100,
+            fields: [
+              Config(DataField, {
+                name: "type",
+                mapping: "",
+                convert: AugmentationUtil.getTypeLabel,
+              }),
+              Config(DataField, {
+                name: "typeCls",
+                mapping: "",
+                convert: AugmentationUtil.getTypeCls,
+              }),
+              Config(DataField, {
+                name: "id",
+                ifUnreadable: "",
+                mapping: "externalId",
+              }),
+              Config(DataField, {
+                name: "name",
+                mapping: "",
+                convert: bind(this$.#catalogHelper, this$.#catalogHelper.getDecoratedName),
+              }),
+              Config(DataField, {
+                name: "description",
+                ifUnreadable: "",
+                mapping: "shortDescription",
+                convert: (v: string, catalogObject: CatalogObject): string =>
+                  RichTextPlainTextTransformer.convertToPlainText(catalogObject.getShortDescription()),
+              }),
+            ],
+          }),
+          Config(ContextMenuPlugin, {
+            lastClickedCellVE: this$.#lastClickedCellVE,
+            contextMenu: Config(CatalogSearchContextMenu, {
+              selectedItemsValueExpression: config.selectedItemsValueExpression,
+              ...ConfigUtils.append({
+                plugins: [
+                  Config(AddItemsPlugin, {
+                    items: [
+                      Config(Item, {
+                        itemId: CatalogSearchList.COPY_COLUMN_CONTENT_TO_SYSTEM_CLIPBOARD,
+                        baseAction: new CopyCellContentToSystemClipboardAction({
+                          lastClickedCellVE: this$.#lastClickedCellVE,
+                          selectedItemsValueExpression: config.selectedItemsValueExpression,
                         }),
-                      ],
-                    }),
-                  ],
-                }),
+                      }),
+                    ],
+                  }),
+                ],
               }),
             }),
-          ],
-        }),
-        columns: [
-          Config(TypeIconColumn, {
-            showTypeName: true,
-            sortable: true,
-            ...{ sortField: "type" },
-            width: 125,
-          }),
-          Config(Column, {
-            header: ECommerceStudioPlugin_properties.id_header,
-            stateId: "id",
-            dataIndex: "id",
-            sortable: true,
-            hideable: false,
-            menuDisabled: true,
-            width: 125,
-          }),
-          Config(Column, {
-            header: GridColumns_properties.name_header,
-            stateId: "name",
-            dataIndex: "name",
-            sortable: true,
-            hideable: false,
-            menuDisabled: true,
-            width: 200,
-          }),
-          Config(Column, {
-            header: ECommerceStudioPlugin_properties.description_header,
-            stateId: "description",
-            dataIndex: "description",
-            hideable: false,
-            menuDisabled: true,
-            flex: 1,
           }),
         ],
-      }), config);
-    })());
+      }),
+      columns: [
+        Config(TypeIconColumn, {
+          showTypeName: true,
+          sortable: true,
+          ...{ sortField: "type" },
+          width: 125,
+        }),
+        Config(Column, {
+          header: ECommerceStudioPlugin_properties.id_header,
+          stateId: "id",
+          dataIndex: "id",
+          sortable: true,
+          hideable: false,
+          menuDisabled: true,
+          width: 125,
+        }),
+        Config(Column, {
+          header: GridColumns_properties.name_header,
+          stateId: "name",
+          dataIndex: "name",
+          sortable: true,
+          hideable: false,
+          menuDisabled: true,
+          width: 200,
+        }),
+        Config(Column, {
+          header: ECommerceStudioPlugin_properties.description_header,
+          stateId: "description",
+          dataIndex: "description",
+          hideable: false,
+          menuDisabled: true,
+          flex: 1,
+        }),
+      ],
+    }), config));
   }
 
   searchResultHitsValueExpression: ValueExpression = null;

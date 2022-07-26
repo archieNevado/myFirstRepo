@@ -30,40 +30,40 @@ class CommerceCategoryWorkAreaTab extends CommerceWorkAreaTab {
   #augmentedCategoryExpression: ValueExpression = null;
 
   constructor(config: Config<CommerceCategoryWorkAreaTab> = null) {
-    super((()=>{
-      this.#augmentedCategoryExpression = ValueExpressionFactory.createFromFunction((): any =>
-        augmentedCategoryTreeRelation.getParentUnchecked(this.getEntityExpression().getValue()),
-      );
-      return ConfigUtils.apply(Config(CommerceCategoryWorkAreaTab, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#augmentedCategoryExpression = ValueExpressionFactory.createFromFunction((): any =>
+      augmentedCategoryTreeRelation.getParentUnchecked(this$.getEntityExpression().getValue()),
+    );
+    super(ConfigUtils.apply(Config(CommerceCategoryWorkAreaTab, {
 
-        subTabs: [
-          Config(CommerceCategoryContentForm, {
-            itemId: CommerceCategoryWorkAreaTab.CONTENT_TAB_ITEM_ID,
-            bindTo: this.getEntityExpression(),
-          }),
-          Config(CommerceCategoryStructureForm, { itemId: CommerceCategoryWorkAreaTab.STRUCTURE_TAB_ITEM_ID }),
-          Config(DocumentForm, {
-            itemId: CommerceCategoryWorkAreaTab.PDP_PAGEGRID_TAB_ITEM_ID,
-            title: LivecontextStudioPlugin_properties.CMExternalChannel_tab_PDP_pagegrid_title,
-            items: [
-              Config(CommerceAugmentedPageGridForm, {
-                itemId: "pdpPagegrid",
-                showLocal: true,
-                forceReadOnlyValueExpression: ValueExpressionFactory.createFromValue(true),
-                bindTo: this.#augmentedCategoryExpression,
-                pageGridPropertyName: "pdpPagegrid",
-                fallbackPageGridPropertyName: "placement",
-              }),
-            ],
-          }),
-          Config(CommerceSystemForm, {
-            autoHide: true,
-            itemId: CommerceCategoryWorkAreaTab.SYSTEM_TAB_ITEM_ID,
-          }),
-        ],
+      subTabs: [
+        Config(CommerceCategoryContentForm, {
+          itemId: CommerceCategoryWorkAreaTab.CONTENT_TAB_ITEM_ID,
+          bindTo: this$.getEntityExpression(),
+        }),
+        Config(CommerceCategoryStructureForm, { itemId: CommerceCategoryWorkAreaTab.STRUCTURE_TAB_ITEM_ID }),
+        Config(DocumentForm, {
+          itemId: CommerceCategoryWorkAreaTab.PDP_PAGEGRID_TAB_ITEM_ID,
+          title: LivecontextStudioPlugin_properties.CMExternalChannel_tab_PDP_pagegrid_title,
+          items: [
+            Config(CommerceAugmentedPageGridForm, {
+              itemId: "pdpPagegrid",
+              showLocal: true,
+              forceReadOnlyValueExpression: ValueExpressionFactory.createFromValue(true),
+              bindTo: this$.#augmentedCategoryExpression,
+              pageGridPropertyName: "pdpPagegrid",
+              fallbackPageGridPropertyName: "placement",
+            }),
+          ],
+        }),
+        Config(CommerceSystemForm, {
+          autoHide: true,
+          itemId: CommerceCategoryWorkAreaTab.SYSTEM_TAB_ITEM_ID,
+        }),
+      ],
 
-      }), config);
-    })());
+    }), config));
   }
 }
 

@@ -50,9 +50,11 @@ class CatalogRepositoryListContainer extends CatalogRepositoryListContainerBase 
   newContentDisabledValueExpression: ValueExpression = null;
 
   constructor(config: Config<CatalogRepositoryListContainer> = null) {
-    super((()=> ConfigUtils.apply(Config(CatalogRepositoryListContainer, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CatalogRepositoryListContainer, {
       itemId: CatalogRepositoryListContainer.VIEW_CONTAINER_ITEM_ID,
-      activeItemValueExpression: this.getActiveViewExpression(),
+      activeItemValueExpression: this$.getActiveViewExpression(),
 
       items: [
         Config(CatalogRepositoryList, {
@@ -65,7 +67,7 @@ class CatalogRepositoryListContainer extends CatalogRepositoryListContainerBase 
         }),
         Config(CatalogRepositoryThumbnails, {
           itemId: CollectionViewConstants.THUMBNAILS_VIEW,
-          catalogThumbnailItemsValueExpression: this.getCatalogThumbnailItemsValueExpression(config),
+          catalogThumbnailItemsValueExpression: this$.getCatalogThumbnailItemsValueExpression(config),
           newContentDisabledValueExpression: config.newContentDisabledValueExpression,
           selectedItemsValueExpression: config.selectedRepositoryItemsValueExpression,
           selectedFolderValueExpression: config.selectedFolderValueExpression,
@@ -73,7 +75,7 @@ class CatalogRepositoryListContainer extends CatalogRepositoryListContainerBase 
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 }
 

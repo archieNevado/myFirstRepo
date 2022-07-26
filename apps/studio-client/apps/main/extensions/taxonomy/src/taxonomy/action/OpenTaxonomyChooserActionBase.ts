@@ -38,16 +38,16 @@ class OpenTaxonomyChooserActionBase extends DependencyTrackedAction {
    * @param config
    */
   constructor(config: Config<OpenTaxonomyChooserAction> = null) {
-    super((()=>{
-      this.#propertyValueExpression = config.propertyValueExpression;
-      this.#singleSelection = config.singleSelection;
-      this.bindTo = config.bindTo;
-      this.forceReadOnlyValueExpression = config.forceReadOnlyValueExpression;
-      this.siteSelectionExpression = config.siteSelectionExpression;
-      this.taxonomyIdExpression = config.taxonomyIdExpression;
-      config.handler = bind(this, this.#showChooser);
-      return config;
-    })());
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#propertyValueExpression = config.propertyValueExpression;
+    this$.#singleSelection = config.singleSelection;
+    this$.bindTo = config.bindTo;
+    this$.forceReadOnlyValueExpression = config.forceReadOnlyValueExpression;
+    this$.siteSelectionExpression = config.siteSelectionExpression;
+    this$.taxonomyIdExpression = config.taxonomyIdExpression;
+    config.handler = bind(this$, this$.#showChooser);
+    super(config);
   }
 
   protected override calculateDisabled(): boolean {

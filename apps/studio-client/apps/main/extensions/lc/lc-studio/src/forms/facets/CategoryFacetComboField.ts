@@ -19,7 +19,9 @@ class CategoryFacetComboField extends CategoryFacetComboFieldBase {
   static override readonly xtype: string = "com.coremedia.livecontext.studio.config.categoryFacetComboField";
 
   constructor(config: Config<CategoryFacetComboField> = null) {
-    super((()=> ConfigUtils.apply(Config(CategoryFacetComboField, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CategoryFacetComboField, {
       fieldLabel: FacetUtil.localizeFacetLabel(config.facet.getLabel()),
       emptyText: LivecontextStudioPlugin_properties["CMProductList_localSettings.productList.facetValue.emptyText"],
       labelAlign: "top",
@@ -31,7 +33,7 @@ class CategoryFacetComboField extends CategoryFacetComboFieldBase {
       ...ConfigUtils.append({
         plugins: [
           Config(BindListPlugin, {
-            bindTo: this.getComboValuesExpression(config),
+            bindTo: this$.getComboValuesExpression(config),
             ifUndefined: [],
             sortDirection: "ASC",
             sortField: CategoryFacetComboFieldBase.LABEL,
@@ -58,7 +60,7 @@ class CategoryFacetComboField extends CategoryFacetComboFieldBase {
           Config(PropertyFieldPlugin, { propertyName: config.structPropertyName + "." + CategoryFacetsPropertyFieldBase.PRODUCT_LIST_STRUCT_NAME + "." + CategoryFacetsPropertyFieldBase.MULTI_FACETS_STRUCT_NAME + "." + config.facet.getKey() }),
         ],
       }),
-    }), config))());
+    }), config));
   }
 }
 

@@ -28,11 +28,11 @@ class RemoveTaxonomyActionBase extends Action {
   readonly items: Array<any>;
 
   constructor(config: Config<RemoveTaxonomyAction> = null) {
-    super((()=>{
-      config.handler = bind(this, this.removeTaxonomy);
-      config.text = TaxonomyStudioPlugin_properties.TaxonomyLinkList_keyword_remove_text;
-      return config;
-    })());
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    config.handler = bind(this$, this$.removeTaxonomy);
+    config.text = TaxonomyStudioPlugin_properties.TaxonomyLinkList_keyword_remove_text;
+    super(config);
     this.#propertyName = config.propertyName;
     this.#bindTo = config.bindTo;
     this.#selectedPositionsExpression = config.selectedPositionsExpression;

@@ -66,149 +66,149 @@ class CMExternalProductForm extends DocumentTabPanel {
   #catalogObjectExpression: ValueExpression = null;
 
   constructor(config: Config<CMExternalProductForm> = null) {
-    super((()=>{
-      this.#catalogObjectExpression = AugmentationUtil.getCatalogObjectExpression(config.bindTo);
-      return ConfigUtils.apply(Config(CMExternalProductForm, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#catalogObjectExpression = AugmentationUtil.getCatalogObjectExpression(config.bindTo);
+    super(ConfigUtils.apply(Config(CMExternalProductForm, {
 
-        items: [
-          Config(DocumentForm, {
-            itemId: CMExternalProductForm.CONTENT_TAB_ITEM_ID,
-            title: BlueprintTabs_properties.Tab_content_title,
-            items: [
-              Config(CollapsibleStringPropertyForm, {
-                propertyName: "title",
-                title: BlueprintDocumentTypes_properties.CMExternalProduct_title_text,
-              }),
-              Config(CommerceDetailsForm, {
-                itemId: "commerceDetails",
-                bindTo: this.#catalogObjectExpression,
-                contentBindTo: config.bindTo,
-                collapsed: true,
-              }),
+      items: [
+        Config(DocumentForm, {
+          itemId: CMExternalProductForm.CONTENT_TAB_ITEM_ID,
+          title: BlueprintTabs_properties.Tab_content_title,
+          items: [
+            Config(CollapsibleStringPropertyForm, {
+              propertyName: "title",
+              title: BlueprintDocumentTypes_properties.CMExternalProduct_title_text,
+            }),
+            Config(CommerceDetailsForm, {
+              itemId: "commerceDetails",
+              bindTo: this$.#catalogObjectExpression,
+              contentBindTo: config.bindTo,
+              collapsed: true,
+            }),
 
-              Config(CommerceAugmentedPageGridForm, {
-                itemId: "pdpPagegrid",
-                pageGridPropertyName: "pdpPagegrid",
-                fallbackPageGridPropertyName: "placement",
-              }),
+            Config(CommerceAugmentedPageGridForm, {
+              itemId: "pdpPagegrid",
+              pageGridPropertyName: "pdpPagegrid",
+              fallbackPageGridPropertyName: "placement",
+            }),
 
-              Config(CommercePricesPropertyFieldGroup, {
-                bindTo: this.#catalogObjectExpression,
-                itemId: "prices",
-              }),
+            Config(CommercePricesPropertyFieldGroup, {
+              bindTo: this$.#catalogObjectExpression,
+              itemId: "prices",
+            }),
 
-              Config(PropertyFieldGroup, {
-                title: LivecontextStudioPlugin_properties.Commerce_PropertyGroup_thumbnail_title,
-                itemId: "picture",
-                items: [
-                  Config(ImageComponent, {
-                    width: 120,
+            Config(PropertyFieldGroup, {
+              title: LivecontextStudioPlugin_properties.Commerce_PropertyGroup_thumbnail_title,
+              itemId: "picture",
+              items: [
+                Config(ImageComponent, {
+                  width: 120,
+                  plugins: [
+                    Config(BindPropertyPlugin, {
+                      componentProperty: "src",
+                      bindTo: CatalogThumbnailResolver.imageValueExpression(this$.#catalogObjectExpression),
+                    }),
+                  ],
+                }),
+              ],
+              layout: Config(VBoxLayout),
+            }),
+            Config(PropertyFieldGroup, {
+              title: LivecontextStudioPlugin_properties.Commerce_Product_PropertyGroup_richMedia_title,
+              itemId: "richMedia",
+              bindTo: this$.#catalogObjectExpression,
+              items: [
+                Config(CatalogAssetsProperty, {
+                  propertyName: CatalogObjectPropertyNames.VISUALS,
+                  assetContentTypes: ["CMPicture", "CMVideo", "CMSpinner"],
+                  emptyText: LivecontextStudioPlugin_properties.Commerce_Product_richMedia_emptyText,
+                }),
+              ],
+            }),
+            Config(PropertyFieldGroup, {
+              title: LivecontextStudioPlugin_properties.Commerce_Product_PropertyGroup_downloads_title,
+              itemId: "downloads",
+              bindTo: this$.#catalogObjectExpression,
+              items: [
+                Config(CatalogAssetsProperty, {
+                  propertyName: CatalogObjectPropertyNames.DOWNLOADS,
+                  assetContentTypes: ["CMDownload"],
+                  emptyText: LivecontextStudioPlugin_properties.Commerce_Product_downloads_emptyText,
+                }),
+              ],
+            }),
+            Config(TeaserWithPictureDocumentForm),
+            Config(ValidityDocumentForm),
+          ],
+        }),
+        Config(CommerceAttributesForm, { bindTo: this$.#catalogObjectExpression }),
+        Config(CommerceProductStructureForm, {
+          itemId: CMExternalProductForm.STRUCTURE_TAB_ITEM_ID,
+          bindTo: this$.#catalogObjectExpression,
+        }),
+        Config(DocumentForm, {
+          title: BlueprintTabs_properties.Tab_extras_title,
+          itemId: "metadata",
+          items: [
+            Config(CategoryDocumentForm),
+          ],
+        }),
+        Config(MultiLanguageDocumentForm),
+        Config(MetaDataInformationForm, {
+          ...ConfigUtils.append({
+            plugins: [
+              Config(NestedRulesPlugin, {
+                rules: [
+                  Config(DocumentPath, {
                     plugins: [
                       Config(BindPropertyPlugin, {
-                        componentProperty: "src",
-                        bindTo: CatalogThumbnailResolver.imageValueExpression(this.#catalogObjectExpression),
+                        bindTo: ValueExpressionFactory.create<boolean>(CatalogPreferencesBase.PREFERENCE_SHOW_CATALOG_KEY, editorContext._.getPreferences()),
+                        ifUndefined: true,
+                        componentProperty: "hidden",
+                        transformer: (enabled: boolean) => !enabled,
                       }),
                     ],
                   }),
                 ],
-                layout: Config(VBoxLayout),
               }),
-              Config(PropertyFieldGroup, {
-                title: LivecontextStudioPlugin_properties.Commerce_Product_PropertyGroup_richMedia_title,
-                itemId: "richMedia",
-                bindTo: this.#catalogObjectExpression,
+              Config(AddItemsPlugin, {
                 items: [
-                  Config(CatalogAssetsProperty, {
-                    propertyName: CatalogObjectPropertyNames.VISUALS,
-                    assetContentTypes: ["CMPicture", "CMVideo", "CMSpinner"],
-                    emptyText: LivecontextStudioPlugin_properties.Commerce_Product_richMedia_emptyText,
+                  Config(PropertyFieldGroup, {
+                    title: LivecontextStudioPlugin_properties.CMExternalProduct_externalId_text,
+                    itemId: "externalId",
+                    items: [
+                      Config(CatalogLinkPropertyField, {
+                        itemId: CMExternalProductForm.CATALOG_LINK_ITEM_ID,
+                        maxCardinality: 1,
+                        disableSelection: true,
+                        propertyName: CMExternalProductForm.EXTERNAL_ID_PROPERTY,
+                        linkTypeNames: [CatalogModel.TYPE_PRODUCT],
+                        dropAreaText: LivecontextStudioPlugin_properties.Product_Link_empty_text,
+                        showRemoveReferenceButton: true,
+                        readOnlyValueExpression: ValueExpressionFactory.createFromValue(false),
+                        ...ConfigUtils.append({
+                          plugins: [
+                            Config(ShowIssuesPlugin, {
+                              propertyName: "externalId",
+                              bindTo: config.bindTo,
+                            }),
+                          ],
+                        }),
+                      }),
+                    ],
                   }),
                 ],
-              }),
-              Config(PropertyFieldGroup, {
-                title: LivecontextStudioPlugin_properties.Commerce_Product_PropertyGroup_downloads_title,
-                itemId: "downloads",
-                bindTo: this.#catalogObjectExpression,
-                items: [
-                  Config(CatalogAssetsProperty, {
-                    propertyName: CatalogObjectPropertyNames.DOWNLOADS,
-                    assetContentTypes: ["CMDownload"],
-                    emptyText: LivecontextStudioPlugin_properties.Commerce_Product_downloads_emptyText,
-                  }),
+                after: [
+                  Config(Component, { itemId: VersionHistory.ITEM_ID_VERSION_HISTORY }),
                 ],
               }),
-              Config(TeaserWithPictureDocumentForm),
-              Config(ValidityDocumentForm),
             ],
           }),
-          Config(CommerceAttributesForm, { bindTo: this.#catalogObjectExpression }),
-          Config(CommerceProductStructureForm, {
-            itemId: CMExternalProductForm.STRUCTURE_TAB_ITEM_ID,
-            bindTo: this.#catalogObjectExpression,
-          }),
-          Config(DocumentForm, {
-            title: BlueprintTabs_properties.Tab_extras_title,
-            itemId: "metadata",
-            items: [
-              Config(CategoryDocumentForm),
-            ],
-          }),
-          Config(MultiLanguageDocumentForm),
-          Config(MetaDataInformationForm, {
-            ...ConfigUtils.append({
-              plugins: [
-                Config(NestedRulesPlugin, {
-                  rules: [
-                    Config(DocumentPath, {
-                      plugins: [
-                        Config(BindPropertyPlugin, {
-                          bindTo: ValueExpressionFactory.create<boolean>(CatalogPreferencesBase.PREFERENCE_SHOW_CATALOG_KEY, editorContext._.getPreferences()),
-                          ifUndefined: true,
-                          componentProperty: "hidden",
-                          transformer: (enabled: boolean) => !enabled,
-                        }),
-                      ],
-                    }),
-                  ],
-                }),
-                Config(AddItemsPlugin, {
-                  items: [
-                    Config(PropertyFieldGroup, {
-                      title: LivecontextStudioPlugin_properties.CMExternalProduct_externalId_text,
-                      itemId: "externalId",
-                      items: [
-                        Config(CatalogLinkPropertyField, {
-                          itemId: CMExternalProductForm.CATALOG_LINK_ITEM_ID,
-                          maxCardinality: 1,
-                          disableSelection: true,
-                          propertyName: CMExternalProductForm.EXTERNAL_ID_PROPERTY,
-                          linkTypeNames: [CatalogModel.TYPE_PRODUCT],
-                          dropAreaText: LivecontextStudioPlugin_properties.Product_Link_empty_text,
-                          showRemoveReferenceButton: true,
-                          readOnlyValueExpression: ValueExpressionFactory.createFromValue(false),
-                          ...ConfigUtils.append({
-                            plugins: [
-                              Config(ShowIssuesPlugin, {
-                                propertyName: "externalId",
-                                bindTo: config.bindTo,
-                              }),
-                            ],
-                          }),
-                        }),
-                      ],
-                    }),
-                  ],
-                  after: [
-                    Config(Component, { itemId: VersionHistory.ITEM_ID_VERSION_HISTORY }),
-                  ],
-                }),
-              ],
-            }),
-          }),
-        ],
+        }),
+      ],
 
-      }), config);
-    })());
+    }), config));
   }
 }
 

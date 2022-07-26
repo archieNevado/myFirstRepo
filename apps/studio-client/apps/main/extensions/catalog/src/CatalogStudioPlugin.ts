@@ -52,7 +52,9 @@ class CatalogStudioPlugin extends CatalogStudioPluginBase {
   static readonly LOST_AND_FOUND_TYPE: string = "lostAndFound";
 
   constructor(config: Config<CatalogStudioPlugin> = null) {
-    super((()=> ConfigUtils.apply(Config(CatalogStudioPlugin, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CatalogStudioPlugin, {
 
       rules: [
         Config(EditorStartup, {
@@ -199,7 +201,7 @@ class CatalogStudioPlugin extends CatalogStudioPluginBase {
       configuration: [
         new ConfigureDocumentTypes({
           names: "CMCategory,CMProduct",
-          mayCreate: bind(this, this.mayCreate),
+          mayCreate: bind(this$, this$.mayCreate),
         }),
 
         new CopyResourceBundleProperties({
@@ -222,7 +224,7 @@ class CatalogStudioPlugin extends CatalogStudioPluginBase {
 
       ],
 
-    }), config))());
+    }), config));
   }
 }
 

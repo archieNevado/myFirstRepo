@@ -6,10 +6,8 @@ import StudioPlugin from "@coremedia/studio-client.main.editor-components/config
 import TreeViewContextMenu from "@coremedia/studio-client.main.editor-components/sdk/collectionview/tree/TreeViewContextMenu";
 import Config from "@jangaroo/runtime/Config";
 import ConfigUtils from "@jangaroo/runtime/ConfigUtils";
-import AddActionsToCatalogRepositoryContextMenuPlugin from "./AddActionsToCatalogRepositoryContextMenuPlugin";
-import AddActionsToCatalogRepositoryToolbarPlugin from "./AddActionsToCatalogRepositoryToolbarPlugin";
-import AddActionsToCatalogSearchContextMenuPlugin from "./AddActionsToCatalogSearchContextMenuPlugin";
-import AddActionsToCatalogSearchToolbarPlugin from "./AddActionsToCatalogSearchToolbarPlugin";
+import AddActionsToCatalogToolbarPlugin from "./AddActionsToCatalogToolbarPlugin";
+import AddActionsToCommonCatalogContextMenuPlugin from "./AddActionsToCommonCatalogContextMenuPlugin";
 import AddCatalogActionsToTreeViewContextMenuPlugin from "./AddCatalogActionsToTreeViewContextMenuPlugin";
 
 interface LivecontextCollectionViewActionsPluginConfig extends Config<StudioPlugin> {
@@ -25,28 +23,24 @@ class LivecontextCollectionViewActionsPlugin extends StudioPlugin {
       rules: [
         Config(CatalogRepositoryToolbar, {
           plugins: [
-            Config(AddActionsToCatalogRepositoryToolbarPlugin),
+            Config(AddActionsToCatalogToolbarPlugin),
           ],
         }),
-
         Config(CatalogRepositoryContextMenu, {
           plugins: [
-            Config(AddActionsToCatalogRepositoryContextMenuPlugin),
+            Config(AddActionsToCommonCatalogContextMenuPlugin),
           ],
         }),
-
         Config(CatalogSearchToolbar, {
           plugins: [
-            Config(AddActionsToCatalogSearchToolbarPlugin),
+            Config(AddActionsToCatalogToolbarPlugin),
           ],
         }),
-
         Config(CatalogSearchContextMenu, {
           plugins: [
-            Config(AddActionsToCatalogSearchContextMenuPlugin),
+            Config(AddActionsToCommonCatalogContextMenuPlugin),
           ],
         }),
-
         Config(TreeViewContextMenu, {
           plugins: [
             Config(AddCatalogActionsToTreeViewContextMenuPlugin),

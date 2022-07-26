@@ -41,12 +41,12 @@ class AddSiteSpecificPathPlugin extends AbstractPlugin {
    * @param config the config object
    */
   constructor(config: Config<Addsitespecificpath> = null) {
-    super((()=>{
-      this.#groupHeaderLabel = config.groupHeaderLabel;
-      this.#entityExpression = config.activeContentValueExpression;
-      this.#path = config.path;
-      return config;
-    })());
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#groupHeaderLabel = config.groupHeaderLabel;
+    this$.#entityExpression = config.activeContentValueExpression;
+    this$.#path = config.path;
+    super(config);
   }
 
   static addSitePathFormatter(sitePathFormatter: AnyFunction): void {

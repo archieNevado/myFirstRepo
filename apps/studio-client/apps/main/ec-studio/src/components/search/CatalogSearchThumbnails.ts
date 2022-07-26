@@ -51,7 +51,7 @@ class CatalogSearchThumbnails extends Container {
               viewLimitIncrement: 100,
               ...ConfigUtils.append({
                 plugins: [
-                  Config(ContextMenuPlugin, { contextMenu: Config(CatalogSearchContextMenu, { selectedSearchItemsValueExpression: config.selectedItemsValueExpression }) }),
+                  Config(ContextMenuPlugin, { contextMenu: Config(CatalogSearchContextMenu, { selectedItemsValueExpression: config.selectedItemsValueExpression }) }),
                 ],
               }),
             }),

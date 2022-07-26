@@ -67,158 +67,158 @@ class CMExternalChannelForm extends DocumentTabPanel {
   #catalogObjectExpression: ValueExpression = null;
 
   constructor(config: Config<CMExternalChannelForm> = null) {
-    super((()=>{
-      this.#catalogObjectExpression = AugmentationUtil.getCatalogObjectExpression(config.bindTo);
-      return ConfigUtils.apply(Config(CMExternalChannelForm, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#catalogObjectExpression = AugmentationUtil.getCatalogObjectExpression(config.bindTo);
+    super(ConfigUtils.apply(Config(CMExternalChannelForm, {
 
-        items: [
-          Config(DocumentForm, {
-            itemId: CMExternalChannelForm.CONTENT_TAB_ITEM_ID,
-            title: BlueprintTabs_properties.Tab_content_title,
-            items: [
-              Config(CollapsibleStringPropertyForm, {
-                propertyName: "title",
-                title: BlueprintDocumentTypes_properties.CMChannel_title_text,
-              }),
-              Config(CommerceDetailsForm, {
-                itemId: "commerceDetails",
-                bindTo: this.#catalogObjectExpression,
-                contentBindTo: config.bindTo,
-                collapsed: true,
-              }),
-              Config(CommerceAugmentedPageGridForm, {
-                itemId: "placement",
-                pageGridPropertyName: "placement",
-              }),
-              Config(PropertyFieldGroup, {
-                title: LivecontextStudioPlugin_properties.Commerce_PropertyGroup_thumbnail_title,
-                itemId: "picture",
-                items: [
-                  Config(ImageComponent, {
-                    width: 120,
+      items: [
+        Config(DocumentForm, {
+          itemId: CMExternalChannelForm.CONTENT_TAB_ITEM_ID,
+          title: BlueprintTabs_properties.Tab_content_title,
+          items: [
+            Config(CollapsibleStringPropertyForm, {
+              propertyName: "title",
+              title: BlueprintDocumentTypes_properties.CMChannel_title_text,
+            }),
+            Config(CommerceDetailsForm, {
+              itemId: "commerceDetails",
+              bindTo: this$.#catalogObjectExpression,
+              contentBindTo: config.bindTo,
+              collapsed: true,
+            }),
+            Config(CommerceAugmentedPageGridForm, {
+              itemId: "placement",
+              pageGridPropertyName: "placement",
+            }),
+            Config(PropertyFieldGroup, {
+              title: LivecontextStudioPlugin_properties.Commerce_PropertyGroup_thumbnail_title,
+              itemId: "picture",
+              items: [
+                Config(ImageComponent, {
+                  width: 120,
+                  plugins: [
+                    Config(BindPropertyPlugin, {
+                      componentProperty: "src",
+                      bindTo: CatalogThumbnailResolver.imageValueExpression(config.bindTo),
+                    }),
+                  ],
+                }),
+              ],
+              layout: Config(VBoxLayout),
+            }),
+            Config(PropertyFieldGroup, {
+              title: LivecontextStudioPlugin_properties.Commerce_Product_PropertyGroup_richMedia_title,
+              itemId: "richMedia",
+              bindTo: this$.#catalogObjectExpression,
+              items: [
+                Config(CatalogAssetsProperty, {
+                  propertyName: CatalogObjectPropertyNames.VISUALS,
+                  assetContentTypes: ["CMPicture", "CMVideo", "CMSpinner"],
+                  emptyText: LivecontextStudioPlugin_properties.Commerce_Product_richMedia_emptyText,
+                }),
+              ],
+            }),
+            Config(PropertyFieldGroup, {
+              title: LivecontextStudioPlugin_properties.Commerce_Product_PropertyGroup_downloads_title,
+              itemId: "downloads",
+              bindTo: this$.#catalogObjectExpression,
+              items: [
+                Config(CatalogAssetsProperty, {
+                  propertyName: CatalogObjectPropertyNames.DOWNLOADS,
+                  assetContentTypes: ["CMDownload"],
+                  emptyText: LivecontextStudioPlugin_properties.Commerce_Product_downloads_emptyText,
+                }),
+              ],
+            }),
+            Config(TeaserWithPictureDocumentForm),
+            Config(ValidityDocumentForm),
+          ],
+        }),
+        Config(CommerceAugmentedCategoryStructureForm, {
+          bindTo: config.bindTo,
+          itemId: CMExternalChannelForm.CATALOG_STRUCTURE_TAB_ITEM_ID,
+        }),
+        Config(DocumentForm, {
+          itemId: CMExternalChannelForm.PDP_PAGEGRID_TAB_ITEM_ID,
+          title: LivecontextStudioPlugin_properties.CMExternalChannel_tab_PDP_pagegrid_title,
+          items: [
+            Config(CommerceAugmentedPageGridForm, {
+              itemId: "pdpPagegrid",
+              pageGridPropertyName: "pdpPagegrid",
+              fallbackPageGridPropertyName: "placement",
+            }),
+          ],
+        }),
+        Config(DocumentForm, {
+          title: BlueprintTabs_properties.Tab_extras_title,
+          itemId: "metadata",
+          items: [
+            Config(CategoryDocumentForm),
+            Config(SEOForm),
+          ],
+        }),
+        Config(MultiLanguageDocumentForm),
+        Config(ChannelMetaDataInformationForm, {
+          ...ConfigUtils.append({
+            plugins: [
+              Config(NestedRulesPlugin, {
+                rules: [
+                  Config(DocumentPath, {
                     plugins: [
                       Config(BindPropertyPlugin, {
-                        componentProperty: "src",
-                        bindTo: CatalogThumbnailResolver.imageValueExpression(config.bindTo),
+                        bindTo: ValueExpressionFactory.create<boolean>(CatalogPreferencesBase.PREFERENCE_SHOW_CATALOG_KEY, editorContext._.getPreferences()),
+                        ifUndefined: true,
+                        componentProperty: "hidden",
+                        transformer: (enabled: boolean) => !enabled,
                       }),
                     ],
                   }),
                 ],
-                layout: Config(VBoxLayout),
               }),
-              Config(PropertyFieldGroup, {
-                title: LivecontextStudioPlugin_properties.Commerce_Product_PropertyGroup_richMedia_title,
-                itemId: "richMedia",
-                bindTo: this.#catalogObjectExpression,
+              Config(AddItemsPlugin, {
                 items: [
-                  Config(CatalogAssetsProperty, {
-                    propertyName: CatalogObjectPropertyNames.VISUALS,
-                    assetContentTypes: ["CMPicture", "CMVideo", "CMSpinner"],
-                    emptyText: LivecontextStudioPlugin_properties.Commerce_Product_richMedia_emptyText,
+                  Config(PropertyFieldGroup, {
+                    title: LivecontextStudioPlugin_properties.CMExternalChannel_externalId_text,
+                    itemId: "externalId",
+                    /* We show the catalog category link field even for the root category.
+             TODO: But there should be instead a label like 'this is root category.'
+                            <plugins mode="append">
+                              <ui:bindVisibilityPlugin bindTo="{getVisibilityExpression(config.bindTo)}"/>
+                            </plugins>
+             */
+                    items: [
+                      Config(CatalogLinkPropertyField, {
+                        itemId: CMExternalChannelForm.CATALOG_LINK_ITEM_ID,
+                        maxCardinality: 1,
+                        disableSelection: true,
+                        propertyName: CMExternalChannelForm.EXTERNAL_ID_PROPERTY,
+                        linkTypeNames: [CatalogModel.TYPE_CATEGORY],
+                        dropAreaText: LivecontextStudioPlugin_properties.Category_Link_empty_text,
+                        showRemoveReferenceButton: true,
+                        readOnlyValueExpression: ValueExpressionFactory.createFromValue(false),
+                        ...ConfigUtils.append({
+                          plugins: [
+                            Config(ShowIssuesPlugin, {
+                              propertyName: "externalId",
+                              bindTo: config.bindTo,
+                            }),
+                          ],
+                        }),
+                      }),
+                    ],
                   }),
                 ],
-              }),
-              Config(PropertyFieldGroup, {
-                title: LivecontextStudioPlugin_properties.Commerce_Product_PropertyGroup_downloads_title,
-                itemId: "downloads",
-                bindTo: this.#catalogObjectExpression,
-                items: [
-                  Config(CatalogAssetsProperty, {
-                    propertyName: CatalogObjectPropertyNames.DOWNLOADS,
-                    assetContentTypes: ["CMDownload"],
-                    emptyText: LivecontextStudioPlugin_properties.Commerce_Product_downloads_emptyText,
-                  }),
+                after: [
+                  Config(Component, { itemId: VersionHistory.ITEM_ID_VERSION_HISTORY }),
                 ],
               }),
-              Config(TeaserWithPictureDocumentForm),
-              Config(ValidityDocumentForm),
             ],
           }),
-          Config(CommerceAugmentedCategoryStructureForm, {
-            bindTo: config.bindTo,
-            itemId: CMExternalChannelForm.CATALOG_STRUCTURE_TAB_ITEM_ID,
-          }),
-          Config(DocumentForm, {
-            itemId: CMExternalChannelForm.PDP_PAGEGRID_TAB_ITEM_ID,
-            title: LivecontextStudioPlugin_properties.CMExternalChannel_tab_PDP_pagegrid_title,
-            items: [
-              Config(CommerceAugmentedPageGridForm, {
-                itemId: "pdpPagegrid",
-                pageGridPropertyName: "pdpPagegrid",
-                fallbackPageGridPropertyName: "placement",
-              }),
-            ],
-          }),
-          Config(DocumentForm, {
-            title: BlueprintTabs_properties.Tab_extras_title,
-            itemId: "metadata",
-            items: [
-              Config(CategoryDocumentForm),
-              Config(SEOForm),
-            ],
-          }),
-          Config(MultiLanguageDocumentForm),
-          Config(ChannelMetaDataInformationForm, {
-            ...ConfigUtils.append({
-              plugins: [
-                Config(NestedRulesPlugin, {
-                  rules: [
-                    Config(DocumentPath, {
-                      plugins: [
-                        Config(BindPropertyPlugin, {
-                          bindTo: ValueExpressionFactory.create<boolean>(CatalogPreferencesBase.PREFERENCE_SHOW_CATALOG_KEY, editorContext._.getPreferences()),
-                          ifUndefined: true,
-                          componentProperty: "hidden",
-                          transformer: (enabled: boolean) => !enabled,
-                        }),
-                      ],
-                    }),
-                  ],
-                }),
-                Config(AddItemsPlugin, {
-                  items: [
-                    Config(PropertyFieldGroup, {
-                      title: LivecontextStudioPlugin_properties.CMExternalChannel_externalId_text,
-                      itemId: "externalId",
-                      /* We show the catalog category link field even for the root category.
-               TODO: But there should be instead a label like 'this is root category.'
-                              <plugins mode="append">
-                                <ui:bindVisibilityPlugin bindTo="{getVisibilityExpression(config.bindTo)}"/>
-                              </plugins>
-               */
-                      items: [
-                        Config(CatalogLinkPropertyField, {
-                          itemId: CMExternalChannelForm.CATALOG_LINK_ITEM_ID,
-                          maxCardinality: 1,
-                          disableSelection: true,
-                          propertyName: CMExternalChannelForm.EXTERNAL_ID_PROPERTY,
-                          linkTypeNames: [CatalogModel.TYPE_CATEGORY],
-                          dropAreaText: LivecontextStudioPlugin_properties.Category_Link_empty_text,
-                          showRemoveReferenceButton: true,
-                          readOnlyValueExpression: ValueExpressionFactory.createFromValue(false),
-                          ...ConfigUtils.append({
-                            plugins: [
-                              Config(ShowIssuesPlugin, {
-                                propertyName: "externalId",
-                                bindTo: config.bindTo,
-                              }),
-                            ],
-                          }),
-                        }),
-                      ],
-                    }),
-                  ],
-                  after: [
-                    Config(Component, { itemId: VersionHistory.ITEM_ID_VERSION_HISTORY }),
-                  ],
-                }),
-              ],
-            }),
-          }),
-        ],
+        }),
+      ],
 
-      }), config);
-    })());
+    }), config));
   }
 }
 

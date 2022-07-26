@@ -20,7 +20,9 @@ class ExpirationDateFilterPanel extends ExpirationDateFilterPanelBase {
   static readonly FILTER_ID: string = "expirationDate";
 
   constructor(config: Config<ExpirationDateFilterPanel> = null) {
-    super((()=> ConfigUtils.apply(Config(ExpirationDateFilterPanel, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(ExpirationDateFilterPanel, {
       itemId: ExpirationDateFilterPanel.FILTER_ID,
       title: AMStudioPlugin_properties.Filter_ExpirationDate_text,
 
@@ -28,14 +30,14 @@ class ExpirationDateFilterPanel extends ExpirationDateFilterPanelBase {
         Config(Container, {
           items: [
             Config(ExpirationDateSelector, {
-              selectedKeyValueExpression: ValueExpressionFactory.create(ExpirationDateFilterPanelBase.KEY, this.getStateBean()),
-              selectedDateValueExpression: ValueExpressionFactory.create(ExpirationDateFilterPanelBase.DATE, this.getStateBean()),
+              selectedKeyValueExpression: ValueExpressionFactory.create(ExpirationDateFilterPanelBase.KEY, this$.getStateBean()),
+              selectedDateValueExpression: ValueExpressionFactory.create(ExpirationDateFilterPanelBase.DATE, this$.getStateBean()),
             }),
           ],
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 }
 

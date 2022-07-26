@@ -54,36 +54,36 @@ class TaxonomySelectorBase extends Container {
   #buttonCache: Array<any> = null;
 
   constructor(config: Config<TaxonomySelector> = null) {
-    super((()=>{
-      this.#ALPHABET = [];
-      this.#ALPHABET[0] = "A";
-      this.#ALPHABET[1] = "B";
-      this.#ALPHABET[2] = "C";
-      this.#ALPHABET[3] = "D";
-      this.#ALPHABET[4] = "E";
-      this.#ALPHABET[5] = "F";
-      this.#ALPHABET[6] = "G";
-      this.#ALPHABET[7] = "H";
-      this.#ALPHABET[8] = "I";
-      this.#ALPHABET[9] = "J";
-      this.#ALPHABET[10] = "K";
-      this.#ALPHABET[11] = "L";
-      this.#ALPHABET[12] = "M";
-      this.#ALPHABET[13] = "N";
-      this.#ALPHABET[14] = "O";
-      this.#ALPHABET[15] = "P";
-      this.#ALPHABET[16] = "Q";
-      this.#ALPHABET[17] = "R";
-      this.#ALPHABET[18] = "S";
-      this.#ALPHABET[19] = "T";
-      this.#ALPHABET[20] = "U";
-      this.#ALPHABET[21] = "V";
-      this.#ALPHABET[22] = "W";
-      this.#ALPHABET[23] = "X";
-      this.#ALPHABET[24] = "Y";
-      this.#ALPHABET[25] = "Z";
-      return config;
-    })());
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#ALPHABET = [];
+    this$.#ALPHABET[0] = "A";
+    this$.#ALPHABET[1] = "B";
+    this$.#ALPHABET[2] = "C";
+    this$.#ALPHABET[3] = "D";
+    this$.#ALPHABET[4] = "E";
+    this$.#ALPHABET[5] = "F";
+    this$.#ALPHABET[6] = "G";
+    this$.#ALPHABET[7] = "H";
+    this$.#ALPHABET[8] = "I";
+    this$.#ALPHABET[9] = "J";
+    this$.#ALPHABET[10] = "K";
+    this$.#ALPHABET[11] = "L";
+    this$.#ALPHABET[12] = "M";
+    this$.#ALPHABET[13] = "N";
+    this$.#ALPHABET[14] = "O";
+    this$.#ALPHABET[15] = "P";
+    this$.#ALPHABET[16] = "Q";
+    this$.#ALPHABET[17] = "R";
+    this$.#ALPHABET[18] = "S";
+    this$.#ALPHABET[19] = "T";
+    this$.#ALPHABET[20] = "U";
+    this$.#ALPHABET[21] = "V";
+    this$.#ALPHABET[22] = "W";
+    this$.#ALPHABET[23] = "X";
+    this$.#ALPHABET[24] = "Y";
+    this$.#ALPHABET[25] = "Z";
+    super(config);
   }
 
   /**

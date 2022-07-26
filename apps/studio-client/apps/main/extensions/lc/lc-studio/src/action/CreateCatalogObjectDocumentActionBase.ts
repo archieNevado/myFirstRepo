@@ -35,7 +35,9 @@ class CreateCatalogObjectDocumentActionBase extends LiveContextCatalogObjectActi
    * @param config the configuration object
    */
   constructor(config: Config<CreateCatalogObjectDocumentAction> = null) {
-    super((()=>ActionConfigUtil.extendConfiguration(resourceManager.getResourceBundle(null, LivecontextStudioPlugin_properties).content, config, config.actionName, { handler: bind(this, this.myHandler) }))());
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ActionConfigUtil.extendConfiguration(resourceManager.getResourceBundle(null, LivecontextStudioPlugin_properties).content, config, config.actionName, { handler: bind(this$, this$.myHandler) }));
     this.#contentType = config.contentType;
     this.#catalogObjectType = config.catalogObjectType;
     this.#inheritEditors = config.inheritEditors;

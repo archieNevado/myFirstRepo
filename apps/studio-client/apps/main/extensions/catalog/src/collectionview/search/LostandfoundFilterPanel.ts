@@ -21,7 +21,9 @@ class LostandfoundFilterPanel extends LostandfoundFilterPanelBase {
   static readonly FILTER_ID: string = "lostandfoundfilterid";
 
   constructor(config: Config<LostandfoundFilterPanel> = null) {
-    super((()=> ConfigUtils.apply(Config(LostandfoundFilterPanel, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(LostandfoundFilterPanel, {
       itemId: LostandfoundFilterPanel.FILTER_ID,
       title: CatalogStudioPlugin_properties.Filter_LostAndFound_text,
 
@@ -37,7 +39,7 @@ class LostandfoundFilterPanel extends LostandfoundFilterPanelBase {
                   bidirectional: true,
                   bindTo: new ConfigBasedValueExpression({
                     expression: LostandfoundFilterPanelBase.LOSTANDFOUND_CHECKBOX_SELECTED,
-                    context: this.getStateBean(),
+                    context: this$.getStateBean(),
                   }),
                 }),
               ],
@@ -46,7 +48,7 @@ class LostandfoundFilterPanel extends LostandfoundFilterPanelBase {
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 }
 

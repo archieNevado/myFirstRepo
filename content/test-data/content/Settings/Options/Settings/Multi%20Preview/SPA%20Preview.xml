@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMSettings folder="/Settings/Options/Settings/Multi Preview" name="SPA Preview" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<externalRefId></externalRefId>
+<locale>en-US</locale>
+<master>
+</master>
+<settings>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructListProperty Name="previews">
+<Struct>
+<StringProperty Name="id">appPreview</StringProperty>
+<StringProperty Name="providerId">genericStudioPreviewProvider</StringProperty>
+<StringProperty Name="displayName">App</StringProperty>
+<StructProperty Name="config">
+<Struct>
+<StringProperty Name="uriTemplate">https://headless-client-preview.{fqdn}/preview/{rootSegment}/{numericContentId}/</StringProperty>
+</Struct>
+</StructProperty>
+<BooleanProperty Name="enabled">false</BooleanProperty>
+</Struct>
+<Struct>
+<StringProperty Name="id">commerceAppPreview</StringProperty>
+<StringProperty Name="providerId">commerceAppPreviewProvider</StringProperty>
+<StringProperty Name="displayName">App</StringProperty>
+<StructProperty Name="config">
+<Struct>
+<StringProperty Name="uriTemplate">https://headless-client-preview.{fqdn}/commercepreview/{rootSegment}/{type}/{externalId}/</StringProperty>
+</Struct>
+</StructProperty>
+<BooleanProperty Name="enabled">false</BooleanProperty>
+</Struct>
+<Struct>
+<StringProperty Name="id">standaloneAppPreview</StringProperty>
+<StringProperty Name="providerId">genericStudioPreviewProvider</StringProperty>
+<StringProperty Name="displayName">Standalone Fragment</StringProperty>
+<StructProperty Name="config">
+<Struct>
+<StringProperty Name="uriTemplate">https://headless-client-preview.{fqdn}/standalone/#{numericContentId}</StringProperty>
+</Struct>
+</StructProperty>
+<BooleanProperty Name="enabled">false</BooleanProperty>
+</Struct>
+</StructListProperty>
+</Struct>
+</settings>
+<identifier></identifier>
+</CMSettings>

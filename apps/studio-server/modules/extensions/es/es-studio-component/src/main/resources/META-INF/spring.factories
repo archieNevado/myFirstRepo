@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.coremedia.blueprint.elastic.social.rest.ESBlueprintStudioConfiguration
+com.coremedia.blueprint.elastic.social.rest.ESBlueprintStudioAutoConfiguration

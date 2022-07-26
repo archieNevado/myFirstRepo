@@ -17,32 +17,32 @@ class AddTimeZoneValidationPlugin extends NestedRulesPlugin {
   #myPreviewDateSelector: PreviewDateSelector = null;
 
   constructor(config: Config<AddTimeZoneValidationPlugin> = null) {
-    super((()=>{
-      this.#myPreviewDateSelector = as(config.cmp, PreviewDateSelector);
-      return ConfigUtils.apply(Config(AddTimeZoneValidationPlugin, {
-        rules: [
-          Config(DateTimePropertyField, {
-            itemId: PreviewDateSelector.DATE_TIME_FIELD_ITEM_ID,
-            plugins: [
-              Config(NestedRulesPlugin, {
-                rules: [
-                  Config(LocalComboBox, {
-                    itemId: DateTimePropertyFieldBase.TIME_ZONE_ITEM_ID,
-                    plugins: [
-                      Config(PreviewPanelTimeZoneValidationPlugin, {
-                        model: this.#myPreviewDateSelector.getModel(),
-                        previewPanel: this.#myPreviewDateSelector.previewPanel,
-                      }),
-                    ],
-                  }),
-                ],
-              }),
-            ],
-          }),
-        ],
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#myPreviewDateSelector = as(config.cmp, PreviewDateSelector);
+    super(ConfigUtils.apply(Config(AddTimeZoneValidationPlugin, {
+      rules: [
+        Config(DateTimePropertyField, {
+          itemId: PreviewDateSelector.DATE_TIME_FIELD_ITEM_ID,
+          plugins: [
+            Config(NestedRulesPlugin, {
+              rules: [
+                Config(LocalComboBox, {
+                  itemId: DateTimePropertyFieldBase.TIME_ZONE_ITEM_ID,
+                  plugins: [
+                    Config(PreviewPanelTimeZoneValidationPlugin, {
+                      model: this$.#myPreviewDateSelector.getModel(),
+                      previewPanel: this$.#myPreviewDateSelector.previewPanel,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        }),
+      ],
 
-      }), config);
-    })());
+    }), config));
   }
 }
 

@@ -26,7 +26,9 @@ class TaxonomyPropertyField extends TaxonomyPropertyFieldBase {
 
   constructor(config: Config<TaxonomyPropertyField> = null) {
     config = ConfigUtils.apply({ disableSuggestions: false }, config);
-    super((()=> ConfigUtils.apply(Config(TaxonomyPropertyField, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(TaxonomyPropertyField, {
 
       defaultType: PropertyField.xtype,
 
@@ -34,7 +36,7 @@ class TaxonomyPropertyField extends TaxonomyPropertyFieldBase {
         bindTo: config.bindTo,
         ...{
           propertyName: config.propertyName,
-          taxonomyIdExpression: this.getTaxonomyIdExpr(config),
+          taxonomyIdExpression: this$.getTaxonomyIdExpr(config),
         },
         forceReadOnlyValueExpression: config.forceReadOnlyValueExpression,
       }),
@@ -52,7 +54,7 @@ class TaxonomyPropertyField extends TaxonomyPropertyFieldBase {
             bindTo: config.bindTo,
             ...{
               propertyName: config.propertyName,
-              taxonomyIdExpression: this.getTaxonomyIdExpr(config),
+              taxonomyIdExpression: this$.getTaxonomyIdExpr(config),
             },
             forceReadOnlyValueExpression: config.forceReadOnlyValueExpression,
           }),
@@ -69,7 +71,7 @@ class TaxonomyPropertyField extends TaxonomyPropertyFieldBase {
         }),
       ],
       layout: Config(VBoxLayout, { align: "stretch" }),
-    }), config))());
+    }), config));
   }
 
   /**

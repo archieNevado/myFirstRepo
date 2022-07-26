@@ -247,7 +247,9 @@ import static java.lang.invoke.MethodHandles.lookup;
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
         "classpath:/com/coremedia/blueprint/base/pagegrid/impl/bpbase-pagegrid-services.xml",
         "classpath:/com/coremedia/blueprint/base/navigation/context/bpbase-default-contextstrategy.xml",
-        "classpath:/com/coremedia/blueprint/base/links/bpbase-urlpathformatting.xml"
+        "classpath:/com/coremedia/blueprint/base/links/bpbase-urlpathformatting.xml",
+        "classpath:/com/coremedia/cap/common/uapi-services.xml",
+        "classpath:/com/coremedia/cache/cache-services.xml",
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)
 @Import({
         ImageTransformationConfiguration.class,

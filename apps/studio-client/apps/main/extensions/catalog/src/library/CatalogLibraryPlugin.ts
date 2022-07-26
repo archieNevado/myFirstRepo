@@ -39,95 +39,95 @@ class CatalogLibraryPlugin extends NestedRulesPlugin {
   #selectionHolder: ICollectionView = null;
 
   constructor(config: Config<CatalogLibraryPlugin> = null) {
-    super((()=>{
-      this.#selectionHolder = as(config.cmp, ICollectionView);
-      return ConfigUtils.apply(Config(CatalogLibraryPlugin, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#selectionHolder = as(config.cmp, ICollectionView);
+    super(ConfigUtils.apply(Config(CatalogLibraryPlugin, {
 
-        rules: [
+      rules: [
 
-          Config(FolderContentSwitchingContainer, {
-            plugins: [
-              Config(AddItemsPlugin, {
-                items: [
-                  Config(FolderContentContainer, {
-                    instanceName: "catalog",
-                    itemId: CatalogCollectionViewExtension.CATALOG_FOLDER_CONTAINER_ITEM_ID,
-                    selectedFolderValueExpression: this.#selectionHolder.getSelectedFolderValueExpression(),
-                    selectedRepositoryItemsValueExpression: this.#selectionHolder.getSelectedRepositoryItemsValueExpression(),
-                    newContentDisabledValueExpression: this.#selectionHolder.getNewContentActionDisabledExpression(),
-                    createdContentValueExpression: this.#selectionHolder.getCreatedContentValueExpression(),
+        Config(FolderContentSwitchingContainer, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              items: [
+                Config(FolderContentContainer, {
+                  instanceName: "catalog",
+                  itemId: CatalogCollectionViewExtension.CATALOG_FOLDER_CONTAINER_ITEM_ID,
+                  selectedFolderValueExpression: this$.#selectionHolder.getSelectedFolderValueExpression(),
+                  selectedRepositoryItemsValueExpression: this$.#selectionHolder.getSelectedRepositoryItemsValueExpression(),
+                  newContentDisabledValueExpression: this$.#selectionHolder.getNewContentActionDisabledExpression(),
+                  createdContentValueExpression: this$.#selectionHolder.getCreatedContentValueExpression(),
+                }),
+              ],
+            }),
+          ],
+        }),
+
+        Config(SearchSwitchingContainer, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              items: [
+                Config(RepositoryCatalogSearchListContainer, {
+                  searchResultHitsValueExpression: this$.#selectionHolder.getSearchResultHitsValueExpression(),
+                  selectedItemsValueExpression: this$.#selectionHolder.getSelectedSearchItemsValueExpression(),
+                }),
+              ],
+            }),
+          ],
+        }),
+
+        Config(RepositoryToolbar, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              items: [
+                Config(IconButton, {
+                  itemId: "unlink",
+                  baseAction: new UnlinkAction({
+                    folderValueExpression: this$.#selectionHolder.getSelectedFolderValueExpression(),
+                    contentValueExpression: this$.#selectionHolder.getSelectedItemsValueExpression(),
                   }),
-                ],
-              }),
-            ],
-          }),
+                }),
+              ],
+              before: [
+                Config(Component, { itemId: AbstractContextMenu.DELETE_MENU_ITEM_ID }),
+              ],
+            }),
+          ],
+        }),
 
-          Config(SearchSwitchingContainer, {
-            plugins: [
-              Config(AddItemsPlugin, {
-                items: [
-                  Config(RepositoryCatalogSearchListContainer, {
-                    searchResultHitsValueExpression: this.#selectionHolder.getSearchResultHitsValueExpression(),
-                    selectedItemsValueExpression: this.#selectionHolder.getSelectedSearchItemsValueExpression(),
+        Config(CollectionRepositoryContextMenu, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              items: [
+                Config(Separator),
+                Config(Item, {
+                  itemId: "unlink",
+                  baseAction: new UnlinkAction({
+                    folderValueExpression: this$.#selectionHolder.getSelectedFolderValueExpression(),
+                    contentValueExpression: this$.#selectionHolder.getSelectedRepositoryItemsValueExpression(),
                   }),
-                ],
-              }),
-            ],
-          }),
+                }),
+              ],
+              after: [
+                Config(Component, { itemId: AbstractContextMenu.DELETE_MENU_ITEM_ID }),
+              ],
+            }),
+          ],
+        }),
 
-          Config(RepositoryToolbar, {
-            plugins: [
-              Config(AddItemsPlugin, {
-                items: [
-                  Config(IconButton, {
-                    itemId: "unlink",
-                    baseAction: new UnlinkAction({
-                      folderValueExpression: this.#selectionHolder.getSelectedFolderValueExpression(),
-                      contentValueExpression: this.#selectionHolder.getSelectedItemsValueExpression(),
-                    }),
-                  }),
-                ],
-                before: [
-                  Config(Component, { itemId: AbstractContextMenu.DELETE_MENU_ITEM_ID }),
-                ],
-              }),
-            ],
-          }),
+        Config(SearchFiltersSwitchingContainer, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              items: [
+                Config(CatalogSearchFilters, { itemId: CatalogSearchFilters.ITEM_ID }),
+              ],
+            }),
+          ],
+        }),
 
-          Config(CollectionRepositoryContextMenu, {
-            plugins: [
-              Config(AddItemsPlugin, {
-                items: [
-                  Config(Separator),
-                  Config(Item, {
-                    itemId: "unlink",
-                    baseAction: new UnlinkAction({
-                      folderValueExpression: this.#selectionHolder.getSelectedFolderValueExpression(),
-                      contentValueExpression: this.#selectionHolder.getSelectedRepositoryItemsValueExpression(),
-                    }),
-                  }),
-                ],
-                after: [
-                  Config(Component, { itemId: AbstractContextMenu.DELETE_MENU_ITEM_ID }),
-                ],
-              }),
-            ],
-          }),
+      ],
 
-          Config(SearchFiltersSwitchingContainer, {
-            plugins: [
-              Config(AddItemsPlugin, {
-                items: [
-                  Config(CatalogSearchFilters, { itemId: CatalogSearchFilters.ITEM_ID }),
-                ],
-              }),
-            ],
-          }),
-
-        ],
-
-      }), config);
-    })());
+    }), config));
   }
 }
 

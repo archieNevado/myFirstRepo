@@ -25,7 +25,9 @@ class EsAnalyticsChartWidgetEditor extends EsAnalyticsChartWidgetEditorBase {
   static readonly ROOT_CHANNEL_ITEM_ID: string = "rootChannelItemId";
 
   constructor(config: Config<EsAnalyticsChartWidgetEditor> = null) {
-    super((()=> ConfigUtils.apply(Config(EsAnalyticsChartWidgetEditor, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(EsAnalyticsChartWidgetEditor, {
       ...{ labelAlign: "left" },
       properties: "content",
 
@@ -39,7 +41,7 @@ class EsAnalyticsChartWidgetEditor extends EsAnalyticsChartWidgetEditorBase {
           ...ConfigUtils.append({
             plugins: [
               Config(BindListPlugin, {
-                bindTo: this.getRootChannelValueExpression(),
+                bindTo: this$.getRootChannelValueExpression(),
                 sortField: "value",
                 fields: [
                   Config(ext_data_field_DataField, { name: "id" }),
@@ -53,7 +55,7 @@ class EsAnalyticsChartWidgetEditor extends EsAnalyticsChartWidgetEditorBase {
               Config(BindPropertyPlugin, {
                 bidirectional: true,
                 componentEvent: "select",
-                bindTo: this.getSelectedSiteExpression(),
+                bindTo: this$.getSelectedSiteExpression(),
                 reverseTransformer: EsAnalyticsChartWidgetEditorBase.getContentFromId,
                 transformer: EsAnalyticsChartWidgetEditorBase.getIdFromContent,
               }),
@@ -64,7 +66,7 @@ class EsAnalyticsChartWidgetEditor extends EsAnalyticsChartWidgetEditorBase {
       layout: Config(VBoxLayout, { align: "stretch" }),
       propertyDefaults: { contentType: ContentTypeNames.DOCUMENT },
 
-    }), config))());
+    }), config));
   }
 }
 

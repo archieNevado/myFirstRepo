@@ -57,7 +57,9 @@ class TaxonomyLinkListPropertyField extends TaxonomyLinkListPropertyFieldBase {
   taxonomyLinkListSideButtonRenderToFunction: AnyFunction = null;
 
   constructor(config: Config<TaxonomyLinkListPropertyField> = null) {
-    super((()=> ConfigUtils.apply(Config(TaxonomyLinkListPropertyField, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(TaxonomyLinkListPropertyField, {
       labelAlign: "top",
       labelSeparator: "",
       layout: Config(VBoxLayout, { align: "stretch" }),
@@ -66,36 +68,36 @@ class TaxonomyLinkListPropertyField extends TaxonomyLinkListPropertyFieldBase {
           new LinkListCutAction({
             text: Actions_properties.Action_cutToClipboard_text,
             tooltip: Actions_properties.Action_cutToClipboard_tooltip,
-            linkListWrapper: this.getLinkListWrapper(config),
-            selectedValuesExpression: this.getSelectedValuesVE(),
-            selectedPositionsExpression: this.getSelectedPositionsVE(),
+            linkListWrapper: this$.getLinkListWrapper(config),
+            selectedValuesExpression: this$.getSelectedValuesVE(),
+            selectedPositionsExpression: this$.getSelectedPositionsVE(),
           }),
           new LinkListCopyAction({
             text: Actions_properties.Action_copyToClipboard_text,
             tooltip: Actions_properties.Action_copyToClipboard_tooltip,
-            linkListWrapper: this.getLinkListWrapper(config),
-            selectedValuesExpression: this.getSelectedValuesVE(),
+            linkListWrapper: this$.getLinkListWrapper(config),
+            selectedValuesExpression: this$.getSelectedValuesVE(),
           }),
           new LinkListPasteAction({
             text: Actions_properties.Action_pasteFromClipboard_text,
             tooltip: Actions_properties.Action_pasteFromClipboard_tooltip,
-            linkListWrapper: this.getLinkListWrapper(config),
-            selectedValuesExpression: this.getSelectedValuesVE(),
-            selectedPositionsExpression: this.getSelectedPositionsVE(),
+            linkListWrapper: this$.getLinkListWrapper(config),
+            selectedValuesExpression: this$.getSelectedValuesVE(),
+            selectedPositionsExpression: this$.getSelectedPositionsVE(),
           }),
           new LinkListRemoveAction({
             text: Actions_properties.Action_deleteSelectedLinks_text,
             tooltip: Actions_properties.Action_deleteSelectedLinks_tooltip,
-            linkListWrapper: this.getLinkListWrapper(config),
-            selectedValuesExpression: this.getSelectedValuesVE(),
-            selectedPositionsExpression: this.getSelectedPositionsVE(),
+            linkListWrapper: this$.getLinkListWrapper(config),
+            selectedValuesExpression: this$.getSelectedValuesVE(),
+            selectedPositionsExpression: this$.getSelectedPositionsVE(),
           }),
           new OpenTaxonomyChooserAction({
             text: TaxonomyStudioPlugin_properties.Taxonomy_action_tooltip,
             tooltip: TaxonomyStudioPlugin_properties.Taxonomy_action_tooltip,
             iconCls: TaxonomyStudioPlugin_properties.Taxonomy_action_icon,
             bindTo: config.bindTo,
-            siteSelectionExpression: this.getSiteSelectionExpression(config.bindTo),
+            siteSelectionExpression: this$.getSiteSelectionExpression(config.bindTo),
             forceReadOnlyValueExpression: config.forceReadOnlyValueExpression,
             propertyValueExpression: config.bindTo.extendBy("properties." + config.propertyName),
             taxonomyIdExpression: config.taxonomyIdExpression,
@@ -111,11 +113,11 @@ class TaxonomyLinkListPropertyField extends TaxonomyLinkListPropertyFieldBase {
       items: [
         Config(TaxonomyLinkListGridPanel, {
           itemId: TaxonomyLinkListPropertyFieldBase.GRID_PANEL_ITEM_ID,
-          linkListWrapper: this.getLinkListWrapper(config),
+          linkListWrapper: this$.getLinkListWrapper(config),
           taxonomyIdExpression: config.taxonomyIdExpression,
           bindTo: config.bindTo,
-          selectedPositionsExpression: this.getSelectedPositionsVE(),
-          selectedValuesExpression: this.getSelectedValuesVE(),
+          selectedPositionsExpression: this$.getSelectedPositionsVE(),
+          selectedValuesExpression: this$.getSelectedValuesVE(),
           readOnlyValueExpression: PropertyEditorUtil.createReadOnlyValueExpression(config.bindTo, config.forceReadOnlyValueExpression),
           sideButtonHorizontalAdjustment: config.taxonomyLinkListSideButtonHorizontalAdjustment,
           sideButtonVerticalAdjustment: config.taxonomyLinkListSideButtonVerticalAdjustment,
@@ -133,7 +135,7 @@ class TaxonomyLinkListPropertyField extends TaxonomyLinkListPropertyFieldBase {
               Config(BEMPlugin, {
                 block: LinkListBEMEntities.BLOCK,
                 bodyElement: LinkListBEMEntities.ELEMENT_LIST,
-                modifier: this.getModifierVE(config),
+                modifier: this$.getModifierVE(config),
               }),
               Config(ContextMenuPlugin, {
                 contextMenu: Config(Menu, {
@@ -179,11 +181,11 @@ class TaxonomyLinkListPropertyField extends TaxonomyLinkListPropertyFieldBase {
             /*We are setting the default focus to the text field since we are not interested in opening the library */
             Config(LinkListDropArea, {
               dock: "bottom",
-              linkListWrapper: this.getLinkListWrapper(config),
+              linkListWrapper: this$.getLinkListWrapper(config),
               ddGroups: ["ContentDD", "ContentLinkDD"],
               defaultFocus: createComponentSelector().itemId(TaxonomyLinkListPropertyFieldBase.TAXONOMY_SEARCH_FIELD_ITEM_ID).build(),
               appendOnDrop: false,
-              dropHandler: bind(this, this.handleDropAreaDrop),
+              dropHandler: bind(this$, this$.handleDropAreaDrop),
               readOnlyValueExpression: PropertyEditorUtil.createReadOnlyValueExpression(config.bindTo, config.forceReadOnlyValueExpression),
               ...Config<BEMMixin>({ bemElement: LinkListBEMEntities.ELEMENT_TAIL }),
               layout: Config(HBoxLayout),
@@ -200,12 +202,12 @@ class TaxonomyLinkListPropertyField extends TaxonomyLinkListPropertyFieldBase {
                   resetOnBlur: true,
                   showSelectionPath: false,
                   taxonomyIdExpression: config.taxonomyIdExpression,
-                  linkListWrapper: this.getLinkListWrapper(config),
+                  linkListWrapper: this$.getLinkListWrapper(config),
                   bindTo: config.bindTo,
                   forceReadOnlyValueExpression: config.forceReadOnlyValueExpression,
                   propertyName: config.propertyName,
-                  siteSelectionExpression: this.getSiteSelectionExpression(config.bindTo),
-                  searchResultExpression: this.getSearchResultExpression(),
+                  siteSelectionExpression: this$.getSiteSelectionExpression(config.bindTo),
+                  searchResultExpression: this$.getSearchResultExpression(),
                 }),
               ],
             }),
@@ -213,7 +215,7 @@ class TaxonomyLinkListPropertyField extends TaxonomyLinkListPropertyFieldBase {
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 
   hideIssues: boolean = false;

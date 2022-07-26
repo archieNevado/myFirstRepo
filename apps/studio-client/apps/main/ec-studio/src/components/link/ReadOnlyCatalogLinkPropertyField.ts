@@ -20,8 +20,10 @@ class ReadOnlyCatalogLinkPropertyField extends ReadOnlyCatalogLinkPropertyFieldB
   static override readonly xtype: string = "com.coremedia.livecontext.studio.config.readOnlyCatalogLinkProperty";
 
   constructor(config: Config<ReadOnlyCatalogLinkPropertyField> = null) {
-    super((()=> ConfigUtils.apply(Config(ReadOnlyCatalogLinkPropertyField, {
-      activeItemValueExpression: this.getActiveCatalogLinkPropertyValueExpression(config),
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(ReadOnlyCatalogLinkPropertyField, {
+      activeItemValueExpression: this$.getActiveCatalogLinkPropertyValueExpression(config),
 
       items: [
         Config(CatalogLinkPropertyField, {
@@ -39,7 +41,7 @@ class ReadOnlyCatalogLinkPropertyField extends ReadOnlyCatalogLinkPropertyFieldB
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 
   /**

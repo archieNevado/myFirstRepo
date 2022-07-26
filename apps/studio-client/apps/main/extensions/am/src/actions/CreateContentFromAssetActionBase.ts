@@ -55,25 +55,25 @@ class CreateContentFromAssetActionBase extends ContentAction {
 
   constructor(config: Config<CreateContentFromAssetAction> = null) {
 
-    super((()=>{
-      this.#assetContentType = config.assetContentType;
-      this.#targetContentType = config.targetContentType;
-      this.#sourceRenditionProperty = config.sourceRenditionProperty;
-      this.#targetRenditionProperty = config.targetRenditionProperty;
-      this.#targetAssetLinkProperty = config.targetAssetLinkProperty;
-      this.#targetCopyrightProperty = config.targetCopyrightProperty;
-      this.#targetValidToProperty = config.targetValidToProperty;
-      this.#targetThumbnailProperty = config.targetThumbnailProperty;
-      this.#targetThumbnailContentType = config.targetThumbnailContentType;
-      this.#sourceThumbnailProperty = config.sourceThumbnailProperty;
-      this.#targetLinkedThumbnailProperty = config.targetLinkedThumbnailProperty;
-      this.#targetThumbnailAssetLinkProperty = config.targetThumbnailAssetLinkProperty;
-      return ActionConfigUtil.extendConfiguration(
-        resourceManager.getResourceBundle(null, AMStudioPlugin_properties).content,
-        config,
-        "create" + this.#targetContentType + "From" + this.#assetContentType,
-        { handler: bind(this, this.#createContentsFromAssets) });
-    })());
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#assetContentType = config.assetContentType;
+    this$.#targetContentType = config.targetContentType;
+    this$.#sourceRenditionProperty = config.sourceRenditionProperty;
+    this$.#targetRenditionProperty = config.targetRenditionProperty;
+    this$.#targetAssetLinkProperty = config.targetAssetLinkProperty;
+    this$.#targetCopyrightProperty = config.targetCopyrightProperty;
+    this$.#targetValidToProperty = config.targetValidToProperty;
+    this$.#targetThumbnailProperty = config.targetThumbnailProperty;
+    this$.#targetThumbnailContentType = config.targetThumbnailContentType;
+    this$.#sourceThumbnailProperty = config.sourceThumbnailProperty;
+    this$.#targetLinkedThumbnailProperty = config.targetLinkedThumbnailProperty;
+    this$.#targetThumbnailAssetLinkProperty = config.targetThumbnailAssetLinkProperty;
+    super(ActionConfigUtil.extendConfiguration(
+      resourceManager.getResourceBundle(null, AMStudioPlugin_properties).content,
+      config,
+      "create" + this$.#targetContentType + "From" + this$.#assetContentType,
+      { handler: bind(this$, this$.#createContentsFromAssets) }));
   }
 
   protected override isHiddenFor(contents: Array<any>): boolean {

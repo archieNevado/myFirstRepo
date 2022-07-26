@@ -5,9 +5,9 @@ import com.coremedia.cap.content.ContentType;
 import com.coremedia.elastic.social.rest.api.CategoryKeyAndDisplay;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import javax.inject.Named;
+import org.springframework.stereotype.Component;
 
-@Named
+@Component
 public class CMTaxonomyCategoryResolver implements CategoryResolver {
 
   public static final String CMTAXONOMY_VALUE = "value";

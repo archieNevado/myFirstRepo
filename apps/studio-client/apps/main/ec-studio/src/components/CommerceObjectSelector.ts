@@ -23,13 +23,15 @@ class CommerceObjectSelector extends CommerceObjectSelectorBase {
   static override readonly xtype: string = "com.coremedia.ecommerce.studio.config.commerceObjectSelector";
 
   constructor(config: Config<CommerceObjectSelector> = null) {
-    super((()=> ConfigUtils.apply(Config(CommerceObjectSelector, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CommerceObjectSelector, {
       valueField: "id",
       displayField: "name",
 
       plugins: [
         Config(BindListPlugin, {
-          bindTo: this.getSelectableCatalogObjectsExpression(config),
+          bindTo: this$.getSelectableCatalogObjectsExpression(config),
           fields: [
             Config(DataField, { name: "id" }),
             Config(DataField, { name: "name" }),
@@ -37,7 +39,7 @@ class CommerceObjectSelector extends CommerceObjectSelectorBase {
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 
   contentValueExpression: ValueExpression = null;

@@ -72,13 +72,6 @@
     </property>
   </bean>
 
-  <bean id="searchLandingPagesLinkBuilderHelper" class="com.coremedia.livecontext.handler.SearchLandingPagesLinkBuilderHelper">
-    <property name="navigationTreeRelation" ref="navigationTreeRelation"/>
-    <property name="segmentPath" value="${livecontext.slp.segmentPath:livecontext-search-landing-pages}" />
-    <property name="keywordsProperty" value="keywords" />
-    <property name="cache" ref="cache"/>
-  </bean>
-
   <bean id="externalSeoSegmentBuilder"
         class="com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.ExternalSeoSegmentBuilder">
     <property name="navigationSegmentsUriHelper" ref="navigationSegmentsUriHelper"/>

@@ -18,7 +18,9 @@ class MetaDataDocumentForm extends MetaDataDocumentFormBase {
 
   constructor(config: Config<MetaDataDocumentForm> = null) {
     config = ConfigUtils.apply({ metadataSectionName: "id3" }, config);
-    super((()=> ConfigUtils.apply(Config(MetaDataDocumentForm, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(MetaDataDocumentForm, {
       itemId: "metaSections",
       collapsed: true,
       title: config.label,
@@ -30,14 +32,14 @@ class MetaDataDocumentForm extends MetaDataDocumentFormBase {
             configBeanParameterName: "metaDataSection",
             clearBeforeUpdate: true,
             reuseComponents: false,
-            valueExpression: this.getMetaDataExpression(),
+            valueExpression: this$.getMetaDataExpression(),
             getKey: MetaDataDocumentFormBase.getTemplateKey,
             template: Config(MetaDataView),
           }),
         ],
       }),
 
-    }), config))());
+    }), config));
   }
 
   propertyName: string = null;

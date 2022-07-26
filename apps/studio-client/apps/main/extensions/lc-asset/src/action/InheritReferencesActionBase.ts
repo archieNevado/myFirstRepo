@@ -36,21 +36,20 @@ class InheritReferencesActionBase extends DependencyTrackedToggleAction {
 
   constructor(config: Config<InheritReferencesAction> = null) {
 
-    super((()=>{
-    // Copy values before super constructor call for calculateDisable.
-      this.#bindTo = config.bindTo;
-      this.#inheritExpression = config.inheritExpression || config.bindTo.extendBy(InheritReferencesActionBase.#PROPERTIES, InheritReferencesActionBase.#LOCAL_SETTINGS_STRUCT_NAME, InheritReferencesActionBase.#COMMERCE_STRUCT_NAME, InheritReferencesActionBase.#INHERIT_PROPERTY_NAME);
-      this.#originReferencesExpression = config.originReferencesExpression || config.bindTo.extendBy(InheritReferencesActionBase.#PROPERTIES, InheritReferencesActionBase.#LOCAL_SETTINGS_STRUCT_NAME, InheritReferencesActionBase.#COMMERCE_STRUCT_NAME, CatalogHelper.ORIGIN_REFERENCES_LIST_NAME);
-      this.#referencesExpression = config.referencesExpression || config.bindTo.extendBy(InheritReferencesActionBase.#PROPERTIES, InheritReferencesActionBase.#LOCAL_SETTINGS_STRUCT_NAME, InheritReferencesActionBase.#COMMERCE_STRUCT_NAME, CatalogHelper.REFERENCES_LIST_NAME);
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#bindTo = config.bindTo;
+    this$.#inheritExpression = config.inheritExpression || config.bindTo.extendBy(InheritReferencesActionBase.#PROPERTIES, InheritReferencesActionBase.#LOCAL_SETTINGS_STRUCT_NAME, InheritReferencesActionBase.#COMMERCE_STRUCT_NAME, InheritReferencesActionBase.#INHERIT_PROPERTY_NAME);
+    this$.#originReferencesExpression = config.originReferencesExpression || config.bindTo.extendBy(InheritReferencesActionBase.#PROPERTIES, InheritReferencesActionBase.#LOCAL_SETTINGS_STRUCT_NAME, InheritReferencesActionBase.#COMMERCE_STRUCT_NAME, CatalogHelper.ORIGIN_REFERENCES_LIST_NAME);
+    this$.#referencesExpression = config.referencesExpression || config.bindTo.extendBy(InheritReferencesActionBase.#PROPERTIES, InheritReferencesActionBase.#LOCAL_SETTINGS_STRUCT_NAME, InheritReferencesActionBase.#COMMERCE_STRUCT_NAME, CatalogHelper.REFERENCES_LIST_NAME);
 
-      this.#forceReadOnlyValueExpression = config.forceReadOnlyValueExpression;
-      return Config(InheritReferencesAction, Ext.apply({
-        iconCls: LivecontextStudioPlugin_properties.InheritReferencesAction_icon,
-        text: LivecontextStudioPlugin_properties.InheritReferencesAction_text,
-        tooltip: LivecontextStudioPlugin_properties.InheritReferencesAction_tooltip,
-        tooltipPressed: LivecontextStudioPlugin_properties.InheritReferencesAction_tooltipPressed,
-      }, config));
-    })());
+    this$.#forceReadOnlyValueExpression = config.forceReadOnlyValueExpression;
+    super(Config(InheritReferencesAction, Ext.apply({
+      iconCls: LivecontextStudioPlugin_properties.InheritReferencesAction_icon,
+      text: LivecontextStudioPlugin_properties.InheritReferencesAction_text,
+      tooltip: LivecontextStudioPlugin_properties.InheritReferencesAction_tooltip,
+      tooltipPressed: LivecontextStudioPlugin_properties.InheritReferencesAction_tooltipPressed,
+    }, config)));
   }
 
   protected override handleUnpress(): void {

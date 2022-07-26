@@ -34,98 +34,98 @@ class LivecontextAssetLibraryPlugin extends NestedRulesPlugin {
   #selectionHolder: ICollectionView = null;
 
   constructor(config: Config<LivecontextAssetLibraryPlugin> = null) {
-    super((()=>{
-      this.#selectionHolder = as(config.cmp, ICollectionView);
-      return ConfigUtils.apply(Config(LivecontextAssetLibraryPlugin, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#selectionHolder = as(config.cmp, ICollectionView);
+    super(ConfigUtils.apply(Config(LivecontextAssetLibraryPlugin, {
 
-        rules: [
+      rules: [
 
-          /*Add Search Product Pictures Action */
-          Config(CatalogSearchToolbar, {
-            plugins: [
-              Config(AddItemsPlugin, {
-                items: [
-                  Config(IconButton, {
-                    itemId: LivecontextAssetLibraryPlugin.SEARCH_PRODUCT_PICTURES_BUTTON_ITEM_ID,
-                    baseAction: new SearchProductPicturesAction({ catalogObjectExpression: this.#selectionHolder.getSelectedSearchItemsValueExpression() }),
-                  }),
-                ],
-                after: [
-                  Config(Component, { itemId: LivecontextStudioPlugin.SEARCH_PRODUCT_VARIANTS_BUTTON_ITEM_ID }),
-                ],
-              }),
-            ],
-          }),
+        /*Add Search Product Pictures Action */
+        Config(CatalogSearchToolbar, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              items: [
+                Config(IconButton, {
+                  itemId: LivecontextAssetLibraryPlugin.SEARCH_PRODUCT_PICTURES_BUTTON_ITEM_ID,
+                  baseAction: new SearchProductPicturesAction({ catalogObjectExpression: this$.#selectionHolder.getSelectedSearchItemsValueExpression() }),
+                }),
+              ],
+              after: [
+                Config(Component, { itemId: LivecontextStudioPlugin.SEARCH_PRODUCT_VARIANTS_BUTTON_ITEM_ID }),
+              ],
+            }),
+          ],
+        }),
 
-          Config(CatalogRepositoryContextMenu, {
-            plugins: [
-              Config(AddItemsPlugin, {
-                items: [
-                  Config(Item, {
-                    itemId: LivecontextAssetLibraryPlugin.SEARCH_PRODUCT_PICTURES_MENU_ITEM_ID,
-                    baseAction: new SearchProductPicturesAction({ catalogObjectExpression: this.#selectionHolder.getSelectedRepositoryItemsValueExpression() }),
-                  }),
-                ],
-                after: [
-                  Config(Component, { itemId: LivecontextStudioPlugin.SEARCH_PRODUCT_VARIANTS_MENU_ITEM_ID }),
-                ],
-              }),
-            ],
-          }),
+        Config(CatalogRepositoryContextMenu, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              items: [
+                Config(Item, {
+                  itemId: LivecontextAssetLibraryPlugin.SEARCH_PRODUCT_PICTURES_MENU_ITEM_ID,
+                  baseAction: new SearchProductPicturesAction({ catalogObjectExpression: this$.#selectionHolder.getSelectedRepositoryItemsValueExpression() }),
+                }),
+              ],
+              after: [
+                Config(Component, { itemId: LivecontextStudioPlugin.SEARCH_PRODUCT_VARIANTS_MENU_ITEM_ID }),
+              ],
+            }),
+          ],
+        }),
 
-          Config(CatalogSearchContextMenu, {
-            plugins: [
-              Config(AddItemsPlugin, {
-                items: [
-                  Config(Item, {
-                    itemId: LivecontextAssetLibraryPlugin.SEARCH_PRODUCT_PICTURES_MENU_ITEM_ID,
-                    baseAction: new SearchProductPicturesAction({ catalogObjectExpression: this.#selectionHolder.getSelectedSearchItemsValueExpression() }),
-                  }),
-                ],
-                after: [
-                  Config(Component, { itemId: LivecontextStudioPlugin.SEARCH_PRODUCT_VARIANTS_MENU_ITEM_ID }),
-                ],
-              }),
-            ],
-          }),
+        Config(CatalogSearchContextMenu, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              items: [
+                Config(Item, {
+                  itemId: LivecontextAssetLibraryPlugin.SEARCH_PRODUCT_PICTURES_MENU_ITEM_ID,
+                  baseAction: new SearchProductPicturesAction({ catalogObjectExpression: this$.#selectionHolder.getSelectedSearchItemsValueExpression() }),
+                }),
+              ],
+              after: [
+                Config(Component, { itemId: LivecontextStudioPlugin.SEARCH_PRODUCT_VARIANTS_MENU_ITEM_ID }),
+              ],
+            }),
+          ],
+        }),
 
-          Config(CatalogRepositoryToolbar, {
-            plugins: [
-              Config(AddItemsPlugin, {
-                items: [
-                  Config(IconButton, {
-                    itemId: LivecontextAssetLibraryPlugin.SEARCH_PRODUCT_PICTURES_BUTTON_ITEM_ID,
-                    baseAction: new SearchProductPicturesAction({ catalogObjectExpression: this.#selectionHolder.getSelectedRepositoryItemsValueExpression() }),
-                  }),
-                ],
-                after: [
-                  Config(Component, { itemId: LivecontextStudioPlugin.SEARCH_PRODUCT_VARIANTS_BUTTON_ITEM_ID }),
-                ],
-              }),
-            ],
-          }),
+        Config(CatalogRepositoryToolbar, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              items: [
+                Config(IconButton, {
+                  itemId: LivecontextAssetLibraryPlugin.SEARCH_PRODUCT_PICTURES_BUTTON_ITEM_ID,
+                  baseAction: new SearchProductPicturesAction({ catalogObjectExpression: this$.#selectionHolder.getSelectedRepositoryItemsValueExpression() }),
+                }),
+              ],
+              after: [
+                Config(Component, { itemId: LivecontextStudioPlugin.SEARCH_PRODUCT_VARIANTS_BUTTON_ITEM_ID }),
+              ],
+            }),
+          ],
+        }),
 
-          Config(TreeViewContextMenu, {
-            plugins: [
-              Config(AddItemsPlugin, {
-                items: [
-                  Config(Item, {
-                    itemId: LivecontextAssetLibraryPlugin.SEARCH_PRODUCT_PICTURES_MENU_ITEM_ID,
-                    baseAction: new SearchProductPicturesAction({ catalogObjectExpression: this.#selectionHolder.getSelectedFolderValueExpression() }),
-                  }),
-                ],
-                after: [
-                  Config(Component, { itemId: LivecontextStudioPlugin.SEARCH_PRODUCT_VARIANTS_MENU_ITEM_ID }),
-                ],
+        Config(TreeViewContextMenu, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              items: [
+                Config(Item, {
+                  itemId: LivecontextAssetLibraryPlugin.SEARCH_PRODUCT_PICTURES_MENU_ITEM_ID,
+                  baseAction: new SearchProductPicturesAction({ catalogObjectExpression: this$.#selectionHolder.getSelectedFolderValueExpression() }),
+                }),
+              ],
+              after: [
+                Config(Component, { itemId: LivecontextStudioPlugin.SEARCH_PRODUCT_VARIANTS_MENU_ITEM_ID }),
+              ],
 
-              }),
-            ],
-          }),
+            }),
+          ],
+        }),
 
-        ],
+      ],
 
-      }), config);
-    })());
+    }), config));
   }
 }
 

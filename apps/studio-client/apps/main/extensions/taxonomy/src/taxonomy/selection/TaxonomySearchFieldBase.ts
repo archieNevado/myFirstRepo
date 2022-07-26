@@ -73,23 +73,23 @@ class TaxonomySearchFieldBase extends StatefulComboBox {
   constructor(config: Config<TaxonomySearchField> = null) {
 
     let superConfig: Config<TaxonomySearchField>;
-    super((()=>{
-      if (config.siteSelectionExpression) {
-        this.siteSelectionExpression = config.siteSelectionExpression;
-        this.siteSelectionExpression.addChangeListener(bind(this, this.#siteSelectionChanged));
-      }
-      this.#searchResultExpression = config.searchResultExpression;
-      this.#showSelectionPath = config.showSelectionPath;
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    if (config.siteSelectionExpression) {
+      this$.siteSelectionExpression = config.siteSelectionExpression;
+      this$.siteSelectionExpression.addChangeListener(bind(this$, this$.#siteSelectionChanged));
+    }
+    this$.#searchResultExpression = config.searchResultExpression;
+    this$.#showSelectionPath = config.showSelectionPath;
 
-      if (this.#showSelectionPath === undefined) {
-        this.#showSelectionPath = true;
-      }
+    if (this$.#showSelectionPath === undefined) {
+      this$.#showSelectionPath = true;
+    }
 
-      this.#resetOnBlur = config.resetOnBlur;
+    this$.#resetOnBlur = config.resetOnBlur;
 
-      superConfig = Config(TaxonomySearchField);
-      return Config(TaxonomySearchField, Ext.apply(superConfig, config));
-    })());
+    superConfig = Config(TaxonomySearchField);
+    super(Config(TaxonomySearchField, Ext.apply(superConfig, config)));
 
     this.getStore().addListener("datachanged", bind(this, this.validate));
     config.linkListWrapper && this.getStore().getFilters().add(this.getFilterFn(config.linkListWrapper));

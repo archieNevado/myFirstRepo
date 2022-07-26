@@ -20,9 +20,11 @@ class CatalogSearchListContainer extends CatalogSearchListContainerBase {
   static readonly VIEW_CONTAINER_ITEM_ID: string = "catalogSearchListContainer";
 
   constructor(config: Config<CatalogSearchListContainer> = null) {
-    super((()=> ConfigUtils.apply(Config(CatalogSearchListContainer, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CatalogSearchListContainer, {
       itemId: CatalogSearchListContainer.VIEW_CONTAINER_ITEM_ID,
-      activeItemValueExpression: this.getActiveItemExpression(),
+      activeItemValueExpression: this$.getActiveItemExpression(),
 
       items: [
         Config(CatalogSearchList, {
@@ -37,7 +39,7 @@ class CatalogSearchListContainer extends CatalogSearchListContainerBase {
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 
   searchResultHitsValueExpression: ValueExpression = null;

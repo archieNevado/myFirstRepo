@@ -14,7 +14,9 @@ class TaxonomyCombo extends TaxonomyComboBase {
   static override readonly xtype: string = "com.coremedia.blueprint.studio.topicpages.config.taxonomyCombo";
 
   constructor(config: Config<TaxonomyCombo> = null) {
-    super((()=> ConfigUtils.apply(Config(TaxonomyCombo, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(TaxonomyCombo, {
       fieldLabel: TopicPages_properties.TopicPages_taxonomy_combo_title,
       anchor: "100%",
       valueField: "id",
@@ -25,7 +27,7 @@ class TaxonomyCombo extends TaxonomyComboBase {
       ...ConfigUtils.append({
         plugins: [
           Config(BindListPlugin, {
-            bindTo: this.getTaxonomiesExpression(),
+            bindTo: this$.getTaxonomiesExpression(),
             fields: [
               Config(DataField, { name: "id" }),
               Config(DataField, {
@@ -37,7 +39,7 @@ class TaxonomyCombo extends TaxonomyComboBase {
         ],
       }),
 
-    }), config))());
+    }), config));
   }
 }
 

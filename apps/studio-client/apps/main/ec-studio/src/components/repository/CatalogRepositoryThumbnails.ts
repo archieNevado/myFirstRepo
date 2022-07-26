@@ -44,7 +44,9 @@ class CatalogRepositoryThumbnails extends CatalogRepositoryThumbnailsBase {
   catalogThumbnailItemsValueExpression: ValueExpression<Array<Bean>>;
 
   constructor(config: Config<CatalogRepositoryThumbnails> = null) {
-    super((()=> ConfigUtils.apply(Config(CatalogRepositoryThumbnails, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CatalogRepositoryThumbnails, {
       layout: "border",
 
       items: [
@@ -55,7 +57,7 @@ class CatalogRepositoryThumbnails extends CatalogRepositoryThumbnailsBase {
           region: "center",
           ui: PanelSkin.EMBEDDED.getSkin(),
           layout: "anchor",
-          listeners: { afterrender: bind(this, this.disableBrowserContextMenu) },
+          listeners: { afterrender: bind(this$, this$.disableBrowserContextMenu) },
           header: Config(PanelHeader, { height: "24px" }),
           items: [
             Config(CatalogThumbDataView, {
@@ -71,8 +73,6 @@ class CatalogRepositoryThumbnails extends CatalogRepositoryThumbnailsBase {
                     contextMenu: Config(CatalogRepositoryContextMenu, {
                       selectedItemsValueExpression: config.selectedItemsValueExpression,
                       selectedFolderValueExpression: config.selectedFolderValueExpression,
-                      newContentDisabledValueExpression: config.newContentDisabledValueExpression,
-                      createdContentValueExpression: config.createdContentValueExpression,
                     }),
                   }),
                 ],
@@ -82,7 +82,7 @@ class CatalogRepositoryThumbnails extends CatalogRepositoryThumbnailsBase {
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 }
 

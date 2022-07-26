@@ -172,9 +172,9 @@
                 <id>create-empty-dirs</id>
                 <phase>generate-sources</phase>
                 <configuration>
-                  <tasks>
+                  <target>
                     <mkdir dir="${project.build.directory}/empty-dirs/coremedia/tools"/>
-                  </tasks>
+                  </target>
                 </configuration>
                 <goals>
                   <goal>run</goal>

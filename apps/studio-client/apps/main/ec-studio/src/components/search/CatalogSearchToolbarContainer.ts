@@ -27,23 +27,25 @@ class CatalogSearchToolbarContainer extends Container {
   selectedSearchItemsValueExpression: ValueExpression = null;
 
   constructor(config: Config<CatalogSearchToolbarContainer> = null) {
-    super((()=> ConfigUtils.apply(Config(CatalogSearchToolbarContainer, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CatalogSearchToolbarContainer, {
       itemId: CatalogSearchToolbarContainer.CATALOG_SEARCH_TOOLBAR_ITEM_ID,
 
       items: [
-        Config(CatalogSearchToolbar, { selectedSearchItemsValueExpression: config.selectedSearchItemsValueExpression }),
+        Config(CatalogSearchToolbar, { selectedItemsValueExpression: config.selectedSearchItemsValueExpression }),
         Config(Toolbar, {
           itemId: "switchViewButtonsToolbar",
           ariaLabel: Editor_properties.CollectionView_switchView_toolbar_label,
           ui: ToolbarSkin.LIGHT.getSkin(),
           items: [
-            Config(SwitchViewButtonsContainer, { scope: this }),
+            Config(SwitchViewButtonsContainer, { scope: this$ }),
           ],
         }),
       ],
       layout: Config(HBoxLayout),
 
-    }), config))());
+    }), config));
   }
 }
 

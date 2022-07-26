@@ -19,28 +19,30 @@ class CommerceReferencesForm extends CommerceReferencesFormBase {
   static override readonly xtype: string = "com.coremedia.livecontext.asset.studio.config.commerceReferencesForm";
 
   constructor(config: Config<CommerceReferencesForm> = null) {
-    super((()=> ConfigUtils.apply(Config(CommerceReferencesForm, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CommerceReferencesForm, {
       itemId: "commerceReferencesForm",
       title: LivecontextStudioPlugin_properties.CMPicture_propertyGroup_commerce,
 
       ...ConfigUtils.append({
         plugins: [
-          Config(BindVisibilityPlugin, { bindTo: this.getShopExpression(config) }),
+          Config(BindVisibilityPlugin, { bindTo: this$.getShopExpression(config) }),
         ],
       }),
       items: [
         Config(CatalogLinkPropertyField, {
-          readOnlyValueExpression: this.getReadOnlyExpression(config),
+          readOnlyValueExpression: this$.getReadOnlyExpression(config),
           propertyName: CommerceReferencesFormBase.PROPERTY_NAME,
           hideCatalog: true,
           linkTypeNames: [CatalogModel.TYPE_CATEGORY, CatalogModel.TYPE_PRODUCT],
-          createStructFunction: bind(this, this.createStructs),
+          createStructFunction: bind(this$, this$.createStructs),
           dropAreaText: ECommerceStudioPlugin_properties.Categories_Products_Link_empty_text,
           additionalToolbarItems: config.additionalToolbarItems,
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 
   additionalToolbarItems: Array<any> = null;

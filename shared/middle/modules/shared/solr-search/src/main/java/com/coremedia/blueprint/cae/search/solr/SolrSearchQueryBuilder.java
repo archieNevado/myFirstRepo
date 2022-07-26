@@ -27,7 +27,7 @@ public class SolrSearchQueryBuilder implements SolrQueryBuilder {
   private static final Logger LOG = LoggerFactory.getLogger(SolrSearchQueryBuilder.class);
   private static final String CONSTANT_FILTER_QUERY = createConstantFilterQuery();
 
-  private SearchPreprocessor<SearchQueryBean> searchPreprocessor;
+  private SearchPreprocessor searchPreprocessor;
   private List<SearchFilterProvider> searchFilterProviders;
 
   private DeliveryConfigurationProperties deliveryConfigurationProperties;
@@ -37,7 +37,7 @@ public class SolrSearchQueryBuilder implements SolrQueryBuilder {
     this.deliveryConfigurationProperties = deliveryConfigurationProperties;
   }
 
-  public void setSearchPreprocessor(SearchPreprocessor<SearchQueryBean> searchPreprocessor) {
+  public void setSearchPreprocessor(SearchPreprocessor searchPreprocessor) {
     this.searchPreprocessor = searchPreprocessor;
   }
 

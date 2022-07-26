@@ -29,11 +29,11 @@ ARG SKIP_GENERATE_LOCK_FILE=true
 RUN --mount=type=secret,mode=0644,id=npmrc,target=/ws-root/apps/studio-client/.npmrc pnpm install --frozen-lockfile=${SKIP_GENERATE_LOCK_FILE}
 ## set build version
 ARG BUILD_VERSION
-RUN if [ -n "${BUILD_VERSION}" ] ; then pnpm run set-version -- ${BUILD_VERSION} ; else echo 'Skip set version.' ; fi
+RUN if [ -n "${BUILD_VERSION}" ] ; then pnpm run set-version ${BUILD_VERSION} ; else echo 'Skip set version.' ; fi
 # build
 RUN pnpm -r run build
 # package
-RUN pnpm -r run package --filter @coremedia-blueprint/studio-client.studio
+RUN pnpm -r --filter @coremedia-blueprint/studio-client.studio run package
 RUN cp $(pnpm -r --filter @coremedia-blueprint/studio-client.studio exec pwd)/build/studio-client.studio-*.zip /tmp/studio-client.studio.zip
 
 

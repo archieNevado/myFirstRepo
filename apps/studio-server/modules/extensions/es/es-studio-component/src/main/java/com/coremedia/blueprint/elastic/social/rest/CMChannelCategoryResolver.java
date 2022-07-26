@@ -4,12 +4,12 @@ import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.elastic.social.rest.api.CategoryKeyAndDisplay;
-import org.apache.commons.lang3.StringUtils;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import javax.inject.Named;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 
-@Named
+@Component
 public class CMChannelCategoryResolver implements CategoryResolver {
 
   // copied from content beans definitions

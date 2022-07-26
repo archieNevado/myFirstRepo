@@ -1,0 +1,33 @@
+query getSiteById($siteId: String) {
+  content {
+    site(siteId: $siteId) {
+      id
+      name
+      locale
+      repositoryPath
+      derivedSites {
+        id
+        name
+        locale
+        repositoryPath
+      }
+      root {
+        title
+        segment
+        id
+        type
+      }
+      crops {
+        name
+        aspectRatio {
+          width
+          height
+        }
+        sizes {
+          width
+          height
+        }
+      }
+    }
+  }
+}

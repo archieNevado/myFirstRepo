@@ -21,7 +21,9 @@ class FilterPanel extends FilterPanelBase {
   static override readonly xtype: string = "com.coremedia.blueprint.studio.topicpages.config.filterPanel";
 
   constructor(config: Config<FilterPanel> = null) {
-    super((()=> ConfigUtils.apply(Config(FilterPanel, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(FilterPanel, {
       layout: "hbox",
 
       items: [
@@ -31,7 +33,7 @@ class FilterPanel extends FilterPanelBase {
           enableKeyEvents: true,
           selectOnFocus: true,
           emptyText: config.emptyText,
-          listeners: { specialkey: bind(this, this.applyFilterInput) },
+          listeners: { specialkey: bind(this$, this$.applyFilterInput) },
           plugins: [
             Config(BindPropertyPlugin, {
               bindTo: config.filterExpression,
@@ -51,7 +53,7 @@ class FilterPanel extends FilterPanelBase {
         Config(Component, { width: 10 }),
       ],
 
-    }), config))());
+    }), config));
   }
 
   emptyText: string = null;

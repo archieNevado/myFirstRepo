@@ -25,12 +25,14 @@ class CommercePricesPropertyFieldGroup extends PropertyFieldGroup {
   }
 
   constructor(config: Config<CommercePricesPropertyFieldGroup> = null) {
-    super((()=> ConfigUtils.apply(Config(CommercePricesPropertyFieldGroup, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CommercePricesPropertyFieldGroup, {
       title: LivecontextStudioPlugin_properties.Commerce_Product_PropertyGroup_prices_title,
 
       ...ConfigUtils.append({
         plugins: [
-          Config(BindVisibilityPlugin, { bindTo: ValueExpressionFactory.createFromFunction(bind(this, this.#isPriceEnabled)) }),
+          Config(BindVisibilityPlugin, { bindTo: ValueExpressionFactory.createFromFunction(bind(this$, this$.#isPriceEnabled)) }),
         ],
       }),
       items: [
@@ -62,7 +64,7 @@ class CommercePricesPropertyFieldGroup extends PropertyFieldGroup {
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 }
 

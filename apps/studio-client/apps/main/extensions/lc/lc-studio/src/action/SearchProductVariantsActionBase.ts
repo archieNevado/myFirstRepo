@@ -29,7 +29,9 @@ class SearchProductVariantsActionBase extends LiveContextCatalogObjectAction {
    * @param config the configuration object
    */
   constructor(config: Config<SearchProductVariantsAction> = null) {
-    super((()=>ActionConfigUtil.extendConfiguration(resourceManager.getResourceBundle(null, LivecontextStudioPlugin_properties).content, config, "searchProductVariants", { handler: bind(this, this.#doExecute) }))());
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ActionConfigUtil.extendConfiguration(resourceManager.getResourceBundle(null, LivecontextStudioPlugin_properties).content, config, "searchProductVariants", { handler: bind(this$, this$.#doExecute) }));
   }
 
   protected override isDisabledFor(catalogObjects: Array<any>): boolean {

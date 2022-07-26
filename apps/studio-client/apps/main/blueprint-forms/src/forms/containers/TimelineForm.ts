@@ -40,7 +40,9 @@ class TimelineForm extends PropertyFieldGroup {
   static readonly TIMELINE_ANNOTATION_WIDGET_ITEM_ID: string = "timeline-annotation-widget";
 
   constructor(config: Config<TimelineForm> = null) {
-    super((()=> ConfigUtils.apply(Config(TimelineForm, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(TimelineForm, {
       title: BlueprintDocumentTypes_properties.CMVideo_timeLine_text,
       itemId: "timelineForm",
 
@@ -50,13 +52,13 @@ class TimelineForm extends PropertyFieldGroup {
           showThumbnails: true,
           hideLabel: true,
           bindTo: config.bindTo,
-          linkListWrapper: this.#getStructContentLinkListWrapper(config),
+          linkListWrapper: this$.#getStructContentLinkListWrapper(config),
           linkType: ConfigUtils.asString(config.linkType || TimelineForm.DEFAULT_LINK_TYPE),
           additionalToolbarItems: [
             Config(Separator),
             Config(QuickCreateLinklistMenu, {
               bindTo: config.bindTo,
-              sourceLinkListVE: this.#getStructContentLinkListWrapper(config).getVE(),
+              sourceLinkListVE: this$.#getStructContentLinkListWrapper(config).getVE(),
             }),
           ],
           fields: [
@@ -86,7 +88,7 @@ class TimelineForm extends PropertyFieldGroup {
           }),
         }),
       ],
-    }), config))());
+    }), config));
   }
 
   #getStructContentLinkListWrapper(config: Config<TimelineForm>): ILinkListWrapper {

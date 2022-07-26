@@ -37,7 +37,9 @@ class TaxonomyFilterPanel extends TaxonomyFilterPanelBase {
   static override readonly BLOCK: BEMBlock = new BEMBlock("cm-taxonomy-filter-panel");
 
   constructor(config: Config<TaxonomyFilterPanel> = null) {
-    super((()=> ConfigUtils.apply(Config(TaxonomyFilterPanel, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(TaxonomyFilterPanel, {
       itemId: ConfigUtils.asString(config.itemId || config.taxonomyId),
       title: TaxonomyStudioPlugin_properties[config.taxonomyId],
       items: [
@@ -47,7 +49,7 @@ class TaxonomyFilterPanel extends TaxonomyFilterPanelBase {
           ],
           items: [
             Config(TaxonomySearchField, {
-              searchResultExpression: this.getSearchResultExpression(),
+              searchResultExpression: this$.getSearchResultExpression(),
               resetOnBlur: true,
               flex: 1,
               itemId: "taxonomyFilterSearchField",
@@ -68,7 +70,7 @@ class TaxonomyFilterPanel extends TaxonomyFilterPanelBase {
               text: TaxonomyStudioPlugin_properties.Taxonomy_action_tooltip,
               tooltip: TaxonomyStudioPlugin_properties.Taxonomy_action_tooltip,
               baseAction: new OpenTaxonomyChooserAction({
-                propertyValueExpression: this.getSelectionExpression(),
+                propertyValueExpression: this$.getSelectionExpression(),
                 taxonomyIdExpression: ValueExpressionFactory.createFromValue(config.taxonomyId),
               }),
             }),
@@ -80,14 +82,14 @@ class TaxonomyFilterPanel extends TaxonomyFilterPanelBase {
           itemId: TaxonomyFilterPanelBase.TAXONOMY_NODE_GRID_ITEM_ID,
           plugins: [
             Config(BindListPlugin, {
-              bindTo: this.getSelectionExpression(),
+              bindTo: this$.getSelectionExpression(),
               fields: [
                 Config(DataField, { name: "name" }),
                 Config(DataField, { name: "html" }),
               ],
             }),
             Config(BindVisibilityPlugin, {
-              bindTo: this.getSelectionExpression(),
+              bindTo: this$.getSelectionExpression(),
               transformer: (selection: Array<any>): boolean => selection.length > 0,
             }),
           ],
@@ -96,7 +98,7 @@ class TaxonomyFilterPanel extends TaxonomyFilterPanelBase {
               stateId: "name",
               sortable: false,
               dataIndex: "name",
-              renderer: bind(this, this.taxonomyRenderer),
+              renderer: bind(this$, this$.taxonomyRenderer),
               flex: 1,
             }),
           ],
@@ -110,7 +112,7 @@ class TaxonomyFilterPanel extends TaxonomyFilterPanelBase {
         ],
       }),
 
-    }), config))());
+    }), config));
   }
 }
 

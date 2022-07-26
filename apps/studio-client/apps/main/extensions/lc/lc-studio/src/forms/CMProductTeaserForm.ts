@@ -29,67 +29,67 @@ class CMProductTeaserForm extends CMProductTeaserFormBase {
   static override readonly xtype: string = "com.coremedia.livecontext.studio.config.cmProductTeaserForm";
 
   constructor(config: Config<CMProductTeaserForm> = null) {
-    super((()=>{
-      this.#catalogObjectExpression = CatalogHelper.getInstance().getCatalogExpression(config.bindTo);
-      return ConfigUtils.apply(Config(CMProductTeaserForm, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    this$.#catalogObjectExpression = CatalogHelper.getInstance().getCatalogExpression(config.bindTo);
+    super(ConfigUtils.apply(Config(CMProductTeaserForm, {
 
-        items: [
-          Config(DocumentForm, {
-            title: BlueprintTabs_properties.Tab_content_title,
-            itemId: "contentTab",
-            items: [
-              Config(PropertyFieldGroup, {
-                title: ECommerceStudioPlugin_properties.Product_label,
-                itemId: "cmProductLinkForm",
-                items: [
-                  Config(CatalogLinkPropertyField, {
-                    bindTo: config.bindTo,
-                    maxCardinality: 1,
-                    replaceOnDrop: true,
-                    itemId: "externalId",
-                    propertyName: "externalId",
-                    linkTypeNames: [CatalogModel.TYPE_PRODUCT],
-                    dropAreaText: LivecontextStudioPlugin_properties.Product_Link_empty_text,
-                  }),
-                ],
-              }),
-              Config(CommerceDetailsForm, {
-                itemId: "productDetailsDocumentForm",
-                bindTo: this.#catalogObjectExpression,
-                contentBindTo: config.bindTo,
-                collapsed: true,
-              }),
-              Config(ProductTeaserDocumentForm),
-              Config(PropertyFieldGroup, {
-                itemId: "shopNowSettings",
-                collapsed: true,
-                title: LivecontextStudioPlugin_properties["CMProductTeaser_localSettings.shopNow_text"],
-                items: [
-                  Config(ViewSettingsRadioGroup, {
-                    propertyName: "localSettings.view.settings",
-                    itemId: "viewSettings",
-                    hideLabel: true,
-                  }),
-                ],
-              }),
-              Config(MediaDocumentForm),
-              Config(ViewTypeSelectorForm),
-              Config(ValidityDocumentForm),
-            ],
-          }),
-          Config(DocumentForm, {
-            title: BlueprintTabs_properties.Tab_extras_title,
-            itemId: "metadata",
-            items: [
-              Config(CategoryDocumentForm),
-            ],
-          }),
-          Config(MultiLanguageDocumentForm),
-          Config(MetaDataInformationForm),
-        ],
+      items: [
+        Config(DocumentForm, {
+          title: BlueprintTabs_properties.Tab_content_title,
+          itemId: "contentTab",
+          items: [
+            Config(PropertyFieldGroup, {
+              title: ECommerceStudioPlugin_properties.Product_label,
+              itemId: "cmProductLinkForm",
+              items: [
+                Config(CatalogLinkPropertyField, {
+                  bindTo: config.bindTo,
+                  maxCardinality: 1,
+                  replaceOnDrop: true,
+                  itemId: "externalId",
+                  propertyName: "externalId",
+                  linkTypeNames: [CatalogModel.TYPE_PRODUCT],
+                  dropAreaText: LivecontextStudioPlugin_properties.Product_Link_empty_text,
+                }),
+              ],
+            }),
+            Config(CommerceDetailsForm, {
+              itemId: "productDetailsDocumentForm",
+              bindTo: this$.#catalogObjectExpression,
+              contentBindTo: config.bindTo,
+              collapsed: true,
+            }),
+            Config(ProductTeaserDocumentForm),
+            Config(PropertyFieldGroup, {
+              itemId: "shopNowSettings",
+              collapsed: true,
+              title: LivecontextStudioPlugin_properties["CMProductTeaser_localSettings.shopNow_text"],
+              items: [
+                Config(ViewSettingsRadioGroup, {
+                  propertyName: "localSettings.view.settings",
+                  itemId: "viewSettings",
+                  hideLabel: true,
+                }),
+              ],
+            }),
+            Config(MediaDocumentForm),
+            Config(ViewTypeSelectorForm),
+            Config(ValidityDocumentForm),
+          ],
+        }),
+        Config(DocumentForm, {
+          title: BlueprintTabs_properties.Tab_extras_title,
+          itemId: "metadata",
+          items: [
+            Config(CategoryDocumentForm),
+          ],
+        }),
+        Config(MultiLanguageDocumentForm),
+        Config(MetaDataInformationForm),
+      ],
 
-      }), config);
-    })());
+    }), config));
   }
 
   #catalogObjectExpression: ValueExpression = null;

@@ -9,7 +9,7 @@
     "jquery": "^3.6.0"
   },
   "devDependencies": {
-    "prettier": "^2.5.1"
+    "prettier": "^2.6.2"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{js,json}\""

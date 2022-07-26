@@ -28,7 +28,9 @@ class TaxonomySearchField extends TaxonomySearchFieldBase {
   static override readonly xtype: string = "com.coremedia.blueprint.studio.config.taxonomy.taxonomySearchField";
 
   constructor(config: Config<TaxonomySearchField> = null) {
-    super((()=> ConfigUtils.apply(Config(TaxonomySearchField, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(TaxonomySearchField, {
       forceSelection: false,
       autoSelect: false,
       enableKeyEvents: true,
@@ -42,10 +44,10 @@ class TaxonomySearchField extends TaxonomySearchFieldBase {
       matchFieldWidth: false,
       pageSize: 0,
       selectOnFocus: true,
-      emptyText: this.getEmptyTextText(config),
-      ariaLabel: this.getEmptyTextText(config),
+      emptyText: this$.getEmptyTextText(config),
+      ariaLabel: this$.getEmptyTextText(config),
       displayField: "name",
-      validator: bind(this, this.tagPrefixValidValidator),
+      validator: bind(this$, this$.tagPrefixValidValidator),
       plugins: [
         Config(BindDisablePlugin, {
           bindTo: config.bindTo,
@@ -55,7 +57,7 @@ class TaxonomySearchField extends TaxonomySearchFieldBase {
       ],
       store: new JsonStore({
         autoDestroy: true,
-        proxy: this.getSearchSuggestionsDataProxy(config),
+        proxy: this$.getSearchSuggestionsDataProxy(config),
         autoLoad: true,
         fields: [
           Config(DataField, { name: TaxonomyNode.PROPERTY_NAME }),
@@ -77,7 +79,7 @@ class TaxonomySearchField extends TaxonomySearchFieldBase {
         emptyText: TaxonomyStudioPlugin_properties.TaxonomySearch_no_hit,
         itemSelector: "div",
       }),
-    }), config))());
+    }), config));
   }
 
   /**

@@ -15,7 +15,9 @@ class GoogleAnalyticsRetrievalFields extends GoogleAnalyticsRetrievalFieldsBase 
   static override readonly xtype: string = "com.coremedia.blueprint.studio.config.googleanalytics.googleAnalyticsRetrievalFields";
 
   constructor(config: Config<GoogleAnalyticsRetrievalFields> = null) {
-    super((()=> ConfigUtils.apply(Config(GoogleAnalyticsRetrievalFields, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(GoogleAnalyticsRetrievalFields, {
       title: GoogleAnalyticsStudioPlugin_properties.SpacerTitle_googleanalytics,
       itemId: "googleAnalyticsRetrievalForm",
 
@@ -31,7 +33,7 @@ class GoogleAnalyticsRetrievalFields extends GoogleAnalyticsRetrievalFieldsBase 
         Config(SingleLinkEditor, {
           itemId: "p12file",
           linkContentType: "CMDownload",
-          bindTo: this.getP12FileVE(),
+          bindTo: this$.getP12FileVE(),
           parentContentValueExpression: config.bindTo,
           linkListLabel: GoogleAnalyticsStudioPlugin_properties.googleanalytics_p12file,
         }),
@@ -49,7 +51,7 @@ class GoogleAnalyticsRetrievalFields extends GoogleAnalyticsRetrievalFieldsBase 
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 }
 

@@ -21,7 +21,9 @@ class CMPersonaFormComboBoxField extends CMPersonaFormComboBox {
   static override readonly xtype: string = "com.coremedia.blueprint.personalization.editorplugin.config.cmPersonaFormComboBoxField";
 
   constructor(config: Config<CMPersonaFormComboBoxField> = null) {
-    super((()=> ConfigUtils.apply(Config(CMPersonaFormComboBoxField, {
+    // @ts-expect-error Ext JS semantics
+    const this$ = this;
+    super(ConfigUtils.apply(Config(CMPersonaFormComboBoxField, {
       properties: config.values,
       typeAhead: true,
       queryMode: "local",
@@ -34,11 +36,11 @@ class CMPersonaFormComboBoxField extends CMPersonaFormComboBox {
         }),
         Config(BindDisablePlugin, {
           forceReadOnlyValueExpression: config.forceReadOnlyValueExpression,
-          bindTo: this.bindTo,
+          bindTo: this$.bindTo,
         }),
       ],
 
-    }), config))());
+    }), config));
   }
 
   /**
