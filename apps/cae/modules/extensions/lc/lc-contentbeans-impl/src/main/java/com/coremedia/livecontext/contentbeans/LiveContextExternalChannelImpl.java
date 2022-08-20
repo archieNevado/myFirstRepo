@@ -94,7 +94,7 @@ public class LiveContextExternalChannelImpl extends CMExternalChannelBase implem
   @NonNull
   public String getExternalId() {
     String externalId = getContent().getString(EXTERNAL_ID);
-    return externalId == null ? "" : externalId.trim();
+    return externalId == null ? "" : externalId;
   }
 
   @Override

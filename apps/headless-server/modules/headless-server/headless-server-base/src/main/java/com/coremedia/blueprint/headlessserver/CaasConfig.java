@@ -26,6 +26,7 @@ import com.coremedia.caas.media.FilenameBlobAdapter;
 import com.coremedia.caas.media.FilenameBlobAdapterFactory;
 import com.coremedia.caas.media.ResponsiveMediaAdapter;
 import com.coremedia.caas.media.ResponsiveMediaAdapterFactory;
+import com.coremedia.caas.media.ResponsiveMediaHashCacheKeyFactory;
 import com.coremedia.caas.model.ContentRoot;
 import com.coremedia.caas.model.adapter.CMGrammarRichTextAdapterFactory;
 import com.coremedia.caas.model.adapter.ContentBlobAdapter;
@@ -65,7 +66,6 @@ import com.coremedia.caas.web.CaasPersistedQueryConfigurationProperties;
 import com.coremedia.caas.web.CaasServiceConfigurationProperties;
 import com.coremedia.caas.web.CaasWebConfig;
 import com.coremedia.caas.web.GraphiqlConfigurationProperties;
-import com.coremedia.caas.web.filter.HSTSResponseHeaderFilter;
 import com.coremedia.caas.web.link.ContentBlobLinkComposer;
 import com.coremedia.caas.web.link.ContentMarkupLinkComposer;
 import com.coremedia.caas.web.link.FilenameBlobLinkComposer;
@@ -196,6 +196,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -226,7 +228,9 @@ import static java.util.Collections.emptyList;
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
         "classpath:/com/coremedia/blueprint/base/pagegrid/impl/bpbase-pagegrid-services.xml",
         "classpath:/com/coremedia/blueprint/base/navigation/context/bpbase-default-contextstrategy.xml",
-        "classpath:/com/coremedia/blueprint/base/links/bpbase-urlpathformatting.xml"
+        "classpath:/com/coremedia/blueprint/base/links/bpbase-urlpathformatting.xml",
+        "classpath:/com/coremedia/cap/common/uapi-services.xml",
+        "classpath:/com/coremedia/cache/cache-services.xml",
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)
 @Import({
         ImageTransformationConfiguration.class,
@@ -278,11 +282,6 @@ public class CaasConfig implements WebMvcConfigurer {
     if (graphiqlConfigurationProperties.isEnabled()) {
       resources.add("/graphiql/static/**");
     }
-    if (caasServiceConfigurationProperties.getSwagger().isEnabled()) {
-      resources.add("swagger-ui.html");
-      resources.add("/webjars/**");
-      resourceLocations.add("classpath:/META-INF/resources/webjars/");
-    }
     if (caasServiceConfigurationProperties.isPreview()) {
       resourceLocations.add("classpath:/static/");
       resourceLocations.add("classpath:/META-INF/resources/");
@@ -310,11 +309,6 @@ public class CaasConfig implements WebMvcConfigurer {
     filter.setIncludeQueryString(true);
     filter.setIncludePayload(false);
     return filter;
-  }
-
-  @Bean
-  public Filter hstsResponseHeaderFilter(CaasServiceConfigurationProperties caasServiceConfigurationProperties) {
-    return new HSTSResponseHeaderFilter(caasServiceConfigurationProperties);
   }
 
   @Bean("cacheManager")
@@ -473,8 +467,8 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public FilenameBlobAdapterFactory filenameBlobAdapter(MimeTypeService mimeTypeService, UrlPathFormater urlPathFormater) {
-    return new FilenameBlobAdapterFactory(mimeTypeService, urlPathFormater);
+  public FilenameBlobAdapterFactory filenameBlobAdapter(MimeTypeService mimeTypeService, UrlPathFormater urlPathFormater, ResponsiveMediaHashCacheKeyFactory responsiveMediaHashCacheKeyFactory) {
+    return new FilenameBlobAdapterFactory(mimeTypeService, urlPathFormater, responsiveMediaHashCacheKeyFactory);
   }
 
   @Bean
@@ -503,8 +497,8 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public ContentBlobAdapterFactory contentBlobAdapter() {
-    return new ContentBlobAdapterFactory();
+  public ContentBlobAdapterFactory contentBlobAdapter(ResponsiveMediaHashCacheKeyFactory responsiveMediaHashCacheKeyFactory) {
+    return new ContentBlobAdapterFactory(responsiveMediaHashCacheKeyFactory);
   }
 
   @Bean
@@ -933,7 +927,8 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public DataLoader<String, Try<String>> remoteLinkDataLoader(RemoteServiceAdapterFactory rsa, CacheManager cacheManager) {
+  public DataLoader<String, Try<String>> remoteLinkDataLoader(RemoteServiceAdapterFactory rsa, CacheManager cacheManager,
+                                                              @Qualifier("remoteLinkExecutorService") ExecutorService remoteLinkExecutorService) {
 
     BatchLoaderWithContext<String, Try<String>> batchLoader = new BatchLoaderWithContext<String, Try<String>>() {
       @Override
@@ -948,7 +943,7 @@ public class CaasConfig implements WebMvcConfigurer {
                     (String) ((Map) environment.getKeyContexts().get(key)).get("context")
             );
           }).collect(Collectors.toList()), (Map<String, String>) environment.getKeyContexts().get(FORWARD_HEADER_MAP));
-        });
+        }, remoteLinkExecutorService);
 
       }
     };
@@ -964,4 +959,8 @@ public class CaasConfig implements WebMvcConfigurer {
     return DataLoader.newDataLoader(batchLoader, options);
   }
 
+  @Bean(name = "remoteLinkExecutorService", destroyMethod= "shutdown")
+  ExecutorService remoteLinkExecutorService() {
+    return Executors.newFixedThreadPool(5);
+  }
 }

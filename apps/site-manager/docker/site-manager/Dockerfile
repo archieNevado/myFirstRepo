@@ -1,4 +1,5 @@
-FROM nginx:1.21.5-alpine
+ARG NGINX_BASE_IMAGE=nginx:1.23.1-alpine
+FROM ${NGINX_BASE_IMAGE}
 ENV CMS_IOR WFS_IOR
 EXPOSE 8080
 COPY entrypoint.sh /entrypoint.sh

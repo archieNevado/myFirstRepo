@@ -23,7 +23,7 @@
     "node": ">=14"
   },
   "dependencies": {
-    "lerna": "^4.0.0"
+    "lerna": "^5.1.8"
   },
   "resolutions": {
     "**/glob-parent": "^5.1.2"

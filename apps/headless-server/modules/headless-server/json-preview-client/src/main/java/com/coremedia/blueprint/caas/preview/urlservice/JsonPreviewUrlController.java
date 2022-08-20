@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
@@ -51,7 +50,7 @@ public class JsonPreviewUrlController {
   @Timed()
   public ResponseEntity<String> previewUrl(@ApiParam(value = "Content id", required = true) @RequestParam(name = "id") String id,
                                            @ApiParam(value = "Type of the content object", required = true) @RequestParam(name = "contentType") String contentType,
-                                           @ApiIgnore HttpServletRequest request) {
+                                           HttpServletRequest request) {
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setAccessControlAllowHeaders(Collections.singletonList(X_CSRF_TOKEN));
 

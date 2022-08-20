@@ -6,7 +6,7 @@
     "@coremedia/tool-utils": "^1.0.0",
     "closest-package": "1.0.0",
     "deepmerge": "^4.0.0",
-    "node-sass": "^6.0.1",
+    "node-sass": "^7.0.1",
     "semver": "^7.1.1"
   },
   "devDependencies": {

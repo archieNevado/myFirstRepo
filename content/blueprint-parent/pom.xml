@@ -34,10 +34,6 @@
       <id>localfs</id>
       <url>file://${project.basedir}/target</url>
     </snapshotRepository>
-    <repository>
-      <id>coremedia.external.releases</id>
-      <url>https://repository.coremedia.com/nexus/service/local/staging/deploy/maven2</url>
-    </repository>
     <site>
       <id>localsite</id>
       <url>file://${project.basedir}/target/site-deploy</url>

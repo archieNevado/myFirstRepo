@@ -107,6 +107,11 @@
       "description": "A file path relative to the theme's root directory where an image to be used as thumbnail is present.",
       "default": null
     },
+    "enableDuplicateSassImportsFix": {
+      "type": "boolean",
+      "description": "Deprecated: The theme tooling had a bug that SASS sometimes was included more than once. As fixing this bug might have impact on your CSS rules this flag determines if the fix is meant to be enabled. The flag will be removed in one of the next releases causing the fix to be enabled by default.",
+      "deprecated": true
+    },
     "styles": {
       "type": "array",
       "items": {

@@ -14,6 +14,7 @@ import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
+import com.coremedia.livecontext.ecommerce.common.CommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
@@ -33,6 +34,8 @@ import org.mockito.quality.Strictness;
 
 import java.util.Optional;
 
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
+import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SKU;
 import static java.util.Locale.US;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Answers.RETURNS_DEEP_STUBS;
@@ -55,7 +58,7 @@ class AugmentationFacadeTest {
   public static final CommerceId PRODUCT_COMMERCE_ID = CommerceIdParserHelper.parseCommerceId(PRODUCT_ID).orElseThrow();
 
   public static final String EXTERNAL_SKU_ID = "myExternalSkuId";
-  private static final String SKU_ID = "acme:///catalog/sku/" + EXTERNAL_PRODUCT_ID;
+  private static final String SKU_ID = "acme:///catalog/sku/" + EXTERNAL_SKU_ID;
   public static final CommerceId SKU_COMMERCE_ID = CommerceIdParserHelper.parseCommerceId(SKU_ID).orElseThrow();
 
   public static final String EXTERNAL_CATEGORY_ID = "myExternalCategoryId";
@@ -227,7 +230,7 @@ class AugmentationFacadeTest {
 
     DataFetcherResult<? extends Augmentation> productAugmentation = testling.getAugmentationBySite(PRODUCT_ID, SITE_ID);
 
-    assertProductAugmentation(productAugmentation);
+    assertProductAugmentation(productAugmentation, PRODUCT);
   }
 
   @Test
@@ -250,15 +253,16 @@ class AugmentationFacadeTest {
 
     DataFetcherResult<? extends Augmentation> productAugmentation = testling.getAugmentationBySite(SKU_ID, SITE_ID);
 
-    assertProductAugmentation(productAugmentation);
+    assertProductAugmentation(productAugmentation, SKU);
   }
 
-  private static void assertProductAugmentation(DataFetcherResult<? extends Augmentation> productAugmentation) {
+  private static void assertProductAugmentation(DataFetcherResult<? extends Augmentation> productAugmentation, CommerceBeanType type) {
     assertThat(productAugmentation).isNotNull();
     assertThat(productAugmentation.getData()).isInstanceOf(ProductAugmentation.class);
     assertThat(productAugmentation.getErrors()).isEmpty();
     assertThat(productAugmentation.getData()).satisfies(augmentation -> {
-      assertThat(augmentation.getCommerceRef()).isNotNull();
+      assertThat(augmentation.getCommerceRef()).isNotNull()
+              .returns(type, CommerceRef::getType);
       assertThat(augmentation.getContent()).isNotNull();
     });
   }

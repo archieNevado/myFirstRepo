@@ -27,9 +27,8 @@
     <docker.repository.suffix>${project.build.finalName}</docker.repository.suffix>
     <docker.image.tag>latest</docker.image.tag>
     <!--used as docker build args-->
-    <docker.webswing-base-image.tag>1.0.6</docker.webswing-base-image.tag>
-    <docker.webswing-base-image.repo>coremedia/webswing</docker.webswing-base-image.repo>
-    <prometheus-agent.version>0.3.1</prometheus-agent.version>
+    <docker.nginx-base-image.tag>1.23.1-alpine</docker.nginx-base-image.tag>
+    <docker.nginx-base-image.repo>nginx</docker.nginx-base-image.repo>
 
     <application-plugin.version>3.0.1</application-plugin.version>
   </properties>
@@ -53,8 +52,7 @@
             <useMavenSettingsForAuth>false</useMavenSettingsForAuth>
             <tag>${docker.image.tag}</tag>
             <buildArgs combine.children="append">
-              <WEBSWING_BASE_IMAGE_TAG>${docker.webswing-base-image.tag}</WEBSWING_BASE_IMAGE_TAG>
-              <WEBSWING_BASE_IMAGE_REPO>${docker.webswing-base-image.repo}</WEBSWING_BASE_IMAGE_REPO>
+              <NGINX_BASE_IMAGE>${docker.nginx-base-image.repo}:${docker.nginx-base-image.tag}</NGINX_BASE_IMAGE>
             </buildArgs>
           </configuration>
           <executions>

@@ -16,7 +16,7 @@
   <h2>Headless Server</h2>
   <ul>
     <li><a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/graphiql" target="_blank" data-cm-test="">Headless Server GraphiQL</a></li>
-    <li><a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/swagger-ui.html" target="_blank" data-cm-test="">Headless Server Swagger UI</a></li>
+    <li><a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/swagger-ui/index.html" target="_blank" data-cm-test="">Headless Server Swagger UI</a></li>
     <li><a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/graphql">Headless Server GraphQL Endpoint URL Preview</a></li>
     <li><a href="https://headless-server-live.{{ getv "/environment/fqdn" }}/graphql">Headless Server GraphQL Endpoint URL Live</a></li>
     {{ if eq (getv "/headless/client/enabled" "true") "true" }}

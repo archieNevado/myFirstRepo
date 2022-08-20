@@ -236,6 +236,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kotlin-stdlib</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>io.specto</groupId>
       <artifactId>hoverfly-java</artifactId>
       <scope>test</scope>

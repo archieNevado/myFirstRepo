@@ -36,6 +36,11 @@ class ApplyConfigsetExtensions {
   // --- main -------------------------------------------------------
 
   static void main(String[] args) {
+    // Static Application Security Testing (SAST) tools like Checkmarx may complain about the usage of the 'args'
+    // parameter, if they assume that they come from an untrusted source. Such reports are false positives.
+    // This is a build-time script that is executed from Maven, and the arguments are set from Maven project properties
+    // as specified at the top of this file where this main method is called. The arguments are controlled by the
+    // build environment and cannot be changed by users of the application.
     try {
       log('INFO', 'Apply extension configsets...', null)
       File srcConfigsets = new File(args[0])
