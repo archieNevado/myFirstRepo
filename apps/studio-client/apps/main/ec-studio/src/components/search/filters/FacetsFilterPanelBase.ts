@@ -3,7 +3,8 @@ import Facet from "@coremedia-blueprint/studio-client.main.ec-studio-model/model
 import Bean from "@coremedia/studio-client.client-core/data/Bean";
 import ValueExpression from "@coremedia/studio-client.client-core/data/ValueExpression";
 import ValueExpressionFactory from "@coremedia/studio-client.client-core/data/ValueExpressionFactory";
-import CollectionViewModel from "@coremedia/studio-client.main.editor-components/sdk/collectionview/CollectionViewModel";
+import CollectionViewModel
+  from "@coremedia/studio-client.main.editor-components/sdk/collectionview/CollectionViewModel";
 import SearchFilter from "@coremedia/studio-client.main.editor-components/sdk/collectionview/search/SearchFilter";
 import Container from "@jangaroo/ext-ts/container/Container";
 import Panel from "@jangaroo/ext-ts/panel/Panel";
@@ -14,10 +15,10 @@ import FacetFilterFieldWrapper from "./FacetFilterFieldWrapper";
 import FacetFilterStateBean from "./FacetFilterStateBean";
 import FacetUtil from "./FacetUtil";
 import FacetsFilterPanel from "./FacetsFilterPanel";
+import editorContext from "@coremedia/studio-client.main.editor-components/sdk/editorContext";
 
 interface FacetsFilterPanelBaseConfig extends Config<Panel>, Partial<Pick<FacetsFilterPanelBase,
-  "filterId"
->> {
+  "filterId">> {
 }
 
 class FacetsFilterPanelBase extends Panel implements SearchFilter {
@@ -152,6 +153,12 @@ class FacetsFilterPanelBase extends Panel implements SearchFilter {
           return undefined;
         }
 
+        const mainState = editorContext._.getCollectionViewModel().getMainStateBean();
+        const viewState = mainState.get(CollectionViewModel.MODE_PROPERTY);
+        if(!viewState || viewState === CollectionViewModel.REPOSITORY_MODE) {
+          return [];
+        }
+
         const searchFacets = category.getSearchFacets();
         if (searchFacets === null) {
           return [];
@@ -216,6 +223,7 @@ class FacetsFilterPanelBase extends Panel implements SearchFilter {
     super.onDestroy();
   }
 }
+
 mixin(FacetsFilterPanelBase, SearchFilter);
 
 export default FacetsFilterPanelBase;

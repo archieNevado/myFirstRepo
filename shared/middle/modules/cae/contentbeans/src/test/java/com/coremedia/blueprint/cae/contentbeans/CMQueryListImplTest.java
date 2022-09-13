@@ -5,9 +5,12 @@ import com.coremedia.blueprint.common.contentbeans.CMQueryList;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.cae.contentbeans.testing.ContentBeanTestBase;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.objectserver.beans.ContentBean;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,8 +18,9 @@ import java.util.List;
 
 import static com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
-
+@TestPropertySource(properties = "delivery.preview-mode=true")
 public class CMQueryListImplTest extends ContentBeanTestBase {
 
   private SearchResultFactory resultFactoryEmptyResult;

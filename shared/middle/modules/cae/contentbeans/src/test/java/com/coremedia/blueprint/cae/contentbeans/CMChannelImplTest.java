@@ -13,6 +13,7 @@ import com.coremedia.cap.struct.Struct;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.test.context.TestPropertySource;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -23,6 +24,7 @@ import static com.coremedia.blueprint.common.datevalidation.ValidityPeriodValida
 /**
  * Unit test for {@link com.coremedia.blueprint.cae.contentbeans.CMChannelImpl}.
  */
+@TestPropertySource(properties = "delivery.preview-mode=true")
 public class CMChannelImplTest extends ContentBeanTestBase {
 
   private CMChannelImpl grandfather;

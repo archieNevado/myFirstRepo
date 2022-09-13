@@ -7,10 +7,10 @@
   },
   "dependencies": {
     "@coremedia/cm-logger": "workspace:*",
-    "archiver": "^5.3.0"
+    "archiver": "^5.3.1"
   },
   "devDependencies": {
-    "prettier": "^2.5.1"
+    "prettier": "^2.7.1"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{js,json}\""

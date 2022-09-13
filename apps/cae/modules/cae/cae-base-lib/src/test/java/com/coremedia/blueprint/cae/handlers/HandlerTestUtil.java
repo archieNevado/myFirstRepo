@@ -7,9 +7,8 @@ import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.objectserver.web.HandlerHelper;
 import org.springframework.web.servlet.ModelAndView;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static com.coremedia.objectserver.web.HandlerHelper.VIEWNAME_DEFAULT;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Utilities for Handler and Linkscheme tests
@@ -26,10 +25,9 @@ public final class HandlerTestUtil {
    * Check that the mav holds a Page, return the Page.
    */
   public static Page extractPage(ModelAndView mav) {
-    assertNotNull("null ModelAndView", mav);
+    assertThat(mav).isNotNull();
     Object self = HandlerHelper.getRootModel(mav);
-    assertNotNull("null self", self);
-    assertTrue("not a page", self instanceof Page);
+    assertThat(self).isInstanceOf(Page.class);
     return (Page) self;
   }
 
@@ -41,11 +39,11 @@ public final class HandlerTestUtil {
   public static void checkPage(ModelAndView mav, int contentId, int channelId) {
     Page page = extractPage(mav);
     Object content = page.getContent();
-    assertNotNull("null content", content);
-    assertEquals("wrong content", contentId, ((CMLinkable)content).getContentId());
+    assertThat(content).isInstanceOf(CMLinkable.class)
+                    .returns(contentId, o -> ((CMLinkable)o).getContentId());
     Navigation navigation = page.getNavigation();
-    assertNotNull("null navigation", navigation);
-    assertEquals("wrong navigation", channelId, ((CMNavigation)navigation).getContentId());
+    assertThat(navigation).isInstanceOf(CMNavigation.class)
+                    .returns(channelId, o -> ((CMNavigation)o).getContentId());
   }
 
   /**
@@ -53,9 +51,8 @@ public final class HandlerTestUtil {
    */
   public static void checkNavigation(ModelAndView mav, int channelId) {
     Object self = HandlerHelper.getRootModel(mav);
-    assertNotNull("null self", self);
-    assertTrue("not a CMNavigation", self instanceof CMNavigation);
-    assertEquals("wrong navigation", channelId, ((CMNavigation) self).getContentId());
+    assertThat(self).isInstanceOf(CMNavigation.class)
+                    .returns(channelId, o -> ((CMNavigation)o).getContentId());
   }
 
   /**
@@ -63,8 +60,7 @@ public final class HandlerTestUtil {
    */
   public static void checkModelAndView(ModelAndView mav, String expectedView, Class<?> clazz) {
     Object self = HandlerHelper.getRootModel(mav);
-    assertNotNull("null self", self);
-    assertTrue("not a " + clazz.getName(), clazz.isInstance(self));
+    assertThat(self).isInstanceOf(clazz);
     checkView(mav, expectedView);
   }
 
@@ -75,9 +71,9 @@ public final class HandlerTestUtil {
     String view = mav.getViewName();
     if (expectedView==null) {
       // null and DEFAULT are equivalent and normalized to null during view dispatching anyway.
-      assertTrue("wrong view: " + view, view==null || HandlerHelper.VIEWNAME_DEFAULT.equals(view));
+      assertThat(view).satisfiesAnyOf(s -> assertThat(s).isNull(), s -> assertThat(s).isEqualTo(VIEWNAME_DEFAULT));
     } else {
-      assertTrue("wrong view: " + view, expectedView.equals(view));
+      assertThat(view).isEqualTo(expectedView);
     }
   }
 
@@ -85,7 +81,7 @@ public final class HandlerTestUtil {
    * Check if the model represents an HttpError.
    */
   public static void checkError(ModelAndView mav, int errorCode) {
-    assertTrue(HandlerHelper.isError(mav, errorCode));
+    assertThat(HandlerHelper.isError(mav, errorCode)).isTrue();
   }
 
 }

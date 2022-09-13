@@ -10,6 +10,7 @@ import LinkListPropertyField from "@coremedia/studio-client.main.editor-componen
 import Config from "@jangaroo/runtime/Config";
 import ConfigUtils from "@jangaroo/runtime/ConfigUtils";
 import LivecontextStudioPlugin_properties from "../LivecontextStudioPlugin_properties";
+import Container from "@jangaroo/ext-ts/container/Container";
 
 interface ProductAssignmentFieldConfig extends Config<PropertyFieldGroup> {
 }
@@ -40,7 +41,15 @@ class ProductAssignmentField extends PropertyFieldGroup {
             linkTypeName: "CMProductTeaser",
           }),
         }),
-        Config(TimelineForm),
+        // this container serves as an anchor for the sideButton used in TimelineForm
+        Config(Container, {
+          items: [
+            Config(TimelineForm, {
+              bindTo: config.bindTo,
+              forceReadOnlyValueExpression: config.forceReadOnlyValueExpression,
+            }),
+          ]
+        })
       ],
     }), config));
   }

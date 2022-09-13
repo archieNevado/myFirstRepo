@@ -95,17 +95,29 @@ public class StructFeedablePopulator implements FeedablePopulator<Object> {
       String key = entry.getKey();
       Object value = entry.getValue();
 
-      //all keys will be added to the index
+      // all keys will be added to the index
       sb.append(key);
       sb.append(' ');
 
-      //only String Properties will be added to the index
+      // String Properties will be added to the index
       if (value instanceof String) {
         sb.append(value);
         sb.append(' ');
-      }
-      // resolve sub-structs
-      else if (value instanceof Map && !((Map) value).isEmpty()) {
+      } else if (value instanceof List) {
+        // resolve lists, String List Properties will be added to the index, Struct Lists will be recursively resolved
+        for (Object item : (List<?>) value) {
+          if (item instanceof String) {
+            sb.append(item);
+            sb.append(' ');
+          } else {
+            if (item instanceof Map) {
+              //noinspection unchecked
+              sb.append(getStringFromStructMap((Map<String, Object>) item));
+            }
+          }
+        }
+      } else if (value instanceof Map) {
+        //noinspection unchecked
         sb.append(getStringFromStructMap((Map<String, Object>) value));
       }
     }

@@ -7,11 +7,11 @@
     "@coremedia/brick-dynamic-include": "workspace:*",
     "@coremedia/brick-node-decoration-service": "workspace:*",
     "@coremedia/brick-utils": "workspace:*",
-    "jquery": "^3.6.0",
+    "jquery": "^3.6.1",
     "slick-carousel-no-font-no-png": "^1.7.5"
   },
   "devDependencies": {
-    "prettier": "^2.5.1"
+    "prettier": "^2.7.1"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{js,json}\""

@@ -16,8 +16,9 @@
   <properties>
     <!--skips execution, to enable activate jib-compat profile-->
     <jib.skip>true</jib.skip>
-    <!--set to build to use without docker being installed but then you need a registry configured in jib.repository-->
+    <!--set to build to use without docker being installed, but then you need a registry configured in jib.repository-->
     <jib.goal>dockerBuild</jib.goal>
+    <application.image-base>nginx:1.23.1-alpine</application.image-base>
     <application.image-prefix>coremedia</application.image-prefix>
     <application.image-suffix>site-manager</application.image-suffix>
     <application.image-tag>${project.version}</application.image-tag>
@@ -109,10 +110,17 @@
       <plugin>
         <groupId>com.google.cloud.tools</groupId>
         <artifactId>jib-maven-plugin</artifactId>
-        <version>3.1.4</version>
+        <version>3.2.1</version>
+        <dependencies>
+          <dependency>
+            <groupId>com.google.cloud.tools</groupId>
+            <artifactId>jib-layer-filter-extension-maven</artifactId>
+            <version>0.3.0</version>
+          </dependency>
+        </dependencies>
         <configuration>
           <from>
-            <image>nginx:1.21.5-alpine</image>
+            <image>${application.image-base}</image>
           </from>
           <to>
             <image>${application.image-prefix}/${application.image-suffix}</image>
@@ -141,6 +149,19 @@
               </permission>
             </permissions>
           </extraDirectories>
+          <pluginExtensions>
+            <pluginExtension>
+              <implementation>com.google.cloud.tools.jib.maven.extension.layerfilter.JibLayerFilterExtension</implementation>
+              <configuration implementation="com.google.cloud.tools.jib.maven.extension.layerfilter.Configuration">
+                <filters>
+                  <!-- Delete pom.xml.jar file falsely added by jib, see https://github.com/GoogleContainerTools/jib/issues/3736-->
+                  <filter>
+                    <glob>**/pom.xml.jar</glob>
+                  </filter>
+                </filters>
+              </configuration>
+            </pluginExtension>
+          </pluginExtensions>
         </configuration>
         <executions>
           <execution>

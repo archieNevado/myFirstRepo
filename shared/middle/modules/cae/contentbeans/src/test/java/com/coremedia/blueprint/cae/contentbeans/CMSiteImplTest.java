@@ -5,13 +5,14 @@ import com.coremedia.blueprint.cae.contentbeans.testing.ContentBeanTestBase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.Calendar;
 import java.util.Locale;
 
 import static com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE;
 
-
+@TestPropertySource(properties = "delivery.preview-mode=true")
 public class CMSiteImplTest extends ContentBeanTestBase {
 
   private CMSite contentBean;

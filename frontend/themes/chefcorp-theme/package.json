@@ -15,11 +15,11 @@
     "@coremedia/brick-utils": "workspace:*",
     "@coremedia/cm-cli": "workspace:*",
     "@coremedia/theme-utils": "workspace:*",
-    "jquery": "^3.6.0",
+    "jquery": "^3.6.1",
     "webpack": "^4.46.0"
   },
   "devDependencies": {
-    "prettier": "^2.5.1"
+    "prettier": "^2.7.1"
   },
   "main": "src/js/index.js",
   "coremedia": {

@@ -91,17 +91,20 @@ class CreateFromTemplateDialogBase extends StudioDialog {
     this.getModel().set(ProcessingData.FOLDER_PROPERTY, []);
     this.getModel().set(CreateFromTemplateStudioPluginSettings_properties.editorial_folder_property, []);
 
-    this.getBaseFolderVE().loadValue((path: string): void => {
-      this.#setBaseFolderInModel(path);
-      this.getBaseFolderVE().addChangeListener(bind(this, this.#loadAndSetBaseFolder));
-    });
+    const folderListView = as(this.queryById(CreateFromTemplateDialogBase.BASE_FOLDER_CHOOSER_ID), FolderChooserListView);
+    folderListView.getAvailablePathsExpression().loadValue(() => {
+      this.getBaseFolderVE().loadValue((path: string): void => {
+        this.#setBaseFolderInModel(path);
+        this.getBaseFolderVE().addChangeListener(bind(this, this.#loadAndSetBaseFolder));
+      });
 
-    this.getContentBaseFolderVE().loadValue((path: string): void => {
-      this.#setContentBaseFolderInModel(path);
-      this.getContentBaseFolderVE().addChangeListener(bind(this, this.#loadAndSetContentBaseFolder));
-    });
+      this.getContentBaseFolderVE().loadValue((path: string): void => {
+        this.#setContentBaseFolderInModel(path);
+        this.getContentBaseFolderVE().addChangeListener(bind(this, this.#loadAndSetContentBaseFolder));
+      });
 
-    this.#validateForm();
+      this.#validateForm();
+    });
   }
 
   #loadAndSetBaseFolder(): void {

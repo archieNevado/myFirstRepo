@@ -65,8 +65,6 @@ import static com.coremedia.objectserver.web.HandlerHelper.createModel;
 import static com.coremedia.objectserver.web.HandlerHelper.createModelWithView;
 import static com.coremedia.objectserver.web.HandlerHelper.notFound;
 import static com.coremedia.objectserver.web.HandlerHelper.redirectTo;
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.springframework.web.util.UriUtils.encodePathSegment;
 
 /**
  * Handler and LinkScheme for all CSS and JavaScript to the requested navigation object
@@ -450,11 +448,7 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
     if (name.endsWith('.'+extension)) {
       name = name.substring(0, name.length() - 1 - extension.length());
     }
-    return uriEncode(name);
-  }
-
-  private String uriEncode(String name) {
-    return encodePathSegment(name, UTF_8);
+    return name;
   }
 
   /**

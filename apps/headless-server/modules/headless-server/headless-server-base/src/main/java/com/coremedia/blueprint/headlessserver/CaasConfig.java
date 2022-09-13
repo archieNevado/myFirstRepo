@@ -212,6 +212,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -247,7 +249,9 @@ import static java.lang.invoke.MethodHandles.lookup;
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",
         "classpath:/com/coremedia/blueprint/base/pagegrid/impl/bpbase-pagegrid-services.xml",
         "classpath:/com/coremedia/blueprint/base/navigation/context/bpbase-default-contextstrategy.xml",
-        "classpath:/com/coremedia/blueprint/base/links/bpbase-urlpathformatting.xml"
+        "classpath:/com/coremedia/blueprint/base/links/bpbase-urlpathformatting.xml",
+        "classpath:/com/coremedia/cap/common/uapi-services.xml",
+        "classpath:/com/coremedia/cache/cache-services.xml",
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)
 @Import({
         ImageTransformationConfiguration.class,
@@ -1071,7 +1075,9 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public DataLoader<String, Try<String>> remoteLinkDataLoader(RemoteServiceAdapterFactory rsa, @Qualifier("remoteLinkCacheMap") CacheMap<Object, Object> remoteLinkCacheMap) {
+  public DataLoader<String, Try<String>> remoteLinkDataLoader(RemoteServiceAdapterFactory rsa,
+                                                              @Qualifier("remoteLinkCacheMap") CacheMap<Object, Object> remoteLinkCacheMap,
+                                                              @Qualifier("remoteLinkExecutorService") ExecutorService remoteLinkExecutorService) {
     BatchLoaderWithContext<String, Try<String>> batchLoader = (keys, environment) -> {
       AtomicReference<Map<String, String>> fwdHeaderMapRef = new AtomicReference<>();
       List<UrlServiceRequestParams> requestParams = keys
@@ -1086,10 +1092,15 @@ public class CaasConfig implements WebMvcConfigurer {
                 );
               }).collect(Collectors.toList());
       Map<String, String> fwdHeaderMap = fwdHeaderMapRef.get() != null ? fwdHeaderMapRef.get() : new HashMap<>();
-      return CompletableFuture.supplyAsync(() -> rsa.to().formatLinks(requestParams, fwdHeaderMap));
+      return CompletableFuture.supplyAsync(() -> rsa.to().formatLinks(requestParams, fwdHeaderMap), remoteLinkExecutorService);
     };
     DataLoaderOptions options = DataLoaderOptions.newOptions().setCacheMap(remoteLinkCacheMap);
     return DataLoaderFactory.newDataLoader(batchLoader, options);
+  }
+
+  @Bean(name = "remoteLinkExecutorService", destroyMethod= "shutdown")
+  ExecutorService remoteLinkExecutorService() {
+    return Executors.newFixedThreadPool(5);
   }
 
   @Bean
