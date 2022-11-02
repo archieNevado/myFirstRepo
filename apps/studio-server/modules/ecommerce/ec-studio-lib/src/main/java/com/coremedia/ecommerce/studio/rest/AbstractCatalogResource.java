@@ -48,11 +48,6 @@ public abstract class AbstractCatalogResource<Entity extends CommerceObject> imp
 
   protected abstract Entity doGetEntity(@NonNull Map<String, String> params);
 
-  @GetMapping
-  public AbstractCatalogRepresentation get(@PathVariable Map<String, String> params) {
-    return getRepresentation(params);
-  }
-
   protected abstract AbstractCatalogRepresentation getRepresentation(@NonNull Map<String, String> params);
 
   @NonNull

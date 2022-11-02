@@ -1,10 +1,11 @@
-import CMArticleSystemForm from "@coremedia-blueprint/studio-client.main.blueprint-forms/forms/components/CMArticleSystemForm";
+import CMArticleSystemForm
+  from "@coremedia-blueprint/studio-client.main.blueprint-forms/forms/components/CMArticleSystemForm";
 import AddItemsPlugin from "@coremedia/studio-client.ext.ui-components/plugins/AddItemsPlugin";
-import ConfigureDashboardPlugin from "@coremedia/studio-client.main.editor-components/sdk/dashboard/ConfigureDashboardPlugin";
+import ConfigureDashboardPlugin
+  from "@coremedia/studio-client.main.editor-components/sdk/dashboard/ConfigureDashboardPlugin";
 import Config from "@jangaroo/runtime/Config";
 import ConfigUtils from "@jangaroo/runtime/ConfigUtils";
 import EsAnalyticsChartPanel from "./EsAnalyticsChartPanel";
-import EsAnalyticsChartWidgetState from "./EsAnalyticsChartWidgetState";
 import EsAnalyticsChartWidgetType from "./EsAnalyticsChartWidgetType";
 import EsAnalyticsStudioPluginBase from "./EsAnalyticsStudioPluginBase";
 
@@ -36,11 +37,6 @@ class EsAnalyticsStudioPlugin extends EsAnalyticsStudioPluginBase {
       configuration: [
         new ConfigureDashboardPlugin({
           widgets: [
-            new EsAnalyticsChartWidgetState({
-              rowspan: 3,
-              column: 2,
-              content: null,
-            }),
           ],
           types: [
             new EsAnalyticsChartWidgetType({}),

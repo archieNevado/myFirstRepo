@@ -65,7 +65,7 @@ export function loadSearchResultPage(
     })
       .done(function (nextSearchResults) {
         log("Loaded search result page successfully.");
-        // append the new results to the the search result page
+        // append the new results to the search result page
         updateTarget($searchResultPageId, $(nextSearchResults), true);
         //set new page url to browser history
         addToBrowserHistory(link, enableBrowserHistory);

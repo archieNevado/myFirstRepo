@@ -469,49 +469,49 @@ public class DownloadPortalHandler {
   @Link(type = DownloadPortal.class, uri = DYNAMIC_PATTERN_PORTAL)
   public UriComponents buildAmDownloadPortalLink(UriTemplate uriTemplate) {
     Navigation navigation = contextHelper.currentSiteContext();
-    return getUriComponentsBuilder(uriTemplate, navigation).build();
+    return getUriComponents(uriTemplate, navigation);
   }
 
   @SuppressWarnings("UnusedDeclaration")
   @Link(type = DownloadPortalContext.class, view = DOWNLOAD_COLLECTION_PREPARE_VIEW, uri = PATTERN_DOWNLOAD_COLLECTION_PREPARE)
   public UriComponents buildDownloadCollectionPrepareLink(UriTemplate uriTemplate) {
     Navigation navigation = contextHelper.currentSiteContext();
-    return getUriComponentsBuilder(uriTemplate, navigation).build();
+    return getUriComponents(uriTemplate, navigation);
   }
 
   @SuppressWarnings("UnusedDeclaration")
   @Link(type = DownloadPortalContext.class, view = DOWNLOAD_COLLECTION_DOWNLOAD_VIEW, uri = PATTERN_DOWNLOAD_COLLECTION_DOWNLOAD)
   public UriComponents buildDownloadCollectionDownloadLink(UriTemplate uriTemplate) {
     Navigation navigation = contextHelper.currentSiteContext();
-    return getUriComponentsBuilder(uriTemplate, navigation).build();
+    return getUriComponents(uriTemplate, navigation);
   }
 
   @SuppressWarnings("UnusedDeclaration")
   @Link(type = CategoryOverview.class, view = ASSETS_VIEW, uri = DYNAMIC_PATTERN_PAGINATED_ASSETS)
   public UriComponents buildAmPaginatedCategoryAssetsLink(UriTemplate uriTemplate) {
     Navigation navigation = contextHelper.currentSiteContext();
-    return getUriComponentsBuilder(uriTemplate, navigation).build();
+    return getUriComponents(uriTemplate, navigation);
   }
 
   @SuppressWarnings("UnusedDeclaration")
   @Link(type = SearchOverview.class, view = ASSETS_VIEW, uri = DYNAMIC_PATTERN_PAGINATED_ASSETS)
   public UriComponents buildAmPaginatedSearchAssetsLink(UriTemplate uriTemplate) {
     Navigation navigation = contextHelper.currentSiteContext();
-    return getUriComponentsBuilder(uriTemplate, navigation).build();
+    return getUriComponents(uriTemplate, navigation);
   }
 
   @SuppressWarnings("UnusedDeclaration")
   @Link(type = TaxonomyOverview.class, view = ASSETS_VIEW, uri = DYNAMIC_PATTERN_PAGINATED_ASSETS)
   public UriComponents buildAmPaginatedSubjectAssetsLink(UriTemplate uriTemplate) {
     Navigation navigation = contextHelper.currentSiteContext();
-    return getUriComponentsBuilder(uriTemplate, navigation).build();
+    return getUriComponents(uriTemplate, navigation);
   }
 
   @SuppressWarnings("UnusedDeclaration")
   @Link(type = DownloadCollectionOverview.class, view = DOWNLOAD_COLLECTION_OVERVIEW_VIEW, uri = PATTERN_DOWNLOAD_COLLECTION_OVERVIEW)
   public UriComponents buildDownloadCollectionOverviewLink(UriTemplate uriTemplate) {
     Navigation navigation = contextHelper.currentSiteContext();
-    return getUriComponentsBuilder(uriTemplate, navigation).build();
+    return getUriComponents(uriTemplate, navigation);
   }
 
   private ModelAndView getModelAndViewWithNavigation(@NonNull Object bean,
@@ -531,7 +531,7 @@ public class DownloadPortalHandler {
     return modelAndView;
   }
 
-  private UriComponentsBuilder getUriComponentsBuilder(UriTemplate uriTemplate, Navigation navigation) {
+  private UriComponents getUriComponents(UriTemplate uriTemplate, Navigation navigation) {
     CMContext navigationContext = null;
     if (null != navigation) {
       navigationContext = navigation.getContext();
@@ -543,7 +543,8 @@ public class DownloadPortalHandler {
     String rootNavigationSegment = navigationContext.getRootNavigation().getSegment();
 
     URI uri = uriTemplate.expand(rootNavigationSegment, nearestNavigationId);
-    return UriComponentsBuilder.fromUri(uri);
+    // UriComponentsBuilder#fromUri should go together with UriComponentsBuilder#build(true) according to the docs
+    return UriComponentsBuilder.fromUri(uri).build(true);
   }
 
   /**

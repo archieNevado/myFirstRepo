@@ -1,7 +1,7 @@
 import Facet from "@coremedia-blueprint/studio-client.main.ec-studio-model/model/Facet";
 import ContentPropertyNames from "@coremedia/studio-client.cap-rest-client/content/ContentPropertyNames";
 import ValueExpression from "@coremedia/studio-client.client-core/data/ValueExpression";
-import InputChipsFieldBase from "@coremedia/studio-client.main.editor-components/sdk/components/ChipsField/InputChipsFieldBase";
+import InputChipsFieldBase from "@coremedia/studio-client.main.editor-components/sdk/components/chipsfield/InputChipsFieldBase";
 import { bind } from "@jangaroo/runtime";
 import Config from "@jangaroo/runtime/Config";
 import CategoryFacetTagField from "./CategoryFacetTagField";

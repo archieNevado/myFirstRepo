@@ -17,6 +17,7 @@
   <import resource="livecontext-fragment.xml"/>
   <import resource="classpath:META-INF/coremedia/lc-services.xml"/>
   <import resource="classpath:/com/coremedia/cache/cache-services.xml"/>
+  <import resource="classpath:/com/coremedia/blueprint/base/links/bpbase-urlpathformatting.xml"/>
 
   <bean id="ecommerceHandlerBase" abstract="true" parent="pageHandlerBase" class="com.coremedia.livecontext.handler.LiveContextPageHandlerBase">
     <property name="dataViewFactory" ref="dataViewFactory"/>
@@ -76,6 +77,7 @@
         class="com.coremedia.livecontext.fragment.links.transformers.resolvers.seo.ExternalSeoSegmentBuilder">
     <property name="navigationSegmentsUriHelper" ref="navigationSegmentsUriHelper"/>
     <property name="settingsService" ref="settingsService"/>
+    <property name="urlPathFormattingHelper" ref="urlPathFormattingHelper"/>
     <property name="cache" ref="cache"/>
   </bean>
 

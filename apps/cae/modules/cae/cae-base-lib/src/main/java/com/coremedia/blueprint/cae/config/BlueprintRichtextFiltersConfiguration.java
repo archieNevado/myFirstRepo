@@ -9,6 +9,8 @@ import com.coremedia.blueprint.cae.richtext.filter.ImgCompletionFilter;
 import com.coremedia.blueprint.cae.richtext.filter.LinkEmbedFilter;
 import com.coremedia.blueprint.cae.richtext.filter.LinkValidationFilter;
 import com.coremedia.blueprint.cae.richtext.filter.P2TagFilter;
+import com.coremedia.blueprint.cae.richtext.filter.ReservedClassToElementConfig;
+import com.coremedia.blueprint.cae.richtext.filter.ReservedClassToElementFilter;
 import com.coremedia.blueprint.cae.richtext.filter.UnsurroundFilter;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cap.content.ContentRepository;
@@ -49,6 +51,7 @@ public class BlueprintRichtextFiltersConfiguration {
                                                                                   FilterFactory linkEmbedFilter,
                                                                                   FilterFactory imageFilter,
                                                                                   FilterFactory p2TagFilter,
+                                                                                  FilterFactory reservedClassToElementFilter,
                                                                                   FilterFactory appendClassToElementFilter,
                                                                                   FilterFactory unsurroundFilter) {
     ConfigurableRichtextToHtmlFilterFactory factory = new ConfigurableRichtextToHtmlFilterFactory();
@@ -63,6 +66,7 @@ public class BlueprintRichtextFiltersConfiguration {
     ));
     factory.setXmlFilters(List.of(
             p2TagFilter,
+            reservedClassToElementFilter,
             appendClassToElementFilter,
             unsurroundFilter
     ));
@@ -172,6 +176,36 @@ public class BlueprintRichtextFiltersConfiguration {
        "p--pre", "pre"
     ));
     return filter;
+  }
+
+  /**
+   * <p>
+   * Converts given elements with given marker class to corresponding HTML
+   * element (stripping the marker class).
+   * </p>
+   * <p>
+   * <strong>Take care of valid HTML:</strong>
+   * Note, that you should ensure that mapped target elements should share the
+   * same valid context (parent, children, attributes) as the originating
+   * element. Thus, for example, replacing {@code <span class="body">} by
+   * {@code <body>} most likely will provide invalid HTML (which browsers may
+   * still tolerate, though).
+   * </p>
+   *
+   * @return filter
+   */
+  @Bean
+  ReservedClassToElementFilter reservedClassToElementFilter() {
+    return new ReservedClassToElementFilter(List.of(
+            // <span class="code"> -> <code>
+            ReservedClassToElementConfig.of("span", "code"),
+            // <span class="strike"> -> <s>
+            ReservedClassToElementConfig.of("span", "strike", "s"),
+            // <span class="underline"> -> <u>
+            ReservedClassToElementConfig.of("span", "underline", "u"),
+            // <td class="td--header"> -> <th>
+            ReservedClassToElementConfig.of("td", "td--header", "th")
+    ));
   }
 
   /**

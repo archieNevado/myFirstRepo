@@ -1,27 +1,30 @@
 package com.coremedia.livecontext.fragment.links.transformers.resolvers.seo;
 
 import com.coremedia.blueprint.base.links.SettingsBasedVanityUrlMapper;
+import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
 import com.coremedia.blueprint.base.links.VanityUrlMapperCacheKey;
+import com.coremedia.blueprint.base.links.impl.BlueprintUrlPathFormattingConfiguration;
 import com.coremedia.blueprint.cae.handlers.NavigationSegmentsUriHelper;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.cache.Cache;
-import com.coremedia.cap.content.Content;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.inject.Inject;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = BlueprintUrlPathFormattingConfiguration.class)
 public class ExternalSeoSegmentBuilderTest {
 
   @Mock
@@ -34,9 +37,6 @@ public class ExternalSeoSegmentBuilderTest {
   private CMNavigation navigation;
 
   @Mock
-  private Content rootChannnel;
-
-  @Mock
   private NavigationSegmentsUriHelper navigationSegmentsUriHelper;
 
   @Mock
@@ -45,6 +45,9 @@ public class ExternalSeoSegmentBuilderTest {
   @Mock
   private SettingsBasedVanityUrlMapper vanityUrlMapper;
 
+  @Inject
+  private UrlPathFormattingHelper urlPathFormattingHelper;
+
   private ExternalSeoSegmentBuilder testling;
 
   @Before
@@ -52,6 +55,7 @@ public class ExternalSeoSegmentBuilderTest {
     testling = new ExternalSeoSegmentBuilder();
     testling.setCache(cache);
     testling.setNavigationSegmentsUriHelper(navigationSegmentsUriHelper);
+    testling.setUrlPathFormattingHelper(urlPathFormattingHelper);
 
     when(navigation.getRootNavigation()).thenReturn(navigation);
 
@@ -73,6 +77,15 @@ public class ExternalSeoSegmentBuilderTest {
     String seoSegment = testling.asSeoSegment(navigation, linkable);
     //special charaters and '--' will be replaced by '-'. Beginning and trailing '-' will be removed.
     assertEquals("pages--perfect-dinner--a-perfect-dinner-home-5678", seoSegment);
+  }
+
+  @Test
+  public void testAsSeoSegmentForCMLinkablesInJapanese() throws Exception {
+    when(linkable.getContentId()).thenReturn(5678);
+    when(linkable.getSegment()).thenReturn("ジーサマー-ルック");
+    String seoSegment = testling.asSeoSegment(navigation, linkable);
+    //special charaters and '--' will be replaced by '-'. Beginning and trailing '-' will be removed.
+    assertEquals("pages--perfect-dinner--%E3%82%B8%E3%83%BC%E3%82%B5%E3%83%9E%E3%83%BC-%E3%83%AB%E3%83%83%E3%82%AF-5678", seoSegment);
   }
 
   @Test

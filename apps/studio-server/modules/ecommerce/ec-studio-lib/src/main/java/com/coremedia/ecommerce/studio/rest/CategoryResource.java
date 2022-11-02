@@ -138,14 +138,6 @@ public class CategoryResource extends CommerceBeanResource<Category> {
     return commerceConnection.getCatalogService().findCategoryById(commerceId, storeContext);
   }
 
-  @NonNull
-  @Override
-  public Map<String, String> getPathVariables(@NonNull Category category) {
-    Map<String, String> params = super.getPathVariables(category);
-    params.put(PATH_ID, category.getExternalId());
-    return params;
-  }
-
   @Override
   @Autowired(required = false)
   @Qualifier("categoryAugmentationService")

@@ -9,7 +9,7 @@ module.exports = {
   externals: [
     "rxjs",
     "@coremedia/service-agent",
-    "@coremedia/studio-client.ckeditor-constants",
+    "@coremedia/studio-client.ckeditor-common",
     "@coremedia/studio-client.cap-base-models",
   ],
 
@@ -20,7 +20,6 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundled-ckeditor.js',
     libraryTarget: 'umd',
-    libraryExport: 'default'
   },
 
   plugins: [

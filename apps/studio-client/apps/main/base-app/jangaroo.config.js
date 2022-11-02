@@ -65,6 +65,29 @@ module.exports = jangarooConfig({
       },
       cmServiceShortcuts: [
         {
+          cmKey: "cmDashboard",
+          cmCategory: "Dashboard",
+          name: "Dashboard",
+          url: "",
+          icons: [
+            {
+              src: "appIcons/dashboard_24.svg",
+              sizes: "24x24",
+              type: "image/svg",
+            },
+            {
+              src: "appIcons/dashboard_192.png",
+              sizes: "192x192",
+              type: "image/png",
+            },
+          ],
+          cmAdministrative: false,
+          cmService: {
+            name: "launchSubAppService",
+            method: "launchSubApp",
+          },
+        },
+        {
           cmKey: "cmLocalizationManager",
           cmOrder: 60,
           cmCategory: "Content",

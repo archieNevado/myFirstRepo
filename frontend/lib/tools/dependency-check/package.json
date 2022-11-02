@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@coremedia/tool-utils": "workspace:*",
+    "@coremedia/tool-utils": "workspace:1.0.0",
     "closest-package": "1.0.0",
     "deepmerge": "^4.2.2",
-    "node-sass": "^6.0.1",
+    "node-sass": "^7.0.3",
     "semver": "^7.3.7"
   },
   "devDependencies": {
-    "prettier": "^2.6.2"
+    "prettier": "^2.7.1"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{js,json}\""

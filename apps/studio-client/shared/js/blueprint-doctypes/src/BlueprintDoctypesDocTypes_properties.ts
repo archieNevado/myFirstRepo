@@ -1,4 +1,6 @@
 interface BlueprintDoctypesDocTypes_properties {
+  Document_displayName: string;
+  Document_description: string;
   CMAbstractCode_displayName: string;
   CMAbstractCode_description: string;
   CMAbstractCode_code_displayName: string;
@@ -445,6 +447,8 @@ interface BlueprintDoctypesDocTypes_properties {
 }
 
 const BlueprintDoctypesDocTypes_properties: BlueprintDoctypesDocTypes_properties = {
+  Document_displayName: "Document",
+  Document_description: "Document",
   CMAbstractCode_displayName: "Code",
   CMAbstractCode_description: "A base type for code-like objects",
   CMAbstractCode_code_displayName: "Code",

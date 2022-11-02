@@ -26,6 +26,9 @@ import CatalogPreferenceWindowPlugin from "./components/preferences/CatalogPrefe
 import CatalogSearchList from "./components/search/CatalogSearchList";
 import CatalogSearchThumbnails from "./components/search/CatalogSearchThumbnails";
 import ECommerceLibraryPlugin from "./library/ECommerceLibraryPlugin";
+import CommerceQuickSearchType from "./quicksearch/CommerceQuickSearchType";
+import ConfigureQuickSearchPlugin
+  from "@coremedia/studio-client.main.quicksearch-components/ConfigureQuickSearchPlugin";
 
 interface ECommerceStudioPluginConfig extends Config<ECommerceStudioPluginBase> {
 }
@@ -104,7 +107,6 @@ class ECommerceStudioPlugin extends ECommerceStudioPluginBase {
             Config(CatalogPreferenceWindowPlugin),
           ],
         }),
-
       ],
 
       configuration: [
@@ -119,6 +121,16 @@ class ECommerceStudioPlugin extends ECommerceStudioPluginBase {
         new CopyResourceBundleProperties({
           destination: resourceManager.getResourceBundle(null, Editor_properties),
           source: resourceManager.getResourceBundle(null, ECommerceStudioPlugin_properties),
+        }),
+
+        new ConfigureQuickSearchPlugin({
+          types: [
+            new CommerceQuickSearchType({
+              id: CatalogModel.TYPE_PRODUCT,
+              title: ECommerceStudioPlugin_properties.Products_label,
+              limit: 5,
+            }),
+          ]
         }),
       ],
 

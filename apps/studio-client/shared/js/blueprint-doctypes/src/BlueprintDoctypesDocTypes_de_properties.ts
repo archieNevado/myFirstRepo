@@ -6,6 +6,8 @@ import BlueprintDoctypesDocTypes_properties from "./BlueprintDoctypesDocTypes_pr
  * @see BlueprintDoctypesDocTypes_properties
  */
 ResourceBundleUtil.override(BlueprintDoctypesDocTypes_properties, {
+  Document_displayName: "Dokument",
+  Document_description: "Dokument",
   CMAbstractCode_displayName: "Code",
   CMAbstractCode_description: "Basistyp für Code-Objekte",
   CMAbstractCode_code_displayName: "Code",

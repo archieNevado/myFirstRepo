@@ -1,0 +1,4 @@
+:root {
+  /* set modal z-index to be higher than Studio's default windows in order to make balloons visible if the editor is rendered in a window */
+  --ck-z-modal: 9001;
+}

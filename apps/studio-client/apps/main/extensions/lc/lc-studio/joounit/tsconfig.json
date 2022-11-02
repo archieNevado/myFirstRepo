@@ -7,7 +7,6 @@
     "outDir": "../build/joounit/src",
     "moduleResolution": "nodenext",
     "types": [
-      "@coremedia-blueprint/studio-client.lc",
       "@coremedia/studio-client.client-core",
       "@coremedia/studio-client.main.editor-components",
       "@jangaroo/ext-ts"

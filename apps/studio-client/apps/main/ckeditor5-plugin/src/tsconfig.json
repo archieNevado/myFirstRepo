@@ -5,11 +5,9 @@
   "compilerOptions": {
     "rootDir": ".",
     "outDir": "../dist/src",
-    "moduleResolution": "nodenext"
-  },
-  "references": [
-    {
-      "path": "../../ckeditor4-plugin/src"
-    }
-  ]
+    "moduleResolution": "nodenext",
+    "types": [
+      "@coremedia/studio-client.main.editor-components"
+    ]
+  }
 }

@@ -1,4 +1,4 @@
-import RichTextPropertyField from "@coremedia/studio-client.main.ckeditor4-components/fields/RichTextPropertyField";
+import RichTextPropertyField from "@coremedia/studio-client.main.editor-components/sdk/premular/fields/richtext/RichTextPropertyField";
 import DocumentForm from "@coremedia/studio-client.main.editor-components/sdk/premular/DocumentForm";
 import DocumentInfo from "@coremedia/studio-client.main.editor-components/sdk/premular/DocumentInfo";
 import DocumentMetaDataFormDispatcher from "@coremedia/studio-client.main.editor-components/sdk/premular/DocumentMetaDataFormDispatcher";

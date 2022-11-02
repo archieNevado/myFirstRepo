@@ -20,7 +20,6 @@ import ListViewNameColumn from "@coremedia/studio-client.main.editor-components/
 import ListViewStatusColumn from "@coremedia/studio-client.main.editor-components/sdk/collectionview/list/ListViewStatusColumn";
 import ListViewTypeIconColumn from "@coremedia/studio-client.main.editor-components/sdk/collectionview/list/ListViewTypeIconColumn";
 import EditorStartup from "@coremedia/studio-client.main.editor-components/sdk/desktop/EditorStartup";
-import LicenseNames_properties from "@coremedia/studio-client.main.editor-components/sdk/desktop/LicenseNames_properties";
 import editorContext from "@coremedia/studio-client.main.editor-components/sdk/editorContext";
 import AddTabbedDocumentFormsPlugin from "@coremedia/studio-client.main.editor-components/sdk/plugins/AddTabbedDocumentFormsPlugin";
 import ConfigureListViewPlugin from "@coremedia/studio-client.main.editor-components/sdk/plugins/ConfigureListViewPlugin";
@@ -201,10 +200,6 @@ class AMStudioPlugin extends AMStudioPluginBase {
           names: AssetConstants.DOCTYPE_ASSET,
           includeSubtypes: true,
           mayCreate: AMStudioPluginBase.mayCreate,
-        }),
-        new CopyResourceBundleProperties({
-          destination: resourceManager.getResourceBundle(null, LicenseNames_properties),
-          source: resourceManager.getResourceBundle(null, AMStudioPlugin_properties),
         }),
         new CopyResourceBundleProperties({
           destination: resourceManager.getResourceBundle(null, ContentTypes_properties),

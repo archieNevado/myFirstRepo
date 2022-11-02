@@ -41,12 +41,18 @@ public class CommerceBeanResourceWithEncodedId {
   }
 
   @GetMapping(value = CommerceBeanResourceWithEncodedId.URI_PATH, produces = MediaType.APPLICATION_JSON_VALUE, params = QUERY_ID)
-  public AbstractCatalogRepresentation get(@PathVariable Map<String, String> params, @RequestParam String id) {
-    CommerceBeanResource resource = lookupResource(params.get(PATH_RESOURCE_TYPE))
+  public AbstractCatalogRepresentation get(@PathVariable(PATH_RESOURCE_TYPE) String resourceType,
+                                           @PathVariable(PATH_SITE_ID) String siteId,
+                                           @PathVariable(PATH_CATALOG_ALIAS) String catalogAlias,
+                                           @RequestParam(PATH_ID) String id) {
+    CommerceBeanResource resource = lookupResource(resourceType)
             .orElseThrow(IllegalArgumentException::new);
 
-    params.put(PATH_ID, id);
-    return resource.getRepresentation(params);
+    return resource.getRepresentation(Map.of(
+            PATH_RESOURCE_TYPE, resourceType,
+            PATH_SITE_ID, siteId,
+            PATH_CATALOG_ALIAS, catalogAlias,
+            PATH_ID, id));
   }
 
   private Optional<CommerceBeanResource> lookupResource(String lookupKey){

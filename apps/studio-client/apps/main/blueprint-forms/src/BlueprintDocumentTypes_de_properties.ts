@@ -434,6 +434,7 @@ ResourceBundleUtil.override(BlueprintDocumentTypes_properties, {
   CMTeasable_teaserTitle_toolTip: "Titel des Teasers",
   CMTeasable_teaserTitle_emptyText: "Geben Sie hier den Teaser-Titel ein.",
   CMTeasable_authors_text: "Autoren",
+  "CMTeasable_localSettings.teaserOverlay.style_text": "Teaser-Stil",
   "CMTeasable_localSettings.teaserSettings.renderLinkToDetailPage_text": "Link zur Detail-Seite rendern",
   CMTeasable_callToActionConfiguration_text: "Call-to-Action-Button",
   CMTeasable_callToActionConfiguration_enable_cta_text: "Zeige Call-to-Action Button an",

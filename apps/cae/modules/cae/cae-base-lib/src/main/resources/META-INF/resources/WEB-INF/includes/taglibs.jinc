@@ -14,9 +14,6 @@
   prefix="bp"
   uri="http://www.coremedia.com/2012/blueprint"
 %><%@ taglib
-  prefix="pbe"
-  uri="http://www.coremedia.com/pbe"
-%><%@ taglib
   prefix="form"
   uri="http://www.springframework.org/tags/form"
 %><%@ taglib

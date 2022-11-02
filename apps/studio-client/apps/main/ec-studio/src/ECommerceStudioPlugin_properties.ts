@@ -26,6 +26,7 @@ interface ECommerceStudioPlugin_properties {
   Catalog_remove_reference_button_confirm: string;
   Catalog_remove_reference_button_abort: string;
   Product_label: string;
+  Products_label: string;
   ProductVariant_label: string;
   MarketingSpot_label: string;
   Marketing_label: string;
@@ -141,6 +142,7 @@ const ECommerceStudioPlugin_properties: ECommerceStudioPlugin_properties = {
   CMAbstractCategory_text: "Abstract Category",
   Category_label: "Category",
   Product_label: "Product",
+  Products_label: "Products",
   ProductVariant_label: "Product Variant",
   MarketingSpot_label: "e-Marketing Spot",
   Marketing_label: "e-Marketing Spots",

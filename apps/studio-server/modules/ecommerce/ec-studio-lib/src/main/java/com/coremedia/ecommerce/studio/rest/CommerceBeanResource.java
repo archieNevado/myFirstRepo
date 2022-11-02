@@ -12,6 +12,8 @@ import com.coremedia.rest.cap.content.ContentRepositoryResource;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.inject.Inject;
 import java.net.URLEncoder;
@@ -35,6 +37,16 @@ public abstract class CommerceBeanResource<Entity extends CommerceBean> extends 
 
   public CommerceBeanResource(CatalogAliasTranslationService catalogAliasTranslationService) {
     super(catalogAliasTranslationService);
+  }
+
+  @GetMapping
+  public AbstractCatalogRepresentation get(@PathVariable(PATH_SITE_ID) final String siteId,
+                                           @PathVariable(PATH_CATALOG_ALIAS) final String catalogAlias,
+                                           @PathVariable(PATH_ID) final String id) {
+    return getRepresentation(Map.of(
+            PATH_ID, id,
+            PATH_CATALOG_ALIAS, catalogAlias,
+            PATH_SITE_ID, siteId));
   }
 
   protected void fillRepresentation(@NonNull Map<String, String> params,

@@ -3,6 +3,7 @@ query getHtmlFragmentById($id: String!) {
     content(id: $id) {
       ... on CMHTML {
         id
+        uuid
         type
         name
         description

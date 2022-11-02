@@ -54,3 +54,17 @@ services:
       PLUGINS_DIRECTORIES_1_: /coremedia/plugins
     volumes:
       - ../plugins/content-server:/coremedia/plugins
+
+  cae-preview:
+    environment:
+      PLUGINS_DIRECTORIES_0_: /coremedia/bundled-plugins
+      PLUGINS_DIRECTORIES_1_: /coremedia/plugins
+    volumes:
+      - ../plugins/cae:/coremedia/plugins
+
+  cae-live:
+    environment:
+      PLUGINS_DIRECTORIES_0_: /coremedia/bundled-plugins
+      PLUGINS_DIRECTORIES_1_: /coremedia/plugins
+    volumes:
+      - ../plugins/cae:/coremedia/plugins

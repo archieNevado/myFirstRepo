@@ -9,11 +9,11 @@
 
   /* basic styles */
   a,
-  .underline {
+  u, .underline {
     text-decoration: underline;
   }
 
-  .strike {
+  s, .strike {
     text-decoration: line-through;
   }
 
@@ -94,7 +94,7 @@
     }
 
     tr:last-child {
-      td {
+      td, th {
         border-bottom: none;
       }
     }

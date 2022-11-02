@@ -1,5 +1,5 @@
-import CKEditorTypes from "@coremedia/studio-client.ckeditor-constants/CKEditorTypes";
-import RichTextPropertyField from "@coremedia/studio-client.main.ckeditor4-components/fields/RichTextPropertyField";
+import CKEditorTypes from "@coremedia/studio-client.ckeditor-common/CKEditorTypes";
+import RichTextPropertyField from "@coremedia/studio-client.main.editor-components/sdk/premular/fields/richtext/RichTextPropertyField";
 import DocumentForm from "@coremedia/studio-client.main.editor-components/sdk/premular/DocumentForm";
 import DocumentTabPanel from "@coremedia/studio-client.main.editor-components/sdk/premular/DocumentTabPanel";
 import PropertyFieldGroup from "@coremedia/studio-client.main.editor-components/sdk/premular/PropertyFieldGroup";

@@ -50,8 +50,15 @@ public class CommerceBeanPreviewsResource implements EntityController<CommerceBe
   }
 
   @GetMapping
-  public ResponseEntity<WithDependencies> get(@PathVariable Map<String, String> params) {
-    CommerceBeanPreviews entity = getEntity(params);
+  public ResponseEntity<WithDependencies> get(@PathVariable(PATH_RESOURCE_TYPE) String resourceType,
+                                              @PathVariable(PATH_SITE_ID) String siteId,
+                                              @PathVariable(PATH_CATALOG_ALIAS) String catalogAlias,
+                                              @PathVariable(PATH_ID) String id) {
+    CommerceBeanPreviews entity = getEntity(Map.of(
+            PATH_RESOURCE_TYPE, resourceType,
+            PATH_SITE_ID, siteId,
+            PATH_CATALOG_ALIAS, catalogAlias,
+            PATH_ID, id));
 
     WithDependencies withDependencies = WithDependencies.compute(connection, linker, () -> previewUrlService.getPreviews(entity.getCommerceBean()));
     return ResponseEntity.ok(withDependencies);

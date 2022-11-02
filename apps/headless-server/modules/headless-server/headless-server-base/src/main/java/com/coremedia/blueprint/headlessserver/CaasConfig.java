@@ -185,7 +185,6 @@ import org.springframework.expression.PropertyAccessor;
 import org.springframework.expression.spel.support.ReflectivePropertyAccessor;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -212,6 +211,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -260,8 +261,6 @@ public class CaasConfig implements WebMvcConfigurer {
 
   private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
   private static final String OPTIONAL_QUERY_ROOT_BEAN_NAME_PREFIX = "query-root:";
-  private static final int TWENTY_FOUR_HOURS = 24 * 60 * 60;
-  private static final int CORS_RESPONSE_MAX_AGE = TWENTY_FOUR_HOURS;
 
   private final CaasServiceConfigurationProperties caasServiceConfigurationProperties;
   private final CaasGraphqlConfigurationProperties caasGraphqlConfigurationProperties;
@@ -287,15 +286,6 @@ public class CaasConfig implements WebMvcConfigurer {
   @Override
   public void configurePathMatch(PathMatchConfigurer matcher) {
     matcher.setUseSuffixPatternMatch(false);
-  }
-
-  @Override
-  public void addCorsMappings(CorsRegistry registry) {
-    registry.addMapping("/**")
-            .allowedOriginPatterns("*")
-            .allowedMethods("GET", "POST", "OPTIONS")
-            .allowCredentials(true)
-            .maxAge(CORS_RESPONSE_MAX_AGE);
   }
 
   @Override
@@ -1040,6 +1030,11 @@ public class CaasConfig implements WebMvcConfigurer {
     return ExtendedScalars.GraphQLLong;
   }
 
+  @Bean
+  public GraphQLScalarType UUID() {
+    return ExtendedScalars.UUID;
+  }
+
   private Map<String, Object> renameQueryRootsWithOptionalPrefix(Map<String, Object> queryRoots) {
     Map<String, Object> renamedQueryRoots = new LinkedHashMap<>(queryRoots.size());
     for (var rootEntry : queryRoots.entrySet()) {
@@ -1073,7 +1068,9 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public DataLoader<String, Try<String>> remoteLinkDataLoader(RemoteServiceAdapterFactory rsa, @Qualifier("remoteLinkCacheMap") CacheMap<Object, Object> remoteLinkCacheMap) {
+  public DataLoader<String, Try<String>> remoteLinkDataLoader(RemoteServiceAdapterFactory rsa,
+                                                              @Qualifier("remoteLinkCacheMap") CacheMap<Object, Object> remoteLinkCacheMap,
+                                                              @Qualifier("remoteLinkExecutorService") ExecutorService remoteLinkExecutorService) {
     BatchLoaderWithContext<String, Try<String>> batchLoader = (keys, environment) -> {
       AtomicReference<Map<String, String>> fwdHeaderMapRef = new AtomicReference<>();
       List<UrlServiceRequestParams> requestParams = keys
@@ -1088,10 +1085,15 @@ public class CaasConfig implements WebMvcConfigurer {
                 );
               }).collect(Collectors.toList());
       Map<String, String> fwdHeaderMap = fwdHeaderMapRef.get() != null ? fwdHeaderMapRef.get() : new HashMap<>();
-      return CompletableFuture.supplyAsync(() -> rsa.to().formatLinks(requestParams, fwdHeaderMap));
+      return CompletableFuture.supplyAsync(() -> rsa.to().formatLinks(requestParams, fwdHeaderMap), remoteLinkExecutorService);
     };
     DataLoaderOptions options = DataLoaderOptions.newOptions().setCacheMap(remoteLinkCacheMap);
     return DataLoaderFactory.newDataLoader(batchLoader, options);
+  }
+
+  @Bean(name = "remoteLinkExecutorService", destroyMethod= "shutdown")
+  ExecutorService remoteLinkExecutorService() {
+    return Executors.newFixedThreadPool(5);
   }
 
   @Bean

@@ -30,6 +30,7 @@ import static org.mockito.Mockito.when;
  * 3. Valid from 1.1.2002 - 31.12.2007
  * 4. Valid from 1.1.2003 - 31.12.2008
  * 5. Valid from 1.1.2004 - 31.12.2009
+ * 6. Valid from 1.1.2020 - 31.12.2150
  * <p/>
  * Test will run with these dates as now
  * 1. 15.3.1999
@@ -63,8 +64,10 @@ class ValidityPeriodValidatorTest {
             mockLinkable(2002, 0, 1, 2007, 11, 31),
             mockLinkable(2003, 0, 1, 2008, 11, 31),
             mockLinkable(2004, 0, 1, 2009, 11, 31),
+            mockLinkable(2020, 0, 1, 2150, 11, 31),
             mockLinkableFrom(2012, 3, 14, mock(CMLinkable.class))
     );
+    when(deliveryConfigurationProperties.isPreviewMode()).thenReturn(true);
   }
 
   @SuppressWarnings("SameParameterValue")
@@ -191,5 +194,16 @@ class ValidityPeriodValidatorTest {
     assertThat(validator.validate(itemsUnfiltered.get(2))).isTrue();
     assertThat(validator.validate(itemsUnfiltered.get(3))).isTrue();
     assertThat(validator.validate(itemsUnfiltered.get(4))).isTrue();
+    assertThat(validator.validate(itemsUnfiltered.get(5))).isFalse();
+  }
+
+  @Test
+  void testValidateNoPreviewMode() {
+    when(deliveryConfigurationProperties.isPreviewMode()).thenReturn(false);
+    preparePreviewDate(15, Calendar.MARCH, 2007);
+    //Validity expired
+    assertThat(validator.validate(itemsUnfiltered.get(4))).isFalse();
+    //Current validity
+    assertThat(validator.validate(itemsUnfiltered.get(5))).isTrue();
   }
 }

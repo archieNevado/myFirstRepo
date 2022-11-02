@@ -2,52 +2,78 @@ import TimeZones_properties from "@coremedia/studio-client.base-models/TimeZones
 import ContentTypes_properties from "@coremedia/studio-client.cap-base-models/content/ContentTypes_properties";
 import session from "@coremedia/studio-client.cap-rest-client/common/session";
 import Content from "@coremedia/studio-client.cap-rest-client/content/Content";
-import Validators_properties from "@coremedia/studio-client.ext.errors-validation-components/validation/Validators_properties";
+import Validators_properties
+  from "@coremedia/studio-client.ext.errors-validation-components/validation/Validators_properties";
 import LocalComboBox from "@coremedia/studio-client.ext.ui-components/components/LocalComboBox";
 import AddArrayItemsPlugin from "@coremedia/studio-client.ext.ui-components/plugins/AddArrayItemsPlugin";
 import NestedRulesPlugin from "@coremedia/studio-client.ext.ui-components/plugins/NestedRulesPlugin";
 import SearchState from "@coremedia/studio-client.library-services-api/SearchState";
-import PageGridLayouts_properties from "@coremedia/studio-client.main.bpbase-pagegrid-studio-plugin/pagegrid/PageGridLayouts_properties";
-import PlacementLinkListPropertyField from "@coremedia/studio-client.main.bpbase-pagegrid-studio-plugin/pagegrid/PlacementLinkListPropertyField";
+import PageGridLayouts_properties
+  from "@coremedia/studio-client.main.bpbase-pagegrid-studio-plugin/pagegrid/PageGridLayouts_properties";
+import PlacementLinkListPropertyField
+  from "@coremedia/studio-client.main.bpbase-pagegrid-studio-plugin/pagegrid/PlacementLinkListPropertyField";
 import PictureUtilsPlugin from "@coremedia/studio-client.main.bpbase-studio-components/pictures/PictureUtilsPlugin";
-import AddPreviewDateSelectorButtonPlugin from "@coremedia/studio-client.main.bpbase-studio-components/previewdate/AddPreviewDateSelectorButtonPlugin";
-import AddPlacementHighlightButtonPlugin from "@coremedia/studio-client.main.bpbase-studio-components/previewhighlighting/AddPlacementHighlightButtonPlugin";
-import Viewtypes_properties from "@coremedia/studio-client.main.bpbase-studio-components/viewtypes/Viewtypes_properties";
+import AddPreviewDateSelectorButtonPlugin
+  from "@coremedia/studio-client.main.bpbase-studio-components/previewdate/AddPreviewDateSelectorButtonPlugin";
+import AddPlacementHighlightButtonPlugin
+  from "@coremedia/studio-client.main.bpbase-studio-components/previewhighlighting/AddPlacementHighlightButtonPlugin";
+import Viewtypes_properties
+  from "@coremedia/studio-client.main.bpbase-studio-components/viewtypes/Viewtypes_properties";
 import DeviceTypes_properties from "@coremedia/studio-client.main.editor-components/DeviceTypes_properties";
-import AddDependingParameterPreviewUrlTransformer from "@coremedia/studio-client.main.editor-components/configuration/AddDependingParameterPreviewUrlTransformer";
-import AddParameterPreviewUrlTransformer from "@coremedia/studio-client.main.editor-components/configuration/AddParameterPreviewUrlTransformer";
-import ConfigureDefaultRichTextImageDocumentType from "@coremedia/studio-client.main.editor-components/configuration/ConfigureDefaultRichTextImageDocumentType";
-import ConfigureDocumentTypes from "@coremedia/studio-client.main.editor-components/configuration/ConfigureDocumentTypes";
-import CopyResourceBundleProperties from "@coremedia/studio-client.main.editor-components/configuration/CopyResourceBundleProperties";
-import RegisterLibraryTreeFilter from "@coremedia/studio-client.main.editor-components/configuration/RegisterLibraryTreeFilter";
+import AddDependingParameterPreviewUrlTransformer
+  from "@coremedia/studio-client.main.editor-components/configuration/AddDependingParameterPreviewUrlTransformer";
+import AddParameterPreviewUrlTransformer
+  from "@coremedia/studio-client.main.editor-components/configuration/AddParameterPreviewUrlTransformer";
+import ConfigureDefaultRichTextImageDocumentType
+  from "@coremedia/studio-client.main.editor-components/configuration/ConfigureDefaultRichTextImageDocumentType";
+import ConfigureDocumentTypes
+  from "@coremedia/studio-client.main.editor-components/configuration/ConfigureDocumentTypes";
+import CopyResourceBundleProperties
+  from "@coremedia/studio-client.main.editor-components/configuration/CopyResourceBundleProperties";
+import RegisterLibraryTreeFilter
+  from "@coremedia/studio-client.main.editor-components/configuration/RegisterLibraryTreeFilter";
 import Actions_properties from "@coremedia/studio-client.main.editor-components/sdk/actions/Actions_properties";
 import CollectionView from "@coremedia/studio-client.main.editor-components/sdk/collectionview/CollectionView";
-import IssueCategories_properties from "@coremedia/studio-client.main.editor-components/sdk/collectionview/search/IssueCategories_properties";
-import ConfigureDashboardPlugin from "@coremedia/studio-client.main.editor-components/sdk/dashboard/ConfigureDashboardPlugin";
-import WidgetState from "@coremedia/studio-client.main.editor-components/sdk/dashboard/WidgetState";
-import FixedSearchWidgetType from "@coremedia/studio-client.main.editor-components/sdk/dashboard/widgets/search/FixedSearchWidgetType";
-import SimpleSearchWidgetState from "@coremedia/studio-client.main.editor-components/sdk/dashboard/widgets/search/SimpleSearchWidgetState";
-import SimpleSearchWidgetType from "@coremedia/studio-client.main.editor-components/sdk/dashboard/widgets/search/SimpleSearchWidgetType";
-import TranslationStatusWidgetState from "@coremedia/studio-client.main.editor-components/sdk/dashboard/widgets/translate/TranslationStatusWidgetState";
-import TranslationStatusWidgetType from "@coremedia/studio-client.main.editor-components/sdk/dashboard/widgets/translate/TranslationStatusWidgetType";
+import IssueCategories_properties
+  from "@coremedia/studio-client.main.editor-components/sdk/collectionview/search/IssueCategories_properties";
+import ConfigureDashboardPlugin
+  from "@coremedia/studio-client.main.editor-components/sdk/dashboard/ConfigureDashboardPlugin";
+import FixedSearchWidgetType
+  from "@coremedia/studio-client.main.editor-components/sdk/dashboard/widgets/search/FixedSearchWidgetType";
+import SimpleSearchWidgetType
+  from "@coremedia/studio-client.main.editor-components/sdk/dashboard/widgets/search/SimpleSearchWidgetType";
+
+import TranslationStatusWidgetType
+  from "@coremedia/studio-client.main.editor-components/sdk/dashboard/widgets/translate/TranslationStatusWidgetType";
 import EditorMainView from "@coremedia/studio-client.main.editor-components/sdk/desktop/EditorMainView";
 import EditorStartup from "@coremedia/studio-client.main.editor-components/sdk/desktop/EditorStartup";
-import ResetInactiveDocumentFormsPlugin from "@coremedia/studio-client.main.editor-components/sdk/desktop/ResetInactiveDocumentFormsPlugin";
+import ResetInactiveDocumentFormsPlugin
+  from "@coremedia/studio-client.main.editor-components/sdk/desktop/ResetInactiveDocumentFormsPlugin";
 import FavoritesButton from "@coremedia/studio-client.main.editor-components/sdk/desktop/maintoolbar/FavoritesButton";
-import ReusableDocumentFormTabsPlugin from "@coremedia/studio-client.main.editor-components/sdk/desktop/reusability/ReusableDocumentFormTabsPlugin";
-import AddDefaultFolderChooserEntry from "@coremedia/studio-client.main.editor-components/sdk/folderchooser/AddDefaultFolderChooserEntry";
-import AddTabbedDocumentFormsPlugin from "@coremedia/studio-client.main.editor-components/sdk/plugins/AddTabbedDocumentFormsPlugin";
-import ContentUtilConfigurationPlugin from "@coremedia/studio-client.main.editor-components/sdk/plugins/ContentUtilConfigurationPlugin";
-import EnableStateBasedPublicationButtonsPlugin from "@coremedia/studio-client.main.editor-components/sdk/plugins/EnableStateBasedPublicationButtonsPlugin";
-import SyncComboBoxValueWithStorePlugin from "@coremedia/studio-client.main.editor-components/sdk/plugins/SyncComboBoxValueWithStorePlugin";
+import ReusableDocumentFormTabsPlugin
+  from "@coremedia/studio-client.main.editor-components/sdk/desktop/reusability/ReusableDocumentFormTabsPlugin";
+import AddDefaultFolderChooserEntry
+  from "@coremedia/studio-client.main.editor-components/sdk/folderchooser/AddDefaultFolderChooserEntry";
+import AddTabbedDocumentFormsPlugin
+  from "@coremedia/studio-client.main.editor-components/sdk/plugins/AddTabbedDocumentFormsPlugin";
+import ContentUtilConfigurationPlugin
+  from "@coremedia/studio-client.main.editor-components/sdk/plugins/ContentUtilConfigurationPlugin";
+import EnableStateBasedPublicationButtonsPlugin
+  from "@coremedia/studio-client.main.editor-components/sdk/plugins/EnableStateBasedPublicationButtonsPlugin";
+import SyncComboBoxValueWithStorePlugin
+  from "@coremedia/studio-client.main.editor-components/sdk/plugins/SyncComboBoxValueWithStorePlugin";
 import DocumentForm from "@coremedia/studio-client.main.editor-components/sdk/premular/DocumentForm";
 import DocumentTabPanel from "@coremedia/studio-client.main.editor-components/sdk/premular/DocumentTabPanel";
-import TabbedDocumentFormDispatcher from "@coremedia/studio-client.main.editor-components/sdk/premular/TabbedDocumentFormDispatcher";
-import LinkListPropertyField from "@coremedia/studio-client.main.editor-components/sdk/premular/fields/LinkListPropertyField";
+import TabbedDocumentFormDispatcher
+  from "@coremedia/studio-client.main.editor-components/sdk/premular/TabbedDocumentFormDispatcher";
+import LinkListPropertyField
+  from "@coremedia/studio-client.main.editor-components/sdk/premular/fields/LinkListPropertyField";
 import PreviewIFrameToolbar from "@coremedia/studio-client.main.editor-components/sdk/preview/PreviewIFrameToolbar";
 import PreviewPanel from "@coremedia/studio-client.main.editor-components/sdk/preview/PreviewPanel";
-import AddQuickCreateLinklistMenuPlugin from "@coremedia/studio-client.main.editor-components/sdk/quickcreate/AddQuickCreateLinklistMenuPlugin";
-import QuickCreateSettings_properties from "@coremedia/studio-client.main.editor-components/sdk/quickcreate/QuickCreateSettings_properties";
+import AddQuickCreateLinklistMenuPlugin
+  from "@coremedia/studio-client.main.editor-components/sdk/quickcreate/AddQuickCreateLinklistMenuPlugin";
+import QuickCreateSettings_properties
+  from "@coremedia/studio-client.main.editor-components/sdk/quickcreate/QuickCreateSettings_properties";
 import AddShortcutsPlugin from "@coremedia/studio-client.main.editor-components/sdk/shortcuts/AddShortcutsPlugin";
 import ImageEditor_properties from "@coremedia/studio-client.main.image-editor-components/ImageEditor_properties";
 import Config from "@jangaroo/runtime/Config";
@@ -99,6 +125,34 @@ import CMThemeForm from "./forms/CMThemeForm";
 import CMVideoForm from "./forms/CMVideoForm";
 import CMViewtypeForm from "./forms/CMViewtypeForm";
 import EditorPreferencesForm from "./forms/EditorPreferencesForm";
+import ConfigureQuickSearchPlugin
+  from "@coremedia/studio-client.main.quicksearch-components/ConfigureQuickSearchPlugin";
+import QuickSearchActionConfiguration from "@coremedia/studio-client.quicksearch-models/QuickSearchActionConfiguration";
+import OpenDialogAction from "@coremedia/studio-client.ext.ui-components/actions/OpenDialogAction";
+import FrameComponents_properties from "@coremedia/studio-client.ext.frame-components/FrameComponents_properties";
+import AboutWindow from "@coremedia/studio-client.ext.frame-components/about/AboutWindow";
+import { changePassword, typePreferences, upload } from "@coremedia/studio-client.common-icons";
+import UploadDialog from "@coremedia/studio-client.main.editor-components/sdk/upload/dialog/UploadDialog";
+import Upload_properties from "@coremedia/studio-client.cap-base-models/upload/Upload_properties";
+import ContentQuickSearchType from "@coremedia/studio-client.quicksearch-models/content/ContentQuickSearchType";
+import AppQuickSearchType from "@coremedia/studio-client.quicksearch-models/apps/AppQuickSearchType";
+import QuickSearch_properties from "@coremedia/studio-client.main.quicksearch-components/QuickSearch_properties";
+import StudioPreferenceWindow from "@coremedia/studio-client.main.editor-components/sdk/desktop/StudioPreferenceWindow";
+import WindowSkin from "@coremedia/studio-client.ext.ui-components/skins/WindowSkin";
+import ChangePasswordWindow from "@coremedia/studio-client.ext.frame-components/login/ChangePasswordWindow";
+import Editor_properties from "@coremedia/studio-client.main.editor-components/Editor_properties";
+import WelcomeWidgetType
+  from "@coremedia/studio-client.main.editor-components/sdk/dashboard/widgets/welcome/WelcomeWidgetType";
+import WelcomeWidgetState
+  from "@coremedia/studio-client.main.editor-components/sdk/dashboard/widgets/welcome/WelcomeWidgetState";
+import BookmarksWidgetType
+  from "@coremedia/studio-client.main.editor-components/sdk/dashboard/widgets/bookmarks/BookmarksWidgetType";
+import WidgetState from "@coremedia/studio-client.main.editor-components/sdk/dashboard/WidgetState";
+import BookmarksWidgetState
+  from "@coremedia/studio-client.main.editor-components/sdk/dashboard/widgets/bookmarks/BookmarksWidgetState";
+import WorkflowQuickSearchType
+  from "@coremedia/studio-client.quicksearch-models/workflow/WorkflowQuickSearchType";
+import WorkflowRouteKeys from "@coremedia/studio-client.workflow-services-api/routes/WorkflowRouteKeys";
 
 interface BlueprintFormsStudioPluginConfig extends Config<BlueprintFormsStudioPluginBase> {
 }
@@ -238,7 +292,7 @@ class BlueprintFormsStudioPlugin extends BlueprintFormsStudioPluginBase {
             new AddArrayItemsPlugin({
               arrayProperty: "defaultItems",
               items:
-                [ {
+                [{
                   "_main": {
                     "searchText": "",
                     "contentType": "Document_",
@@ -260,82 +314,82 @@ class BlueprintFormsStudioPlugin extends BlueprintFormsStudioPluginBase {
                   "lastEdited": { "lastEditedBy": "me" },
                   "_name": BlueprintStudio_properties.FavoritesToolbarDefaultSearchFolderNames_lastEdited,
                 },
-                {
-                  "_main": {
-                    "searchText": "",
-                    "contentType": "CMArticle",
-                    "mode": "search",
-                    "view": "list",
-                    "folder": this$.#root,
-                    "orderBy": "freshness desc",
-                    "limit": 50,
+                  {
+                    "_main": {
+                      "searchText": "",
+                      "contentType": "CMArticle",
+                      "mode": "search",
+                      "view": "list",
+                      "folder": this$.#root,
+                      "orderBy": "freshness desc",
+                      "limit": 50,
+                    },
+                    "site": { "site": "PREFERRED" },
+                    "status": {
+                      "inProduction": true,
+                      "editedByMe": true,
+                      "editedByOthers": true,
+                      "notEdited": true,
+                      "approved": true,
+                      "published": true,
+                      "deleted": false,
+                    },
+                    "lastEdited": { "lastEditedBy": "anyone" },
+                    "_name": BlueprintStudio_properties.FavoritesToolbarDefaultSearchFolderNames_articles,
                   },
-                  "site": { "site": "PREFERRED" },
-                  "status": {
-                    "inProduction": true,
-                    "editedByMe": true,
-                    "editedByOthers": true,
-                    "notEdited": true,
-                    "approved": true,
-                    "published": true,
-                    "deleted": false,
+                  {
+                    "_main": {
+                      "searchText": "",
+                      "contentType": "CMPicture",
+                      "mode": "search",
+                      "view": "thumbnails",
+                      "folder": this$.#root,
+                      "orderBy": "freshness desc",
+                      "limit": 50,
+                    },
+                    "site": { "site": "PREFERRED" },
+                    "status": {
+                      "inProduction": true,
+                      "editedByMe": true,
+                      "editedByOthers": true,
+                      "notEdited": true,
+                      "approved": true,
+                      "published": true,
+                      "deleted": false,
+                    },
+                    "lastEdited": { "lastEditedBy": "anyone" },
+                    "_name": BlueprintStudio_properties.FavoritesToolbarDefaultSearchFolderNames_pictures,
                   },
-                  "lastEdited": { "lastEditedBy": "anyone" },
-                  "_name": BlueprintStudio_properties.FavoritesToolbarDefaultSearchFolderNames_articles,
-                },
-                {
-                  "_main": {
-                    "searchText": "",
-                    "contentType": "CMPicture",
-                    "mode": "search",
-                    "view": "thumbnails",
-                    "folder": this$.#root,
-                    "orderBy": "freshness desc",
-                    "limit": 50,
-                  },
-                  "site": { "site": "PREFERRED" },
-                  "status": {
-                    "inProduction": true,
-                    "editedByMe": true,
-                    "editedByOthers": true,
-                    "notEdited": true,
-                    "approved": true,
-                    "published": true,
-                    "deleted": false,
-                  },
-                  "lastEdited": { "lastEditedBy": "anyone" },
-                  "_name": BlueprintStudio_properties.FavoritesToolbarDefaultSearchFolderNames_pictures,
-                },
-                {
-                  "_main": {
-                    "searchText": "",
-                    "contentType": "CMChannel",
-                    "mode": "search",
-                    "view": "list",
-                    "folder": this$.#root,
-                    "orderBy": "freshness desc",
-                    "limit": 50,
-                  },
-                  "site": { "site": "PREFERRED" },
-                  "status": {
-                    "inProduction": true,
-                    "editedByMe": true,
-                    "editedByOthers": true,
-                    "notEdited": true,
-                    "approved": true,
-                    "published": true,
-                    "deleted": false,
-                  },
-                  "lastEdited": { "lastEditedBy": "anyone" },
-                  "_name": BlueprintStudio_properties.FavoritesToolbarDefaultSearchFolderNames_pages,
-                }],
+                  {
+                    "_main": {
+                      "searchText": "",
+                      "contentType": "CMChannel",
+                      "mode": "search",
+                      "view": "list",
+                      "folder": this$.#root,
+                      "orderBy": "freshness desc",
+                      "limit": 50,
+                    },
+                    "site": { "site": "PREFERRED" },
+                    "status": {
+                      "inProduction": true,
+                      "editedByMe": true,
+                      "editedByOthers": true,
+                      "notEdited": true,
+                      "approved": true,
+                      "published": true,
+                      "deleted": false,
+                    },
+                    "lastEdited": { "lastEditedBy": "anyone" },
+                    "_name": BlueprintStudio_properties.FavoritesToolbarDefaultSearchFolderNames_pages,
+                  }],
             }),
           ],
         }),
       ],
 
       configuration: [
-      /* override the standard studio labels with custom properties */
+        /* override the standard studio labels with custom properties */
         new CopyResourceBundleProperties({
           destination: resourceManager.getResourceBundle(null, ImageEditor_properties),
           source: resourceManager.getResourceBundle(null, BlueprintImageEditor_properties),
@@ -462,19 +516,19 @@ class BlueprintFormsStudioPlugin extends BlueprintFormsStudioPluginBase {
 
         new ConfigureDashboardPlugin({
           widgets: [
-            new SimpleSearchWidgetState({ contentType: "CMChannel" }),
-            new SimpleSearchWidgetState({ contentType: "CMArticle" }),
-            new SimpleSearchWidgetState({ contentType: "CMPicture" }),
+            new WelcomeWidgetState({}),
+            new BookmarksWidgetState({
+              column: WidgetState.NEXT,
+            }),
             new WidgetState({
               widgetTypeId: BlueprintFormsStudioPlugin.EDITED_BY_ME_TYPE,
               column: WidgetState.NEXT,
               rowspan: 1,
             }),
-            new WidgetState({ widgetTypeId: BlueprintFormsStudioPlugin.EDITED_BY_OTHERS_TYPE }),
-            new TranslationStatusWidgetState({}),
           ],
-
           types: [
+            new WelcomeWidgetType({}),
+            new BookmarksWidgetType({}),
             new SimpleSearchWidgetType({}),
 
             new FixedSearchWidgetType({
@@ -503,6 +557,86 @@ class BlueprintFormsStudioPlugin extends BlueprintFormsStudioPluginBase {
 
         new RegisterLibraryTreeFilter({ path: "/Home/$USER/EditorProfile" }),
 
+        new ConfigureQuickSearchPlugin({
+          keepResults: true,
+          imageDocTypes: [
+            "CMPicture"
+          ],
+          actions: [
+            new QuickSearchActionConfiguration({
+              svgIcon: typePreferences,
+              label: FrameComponents_properties.PreferenceWindow_title,
+              additionalKeywords: [FrameComponents_properties.PreferenceWindow_shortcuts_text,
+                FrameComponents_properties.PreferenceWindow_language_text,
+                FrameComponents_properties.PreferenceWindow_SiteSelector_title,
+                FrameComponents_properties.PreferenceWindow_dialogs_title,
+                FrameComponents_properties.PreferenceWindow_shortcuts_text,
+              ],
+              action: (): void => {
+                new OpenDialogAction({
+                  dialogDefaults: Config(StudioPreferenceWindow, {}),
+                }).execute();
+              },
+            }),
+            new QuickSearchActionConfiguration({
+              svgIcon: typePreferences,
+              label: FrameComponents_properties.AboutWindow_title,
+              additionalKeywords: [],
+              action: (): void => {
+                new OpenDialogAction({
+                  dialogDefaults: Config(AboutWindow, {}),
+                }).execute();
+              },
+            }),
+            new QuickSearchActionConfiguration({
+              svgIcon: upload,
+              label: Upload_properties.Upload_button_label,
+              additionalKeywords: [],
+              action: (): void => {
+                new OpenDialogAction({
+                  dialogDefaults: Config(UploadDialog, {}),
+                }).execute();
+              },
+            }),
+            new QuickSearchActionConfiguration({
+              svgIcon: changePassword,
+              label: Editor_properties.HeaderToolbar_changePassword_btn_text,
+              additionalKeywords: Editor_properties.HeaderToolbar_changePassword_btn_text.split(" "),
+              isSearchable: async () => { return session._.getUser().isBuiltIn(); },
+              action: (): void => {
+                new OpenDialogAction({
+                  dialogDefaults: Config(ChangePasswordWindow, {
+                    ui: WindowSkin.GRID_200.getSkin()
+                  }),
+                }).execute();
+              },
+            }),
+          ],
+          types: [
+            new AppQuickSearchType({
+              title: QuickSearch_properties.QuickSearch_search_type_apps,
+            }),
+            new ContentQuickSearchType({
+              id: "allContent",
+              title: QuickSearch_properties.QuickSearch_search_type_content,
+            }),
+            new WorkflowQuickSearchType({
+              id: "openWorkflows",
+              workflowStatus: WorkflowRouteKeys.INBOX_ROUTE_SEGMENT_KEY,
+              title: QuickSearch_properties.QuickSearch_search_type_workflow_inbox,
+            }),
+            new WorkflowQuickSearchType({
+              id: "runningWorkflows",
+              workflowStatus: WorkflowRouteKeys.PENDING_ROUTE_SEGMENT_KEY,
+              title: QuickSearch_properties.QuickSearch_search_type_workflow_pending,
+            }),
+            new WorkflowQuickSearchType({
+              id: "closedWorkflows",
+              workflowStatus: WorkflowRouteKeys.FINISHED_ROUTE_SEGMENT_KEY,
+              title: QuickSearch_properties.QuickSearch_search_type_workflow_finished,
+            }),
+          ]
+        }),
       ],
 
     }), config));

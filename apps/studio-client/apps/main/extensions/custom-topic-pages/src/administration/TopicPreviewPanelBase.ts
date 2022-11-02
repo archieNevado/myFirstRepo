@@ -52,7 +52,7 @@ class TopicPreviewPanelBase extends Panel {
           if (this.#lastUrl !== url) {
             this.#lastUrl = url;
             trace("[INFO]", "Updating topic page preview URL: " + url);
-            this.#frameLabel.setText(TopicPreviewPanelBase.#getFrameHTML(url), false);
+            this.#frameLabel && this.#frameLabel.setText(TopicPreviewPanelBase.#getFrameHTML(url), false);
           }
         }, 2000);
       });

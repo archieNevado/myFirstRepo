@@ -19,10 +19,45 @@
             </document>
             <folder id="11111" name="Content">
               <folder id="111111" name="Navigation">
-                <document id="111112" name="Root" type="CMChannel" creationDate="1967-01-10T20:59:42.000+01:00">
+                <document id="111112" uuid="2b44cbcf-4dca-405f-a274-bae6d9eeadfd" name="Root" type="CMChannel" creationDate="1967-01-10T20:59:42.000+01:00">
                   <version number="1">
-                    <stringProperty name="segment" value="root"/>
+                    <stringProperty name="segment" value="root-en"/>
                     <stringProperty name="title" value="USHomePage"/>
+                    <stringProperty name="htmlTitle" value="htmlTitle"/>
+                    <stringProperty name="htmlDescription" value="htmlDescription"/>
+                    <stringProperty name="teaserTitle" value="TeaserTestTitle"/>
+                    <markupProperty name="teaserText" url="4teaserText.xml" grammar="coremedia-richtext-1.0"/>
+                    <stringProperty name="keywords" value="key 1,key2,key3"/>
+                    <markupProperty name="localSettings" url="4settings.xml" grammar="coremedia-struct-2008"/>
+                    <linkProperty name="pictures">
+                      <link id="111114"/>
+                    </linkProperty>
+                    <linkProperty name="children">
+                      <link id="1111112"/>
+                      <link id="1111114"/>
+                    </linkProperty>
+                  </version>
+                </document>
+                <document id="1111112" name="Subpage" type="CMChannel" creationDate="1967-01-10T20:59:42.000+01:00">
+                  <version number="1">
+                    <stringProperty name="segment" value="subpage-en"/>
+                    <stringProperty name="title" value="USSubpage"/>
+                    <stringProperty name="htmlTitle" value="htmlTitle"/>
+                    <stringProperty name="htmlDescription" value="htmlDescription"/>
+                    <stringProperty name="teaserTitle" value="TeaserTestTitle"/>
+                    <markupProperty name="teaserText" url="4teaserText.xml" grammar="coremedia-richtext-1.0"/>
+                    <stringProperty name="keywords" value="key 1,key2,key3"/>
+                    <markupProperty name="localSettings" url="4settings.xml" grammar="coremedia-struct-2008"/>
+                    <linkProperty name="pictures">
+                      <link id="111114"/>
+                    </linkProperty>
+                  </version>
+                </document>
+                <document id="1111114" name="HiddenSubpage" type="CMChannel" creationDate="1967-01-10T20:59:42.000+01:00">
+                  <version number="1">
+                    <intProperty name="hidden" value="1"/>
+                    <stringProperty name="segment" value="hidden-subpage-en"/>
+                    <stringProperty name="title" value="USHiddenSubpage"/>
                     <stringProperty name="htmlTitle" value="htmlTitle"/>
                     <stringProperty name="htmlDescription" value="htmlDescription"/>
                     <stringProperty name="teaserTitle" value="TeaserTestTitle"/>
@@ -36,23 +71,23 @@
                 </document>
               </folder>
               <folder id="111113" name="Pictures">
-                <document id="111114" type="CMPicture" name="pic16" creationDate="1967-01-10T20:59:42.000+01:00">
+                <document id="111114" uuid="6a454873-f57e-4ef4-8a60-0e2083e9d6d5" type="CMPicture" name="pic16" creationDate="1967-01-10T20:59:42.000+01:00">
                   <version number="1">
                     <markupProperty name="caption" url="4teaserText.xml" grammar="coremedia-richtext-1.0"/>
                     <blobProperty name="data" url="16data.jpg" type="image/jpeg"/>
                   </version>
                 </document>
-                <document id="111118" type="CMVideo" name="vid18">
+                <document id="111118" uuid="47112af0-97b1-49bd-84e7-80701297422e" type="CMVideo" name="vid18">
                   <version number="1">
                     <blobProperty name="data" url="16data.jpg" type="image/jpeg"/>
                   </version>
                 </document>
-                <document id="111120" type="CMDownload" name="pdf20">
+                <document id="111120" uuid="682cffee-6b67-42f4-b608-b56e07dae22b" type="CMDownload" name="pdf20">
                   <version number="1">
                     <blobProperty name="data" url="24data.pdf" type="application/pdf"/>
                   </version>
                 </document>
-                <document id="111122" type="CMHTML" name="html22">
+                <document id="111122" uuid="0ebe01ee-341c-4667-88a0-67f740c668a0" type="CMHTML" name="html22">
                   <version number="1">
                     <stringProperty name="description" value="html description"/>
                     <markupProperty name="data" url="4teaserText.xml" grammar="coremedia-richtext-1.0"/>
@@ -60,7 +95,7 @@
                 </document>
               </folder>
               <folder id="111115" name="Articles">
-                <document id="111116" type="CMArticle" name="TargetArticle1"
+                <document id="111116" uuid="a3eef115-05f6-4d62-a784-37218575ff79" type="CMArticle" name="TargetArticle1"
                           creationDate="1967-01-10T20:59:42.000+01:00">
                   <version number="1">
                     <dateProperty name="creationDate" value="10.01.1967"/>
@@ -80,16 +115,19 @@
                 <linkProperty name="master">
                   <link id="1112"/>
                 </linkProperty>
+                <linkProperty name="root">
+                  <link id="11144"/>
+                </linkProperty>
               </version>
             </document>
             <folder id="11141" name="Content">
               <folder id="11143" name="Navigation">
-                <document id="11144" name="Root" type="CMChannel">
+                <document id="11144" uuid="2c0b9846-2d46-47e0-af6a-875e685196e9" name="Root" type="CMChannel">
                   <version number="1">
                     <linkProperty name="master">
                       <link id="111112"/>
                     </linkProperty>
-                    <stringProperty name="segment" value="root"/>
+                    <stringProperty name="segment" value="root-de"/>
                     <stringProperty name="title" value="DEHomePage"/>
                     <stringProperty name="htmlTitle" value="htmlTitle"/>
                     <stringProperty name="htmlDescription" value="htmlDescription"/>
@@ -109,7 +147,7 @@
       </folder>
       <folder id="3111" name="Settings">
         <folder id="13" name="Taxonomies">
-          <document name="Blog" id="130" type="CMTaxonomy">
+          <document name="Blog" id="130" uuid="39395448-62e6-412a-a1cb-ad31bff67ed0" type="CMTaxonomy">
             <version number="1">
               <stringProperty name="value" value="Blog"/>
             </version>
@@ -119,7 +157,7 @@
               <stringProperty name="value" value="America"/>
             </version>
           </document>
-          <document name="Europe" id="134" type="CMLocTaxonomy">
+          <document name="Europe" id="134" uuid="062e3060-f135-452f-962b-85a6ef014870" type="CMLocTaxonomy">
             <version number="1">
               <stringProperty name="value" value="Europe"/>
               <linkProperty name="children">
@@ -135,7 +173,7 @@
               </linkProperty>
             </version>
           </document>
-          <document name="Hamburg" id="13444" type="CMLocTaxonomy">
+          <document name="Hamburg" id="13444" uuid="3ee8a696-9720-4131-ab87-390c628f4d85" type="CMLocTaxonomy">
             <version number="1">
               <stringProperty name="value" value="Hamburg"/>
             </version>

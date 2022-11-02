@@ -3,6 +3,7 @@ query getCmDownloadById($id: String!) {
     content(id: $id, type: "CMDownload") {
       ... on CMDownload {
         id
+        uuid
         name
         type
         repositoryPath

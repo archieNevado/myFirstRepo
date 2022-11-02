@@ -34,7 +34,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.scheduling.TaskScheduler;
 
 import java.util.List;
@@ -64,7 +63,7 @@ class CommerceCacheInvalidationSourceTest {
   private SitesService sitesService;
 
   @Mock(answer = Answers.CALLS_REAL_METHODS)
-  private ObjectProvider<TaskScheduler> taskScheduler;
+  private TaskScheduler taskScheduler;
 
   private CommerceCacheInvalidationSource testling;
 

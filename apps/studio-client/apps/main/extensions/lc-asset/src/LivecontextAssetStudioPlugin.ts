@@ -7,7 +7,6 @@ import Validators_properties from "@coremedia/studio-client.ext.errors-validatio
 import AddItemsPlugin from "@coremedia/studio-client.ext.ui-components/plugins/AddItemsPlugin";
 import CopyResourceBundleProperties from "@coremedia/studio-client.main.editor-components/configuration/CopyResourceBundleProperties";
 import CollectionView from "@coremedia/studio-client.main.editor-components/sdk/collectionview/CollectionView";
-import LicenseNames_properties from "@coremedia/studio-client.main.editor-components/sdk/desktop/LicenseNames_properties";
 import Component from "@jangaroo/ext-ts/Component";
 import Config from "@jangaroo/runtime/Config";
 import ConfigUtils from "@jangaroo/runtime/ConfigUtils";
@@ -111,10 +110,6 @@ class LivecontextAssetStudioPlugin extends LivecontextAssetStudioPluginBase {
       ],
 
       configuration: [
-        new CopyResourceBundleProperties({
-          destination: resourceManager.getResourceBundle(null, LicenseNames_properties),
-          source: resourceManager.getResourceBundle(null, LivecontextAssetStudioPlugin_properties),
-        }),
         new CopyResourceBundleProperties({
           destination: resourceManager.getResourceBundle(null, Validators_properties),
           source: resourceManager.getResourceBundle(null, LivecontextAssetStudioPlugin_properties),

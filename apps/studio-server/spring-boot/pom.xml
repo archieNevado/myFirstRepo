@@ -19,6 +19,9 @@
 
   <properties>
     <skipGitCommitIdPlugin>true</skipGitCommitIdPlugin>
+
+    <!-- additional profiles for local development, comma-separated list -->
+    <additionalProfiles/>
   </properties>
 
   <build>
@@ -27,12 +30,17 @@
         <plugin>
           <groupId>com.google.cloud.tools</groupId>
           <artifactId>jib-maven-plugin</artifactId>
-          <version>3.1.4</version>
+          <version>3.2.1</version>
           <dependencies>
             <dependency>
               <groupId>com.google.cloud.tools</groupId>
               <artifactId>jib-ownership-extension-maven</artifactId>
               <version>0.1.0</version>
+            </dependency>
+            <dependency>
+              <groupId>com.google.cloud.tools</groupId>
+              <artifactId>jib-layer-filter-extension-maven</artifactId>
+              <version>0.3.0</version>
             </dependency>
           </dependencies>
         </plugin>
@@ -73,11 +81,8 @@
             <time>off</time>
             <!-- common main class -->
             <addResources>true</addResources>
-            <profiles>
-              <!-- spring profile for local development, activates application-local.properties -->
-              <profile>dev</profile>
-              <profile>local</profile>
-            </profiles>
+            <!-- spring profiles for local development, activates application-dev.properties and application-local.properties -->
+            <profiles>dev,local,${additionalProfiles}</profiles>
             <!--
              | DO NOT USE jvmArguments, the spring boot plugin will then fork a VM, which is not possible on Windows
              | hosts due to command line length restrictions.

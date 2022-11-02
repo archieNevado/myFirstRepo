@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@coremedia/brick-utils": "workspace:*"
+    "@coremedia/brick-utils": "workspace:1.0.0"
   },
   "coremedia": {
     "type": "brick"

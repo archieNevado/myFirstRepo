@@ -1,41 +1,59 @@
-import initEditor, { CKEditorInitProps, CKEditorPluginConfig } from "@coremedia-blueprint/studio-client.main.ckeditor5";
+import { createDefaultCKEditor, createSlimCKEditor } from "@coremedia-blueprint/studio-client.ckeditor5/";
 import { serviceAgent } from "@coremedia/service-agent";
-import CKEditor5Wrapper from "@coremedia/studio-client.ckeditor-base/CKEditor5Wrapper";
-import CKEditorTypes from "@coremedia/studio-client.ckeditor-constants/CKEditorTypes";
-import ckEditorFactory from "@coremedia/studio-client.ckeditor-factory/util/ckEditorFactory";
+import CKEditorTypes from "@coremedia/studio-client.ckeditor-common/CKEditorTypes";
+import RichTextAreaConstants from "@coremedia/studio-client.ckeditor-common/RichTextAreaConstants";
+import CKEditor5RichTextArea from "@coremedia/studio-client.ext.ckeditor5-components/CKEditor5RichTextArea";
 import StudioBlobDisplayService
   from "@coremedia/studio-client.ext.ckeditor5-services-toolkit/StudioBlobDisplayService";
 import StudioContentDisplayService
   from "@coremedia/studio-client.ext.ckeditor5-services-toolkit/StudioContentDisplayService";
 import StudioRichtextConfigurationService
   from "@coremedia/studio-client.ext.ckeditor5-services-toolkit/StudioRichtextConfigurationService";
-import richTextAreaFactory
-  from "@coremedia/studio-client.ext.richtext-components-toolkit/richtextArea/richTextAreaFactory";
-import CKEditor5RichTextArea from "@coremedia/studio-client.ext.ckeditor5-components/CKEditor5RichTextArea";
+import richTextAreaRegistry
+  from "@coremedia/studio-client.ext.richtext-components-toolkit/richtextArea/richTextAreaRegistry";
+import { PRIORITY_HIGHEST } from "@coremedia/studio-client.ext.richtext-components-toolkit/richtextPropertyField/IRichTextPropertyFieldRegistry";
+import richTextPropertyFieldRegistry
+  from "@coremedia/studio-client.ext.richtext-components-toolkit/richtextPropertyField/richTextPropertyFieldRegistry";
+import RichTextPropertyField
+  from "@coremedia/studio-client.main.editor-components/sdk/premular/fields/richtext/RichTextPropertyField";
 import Config from "@jangaroo/runtime/Config";
-import RichTextAreaConstants from "@coremedia/studio-client.ckeditor-constants/RichTextAreaConstants";
 
+/**
+ * The default width of embedded images, displayed in richText fields.
+ */
 const DEFAULT_EMBEDDED_IMAGE_MAX_WIDTH: number = 240;
 
-/*
- * WARNING: This package is highly experimental and will probably change or be removed in future releases.
- * Please use for CKEditor 5 preview purposes only and do not rely on any experimental CKEditor Studio API.
- * @experimental
+/**
+ * Services used for CKEditor 5
  */
 const service = new StudioContentDisplayService();
 serviceAgent.registerService(service);
 
-const richtextConfigurationService = new StudioRichtextConfigurationService();
-serviceAgent.registerService(richtextConfigurationService);
+const richTextConfigurationService = new StudioRichtextConfigurationService();
+serviceAgent.registerService(richTextConfigurationService);
 
 const studioBlobDisplayService = new StudioBlobDisplayService(DEFAULT_EMBEDDED_IMAGE_MAX_WIDTH);
 serviceAgent.registerService(studioBlobDisplayService);
 
 /**
- * Register a wrapper for the default editor type
+ * Register RichTextAreas, representing different editor versions, in the {@link richTextAreaRegistry}.
+ * If only CKEditor 5 is ued, there should be no need to register any further richTextAreas.
+ *
+ * There may be different editor configurations, that need to be available per editor version.
+ * This can be done by adding the constructor functions of those configurations to the map
+ * in the richTextArea config.
  */
-ckEditorFactory.registerConstructor(CKEditorTypes.DEFAULT_EDITOR_TYPE, (editorType, pluginConfig, placeholderText, language) => {
-  const pluginConfigConverted: CKEditorPluginConfig = pluginConfig as CKEditorPluginConfig;
-  return new CKEditor5Wrapper(initEditor({type: editorType, pluginConfig: pluginConfigConverted, language, placeholderText}));
-}, 5);
-richTextAreaFactory.registerRichTextArea(RichTextAreaConstants.CKE5_EDITOR, Config(CKEditor5RichTextArea, {}))
+richTextAreaRegistry.registerRichTextArea(RichTextAreaConstants.CKE5_EDITOR, Config(CKEditor5RichTextArea, {
+  editorTypeMap: new Map([
+    [CKEditorTypes.DEFAULT_EDITOR_TYPE, createDefaultCKEditor],
+    [CKEditorTypes.NO_TOOLBAR_EDITOR_TYPE, createSlimCKEditor],
+  ]),
+}));
+
+/**
+ * Registers the RichTextPropertyField for ckeditor 5 with highest priority and therefore
+ * overrides CKEditor 4 for core components.
+ *
+ * This mechanism will be removed with ckeditor 4 in the future.
+ */
+richTextPropertyFieldRegistry.registerRichTextPropertyFieldConfig(Config(RichTextPropertyField), PRIORITY_HIGHEST);

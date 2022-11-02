@@ -1,0 +1,19 @@
+query getTransformedRichtext($aid: String!, $pid: String! $view: String, $suppressRootTag: Boolean) {
+  content {
+    article(id: $aid) {
+      id
+      type
+      teaserText {
+        text(view: $view, suppressRootTag: $suppressRootTag)
+      }
+      detailText {
+        text(view: $view, suppressRootTag: $suppressRootTag)
+      }
+    }
+    picture(id: $pid) {
+      id
+      type
+      caption(view: $view, suppressRootTag: $suppressRootTag)
+    }
+  }
+}

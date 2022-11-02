@@ -1,0 +1,9 @@
+query getContentById($id: String!, $type: String!) {
+  content {
+    content(id: $id,  type: $type) {
+      id
+      name
+      type
+    }
+  }
+}

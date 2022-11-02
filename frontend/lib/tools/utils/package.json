@@ -7,7 +7,7 @@
     "node": ">=16"
   },
   "dependencies": {
-    "@coremedia/cm-logger": "workspace:*",
+    "@coremedia/cm-logger": "workspace:1.0.0",
     "ajv": "^6.12.6",
     "closest-package": "^1.0.0",
     "find-up": "^5.0.0",
@@ -15,11 +15,11 @@
     "js-yaml": "^4.1.0",
     "json5": "^2.2.1",
     "lodash": "^4.17.21",
-    "selfsigned": "^2.0.1"
+    "selfsigned": "^2.1.1"
   },
   "devDependencies": {
     "jest": "^27.5.1",
-    "prettier": "^2.6.2"
+    "prettier": "^2.7.1"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{js,json}\"",

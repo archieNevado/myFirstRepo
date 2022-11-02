@@ -175,7 +175,7 @@
   <bean id="renditionFeedablePopulator"
         class="com.coremedia.blueprint.feeder.cae.assets.AssetDocumentBlobFeedablePopulator">
     <description>
-      FeedablePopulator that sets the the blob field.
+      FeedablePopulator that sets the blob field.
     </description>
   </bean>
 

@@ -14,7 +14,7 @@ import StatusColumn from "@coremedia/studio-client.ext.cap-base-components/colum
 import TypeIconColumn from "@coremedia/studio-client.ext.cap-base-components/columns/TypeIconColumn";
 import LinkListThumbnailColumn from "@coremedia/studio-client.ext.content-link-list-components/columns/LinkListThumbnailColumn";
 import DataField from "@coremedia/studio-client.ext.ui-components/store/DataField";
-import RichTextPropertyField from "@coremedia/studio-client.main.ckeditor4-components/fields/RichTextPropertyField";
+import RichTextPropertyField from "@coremedia/studio-client.main.editor-components/sdk/premular/fields/richtext/RichTextPropertyField";
 import DocumentForm from "@coremedia/studio-client.main.editor-components/sdk/premular/DocumentForm";
 import DocumentTabPanel from "@coremedia/studio-client.main.editor-components/sdk/premular/DocumentTabPanel";
 import PropertyFieldGroup from "@coremedia/studio-client.main.editor-components/sdk/premular/PropertyFieldGroup";

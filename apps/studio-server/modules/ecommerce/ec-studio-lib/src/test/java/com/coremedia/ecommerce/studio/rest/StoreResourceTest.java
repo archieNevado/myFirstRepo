@@ -32,7 +32,7 @@ public class StoreResourceTest {
   @Test
   public void handlePostNoData() {
     Map<String, Object> rawJson = emptyMap();
-    assertThat(storeResource.handlePost(emptyMap(), rawJson)).isNull();
+    assertThat(storeResource.handlePost(null, rawJson)).isNull();
   }
 
   @Test
@@ -41,6 +41,6 @@ public class StoreResourceTest {
     String url = "http://test.net";
     when(pbeShopUrlTargetResolver.resolveUrl(url, null)).thenReturn(o);
     Map<String, Object> rawJson = singletonMap("shopUrl", url);
-    assertThat(storeResource.handlePost(emptyMap(), rawJson)).isSameAs(o);
+    assertThat(storeResource.handlePost(null, rawJson)).isSameAs(o);
   }
 }

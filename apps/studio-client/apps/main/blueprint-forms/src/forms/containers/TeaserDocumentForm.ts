@@ -1,6 +1,5 @@
-import TeaserOverlayPropertyField from "@coremedia/studio-client.main.ckeditor4-components/fields/TeaserOverlayPropertyField";
+import TeaserOverlayContainer from "@coremedia/studio-client.main.teaser-overlay-components/TeaserOverlayContainer";
 import StringPropertyField from "@coremedia/studio-client.main.editor-components/sdk/premular/fields/StringPropertyField";
-import StringPropertyFieldDelegatePlugin from "@coremedia/studio-client.main.editor-components/sdk/premular/fields/plugins/StringPropertyFieldDelegatePlugin";
 import ShowIssuesPlugin from "@coremedia/studio-client.main.editor-components/sdk/validation/ShowIssuesPlugin";
 import Config from "@jangaroo/runtime/Config";
 import ConfigUtils from "@jangaroo/runtime/ConfigUtils";
@@ -29,13 +28,8 @@ class TeaserDocumentForm extends TeaserDocumentFormBase {
         Config(StringPropertyField, {
           itemId: "teaserTitle",
           propertyName: "teaserTitle",
-          ...ConfigUtils.append({
-            plugins: [
-              Config(StringPropertyFieldDelegatePlugin, { delegatePropertyName: "title" }),
-            ],
-          }),
         }),
-        Config(TeaserOverlayPropertyField, {
+        Config(TeaserOverlayContainer, {
           propertyName: "teaserText",
           delegatePropertyName: "detailText",
           initialHeight: 100,
@@ -48,7 +42,7 @@ class TeaserDocumentForm extends TeaserDocumentFormBase {
                 bindTo: config.bindTo,
                 propertyName: "teaserText",
                 statefulSubComponentsFunction: (): Array<any> =>
-                  [this.queryById(TeaserOverlayPropertyField.TEASER_OVERLAY_RICHTEXT_ITEM_ID)],
+                  [this.queryById(TeaserOverlayContainer.TEASER_OVERLAY_RICHTEXT_ITEM_ID)],
               }),
             ],
           }),

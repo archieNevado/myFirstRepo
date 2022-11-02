@@ -11,6 +11,7 @@ import DocumentList from '@ckeditor/ckeditor5-list/src/documentlist';
 import Heading from '@ckeditor/ckeditor5-heading/src/heading';
 import Link from '@ckeditor/ckeditor5-link/src/link';
 import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
+import ImageBlockEditing from "@ckeditor/ckeditor5-image/src/image/imageblockediting";
 import ImageStyle from "@ckeditor/ckeditor5-image/src/imagestyle";
 import ImageToolbar from "@ckeditor/ckeditor5-image/src/imagetoolbar";
 import AutoLink from "@ckeditor/ckeditor5-link/src/autolink";
@@ -25,14 +26,19 @@ import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
 import ContentClipboard from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentClipboard";
 import ContentImagePlugin from "@coremedia/ckeditor5-coremedia-images/ContentImagePlugin";
 import ContentLinks from "@coremedia/ckeditor5-coremedia-link/contentlink/ContentLinks";
+import Differencing from "@coremedia/ckeditor5-coremedia-differencing/Differencing";
 import LinkTarget from "@coremedia/ckeditor5-coremedia-link/linktarget/LinkTarget";
-import CoreMediaStudioEssentials from "@coremedia/ckeditor5-studio-essentials/CoreMediaStudioEssentials";
+import CoreMediaStudioEssentials, {Strictness} from "@coremedia/ckeditor5-coremedia-studio-essentials/CoreMediaStudioEssentials";
 import CoreMediaFontMapper from '@coremedia/ckeditor5-font-mapper/FontMapper';
 
 import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave';
-import { CKEditorPluginConfig } from "./ckeditor";
 import { icons } from '@ckeditor/ckeditor5-core';
 import { localization, localize } from "../lang/LocalizationUtils";
+import LocaleUtil from "@coremedia/studio-client.cap-base-models/locale/LocaleUtil";
+import { CKEditorPluginConfig, CreateCKEditorFunction } from "@coremedia/studio-client.ckeditor-common/CKEditorCreateFunctionType";
+import { LinkImage } from "@ckeditor/ckeditor5-link";
+import '../theme/custom.css';
+import { PasteFromOffice } from "@ckeditor/ckeditor5-paste-from-office";
 
 const {
   //@ts-expect-error
@@ -51,22 +57,19 @@ localization.add({
     "Left-aligned": "Linksbündig",
     "Right-aligned": "Rechtsbündig",
     "Within Text": "Im Text",
-    "Page default": "Standardeinstellung"
+    "Page default": "Standardeinstellung",
+    "Type your text here...": "Text hier eingeben..."
   }
 })
 
 /**
  * This is the default configuration for the CKEditor 5 in CoreMedia Studio.
- * Please be advised, that
+ * Please be advised, that any misconfiguration of this editor might cause issues in CoreMedia Studio.
  *
- * *** THIS CONFIGURATION MUST NOT BE CHANGED ***
- *
- * Any misconfiguration of this editor might cause issues in CoreMedia Studio.
  * If you want to add a custom configuration, you should create a separate module
  * and add the exported editor in {@link ckeditor.ts} accordingly.
  */
-export function createDefaultCKEditor (domElement:(string | HTMLElement), language: string, placeholderText:string | undefined, pluginConfig: CKEditorPluginConfig): Promise<ClassicEditor> {
-
+export const createDefaultCKEditor: CreateCKEditorFunction = (domElement:(string | HTMLElement), pluginConfig: CKEditorPluginConfig): Promise<ClassicEditor> => {
   const defaultToolbarItems = [
     'undo',
     'redo',
@@ -93,11 +96,11 @@ export function createDefaultCKEditor (domElement:(string | HTMLElement), langua
     'outdent',
     'indent'
   ];
-
+  const language = LocaleUtil.getLocale();
   return ClassicEditor.create(domElement, {
     // Add License Key retrieved via CKEditor for Premium Features Support.
     licenseKey: '',
-    placeholder: placeholderText ? placeholderText : 'Type your text here...',
+    placeholder: localize('Type your text here...', language),
     plugins: [
       Alignment,
       AutoLink,
@@ -109,17 +112,21 @@ export function createDefaultCKEditor (domElement:(string | HTMLElement), langua
       ContentImagePlugin,
       CoreMediaStudioEssentials,
       CoreMediaFontMapper,
+      Differencing,
       Essentials,
       Heading,
       ImageInline,
+      ImageBlockEditing,
       ImageStyle,
       ImageToolbar,
       Indent,
       Italic,
       Link,
+      LinkImage,
       LinkTarget,
       DocumentList,
       Paragraph,
+      PasteFromOffice,
       RemoveFormat,
       Strikethrough,
       Subscript,
@@ -191,6 +198,9 @@ export function createDefaultCKEditor (domElement:(string | HTMLElement), langua
         'imageStyle:float-right',
         'imageStyle:float-none',
         'imageStyle:inline',
+        "|",
+        "linkImage",
+        "contentImageOpenInTab",
       ]
     },
     table: {
@@ -203,7 +213,11 @@ export function createDefaultCKEditor (domElement:(string | HTMLElement), langua
     language: language,
     autosave: {
       save: pluginConfig.autosave.save,
-      waitingTime: 50,
-    }
+      waitingTime: 1000,
+    },
+    //@ts-expect-error ClassicEditor.create(..., EditorConfig), EditorConfig does not know about custom plugin configurations.
+    "coremedia:richtext": {
+      strictness: Strictness.LOOSE,
+    },
   });
 }

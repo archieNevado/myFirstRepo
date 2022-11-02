@@ -5,8 +5,6 @@ import CoreIcons_properties from "@coremedia/studio-client.core-icons/CoreIcons_
  * @see AMStudioPlugin_properties#INSTANCE
  */
 interface AMStudioPlugin_properties {
-  "LicenseName_asset-management": string;
-
   Tab_renditions_title: string;
   Tab_metadata_title: string;
   Tab_state_title: string;
@@ -56,7 +54,6 @@ interface AMStudioPlugin_properties {
  * @see AMStudioPlugin_properties
  */
 const AMStudioPlugin_properties: AMStudioPlugin_properties = {
-  "LicenseName_asset-management": "CoreMedia Advanced Asset Management",
   Tab_renditions_title: "Renditions",
   Tab_metadata_title: "Metadata",
   Tab_state_title: "State",

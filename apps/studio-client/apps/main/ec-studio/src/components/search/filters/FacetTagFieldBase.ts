@@ -1,5 +1,5 @@
 import ValueExpression from "@coremedia/studio-client.client-core/data/ValueExpression";
-import InputChipsFieldBase from "@coremedia/studio-client.main.editor-components/sdk/components/ChipsField/InputChipsFieldBase";
+import InputChipsFieldBase from "@coremedia/studio-client.main.editor-components/sdk/components/chipsfield/InputChipsFieldBase";
 import Config from "@jangaroo/runtime/Config";
 
 interface FacetTagFieldBaseConfig extends Config<InputChipsFieldBase>, Partial<Pick<FacetTagFieldBase,

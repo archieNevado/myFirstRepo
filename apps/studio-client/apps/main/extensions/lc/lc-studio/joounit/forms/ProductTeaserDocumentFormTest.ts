@@ -1,5 +1,6 @@
 import AbstractCatalogTest from "@coremedia-blueprint/studio-client.main.ec-studio-test-helper/AbstractCatalogTest";
-import AbstractProductTeaserComponentsTest from "@coremedia-blueprint/studio-client.main.lc-studio-test-helper/AbstractProductTeaserComponentsTest";
+import AbstractProductTeaserComponentsTest
+  from "@coremedia-blueprint/studio-client.main.lc-studio-test-helper/AbstractProductTeaserComponentsTest";
 import Step from "@coremedia/studio-client.client-core-test-helper/Step";
 import Viewport from "@jangaroo/ext-ts/container/Viewport";
 import TextField from "@jangaroo/ext-ts/form/field/Text";
@@ -8,6 +9,7 @@ import QuickTipManager from "@jangaroo/ext-ts/tip/QuickTipManager";
 import { as, bind } from "@jangaroo/runtime";
 import Config from "@jangaroo/runtime/Config";
 import ProductTeaserDocumentFormTestView from "./ProductTeaserDocumentFormTestView";
+import IgnoreForCKEditor5Step from "./IgnoreForCKEditor5Step";
 
 class ProductTeaserDocumentFormTest extends AbstractProductTeaserComponentsTest {
   #viewPort: Viewport = null;
@@ -29,6 +31,7 @@ class ProductTeaserDocumentFormTest extends AbstractProductTeaserComponentsTest 
   //noinspection JSUnusedGlobalSymbols
   testProductTeaserDocumentForm(): void {
     this.chain(
+      this.#createTestlingStep(),
       this.loadContentRepository(),
       this.waitForContentRepositoryLoaded(),
       this.loadContentTypes(),
@@ -36,8 +39,8 @@ class ProductTeaserDocumentFormTest extends AbstractProductTeaserComponentsTest 
       this.loadProductTeaser(),
       this.waitForProductTeaserToBeLoaded(),
       this.waitForProductTeaserContentTypeToBeLoaded(),
-      this.#createTestlingStep(),
       this.#waitForTeaserTitleFieldValue(AbstractCatalogTest.ORANGES_NAME),
+      //this test step is ignored for ckeditor 5 for now, as we do currently not support the delegate to another property field.
       this.#waitForTeaserTextAreaValue(AbstractCatalogTest.ORANGES_SHORT_DESC),
     );
   }
@@ -51,11 +54,14 @@ class ProductTeaserDocumentFormTest extends AbstractProductTeaserComponentsTest 
   }
 
   #waitForTeaserTextAreaValue(value: string): Step {
-    return new Step("Wait for the product teaser text area to be " + value,
+    return new IgnoreForCKEditor5Step(bind(this, this.#getViewPort), "Wait for the product teaser text area to be " + value,
       (): boolean =>
         this.#productTeaserTextArea.getValue() && this.#productTeaserTextArea.getValue().indexOf(value) >= 0,
-
     );
+  }
+
+  #getViewPort(): Viewport {
+    return this.#viewPort;
   }
 
   #createTestlingStep(): Step {

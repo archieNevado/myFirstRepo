@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.fragment.links.transformers.resolvers.seo;
 
 import com.coremedia.blueprint.base.links.SettingsBasedVanityUrlMapper;
+import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
 import com.coremedia.blueprint.base.links.VanityUrlMapperCacheKey;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.handlers.NavigationSegmentsUriHelper;
@@ -9,16 +10,16 @@ import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.List;
+
 import static java.text.MessageFormat.format;
 
 /**
@@ -29,7 +30,6 @@ public class ExternalSeoSegmentBuilder implements SeoSegmentBuilder {
   public static final Logger LOG = LoggerFactory.getLogger(ExternalSeoSegmentBuilder.class);
 
   private static final String PATH_DELIMITER = "--";
-  private static final String PATH_DELIMITER_REGEX = PATH_DELIMITER + "+";
   private static final String ID_DELIMITER = "-";
   private static final String ID_DELIMITER_BEGIN_REGEX = "^" +ID_DELIMITER + "+";
   private static final String ID_DELIMITER_END_REGEX = ID_DELIMITER + "+$";
@@ -38,7 +38,9 @@ public class ExternalSeoSegmentBuilder implements SeoSegmentBuilder {
   private NavigationSegmentsUriHelper navigationSegmentsUriHelper;
   private Cache cache;
   private SettingsService settingsService;
+  private UrlPathFormattingHelper urlPathFormattingHelper;
 
+  @Override
   @NonNull
   public String asSeoSegment(CMNavigation navigation, CMObject target) {
     if (navigation == null || target == null) {
@@ -80,7 +82,7 @@ public class ExternalSeoSegmentBuilder implements SeoSegmentBuilder {
         }
       }
 
-      return asUrlEncoded(sb.toString());
+      return UriComponentsBuilder.fromPath(sb.toString()).toUriString();
     }
     catch (Exception e) {
       LOG.error(format("Cannot generate SEOSegment for the navigation {0} and target {1}",
@@ -96,50 +98,19 @@ public class ExternalSeoSegmentBuilder implements SeoSegmentBuilder {
     return vanityUrlMapper.patternFor(target.getContent());
   }
 
-  private String asUrlEncoded(String s) {
-    try {
-      return URLEncoder.encode(s, "UTF-8");
-    } catch (UnsupportedEncodingException e) {
-      LOG.trace("Cannot encode string {}", s, e);
-    }
-    return s;
-  }
-
   /**
    * To lowercase;
-   * replace all non-alphabetic with a dash;
    * reduce multiple dashes to one;
    * remove dashes at the beginning.
    * remove dashes at the end.
    */
   private String asSeoTitle(String s) {
-    char[] ca = s.toCharArray();
-    for (int index = 0; index < ca.length; index++) {
-      if (Character.isLetterOrDigit(ca[index]) && isAscii(ca[index])) {
-        ca[index] = Character.toLowerCase(ca[index]);
-      }
-      else {
-        ca[index] = '-';
-      }
-    }
-    String result = String.valueOf(ca);
-
-    //'+' means that PATH_DELIMITER will be replaced RECURSIVELY.
-    result = result.replaceAll(PATH_DELIMITER_REGEX, ID_DELIMITER);
-
-    // Remove dashes at the beginning
-    result = result.replaceAll(ID_DELIMITER_BEGIN_REGEX, "");
-
-    // Remove dashes at the end
-    result = result.replaceAll(ID_DELIMITER_END_REGEX, "");
-
-    return result;
+    return urlPathFormattingHelper.tidyUrlPath(s)
+            // Remove dashes at the beginning
+            .replaceAll(ID_DELIMITER_BEGIN_REGEX, "")
+            // Remove dashes at the end
+            .replaceAll(ID_DELIMITER_END_REGEX, "");
   }
-
-  private boolean isAscii(int ch) {
-    return ((ch & 0xFFFFFF80) == 0);
-  }
-
 
   @Required
   public void setNavigationSegmentsUriHelper(NavigationSegmentsUriHelper navigationSegmentsUriHelper) {
@@ -155,4 +126,10 @@ public class ExternalSeoSegmentBuilder implements SeoSegmentBuilder {
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
   }
+
+  @Required
+  public void setUrlPathFormattingHelper(UrlPathFormattingHelper urlPathFormattingHelper) {
+    this.urlPathFormattingHelper = urlPathFormattingHelper;
+  }
+
 }

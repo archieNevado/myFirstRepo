@@ -25,6 +25,7 @@ ResourceBundleUtil.override(ECommerceStudioPlugin_properties, {
   CMAbstractCategory_text: "Allgemeine Kategorie",
   Category_label: "Kategorie",
   Product_label: "Produkt",
+  Products_label: "Produkte",
   ProductVariant_label: "Produktvariante",
   MarketingSpot_label: "e-Marketing Spot",
   Marketing_label: "e-Marketing Spots",

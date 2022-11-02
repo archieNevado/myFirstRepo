@@ -262,7 +262,7 @@ function threeSixtySpinner(spinner) {
         refresh();
         // restarts counting the pointer tracking period
         monitorStartTime = new Date().getTime();
-        // Stores the the pointer X position as the starting position (because we started a new tracking period)
+        // Stores the pointer X position as the starting position (because we started a new tracking period)
         pointerStartPosX = getPointerEvent(event).pageX;
       }
     }

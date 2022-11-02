@@ -14,6 +14,8 @@ import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,6 +32,16 @@ public class SearchFacetsResource extends AbstractCatalogResource<SearchFacets> 
   @Autowired
   public SearchFacetsResource(CatalogAliasTranslationService catalogAliasTranslationService) {
     super(catalogAliasTranslationService);
+  }
+
+  @GetMapping
+  public AbstractCatalogRepresentation get(@PathVariable(PATH_SITE_ID) final String siteId,
+                                           @PathVariable(PATH_CATALOG_ALIAS) final String catalogAlias,
+                                           @PathVariable(PATH_ID) final String id) {
+    return getRepresentation(Map.of(
+            PATH_ID, id,
+            PATH_CATALOG_ALIAS, catalogAlias,
+            PATH_SITE_ID, siteId));
   }
 
   @Override

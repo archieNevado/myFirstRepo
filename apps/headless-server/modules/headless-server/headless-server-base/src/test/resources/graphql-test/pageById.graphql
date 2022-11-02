@@ -2,6 +2,7 @@ query getPageById($id: String!) {
   content {
     page(id: $id) {
       id
+      uuid
       type
       repositoryPath
       locale
@@ -16,9 +17,11 @@ query getPageById($id: String!) {
       settings(paths: ["testInt"])
       picture {
         id
+        uuid
       }
       pictures {
         id
+        uuid
         title
         link {
           id
@@ -30,6 +33,7 @@ query getPageById($id: String!) {
           result {
             ... on CMPicture {
               id
+              uuid
               name
               type
             }
@@ -39,6 +43,7 @@ query getPageById($id: String!) {
       children {
         title
         id
+        uuid
         link {
           id
         }
@@ -46,17 +51,20 @@ query getPageById($id: String!) {
       localizedVariants {
         ... on CMChannel {
           id
+          uuid
           locale
         }
       }
       localizedVariant(language: "de", country: "de") {
         ... on CMChannel {
           id
+          uuid
           locale
         }
       }
       localizationRoot {
         id
+        uuid
         locale
       }
 #      master {

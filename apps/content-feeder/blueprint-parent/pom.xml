@@ -73,10 +73,10 @@
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
     <tomcat.embed.version>9.0.64</tomcat.embed.version>
-    <cm.content-feeder.core.version>2207.1</cm.content-feeder.core.version>
-    <cm.common.core.version>2207.1</cm.common.core.version>
+    <cm.content-feeder.core.version>2210.1</cm.content-feeder.core.version>
+    <cm.common.core.version>2210.1</cm.common.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
-    <cm.middle.core.version>2207.1</cm.middle.core.version>
+    <cm.middle.core.version>2210.1</cm.middle.core.version>
     <cm.middle.bp.version>1-SNAPSHOT</cm.middle.bp.version>
     <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
 

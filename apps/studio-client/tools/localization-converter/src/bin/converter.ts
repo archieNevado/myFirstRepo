@@ -33,6 +33,7 @@ function createPackageJson(basePackageJson: Record<string, string>, jangarooCore
     version: basePackageJson.version,
     author: basePackageJson.author,
     license: basePackageJson.license,
+    private: true,
     dependencies,
     devDependencies: {
       "@jangaroo/build": jangarooCoreVersion,

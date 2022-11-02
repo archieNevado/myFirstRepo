@@ -10,7 +10,7 @@ import IntegerCondition from "@coremedia/studio-client.main.cap-personalization-
 import PercentageKeywordCondition from "@coremedia/studio-client.main.cap-personalization-ui/condition/PercentageKeywordCondition";
 import StringCondition from "@coremedia/studio-client.main.cap-personalization-ui/condition/StringCondition";
 import TimeCondition from "@coremedia/studio-client.main.cap-personalization-ui/condition/TimeCondition";
-import RichTextPropertyField from "@coremedia/studio-client.main.ckeditor4-components/fields/RichTextPropertyField";
+import RichTextPropertyField from "@coremedia/studio-client.main.editor-components/sdk/premular/fields/richtext/RichTextPropertyField";
 import DocumentForm from "@coremedia/studio-client.main.editor-components/sdk/premular/DocumentForm";
 import DocumentTabPanel from "@coremedia/studio-client.main.editor-components/sdk/premular/DocumentTabPanel";
 import PropertyFieldGroup from "@coremedia/studio-client.main.editor-components/sdk/premular/PropertyFieldGroup";

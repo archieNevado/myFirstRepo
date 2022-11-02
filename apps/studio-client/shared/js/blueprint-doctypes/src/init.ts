@@ -31,6 +31,14 @@ import typeVideo from "./icons/type-video.svg";
 import typeViewtype from "./icons/type-viewtype.svg";
 import user from "./icons/user.svg";
 
+contentTypeLocalizationRegistry.addLocalization("Document_", {
+  displayName: BlueprintDoctypesDocTypes_properties.Document_displayName,
+  description: BlueprintDoctypesDocTypes_properties.Document_description,
+  svgIcon: typeObject,
+  properties: {
+  },
+});
+
 contentTypeLocalizationRegistry.addLocalization("CMAbstractCode", {
   displayName: BlueprintDoctypesDocTypes_properties.CMAbstractCode_displayName,
   description: BlueprintDoctypesDocTypes_properties.CMAbstractCode_description,

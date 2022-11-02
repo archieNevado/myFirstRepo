@@ -16,6 +16,9 @@ import ConfigUtils from "@jangaroo/runtime/ConfigUtils";
 import BlueprintDocumentTypes_properties from "../../BlueprintDocumentTypes_properties";
 import ValidityColumn from "../columns/ValidityColumn";
 import TimelineConfigurationForm from "./TimelineConfigurationForm";
+import { as } from "@jangaroo/runtime";
+import Component from "@jangaroo/ext-ts/Component";
+import Element from "@jangaroo/ext-ts/dom/Element";
 
 interface TimelineFormConfig extends Config<PropertyFieldGroup>, Partial<Pick<TimelineForm,
   "propertyName" |
@@ -54,6 +57,11 @@ class TimelineForm extends PropertyFieldGroup {
           bindTo: config.bindTo,
           linkListWrapper: this$.#getStructContentLinkListWrapper(config),
           linkType: ConfigUtils.asString(config.linkType || TimelineForm.DEFAULT_LINK_TYPE),
+          linkListSideButtonRenderToFunction: (host: Component): Element => {
+            const parentContainer = as(host.findParentByType(TimelineForm), TimelineForm).up();
+            return parentContainer.el;
+          },
+          linkListSideButtonVerticalAdjustment: 10,
           additionalToolbarItems: [
             Config(Separator),
             Config(QuickCreateLinklistMenu, {

@@ -58,9 +58,7 @@ class AddSiteSpecificPathPlugin extends AbstractPlugin {
       throw Error("plugin is only applicable to components of type 'PersonaSelector'");
     }
     this.#personaSelector = as(component, PersonaSelector);
-    this.#personaSelector.mon(this.#personaSelector, "afterrender", (): void =>
-      this.#personaSelector.contentValueExpression.addChangeListener(bind(this, this.#loadPersonasFromSitePath)),
-    );
+    this.#personaSelector.contentValueExpression.addChangeListener(bind(this, this.#loadPersonasFromSitePath));
 
     this.#personaSelector.addListener("beforedestroy", () => {
       this.#personaSelector.contentValueExpression && this.#personaSelector.contentValueExpression.removeChangeListener(bind(this, this.#loadPersonasFromSitePath));
@@ -68,9 +66,15 @@ class AddSiteSpecificPathPlugin extends AbstractPlugin {
   }
 
   #loadPersonasFromSitePath(): void {
-    for (const sitePathFormatter of AddSiteSpecificPathPlugin.#sitePathFormatters as AnyFunction[]) {
-      sitePathFormatter.call(null, this.#path, this.#entityExpression, bind(this, this.#doLoadPersonas));
-    }
+    this.#entityExpression.loadValue((entity: any) => {
+      if (is(entity, RemoteBean) && entity.getState().exists === false) {
+        // remote bean was destroyed, so abort
+        return;
+      }
+      for (const sitePathFormatter of AddSiteSpecificPathPlugin.#sitePathFormatters as AnyFunction[]) {
+        sitePathFormatter.call(null, this.#path, this.#entityExpression, bind(this, this.#doLoadPersonas));
+      }
+    });
   }
 
   static #formatSitePathFromContent(path: string, entityExpression: ValueExpression, callback: AnyFunction): void {

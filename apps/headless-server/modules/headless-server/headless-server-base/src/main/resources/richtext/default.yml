@@ -15,6 +15,7 @@ handlerSets:
         elementTransformer:
           !ElementFromClass
           mapping:
+            *code_style: code
             *strike_style: s
             *underline_style: u
     - !Handler
@@ -143,6 +144,17 @@ contexts:
     name: tablerow
     handlers:
       - - !Handler
+          eventMatcher:   !Matcher {qname: *td, classes: *table_data_cell_styles}
+          contextHandler: !Push {contextName: tablecell}
+          outputHandler:
+            !ElementWriter
+            writeElement: true
+            writeCharacters: true
+            elementTransformer:
+              !ElementFromClass
+              mapping:
+                *table_header_cell_style: th
+      - - !Handler
           eventMatcher:   !Matcher {qname: *td}
           contextHandler: !Push {contextName: tablecell}
           outputHandler:  !ElementWriter {writeElement: true, writeCharacters: true}
@@ -158,6 +170,10 @@ contexts:
   - !Context
     name: table
     handlers:
+      - - !Handler
+          eventMatcher:   !Matcher {qname: *tr}
+          contextHandler: !Push {contextName: tablerow}
+          outputHandler:  !ElementWriter {writeElement: true}
       - - !Handler
           eventMatcher:   !Matcher {qname: *tbody}
           contextHandler: !Push {contextName: tablebody}

@@ -1,0 +1,21 @@
+query getPageByPath($path: String!) {
+  content {
+    pageByPath(path: $path) {
+      id
+      title
+      repositoryPath
+      pictures {
+        title
+        link {
+          id
+        }
+      }
+      children {
+        title
+        link {
+          id
+        }
+      }
+    }
+  }
+}

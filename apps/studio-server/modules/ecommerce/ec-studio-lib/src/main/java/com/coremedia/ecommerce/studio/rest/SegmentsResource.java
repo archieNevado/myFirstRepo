@@ -14,6 +14,8 @@ import com.google.common.annotations.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,7 +33,7 @@ import static com.coremedia.blueprint.base.livecontext.client.settings.SettingsU
  * It is not showed in the catalog tree but used to invalidate the list of available commerce segments
  */
 @RestController
-@RequestMapping(value = "livecontext/segments/{siteId}", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "livecontext/segments/{" + AbstractCatalogResource.PATH_SITE_ID + "}", produces = MediaType.APPLICATION_JSON_VALUE)
 public class SegmentsResource extends AbstractCatalogResource<Segments> {
 
   private final SitesService sitesService;
@@ -42,6 +44,11 @@ public class SegmentsResource extends AbstractCatalogResource<Segments> {
     super(catalogAliasTranslationService);
     this.sitesService = sitesService;
     this.settingsService = settingsService;
+  }
+
+  @GetMapping
+  public AbstractCatalogRepresentation get(@PathVariable(PATH_SITE_ID) String siteId) {
+    return getRepresentation(Map.of(PATH_SITE_ID, siteId));
   }
 
   @Override

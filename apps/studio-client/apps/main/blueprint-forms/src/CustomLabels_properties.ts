@@ -63,7 +63,7 @@ const CustomLabels_properties: CustomLabels_properties = {
   PropertyGroup_MiscSettings_label: "Further Details",
   PropertyGroup_Placements_label: "Placements",
   PropertyGroup_Teaser_label: "Teaser",
-  PropertyGroup_TeaserSettings_label: "Teaser Options",
+  PropertyGroup_TeaserSettings_label: "Options",
   PropertyGroup_VideoProperties_label: "Video Options",
   PropertyGroup_AudioProperties_label: "Audio Options",
   PropertyGroup_ProductDetails_label: "Product Details from Catalog",

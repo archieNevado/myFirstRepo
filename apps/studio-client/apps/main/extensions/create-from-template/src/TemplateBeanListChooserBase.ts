@@ -177,7 +177,7 @@ class TemplateBeanListChooserBase extends BeanListChooser {
             ready = false;
           }
         } else {
-          Logger.debug(TemplateBeanListChooserBase + ": No valid documents are found in configured path '" + path + "'.");
+          Logger.debug("TemplateBeanListChooserBase: No valid documents are found in configured path '" + path + "'.");
         }
       });
       if (ready) {

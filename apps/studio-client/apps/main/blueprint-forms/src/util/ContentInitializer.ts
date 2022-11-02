@@ -1,14 +1,16 @@
 import Content from "@coremedia/studio-client.cap-rest-client/content/Content";
 import Struct from "@coremedia/studio-client.cap-rest-client/struct/Struct";
-import TeaserOverlayManager from "@coremedia/studio-client.main.ckeditor4-components/fields/TeaserOverlayManager";
+import TeaserOverlayManager from "@coremedia/studio-client.main.teaser-overlay-components/TeaserOverlayManager";
 import Actions_properties from "@coremedia/studio-client.main.editor-components/sdk/actions/Actions_properties";
 import editorContext from "@coremedia/studio-client.main.editor-components/sdk/editorContext";
 import Site from "@coremedia/studio-client.multi-site-models/Site";
 import Ext from "@jangaroo/ext-ts";
-import { as } from "@jangaroo/runtime";
+import { as, cast, is } from "@jangaroo/runtime";
 import int from "@jangaroo/runtime/int";
 import joo from "@jangaroo/runtime/joo";
 import TeaserOverlayConstants from "../TeaserOverlayConstants";
+import StringPropertyDescriptor
+  from "@coremedia/studio-client.cap-rest-client/common/descriptors/StringPropertyDescriptor";
 
 /**
  * Initializer settings for the blueprint project.
@@ -156,8 +158,13 @@ class ContentInitializer {
 
   static initializePropertyWithName(content: Content, property: string): void {
     //Only initialize if the name of the content is not "New content item"
-    if (content.getName() != Actions_properties.Action_newContent_newDocumentName_text) {
-      ContentInitializer.setProperty(content, property, content.getName());
+    let value = content.getName();
+    if (value != Actions_properties.Action_newContent_newDocumentName_text) {
+      const descriptor = content.getType().getDescriptor(property);
+      if(is(descriptor, StringPropertyDescriptor) && value.length > as(descriptor, StringPropertyDescriptor).length) {
+        value = value.substring(0, as(descriptor, StringPropertyDescriptor).length);
+      }
+      ContentInitializer.setProperty(content, property, value);
     }
   }
 

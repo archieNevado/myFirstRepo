@@ -22,7 +22,7 @@ ResourceBundleUtil.override(CustomLabels_properties, {
   PropertyGroup_Settings_label: "Einstellungen",
   PropertyGroup_MiscSettings_label: "Weitere Details",
   PropertyGroup_Teaser_label: "Teaser",
-  PropertyGroup_TeaserSettings_label: "Teaser Optionen",
+  PropertyGroup_TeaserSettings_label: "Optionen",
   PropertyGroup_VideoProperties_label: "Video Optionen",
   PropertyGroup_AudioProperties_label: "Audio Optionen",
   PropertyGroup_ProductDetails_label: "Produktdetails vom Katalog",

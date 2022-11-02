@@ -1,6 +1,7 @@
 import Content from "@coremedia/studio-client.cap-rest-client/content/Content";
 import RemoteServiceMethod from "@coremedia/studio-client.client-core-impl/data/impl/RemoteServiceMethod";
-import RemoteServiceMethodResponse from "@coremedia/studio-client.client-core-impl/data/impl/RemoteServiceMethodResponse";
+import RemoteServiceMethodResponse
+  from "@coremedia/studio-client.client-core-impl/data/impl/RemoteServiceMethodResponse";
 import ValueExpression from "@coremedia/studio-client.client-core/data/ValueExpression";
 import ValueExpressionFactory from "@coremedia/studio-client.client-core/data/ValueExpressionFactory";
 import beanFactory from "@coremedia/studio-client.client-core/data/beanFactory";
@@ -14,10 +15,10 @@ import { as } from "@jangaroo/runtime";
 import Config from "@jangaroo/runtime/Config";
 import EsAnalyticsImpl from "./EsAnalyticsImpl";
 import EsAnalyticsStudioPlugin_properties from "./EsAnalyticsStudioPlugin_properties";
+import Site from "@coremedia/studio-client.multi-site-models/Site";
 
 interface EsAnalyticsChartWidgetBaseConfig extends Config<Container>, Partial<Pick<EsAnalyticsChartWidgetBase,
-  "content"
->> {
+  "content">> {
 }
 
 class EsAnalyticsChartWidgetBase extends Container {
@@ -95,8 +96,17 @@ class EsAnalyticsChartWidgetBase extends Container {
       this.#tenantVE = ValueExpressionFactory.createFromValue(undefined);
 
       if (this.content) {
-        this.content.load((): void => {
+        ValueExpressionFactory.createFromFunction((): Site => {
+          if (!this.content.isLoaded()) {
+            return undefined;
+          }
           const site = editorContext._.getSitesService().getSiteFor(this.content);
+          if (site === undefined) {
+            return undefined;
+          }
+
+          return site;
+        }).loadValue(site => {
           let tenantInfoUrl = EsAnalyticsImpl.ELASTIC_API_BASE_URL + EsAnalyticsImpl.TENANT_URI_SEGMENT + "?siteId=";
           // remote call can handle empty site id and would return the default tenant
           if (site) {

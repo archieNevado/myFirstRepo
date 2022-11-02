@@ -63,10 +63,10 @@ export function consolePrint($text) {
  * @return {string}
  */
 const initBrickInitJs = (brickName) => `//import $ from "jquery";
-import * as ${brickName} from "./${brickName}";
+import { consolePrint } from "./${brickName}";
 // --- JQUERY DOCUMENT READY -------------------------------------------------------------------------------------------
 //$(function () {
-//  ${brickName}.consolePrint("Brick ${brickName} is used.");
+//  consolePrint("Brick ${brickName} is used.");
 //});
 `;
 

@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.coremedia.cms.middle.blueprint.validators.ValidatorsConfiguration
+com.coremedia.cms.middle.blueprint.validators.ValidatorsConfiguration,\
+com.coremedia.cms.content_feeder.blueprint.validators.ContentFeederValidatorsAutoConfiguration

@@ -6,6 +6,8 @@ import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,6 +26,11 @@ public class MarketingResource extends AbstractCatalogResource<Marketing> {
   @Autowired
   public MarketingResource(CatalogAliasTranslationService catalogAliasTranslationService) {
     super(catalogAliasTranslationService);
+  }
+
+  @GetMapping
+  public AbstractCatalogRepresentation get(@PathVariable(PATH_SITE_ID) String siteId) {
+    return getRepresentation(Map.of(PATH_SITE_ID, siteId));
   }
 
   @Override

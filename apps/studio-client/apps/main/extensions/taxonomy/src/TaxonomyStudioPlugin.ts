@@ -9,7 +9,6 @@ import ValueExpressionFactory from "@coremedia/studio-client.client-core/data/Va
 import AddItemsPlugin from "@coremedia/studio-client.ext.ui-components/plugins/AddItemsPlugin";
 import IEditorContext from "@coremedia/studio-client.main.editor-components/sdk/IEditorContext";
 import SearchFilters from "@coremedia/studio-client.main.editor-components/sdk/collectionview/search/SearchFilters";
-import InputChipsField from "@coremedia/studio-client.main.editor-components/sdk/components/ChipsField/InputChipsField";
 import ComponentBasedWorkAreaTabType
   from "@coremedia/studio-client.main.editor-components/sdk/desktop/ComponentBasedWorkAreaTabType";
 import StudioPreferenceWindow from "@coremedia/studio-client.main.editor-components/sdk/desktop/StudioPreferenceWindow";
@@ -35,6 +34,8 @@ import TaxonomyChangePlugin from "./taxonomy/forms/TaxonomyChangePlugin";
 import AddTaggingStrategyPlugin from "./taxonomy/preferences/AddTaggingStrategyPlugin";
 import TaxonomyPreferenceWindowPlugin from "./taxonomy/preferences/TaxonomyPreferenceWindowPlugin";
 import TaxonomyPropertyField from "./taxonomy/selection/TaxonomyPropertyField";
+import InputChipsPropertyField
+  from "@coremedia/studio-client.main.editor-components/sdk/components/chipsfield/InputChipsPropertyField";
 
 interface TaxonomyStudioPluginConfig extends Config<TaxonomyStudioPluginBase> {
 }
@@ -101,7 +102,7 @@ class TaxonomyStudioPlugin extends TaxonomyStudioPluginBase {
                   itemId: "freeKeywordsForm",
                   collapsed: true,
                   items: [
-                    Config(InputChipsField, {
+                    Config(InputChipsPropertyField, {
                       propertyName: "keywords",
                       hideLabel: true,
                     }),

@@ -8,6 +8,7 @@ classes:
     - &headline_6_style p--heading-6
 
   - &inline_styles !!java.util.ArrayList
+    - &code_style      code
     - &strike_style    strike
     - &underline_style underline
 
@@ -21,3 +22,6 @@ classes:
     - &float_left_style  float--left
     - &float_right_style float--right
     - &float_none_style  float--none
+
+  - &table_data_cell_styles !!java.util.ArrayList
+    - &table_header_cell_style td--header

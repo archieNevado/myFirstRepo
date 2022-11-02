@@ -2,6 +2,7 @@ query getPictureById($id: String!) {
   content {
     picture(id: $id) {
       id
+      uuid
       repositoryPath
       locale
       name

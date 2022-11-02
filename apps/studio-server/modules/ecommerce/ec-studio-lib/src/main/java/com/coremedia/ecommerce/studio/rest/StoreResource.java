@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -65,11 +66,11 @@ public class StoreResource extends AbstractCatalogResource<Store> {
 
   @PostMapping("urlService")
   @Nullable
-  public Object handlePost(@PathVariable Map<String, String> params, @RequestBody @NonNull Map<String, Object> json) {
+  public Object handlePost(@PathVariable(PATH_SITE_ID) String siteId, @RequestBody @NonNull Map<String, Object> json) {
     String shopUrlStr = (String) json.get(SHOP_URL_PBE_PARAM);
     Object resolved = null;
     if (shopUrlStr != null) {
-      resolved = findFirstPbeShopUrlTargetResolver(params, shopUrlStr).orElse(null);
+      resolved = findFirstPbeShopUrlTargetResolver(siteId, shopUrlStr).orElse(null);
     }
 
     if (resolved == null) {
@@ -82,10 +83,8 @@ public class StoreResource extends AbstractCatalogResource<Store> {
   }
 
   @NonNull
-  private Optional<Object> findFirstPbeShopUrlTargetResolver(@NonNull Map<String, String> params,
+  private Optional<Object> findFirstPbeShopUrlTargetResolver(@NonNull String siteId,
                                                              @NonNull String shopUrlStr) {
-    String siteId = params.get(PATH_SITE_ID);
-
     return pbeShopUrlTargetResolvers.stream()
             .map(resolver -> resolver.resolveUrl(shopUrlStr, siteId))
             .filter(Objects::nonNull)
@@ -104,6 +103,11 @@ public class StoreResource extends AbstractCatalogResource<Store> {
       LOG.debug("Cannot augment object {}: only categories and products are supported. JSON parameters: {}", catalogObject, catalogObject);
       return null;
     }
+  }
+
+  @GetMapping
+  public AbstractCatalogRepresentation get(@PathVariable(PATH_SITE_ID) String siteId) {
+    return getRepresentation(Map.of(PATH_SITE_ID, siteId));
   }
 
   @Override

@@ -14,17 +14,17 @@
     "cm": "./bin/cm-cli.js"
   },
   "dependencies": {
-    "@coremedia/cm-logger": "workspace:*",
-    "@coremedia/module-creator": "workspace:*",
-    "@coremedia/theme-importer": "workspace:*",
-    "@coremedia/tool-utils": "workspace:*",
-    "@coremedia/zipper": "workspace:*",
+    "@coremedia/cm-logger": "workspace:1.0.0",
+    "@coremedia/module-creator": "workspace:1.0.0",
+    "@coremedia/theme-importer": "workspace:1.0.1",
+    "@coremedia/tool-utils": "workspace:1.0.0",
+    "@coremedia/zipper": "workspace:1.0.0",
     "inquirer": "^8.2.4",
     "yargs": "^15.4.1"
   },
   "devDependencies": {
     "jest": "^27.5.1",
-    "prettier": "^2.6.2"
+    "prettier": "^2.7.1"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{js,json}\"",

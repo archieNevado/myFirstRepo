@@ -44,7 +44,7 @@ fi
 rm -rf 'plugin-descriptors' 'plugins'
 mkdir 'plugin-descriptors' 'plugins'
 # make sure to create all folders that will be mounted as docker volumes to prevent permission issues
-mkdir -p 'plugins/studio-server' 'plugins/studio-client' 'plugins/studio-client.main' 'plugins/studio-client.workflow' 'plugins/headless-server' 'plugins/content-feeder' 'plugins/content-server'
+mkdir -p 'plugins/studio-server' 'plugins/studio-client' 'plugins/studio-client.main' 'plugins/studio-client.workflow' 'plugins/headless-server' 'plugins/content-feeder' 'plugins/content-server' 'plugins/cae'
 
 function main() {
   download_descriptors

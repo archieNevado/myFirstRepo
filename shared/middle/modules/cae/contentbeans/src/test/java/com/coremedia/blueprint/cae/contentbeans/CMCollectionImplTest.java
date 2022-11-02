@@ -6,9 +6,11 @@ import com.coremedia.blueprint.cae.contentbeans.testing.ContentBeanTestBase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.test.context.TestPropertySource;
 
 import static com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE;
 
+@TestPropertySource(properties = "delivery.preview-mode=true")
 public class CMCollectionImplTest extends ContentBeanTestBase {
 
   private CMCollection collection;

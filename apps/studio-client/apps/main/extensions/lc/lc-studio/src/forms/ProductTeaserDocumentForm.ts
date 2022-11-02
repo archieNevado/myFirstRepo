@@ -4,7 +4,7 @@ import TeaserSettingsPropertyFieldGroup from "@coremedia-blueprint/studio-client
 import CatalogObjectPropertyNames from "@coremedia-blueprint/studio-client.main.ec-studio-model/model/CatalogObjectPropertyNames";
 import ProductPropertyNames from "@coremedia-blueprint/studio-client.main.ec-studio-model/model/ProductPropertyNames";
 import CatalogHelper from "@coremedia-blueprint/studio-client.main.ec-studio/helper/CatalogHelper";
-import TeaserOverlayPropertyField from "@coremedia/studio-client.main.ckeditor4-components/fields/TeaserOverlayPropertyField";
+import TeaserOverlayContainer from "@coremedia/studio-client.main.teaser-overlay-components/TeaserOverlayContainer";
 import PropertyFieldGroup from "@coremedia/studio-client.main.editor-components/sdk/premular/PropertyFieldGroup";
 import StringPropertyField from "@coremedia/studio-client.main.editor-components/sdk/premular/fields/StringPropertyField";
 import StringPropertyFieldDelegatePlugin from "@coremedia/studio-client.main.editor-components/sdk/premular/fields/plugins/StringPropertyFieldDelegatePlugin";
@@ -35,7 +35,7 @@ class ProductTeaserDocumentForm extends PropertyFieldGroup {
             ],
           }),
         }),
-        Config(TeaserOverlayPropertyField, {
+        Config(TeaserOverlayContainer, {
           propertyName: "teaserText",
           delegateExpression: CatalogHelper.getInstance().getProductPropertyExpression(config.bindTo, ProductPropertyNames.SHORT_DESC),
           initialHeight: 100,

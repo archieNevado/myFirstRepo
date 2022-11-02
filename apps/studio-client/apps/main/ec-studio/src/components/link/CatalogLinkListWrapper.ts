@@ -158,7 +158,7 @@ class CatalogLinkListWrapper extends LinkListWrapperBase {
   }
 
   /**
-   * Return the the target site id. May be undefined.
+   * Return the target site id. May be undefined.
    */
   #getTargetSiteId(): string {
     const site = this.#getTargetSite();

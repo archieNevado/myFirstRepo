@@ -1,5 +1,6 @@
 import Catalog from "@coremedia-blueprint/studio-client.main.ec-studio-model/model/Catalog";
-import CatalogObjectPropertyNames from "@coremedia-blueprint/studio-client.main.ec-studio-model/model/CatalogObjectPropertyNames";
+import CatalogObjectPropertyNames
+  from "@coremedia-blueprint/studio-client.main.ec-studio-model/model/CatalogObjectPropertyNames";
 import Store from "@coremedia-blueprint/studio-client.main.ec-studio-model/model/Store";
 import UserUtil from "@coremedia/studio-client.cap-base-models/util/UserUtil";
 import Content from "@coremedia/studio-client.cap-rest-client/content/Content";
@@ -8,7 +9,8 @@ import ValueExpressionFactory from "@coremedia/studio-client.client-core/data/Va
 import PageGridUtil from "@coremedia/studio-client.main.bpbase-pagegrid-studio-plugin/pagegrid/PageGridUtil";
 import StudioPlugin from "@coremedia/studio-client.main.editor-components/configuration/StudioPlugin";
 import IEditorContext from "@coremedia/studio-client.main.editor-components/sdk/IEditorContext";
-import CollectionViewManagerInternal from "@coremedia/studio-client.main.editor-components/sdk/collectionview/CollectionViewManagerInternal";
+import CollectionViewManagerInternal
+  from "@coremedia/studio-client.main.editor-components/sdk/collectionview/CollectionViewManagerInternal";
 import editorContext from "@coremedia/studio-client.main.editor-components/sdk/editorContext";
 import { as, cast } from "@jangaroo/runtime";
 import Config from "@jangaroo/runtime/Config";
@@ -22,6 +24,12 @@ import CatalogHelper from "./helper/CatalogHelper";
 import CommerceCategoryCollectionViewStateInterceptor from "./library/CommerceCategoryCollectionViewStateInterceptor";
 import CommerceCollectionViewStateInterceptor from "./library/CommerceCollectionViewStateInterceptor";
 import ECommerceCollectionViewExtension from "./library/ECommerceCollectionViewExtension";
+import quickSearchService from "@coremedia/studio-client.quicksearch-models/quickSearchService";
+import QuickSearchServiceImpl from "@coremedia/studio-client.quicksearch-models/QuickSearchServiceImpl";
+import CatalogObject from "@coremedia-blueprint/studio-client.main.ec-studio-model/model/CatalogObject";
+import QuickSearchResultListConfiguration
+  from "@coremedia/studio-client.quicksearch-models/QuickSearchResultListConfiguration";
+import QuickSearchCommerceResults from "./quicksearch/QuickSearchCommerceResults";
 
 interface ECommerceStudioPluginBaseConfig extends Config<StudioPlugin> {
 }
@@ -38,13 +46,16 @@ class ECommerceStudioPluginBase extends StudioPlugin {
   override init(editorContext: IEditorContext): void {
     super.init(editorContext);
 
-    const isApplicable: AnyFunction = (): boolean => false ;
+    const service = cast(QuickSearchServiceImpl, quickSearchService._);
+    service.getResultLists().push(new QuickSearchResultListConfiguration(CatalogObject.name, QuickSearchCommerceResults.xtype));
+
+    const isApplicable: AnyFunction = (): boolean => false;
     editorContext.getCollectionViewExtender().addExtension(new ECommerceCollectionViewExtension(), isApplicable);
     editorContext.registerCollectionViewStateInterceptor(new CommerceCategoryCollectionViewStateInterceptor());
     editorContext.registerCollectionViewStateInterceptor(new CommerceCollectionViewStateInterceptor());
 
     const collectionViewManagerInternal =
-            (as((editorContext.getCollectionViewManager()), CollectionViewManagerInternal));
+      (as((editorContext.getCollectionViewManager()), CollectionViewManagerInternal));
 
     const catalogTreeModel = new CatalogTreeModel();
     collectionViewManagerInternal.addTreeModel(catalogTreeModel,

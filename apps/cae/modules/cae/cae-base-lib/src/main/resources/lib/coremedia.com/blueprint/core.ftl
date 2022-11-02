@@ -95,15 +95,3 @@
 <#function getLinkToThemeResource path>
   <#return blueprintFreemarkerFacade.getLinkToThemeResource(path)>
 </#function>
-
-<#-- --- DEPRECATED/UNUSED ----------------------------------------------------------------------------------------- -->
-
-<#-- DEPRECATED, use cm.getLink(target, cm.UNDEFINED, { "filename": filename }); instead -->
-
-<#function getBlobLink target filename="">
-  <#if cm.isUndefined(target)>
-    <#return ""/>
-  </#if>
-  <#return blueprintFreemarkerFacade.getBlobLink(target, filename)>
-</#function>
-

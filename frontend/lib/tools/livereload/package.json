@@ -10,13 +10,13 @@
     "node": ">=16"
   },
   "dependencies": {
-    "@coremedia/cm-logger": "workspace:*",
-    "@coremedia/tool-utils": "workspace:*",
+    "@coremedia/cm-logger": "workspace:1.0.0",
+    "@coremedia/tool-utils": "workspace:1.0.0",
     "tiny-lr": "^2.0.0"
   },
   "devDependencies": {
     "jest": "^27.5.1",
-    "prettier": "^2.6.2"
+    "prettier": "^2.7.1"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{js,json}\"",

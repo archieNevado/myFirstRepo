@@ -28,6 +28,8 @@ scalar JSON
 
 scalar Long
 
+scalar UUID
+
 """
 The top query root
 """
@@ -48,7 +50,7 @@ type ContentRoot {
   """
   content(
     """
-    The content id as `integer` or formatted as *coremedia:///cap/content/<id>*.
+    The content id as `integer` or formatted as *coremedia:///cap/content/<id>* or its UUID.
     """
     id: String!,
     """
@@ -61,7 +63,7 @@ type ContentRoot {
   """
   article(
     """
-    The content id as `integer` or formatted as *coremedia:///cap/content/<id>*.
+    The content id as `integer` or formatted as *coremedia:///cap/content/<id>* or its UUID.
     """
     id: String!): CMArticle @fetch(from: "getContent(#id, 'CMArticle')")
 
@@ -70,7 +72,7 @@ type ContentRoot {
   """
   picture(
     """
-    The content id as `integer` or formatted as *coremedia:///cap/content/<id>*.
+    The content id as `integer` or formatted as *coremedia:///cap/content/<id>* or its UUID.
     """
     id: String!): CMPicture @fetch(from: "getContent(#id, 'CMPicture')")
 
@@ -79,7 +81,7 @@ type ContentRoot {
   """
   page(
     """
-    The content id as `integer` or formatted as *coremedia:///cap/content/<id>*.
+    The content id as `integer` or formatted as *coremedia:///cap/content/<id>*  or its UUID.
     """
     id: String!): CMChannel
 
@@ -217,6 +219,9 @@ interface CMImageMap @inherit(from: ["CMTeaser"]) {
 interface CMInteractive @inherit(from: ["CMVisual"]) {}
 
 interface CMLinkable @inherit(from: ["CMLocalized", "CollectionItem"]) {
+  """
+  Retrieves settings as JSON by a list of list with path segments, e.g. settings(path: [["path1-segment1", "path1-segment2"], ["path2-segment1", "path2-segment2"]]. Supports "\*" as a wildcard to retrieve all settings at once: settings(path: "\*")
+  """
   settings(paths: [[String!]!]!): JSON
   contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
   contentInSettingPaged(paths: [[String!]!]!, offset: Int, limit: Int): LinkedContentEntryPaginationResult
@@ -259,7 +264,7 @@ interface CMLocTaxonomy @inherit(from: ["CMTaxonomy"]) {
 
 interface CMMedia @inherit(from: ["CMTeasable"]) {
   alt: String
-  caption(view: String): String
+  caption(view: String, suppressRootTag: Boolean): String
   captionAsTree(view: String): RichTextTree
   captionReferencedContent(view: String): [Content_!]
   copyright: String
@@ -298,6 +303,7 @@ interface CMPicture @inherit(from: ["CMVisual"]) {
 }
 
 interface CMPlaceholder @inherit(from: ["CMTeasable"]) {
+  placeholderId: String!
 }
 
 interface CMResourceBundle @inherit(from: ["CMLocalized"]) {
@@ -305,6 +311,9 @@ interface CMResourceBundle @inherit(from: ["CMLocalized"]) {
 }
 
 interface CMSettings @inherit(from: ["CMLocalized"]) {
+  """
+  Retrieves settings as JSON by a list of list with path segments, e.g. settings(path: [["path1-segment1", "path1-segment2"], ["path2-segment1", "path2-segment2"]]. Supports "\*" as a wildcard to retrieve all settings at once: settings(path: "\*")
+  """
   settings(paths: [[String]]): JSON
   identifier: String
 }
@@ -312,6 +321,9 @@ interface CMSettings @inherit(from: ["CMLocalized"]) {
 interface CMSite @inherit(from: ["CMLocalized"]) {
   id: ID!
   root: CMNavigation
+  """
+  Retrieves settings as JSON by a list of list with path segments, e.g. settings(path: [["path1-segment1", "path1-segment2"], ["path2-segment1", "path2-segment2"]]. Supports "\*" as a wildcard to retrieve all settings at once: settings(path: "\*")
+  """
   settings(paths: [[String!]!]!): JSON
 }
 
@@ -365,6 +377,7 @@ interface CollectionItem {
 
 interface Content_ {
   id: ID!
+  uuid: UUID!
   creationDate: String!
   modificationDate: String!
   name: String!
@@ -380,7 +393,7 @@ interface Detail {
 }
 
 type RichText {
-  text(view: String): String @fetch(from: "#this?.view(#view?:'default')")
+  text(view: String, suppressRootTag: Boolean): String @fetch(from: "#this?.view(#view?:'default', #suppressRootTag)")
   textAsTree(view: String): RichTextTree @fetch(from: "#this?.view(#view?:'default')")
   textReferencedContent(view: String): [Content_!] @fetch(from: "#this?.view(#view?:'default')?.getReferencedContent()")
 }
@@ -523,7 +536,7 @@ type CMLocTaxonomyImpl implements CMLocTaxonomy @inherit(from: ["CMTaxonomyImpl"
 
 type CMMediaImpl implements CMMedia @inherit(from: ["CMTeasableImpl"]) {
   alt: String
-  caption(view: String): String
+  caption(view: String, suppressRootTag: Boolean): String @fetch(from: "caption?.view(#view?:'default', #suppressRootTag)")
   captionAsTree(view: String): RichTextTree @fetch(from: "caption?.view(#view?:'default')")
   captionReferencedContent(view: String): [Content_!] @fetch(from: "caption?.view(#view?:'default')?.getReferencedContent()")
   copyright: String
@@ -563,6 +576,7 @@ type CMPictureImpl implements CMPicture @inherit(from: ["CMVisualImpl"]) {
 }
 
 type CMPlaceholderImpl implements CMPlaceholder @inherit(from: ["CMTeasableImpl"]) {
+  placeholderId: String! @fetch(from: "#this.getString('id')")
 }
 
 type CMResourceBundleImpl implements CMResourceBundle @inherit(from: ["CMLocalizedImpl"]) {
@@ -667,6 +681,7 @@ type CMVisualImpl implements CMVisual @inherit(from: ["CMMediaImpl"]) {
 
 type Content_Impl implements Content_ {
   id: ID! @fetch(from: "@contentIdProvider.apply(#root)")
+  uuid: UUID!
   creationDate: String!
   modificationDate: String!
   name: String!

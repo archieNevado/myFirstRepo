@@ -2,6 +2,7 @@ query getArticleById($id: String!) {
   content {
     article(id: $id) {
       id
+      uuid
       repositoryPath
       locale
       name

@@ -633,6 +633,7 @@ interface BlueprintDocumentTypes_properties {
  *CMTeasable_thumbnail_toolTip=Picture for Teaser view
 
  */
+  "CMTeasable_localSettings.teaserOverlay.style_text": string;
   "CMTeasable_localSettings.teaserSettings.renderLinkToDetailPage_text": string;
   CMTeasable_callToActionConfiguration_text: string;
   CMTeasable_callToActionConfiguration_enable_cta_text: string;
@@ -1248,6 +1249,7 @@ const BlueprintDocumentTypes_properties: BlueprintDocumentTypes_properties = {
   CMTeasable_teaserTitle_toolTip: "Title of the teaser",
   CMTeasable_teaserTitle_emptyText: "Enter a teaser title here.",
   CMTeasable_authors_text: "Authors",
+  "CMTeasable_localSettings.teaserOverlay.style_text": "Teaser Style",
   "CMTeasable_localSettings.teaserSettings.renderLinkToDetailPage_text": "Render Link To Detail Page",
   CMTeasable_callToActionConfiguration_text: "Call-to-Action-Button",
   CMTeasable_callToActionConfiguration_enable_cta_text: "Show Call-to-Action Button",
