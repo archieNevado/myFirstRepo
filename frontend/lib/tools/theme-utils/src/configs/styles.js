@@ -1,5 +1,4 @@
 const autoprefixer = require("autoprefixer");
-const postcssObjectFitImages = require("postcss-object-fit-images");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const fs = require("fs");
 const nodeSass = require("node-sass");
@@ -138,15 +137,13 @@ module.exports = ({ dependencyCheckPlugin, mode }) => (config) =>
                     // enable css-grid for IE
                     grid: true,
                   }),
-                  postcssObjectFitImages,
                 ],
               },
             },
             {
               loader: "resolve-url-loader",
               options: {
-                sourceMap: mode === "development",
-                keepQuery: true,
+                sourceMap: mode === "development"
               },
             },
             {

@@ -27,8 +27,8 @@
     <docker.repository.suffix>${project.build.finalName}</docker.repository.suffix>
     <docker.image.tag>latest</docker.image.tag>
     <!--used as docker build args-->
-    <docker.nginx-base-image.tag>1.23.1-alpine</docker.nginx-base-image.tag>
-    <docker.nginx-base-image.repo>nginx</docker.nginx-base-image.repo>
+    <docker.nginx-base-image.tag>1.0.1-cm-1.23.2-alpine</docker.nginx-base-image.tag>
+    <docker.nginx-base-image.repo>coremedia/nginx-base</docker.nginx-base-image.repo>
 
     <application-plugin.version>3.0.1</application-plugin.version>
   </properties>

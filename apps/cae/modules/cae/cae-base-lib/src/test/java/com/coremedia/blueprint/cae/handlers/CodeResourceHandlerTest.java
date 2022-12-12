@@ -89,12 +89,13 @@ public class CodeResourceHandlerTest {
   // unit test real frontend resources are not arranged in Java-driven
   // package directories.
 
-  private static final String LINK_TO_SINGLE_RESOURCE = "/" + PREFIX_RESOURCE + "/com/coremedia/blueprint/cae/handlers/coderesource/js/my-custom-40-2.js";
+  private static final String LINK_TO_SINGLE_RESOURCE = "/" + PREFIX_RESOURCE + "/com/coremedia/blueprint/cae/handlers/coderesource/js/my-cústom-40-2.js";
+  private static final String ENCODED_LINK_TO_SINGLE_RESOURCE = "/" + PREFIX_RESOURCE + "/com/coremedia/blueprint/cae/handlers/coderesource/js/my-c%C3%BAstom-40-2.js";
   private static final String LINK_TO_NOT_LOCAL_RESOURCE = "/" + PREFIX_RESOURCE + "/com/coremedia/blueprint/cae/handlers/coderesource/js/not-local-42-3.js";
 
-  private static final String LINK_TO_WRONG_SINGLE_CONTENT_RESOURCE_1 = "/" + PREFIX_RESOURCE + "/css/my-custom-40-2.css";
+  private static final String LINK_TO_WRONG_SINGLE_CONTENT_RESOURCE_1 = "/" + PREFIX_RESOURCE + "/css/my-cústom-40-2.css";
   private static final String LINK_TO_WRONG_SINGLE_CONTENT_RESOURCE_2 = "/" + PREFIX_RESOURCE + "/js/wrong-name-40-2.js";
-  private static final String LINK_TO_SINGLE_CONTENT_RESOURCE_OLD_VERSION = "/" + PREFIX_RESOURCE + "/js/my-custom-40-1.js";
+  private static final String LINK_TO_SINGLE_CONTENT_RESOURCE_OLD_VERSION = "/" + PREFIX_RESOURCE + "/js/my-cústom-40-1.js";
 
   private static final String LINK_TO_DELETED_LOCAL_RESOURCE = "/" + PREFIX_RESOURCE + "/com/coremedia/blueprint/cae/handlers/coderesource/js/deleted-50-2.js";
   private static final String LINK_TO_WRONG_LOCAL_RESOURCE = "/" + PREFIX_RESOURCE + "/js/does-not-exist.js";
@@ -265,7 +266,7 @@ public class CodeResourceHandlerTest {
   @Test
   public void testLinkForManagedResources() {
     String url = linkFormatterTestHelper.formatLink(abstractCodeBean);
-    assertEquals("urls do not match", LINK_TO_SINGLE_RESOURCE , url);
+    assertEquals("urls do not match", ENCODED_LINK_TO_SINGLE_RESOURCE , url);
   }
 
   @Test
@@ -273,7 +274,7 @@ public class CodeResourceHandlerTest {
     //we need local resources enabled here.
     testling.setLocalResourcesEnabled(true);
     String url = linkFormatterTestHelper.formatLink(abstractCodeBean);
-    assertEquals("urls do not match", LINK_TO_SINGLE_RESOURCE , url);
+    assertEquals("urls do not match", ENCODED_LINK_TO_SINGLE_RESOURCE , url);
   }
 
   @Test

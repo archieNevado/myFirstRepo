@@ -21,6 +21,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -81,7 +82,7 @@ public class DownloadPortalHandlerDownloadCollectionTest {
 
   @BeforeClass
   public static void prepare() throws IOException {
-    zipFile = File.createTempFile("temp-file-name", ".tmp");
+    zipFile = Files.createTempFile("temp-file-name", ".tmp").toFile();
   }
 
   @Before
@@ -187,7 +188,7 @@ public class DownloadPortalHandlerDownloadCollectionTest {
 
   @Test
   public void testDownloadRenditionCollectionFound() throws IOException {
-    File file = File.createTempFile("amDownload", null);
+    File file = Files.createTempFile("amDownload", null).toFile();
     when(downloadPortalFactory.getPreparedDownload(anyList())).thenReturn(file);
     handler.downloadRenditionCollection("{\"" + ASSET_CONTENT_ID_AVAILABLE + "\":[\"original\"]}", response);
     assertEquals(HttpServletResponse.SC_OK, response.getStatus());

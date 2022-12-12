@@ -20,13 +20,13 @@
     "bricks/*"
   ],
   "engines": {
-    "node": ">=14"
+    "node": "^14 || ^16"
   },
   "dependencies": {
     "lerna": "^5.1.8"
   },
   "resolutions": {
-    "**/glob-parent": "^5.1.2"
+    "**/glob-parent": "^6.0.2"
   },
   "coremedia": {
     "type": "workspace"

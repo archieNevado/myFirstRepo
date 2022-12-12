@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.ecommerce.ibm.catalog;
 
 import com.coremedia.livecontext.ecommerce.catalog.ProductAttribute;
+import com.coremedia.livecontext.ecommerce.common.CustomAttributes;
 import com.coremedia.livecontext.ecommerce.ibm.common.DataMapHelper;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -76,6 +77,12 @@ class ProductAttributeImpl implements ProductAttribute {
             .map(item -> DataMapHelper.getValueForKey(item, "value"))
             .filter(Objects::nonNull)
             .collect(toList());
+  }
+
+  @NonNull
+  @Override
+  public CustomAttributes getCustomAttributes() {
+    return CustomAttributes.empty();
   }
 
   @Override

@@ -1,4 +1,4 @@
-ARG NGINX_BASE_IMAGE=nginx:1.23.1-alpine
+ARG NGINX_BASE_IMAGE=coremedia/nginx-base:1.0.1-cm-1.23.2-alpine
 FROM ${NGINX_BASE_IMAGE}
 ENV CMS_IOR WFS_IOR
 EXPOSE 8080

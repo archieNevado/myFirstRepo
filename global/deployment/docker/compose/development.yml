@@ -443,6 +443,10 @@ services:
 
 
 volumes:
+  commerce-adapter-commercetools-cache: {}
+  commerce-adapter-hybris-cache: {}
+  commerce-adapter-sfcc-cache: {}
+  commerce-adapter-wcs-cache: {}
   content-feeder-cache: {}
   cae-preview-cache: {}
   cae-live-cache: {}

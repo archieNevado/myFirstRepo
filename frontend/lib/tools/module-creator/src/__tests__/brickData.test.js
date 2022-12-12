@@ -17,19 +17,19 @@ const {
 
 describe("initPackageJson()", () => {
   it("returns data for package.json", () => {
-    expect(initPackageJson("test")).toMatchSnapshot();
+    expect(initPackageJson("my-test")).toMatchSnapshot();
   });
 });
 
 describe("initBrickIndexJs()", () => {
   it("returns data for index.js", () => {
-    expect(initBrickIndexJs("test")).toMatchSnapshot();
+    expect(initBrickIndexJs("my-test")).toMatchSnapshot();
   });
 });
 
 describe("initBrickInitJs()", () => {
   it("returns data for init.js", () => {
-    expect(initBrickInitJs("test")).toMatchSnapshot();
+    expect(initBrickInitJs("my-test")).toMatchSnapshot();
   });
 });
 
@@ -41,13 +41,13 @@ describe("initBrickJs()", () => {
 
 describe("initBrickPartialsScss()", () => {
   it("returns data for _partials.scss", () => {
-    expect(initBrickPartialsScss("test")).toMatchSnapshot();
+    expect(initBrickPartialsScss("my-test")).toMatchSnapshot();
   });
 });
 
 describe("initBrickVariablesScss()", () => {
   it("returns data for _variables.scss", () => {
-    expect(initBrickVariablesScss("test")).toMatchSnapshot();
+    expect(initBrickVariablesScss("my-test")).toMatchSnapshot();
   });
 });
 

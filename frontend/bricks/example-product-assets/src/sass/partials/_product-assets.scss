@@ -16,6 +16,8 @@
 
   .cm-media--uncropped {
     object-fit: contain;
+    // polyfill for objectFitImages()
+    font-family: "object-fit: contain;";
   }
 
   &--portrait {

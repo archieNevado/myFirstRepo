@@ -29,8 +29,8 @@
     <!--used as docker build args-->
     <docker.alpine-base-image.tag>3.9.4</docker.alpine-base-image.tag>
     <docker.alpine-base-image.repo>alpine</docker.alpine-base-image.repo>
-    <docker.nginx-base-image.tag>1.23.1-alpine</docker.nginx-base-image.tag>
-    <docker.nginx-base-image.repo>nginx</docker.nginx-base-image.repo>
+    <docker.nginx-base-image.tag>1.0.1-cm-1.23.2-alpine</docker.nginx-base-image.tag>
+    <docker.nginx-base-image.repo>coremedia/nginx-base</docker.nginx-base-image.repo>
     <prometheus-agent.version>0.3.1</prometheus-agent.version>
   </properties>
 

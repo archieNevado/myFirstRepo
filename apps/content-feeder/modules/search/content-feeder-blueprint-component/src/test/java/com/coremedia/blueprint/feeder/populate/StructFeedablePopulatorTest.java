@@ -75,7 +75,10 @@ public class StructFeedablePopulatorTest {
       @Override
       public void setStringElement(String s, String s1) {
         assertEquals("unexpected field", "textbody", s);
-        assertEquals("unexpected struct", "booleanProperty stringProperty testString integerProperty dateProperty 2010-01-01T10:00:23-10:00 doubleProperty 2.3 linkProperty markupListProperty blobListProperty structProperty", s1);
+        assertEquals("unexpected struct", "booleanProperty stringProperty testString integerProperty " +
+                "dateProperty 2010-01-01T10:00:23-10:00 doubleProperty 2.3 stringListProperty string list 1 string list 2 " +
+                "linkProperty markupListProperty blobListProperty structProperty simpleString1 simple string1 simpleString2 simple string2 " +
+                "simpleStringList1 simple string5 simple string6 simpleString3 simple string3 simpleString4 simple string4", s1);
       }
 
       @Override

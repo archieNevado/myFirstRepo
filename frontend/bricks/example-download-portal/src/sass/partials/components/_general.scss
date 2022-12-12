@@ -588,6 +588,8 @@
   &--scale {
     .am-picture-box__picture {
       object-fit: contain;
+      // polyfill for objectFitImages()
+      font-family: "object-fit: contain;";
       // for object fit, the img actually needs a specified width/height (top, left, right and bottom is not sufficient).
       width: 100%;
       height: 100%;

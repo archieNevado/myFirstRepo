@@ -11,10 +11,10 @@ import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.elastic.core.api.models.Model;
 import com.coremedia.elastic.core.api.models.Query;
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
-import com.google.common.collect.ImmutableMap;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -77,7 +77,7 @@ public class EsAlxRetrievalApplicationContextTest {
 
   private static final String SERVICE = "service"; // compare with 12345settings.xml
   static final Object APPLICATION_NAME = "CoreMedia";
-  static final ImmutableMap<String, Object> EFFECTIVE_SETTINGS = ImmutableMap.of("applicationName", APPLICATION_NAME, "password", "password", "timeRange", 14, "maxLength", 4, "interval", 50000);
+  static final Map<String, Object> EFFECTIVE_SETTINGS = Map.of("applicationName", APPLICATION_NAME, "password", "password", "timeRange", 14, "maxLength", 4, "interval", 50000);
   static final List<String> ARTICLES = asList("113110", "1131110", "113152", "206", "886", "1234");
   static final List<String> TOP_4_ARTICLES = asList("contentbean:113110", "contentbean:1131110", "contentbean:113152", "contentbean:206");
 
@@ -105,6 +105,9 @@ public class EsAlxRetrievalApplicationContextTest {
   @Inject
   private SettingsService settingsService;
 
+  @Inject
+  private SitesService sitesService;
+
   private Content pageList;
   private long start;
 
@@ -113,12 +116,12 @@ public class EsAlxRetrievalApplicationContextTest {
     pageList = contentRepository.getContent("12348"); // compare with contenttest.xml
 
     when(analyticsServiceProvider.getServiceKey()).thenReturn(SERVICE);
-    when(analyticsServiceProvider.computeEffectiveRetrievalSettings(eq(pageList), any(Content.class)))
+    when(analyticsServiceProvider.computeEffectiveRetrievalSettings(any(), any(Content.class)))
     .then(new Answer<Object>() {
       @Override
       public Object answer(InvocationOnMock invocation) throws Throwable {
         final Object[] args = invocation.getArguments();
-        return RetrievalUtil.computeEffectiveRetrievalSettings(SERVICE, EFFECTIVE_SETTINGS, (Content)args[0], (Content) args[1], settingsService);
+        return RetrievalUtil.computeEffectiveRetrievalSettings(SERVICE, EFFECTIVE_SETTINGS, (Content)args[0], (Content) args[1], settingsService, sitesService);
       }
     });
 
@@ -213,9 +216,9 @@ public class EsAlxRetrievalApplicationContextTest {
   public void runPageViewHistoryTaskWithResult() throws Exception {
     Map<String, Map<String, Long>> data = new HashMap<>();
     String today = new SimpleDateFormat(REPORT_DATE_FORMAT, Locale.getDefault()).format(new Date());
-    data.put("not_a_content_id", ImmutableMap.of(today, 13L));
+    data.put("not_a_content_id", Map.of(today, 13L));
     final String articleId = ARTICLES.get(0);
-    data.put(articleId, ImmutableMap.of(today, 5L));
+    data.put(articleId, Map.of(today, 5L));
     when(analyticsServiceProvider.fetchPageViews(any(Content.class), anyMap())).thenReturn(data);
 
     fetchPageViewHistoryTask.run();

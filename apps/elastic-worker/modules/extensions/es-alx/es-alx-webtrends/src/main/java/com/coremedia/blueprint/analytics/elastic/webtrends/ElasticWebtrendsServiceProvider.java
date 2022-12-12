@@ -4,6 +4,7 @@ import com.coremedia.blueprint.analytics.elastic.retrieval.AnalyticsServiceProvi
 import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.multisite.SitesService;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
@@ -47,6 +48,9 @@ public class ElasticWebtrendsServiceProvider implements AnalyticsServiceProvider
 
   @Inject
   private SettingsService settingsService;
+
+  @Inject
+  private SitesService sitesService;
 
   private static final String WEBTRENDS_REST_URL_PATTERN = "https://ws.webtrends.com/v3/Reporting/profiles/{0,number,#}/reports/{1}/?totals=none&start_period=current_day-{2,number,#}&end_period=current_day&period_type=agg&range={3,number,#}&sortby={4}&format=json";
   private static final String WEBTRENDS_HOST = "ws.webtrends.com";
@@ -180,6 +184,6 @@ public class ElasticWebtrendsServiceProvider implements AnalyticsServiceProvider
 
   @Override
   public Map<String, Object> computeEffectiveRetrievalSettings(Content cmalxBaseList, Content rootNavigation) {
-    return RetrievalUtil.computeEffectiveRetrievalSettings(WEBTRENDS_SERVICE_KEY, DEFAULT_RETRIEVAL_SETTINGS, cmalxBaseList, rootNavigation, settingsService);
+    return RetrievalUtil.computeEffectiveRetrievalSettings(WEBTRENDS_SERVICE_KEY, DEFAULT_RETRIEVAL_SETTINGS, cmalxBaseList, rootNavigation, settingsService, sitesService);
   }
 }

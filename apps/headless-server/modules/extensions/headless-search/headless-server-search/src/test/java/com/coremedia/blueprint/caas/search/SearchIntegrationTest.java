@@ -1,12 +1,14 @@
 package com.coremedia.blueprint.caas.search;
 
 import com.coremedia.blueprint.base.caas.model.adapter.SearchResult;
+import com.coremedia.blueprint.base.caas.model.adapter.SearchServiceAdapter;
 import com.coremedia.blueprint.base.caas.model.adapter.SearchServiceAdapterFactory;
+import com.coremedia.caas.filter.ValidityDateFilterPredicate;
 import com.coremedia.caas.search.model.FilterQueryArg;
 import com.coremedia.caas.search.solr.SolrSearchResultFactory;
-import com.coremedia.caas.wiring.ContextInstrumentation;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
+import graphql.GraphQLContext;
 import graphql.execution.DataFetcherResult;
 import graphql.execution.instrumentation.parameters.InstrumentationFieldFetchParameters;
 import graphql.schema.DataFetchingEnvironment;
@@ -27,6 +29,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.inject.Inject;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -45,9 +48,6 @@ public class SearchIntegrationTest {
   @Inject
   private SearchServiceAdapterFactory searchServiceAdapterFactory;
 
-  @Inject
-  private ContextInstrumentation contextInstrumentation;
-
   @MockBean(name = "searchResultFactory")
   private SolrSearchResultFactory solrSearchResultFactory;
 
@@ -58,27 +58,30 @@ public class SearchIntegrationTest {
   private InstrumentationFieldFetchParameters parameters;
 
   @Mock
-  private DataFetchingEnvironment environment;
+  private DataFetchingEnvironment dataFetchingEnvironment;
+
+  @Mock
+  private GraphQLContext graphQLContext;
 
   @BeforeEach
   public void setup() {
-    when(parameters.getEnvironment()).thenReturn(environment);
-    when(environment.getContext()).thenReturn(new HashMap<>());
-    contextInstrumentation.beginFieldFetch(parameters);
-
+    when(dataFetchingEnvironment.getGraphQlContext()).thenReturn(graphQLContext);
+    when(graphQLContext.get(ValidityDateFilterPredicate.VIEW_DATE)).thenReturn(ZonedDateTime.now());
+    when(parameters.getEnvironment()).thenReturn(dataFetchingEnvironment);
     when(solrSearchResultFactory.createSearchResult(any(SolrQuery.class))).thenReturn(queryResponse);
   }
 
   @Test
   void searchConfigTest() {
     when(queryResponse.getResults().getNumFound()).thenReturn(1L);
-    SearchResult searchResult = searchServiceAdapterFactory.to().search("test", null, null, null, null, null, null);
-    assertThat(searchResult.getNumFound()).isEqualTo(1);
+    DataFetcherResult<SearchResult> searchResult = getSearchServiceAdapter().search("test", null, null, null, null, null, null, Collections.emptyList());
+    assertThat(searchResult.hasErrors()).isFalse();
+    assertThat(searchResult.getData().getNumFound()).isEqualTo(1);
   }
 
   @Test
   void customFilterQueriesTest() {
-    searchServiceAdapterFactory.to().search("test", null, null, null, null, null, null);
+    getSearchServiceAdapter().search("test", null, null, null, null, null, null);
 
     ArgumentCaptor<SolrQuery> solrQueryCaptor = ArgumentCaptor.forClass(SolrQuery.class);
     verify(solrSearchResultFactory).createSearchResult(solrQueryCaptor.capture());
@@ -88,7 +91,7 @@ public class SearchIntegrationTest {
 
   @Test
   void customSolrFieldsTest() {
-    searchServiceAdapterFactory.to().search("test", null, null, null, Collections.singletonList("TESTFIELD_ASC"), null, null);
+    getSearchServiceAdapter().search("test", null, null, null, Collections.singletonList("TESTFIELD_ASC"), null, null);
 
     ArgumentCaptor<SolrQuery> solrQueryCaptor = ArgumentCaptor.forClass(SolrQuery.class);
     verify(solrSearchResultFactory).createSearchResult(solrQueryCaptor.capture());
@@ -99,8 +102,14 @@ public class SearchIntegrationTest {
 
   @Test
   void customSolrFieldsTest_error() {
-    DataFetcherResult<SearchResult> result = searchServiceAdapterFactory.to().search("test", null, null, null, Collections.singletonList("INVALIDFIELD_DESC"), null, null, Collections.emptyList());
+    DataFetcherResult<SearchResult> result = getSearchServiceAdapter().search("test", null, null, Collections.emptyList(), Collections.singletonList("INVALIDFIELD_DESC"), null, null, Collections.emptyList());
     assertThat(result.hasErrors()).isTrue();
+  }
+
+  private SearchServiceAdapter getSearchServiceAdapter() {
+    SearchServiceAdapter searchServiceAdapter = searchServiceAdapterFactory.to();
+    searchServiceAdapter.setDataFetchingEnvironment(dataFetchingEnvironment);
+    return searchServiceAdapter;
   }
 
   @Configuration(proxyBeanMethods = false)
@@ -110,11 +119,6 @@ public class SearchIntegrationTest {
     @Bean
     static XmlUapiConfig xmlUapiConfig() {
       return new XmlUapiConfig();
-    }
-
-    @Bean
-    public ContextInstrumentation contextInstrumentation() {
-      return new ContextInstrumentation();
     }
 
     @Bean

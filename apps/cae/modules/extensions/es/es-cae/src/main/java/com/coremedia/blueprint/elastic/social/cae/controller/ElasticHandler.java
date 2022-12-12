@@ -16,11 +16,11 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.user.User;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.inject.Inject;
 import java.net.URI;
 import java.util.ArrayList;
@@ -115,7 +115,8 @@ public abstract class ElasticHandler<T extends ContributionResult> extends Handl
                                          Map<String, Object> linkParameters) {
     UriComponentsBuilder uriBuilder = getUriComponentsBuilder(site, result, uriTemplate);
     addLinkParametersAsQueryParameters(uriBuilder, linkParameters);
-    return uriBuilder.build();
+    // UriComponentsBuilder#fromUri should go together with UriComponentsBuilder#build(true) according to the docs
+    return uriBuilder.build(true);
   }
 
   protected abstract UriComponentsBuilder getUriComponentsBuilder(Site site, T result, UriTemplate uriTemplate);

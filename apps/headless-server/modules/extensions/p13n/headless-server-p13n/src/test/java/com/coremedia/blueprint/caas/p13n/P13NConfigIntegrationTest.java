@@ -2,11 +2,11 @@ package com.coremedia.blueprint.caas.p13n;
 
 import com.coremedia.blueprint.base.caas.p13n.adapter.PersonalizationRule;
 import com.coremedia.blueprint.base.caas.p13n.adapter.PersonalizationRulesAdapterFactory;
-import com.coremedia.caas.wiring.ContextInstrumentation;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
+import graphql.GraphQLContext;
 import graphql.execution.instrumentation.parameters.InstrumentationFieldFetchParameters;
 import graphql.schema.DataFetchingEnvironment;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,9 +35,6 @@ public class P13NConfigIntegrationTest {
   private PersonalizationRulesAdapterFactory personalizationRulesAdapterFactory;
 
   @Inject
-  private ContextInstrumentation contextInstrumentation;
-
-  @Inject
   private ContentRepository contentRepository;
 
   @Mock
@@ -46,11 +43,13 @@ public class P13NConfigIntegrationTest {
   @Mock
   private DataFetchingEnvironment environment;
 
+  @Mock
+  private GraphQLContext graphQLContext;
+
   @BeforeEach
   public void setup() {
     when(parameters.getEnvironment()).thenReturn(environment);
-    when(environment.getContext()).thenReturn(new HashMap<>());
-    contextInstrumentation.beginFieldFetch(parameters);
+    when(environment.getGraphQlContext()).thenReturn(graphQLContext);
   }
 
   @Test
@@ -68,11 +67,6 @@ public class P13NConfigIntegrationTest {
     @Bean
     static XmlUapiConfig xmlUapiConfig() {
       return new XmlUapiConfig("classpath:/com/coremedia/blueprint/caas/p13n/contentrepository.xml");
-    }
-
-    @Bean
-    public ContextInstrumentation contextInstrumentation() {
-      return new ContextInstrumentation();
     }
   }
 }

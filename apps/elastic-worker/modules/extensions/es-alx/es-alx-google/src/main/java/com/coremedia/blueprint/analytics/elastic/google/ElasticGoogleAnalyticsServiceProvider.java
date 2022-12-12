@@ -6,6 +6,7 @@ import com.coremedia.blueprint.base.analytics.elastic.util.SettingsUtil;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.multisite.SitesService;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -65,6 +66,9 @@ public class ElasticGoogleAnalyticsServiceProvider implements AnalyticsServicePr
   @Inject
   private SettingsService settingsService;
 
+  @Inject
+  private SitesService sitesService;
+
   private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 
   private static final JsonFactory JSON_FACTORY = new JacksonFactory();
@@ -107,7 +111,13 @@ public class ElasticGoogleAnalyticsServiceProvider implements AnalyticsServicePr
   }
 
   private PrivateKey getPrivateKeyFromContent(GoogleAnalyticsSettings googleAnalyticsSettings) {
-    Content p12File = googleAnalyticsSettings.getP12File();
+    Content p12File;
+    try {
+      p12File = googleAnalyticsSettings.getP12File();
+    } catch (IllegalStateException e) {
+      // p12File is not configured in settings
+      return null;
+    }
     if (null != p12File) {
       Blob blob = p12File.getBlob("data");
       if (null != blob && blob.getSize() > 0) {
@@ -240,6 +250,6 @@ public class ElasticGoogleAnalyticsServiceProvider implements AnalyticsServicePr
 
   @Override
   public Map<String, Object> computeEffectiveRetrievalSettings(Content cmalxBaseList, Content rootNavigation) {
-    return RetrievalUtil.computeEffectiveRetrievalSettings(GOOGLE_ANALYTICS_SERVICE_KEY, DEFAULT_RETRIEVAL_SETTINGS, cmalxBaseList, rootNavigation, settingsService);
+    return RetrievalUtil.computeEffectiveRetrievalSettings(GOOGLE_ANALYTICS_SERVICE_KEY, DEFAULT_RETRIEVAL_SETTINGS, cmalxBaseList, rootNavigation, settingsService, sitesService);
   }
 }

@@ -16,6 +16,7 @@ import com.coremedia.xml.MarkupUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.test.context.TestPropertySource;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
+@TestPropertySource(properties = "delivery.preview-mode=true")
 public class CMArticleImplTest extends ContentBeanTestBase {
   private CMArticle article_en;
   private CMArticle article_de;

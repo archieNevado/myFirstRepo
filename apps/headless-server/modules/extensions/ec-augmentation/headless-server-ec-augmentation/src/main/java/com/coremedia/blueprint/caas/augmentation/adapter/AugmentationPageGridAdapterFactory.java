@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static java.lang.invoke.MethodHandles.lookup;
+import graphql.schema.DataFetchingEnvironment;
 
 @DefaultAnnotation(NonNull.class)
 public class AugmentationPageGridAdapterFactory extends PageGridAdapterFactory {
@@ -53,17 +54,17 @@ public class AugmentationPageGridAdapterFactory extends PageGridAdapterFactory {
    * @throws IllegalStateException if the page grid could not be loaded
    */
   @Deprecated(forRemoval = true, since = "2107")
-  public PageGridAdapter to(CommerceBean commerceBean) {
-    return to(getContent(commerceBean), propertyName);
+  public PageGridAdapter to(CommerceBean commerceBean, DataFetchingEnvironment dataFetchingEnvironment) {
+    return to(getContent(commerceBean), propertyName, dataFetchingEnvironment);
   }
 
-  public PageGridAdapter to(CommerceRef commerceRef) {
-    return to(getContent(getCommerceBean(commerceRef)), propertyName);
+  public PageGridAdapter to(CommerceRef commerceRef, DataFetchingEnvironment dataFetchingEnvironment) {
+    return to(getContent(getCommerceBean(commerceRef)), propertyName, dataFetchingEnvironment);
   }
 
-  public PageGridAdapter to(Augmentation augmentation) {
+  public PageGridAdapter to(Augmentation augmentation, DataFetchingEnvironment dataFetchingEnvironment) {
     CommerceRef commerceRef = augmentation.getCommerceRef();
-    return to(getContent(getCommerceBean(commerceRef)), propertyName);
+    return to(getContent(getCommerceBean(commerceRef)), propertyName, dataFetchingEnvironment);
   }
 
   private CommerceBean getCommerceBean(CommerceRef commerceRef){

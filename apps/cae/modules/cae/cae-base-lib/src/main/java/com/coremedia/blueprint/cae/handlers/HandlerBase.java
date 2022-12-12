@@ -75,6 +75,13 @@ public abstract class HandlerBase extends WebContentGenerator {
     this.permittedLinkParameterNames = permittedLinkParameterNames;
   }
 
+  /**
+   * Exposes the list, in order to simply modify via customizer.
+   */
+  public List<String> getPermittedLinkParameterNames() {
+    return permittedLinkParameterNames;
+  }
+
   public void setContentBeanIdConverter(ContentBeanIdConverter contentBeanIdConverter) {
     this.contentBeanIdConverter = contentBeanIdConverter;
   }

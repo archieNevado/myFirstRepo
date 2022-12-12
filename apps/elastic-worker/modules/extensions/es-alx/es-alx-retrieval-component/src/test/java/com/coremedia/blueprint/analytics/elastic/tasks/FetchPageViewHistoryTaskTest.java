@@ -4,11 +4,13 @@ import com.coremedia.blueprint.analytics.elastic.retrieval.AnalyticsServiceProvi
 import com.coremedia.blueprint.base.analytics.elastic.PageViewReportModelService;
 import com.coremedia.blueprint.base.analytics.elastic.PageViewTaskReportModelService;
 import com.coremedia.blueprint.base.analytics.elastic.ReportModel;
+import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
 import com.coremedia.blueprint.base.analytics.elastic.validation.ResultItemValidationService;
 import com.coremedia.blueprint.base.elastic.tenant.TenantSiteMapping;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.elastic.core.api.tenant.TenantService;
@@ -76,11 +78,14 @@ public class FetchPageViewHistoryTaskTest {
   static final String ARTICLE_CONTENT_ID = "1234";
   static final String NO_CONTENT_ID = "1230";
   static final String CHANNEL_CONTENT_ID = "12346";
+  static final Map<String, Object> DEFAULT_SETTINGS = Map.of("applicationName", "CoreMedia", "password", "password");
 
   @Inject
   private ContentRepository contentRepository;
   @Inject
   private SettingsService settingsService;
+  @Inject
+  private SitesService sitesService;
 
   private TenantService tenantService;
   private PageViewReportModelService modelService;
@@ -123,6 +128,16 @@ public class FetchPageViewHistoryTaskTest {
     analyticsSettings.put("applicationName", "CoreMedia");
 
     when(taskModelForRoot.getSettings()).thenReturn(analyticsSettings);
+
+    when(analyticsServiceProvider.computeEffectiveRetrievalSettings(eq(null), any(Content.class)))
+            .then(new Answer<Object>() {
+              @Override
+              public Object answer(InvocationOnMock invocation) throws Throwable {
+                final Object[] args = invocation.getArguments();
+                return RetrievalUtil.computeEffectiveRetrievalSettings(SERVICE_KEY, DEFAULT_SETTINGS, (Content)args[0], (Content) args[1], settingsService, sitesService);
+              }
+            });
+
     when(modelService.getReportModel(articleContent, SERVICE_KEY)).thenReturn(pageViewReportModel);
     when(tenantService.getCurrent()).thenReturn(TENANT);
 

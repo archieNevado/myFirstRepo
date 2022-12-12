@@ -18,6 +18,7 @@ import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.Vendor;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import graphql.schema.DataFetchingEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,9 +57,9 @@ public class AugmentationPageGridAdapterFactoryCmsOnly extends PageGridAdapterFa
     this.commerceSettingsHelper = commerceSettingsHelper;
   }
 
-  public PageGridAdapter to(CommerceRef commerceRef) {
+  public PageGridAdapter to(CommerceRef commerceRef, DataFetchingEnvironment dataFetchingEnvironment) {
     return to(getContent(commerceRef, sitesService.getSite(commerceRef.getSiteId())),
-            propertyName);
+            propertyName, dataFetchingEnvironment);
   }
 
   private CommerceId getCommerceId(CommerceRef commerceRef) {

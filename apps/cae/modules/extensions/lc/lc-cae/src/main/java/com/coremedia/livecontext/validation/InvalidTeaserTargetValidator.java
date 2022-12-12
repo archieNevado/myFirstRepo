@@ -6,14 +6,17 @@ import com.coremedia.blueprint.common.contentbeans.CMTeaser;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.services.validation.AbstractValidator;
 import com.coremedia.cap.struct.Struct;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
+
+import static java.lang.invoke.MethodHandles.lookup;
 
 /**
  * validates {@link CMTeaser} objects by validating the {@link com.coremedia.blueprint.common.contentbeans.CMTeaser#getTarget()}
@@ -24,7 +27,7 @@ import java.util.function.Predicate;
  */
 public class InvalidTeaserTargetValidator extends AbstractValidator<Object> {
 
-  private static final Logger LOG = LoggerFactory.getLogger(InvalidTeaserTargetPredicate.class);
+  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
 
   private static final String INHERIT_VALIDITY_SETTING_NAME = "useTeaserTargetValidity";
 
@@ -36,7 +39,7 @@ public class InvalidTeaserTargetValidator extends AbstractValidator<Object> {
   }
 
   @Override
-  public boolean supports(Class<?> clazz) {
+  public boolean supports(@NonNull Class<?> clazz) {
     return CMTeaser.class.isAssignableFrom(clazz) || Page.class.isAssignableFrom(clazz);
   }
 

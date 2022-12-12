@@ -13,6 +13,8 @@ import org.springframework.util.StringUtils;
 
 import java.util.function.Predicate;
 
+import static java.lang.invoke.MethodHandles.lookup;
+
 /**
  * {@link com.coremedia.livecontext.contentbeans.CMExternalProduct augmented Product} may link to a product that
  * does not existent on the remote commerce system anymore or does only exist in a workspace which is not currently selected.
@@ -21,7 +23,7 @@ import java.util.function.Predicate;
  * those augmented products silently, so that the rendering does not break.
  */
 public class ExternalProductValidator extends AbstractValidator<LiveContextExternalProduct> {
-  private static final Logger LOG = LoggerFactory.getLogger(ExternalProductValidator.class);
+  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
 
   @Override
   protected Predicate<LiveContextExternalProduct> createPredicate() {
@@ -44,7 +46,7 @@ public class ExternalProductValidator extends AbstractValidator<LiveContextExter
   }
 
   @Override
-  public boolean supports(Class<?> clazz) {
+  public boolean supports(@NonNull Class<?> clazz) {
     return CMExternalProduct.class.isAssignableFrom(clazz);
   }
 

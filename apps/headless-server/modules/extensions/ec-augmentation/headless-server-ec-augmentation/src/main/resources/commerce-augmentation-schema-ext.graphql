@@ -31,10 +31,10 @@ interface ProductAugmentation @inherit(from: ["Augmentation"]) {
 interface CategoryAugmentation @inherit(from: ["Augmentation"]){
 }
 
-type AugmentationImpl implements Augmentation, HasPageGrid {
+type AugmentationImpl implements Augmentation & HasPageGrid {
   id: ID!
   commerceRef: CommerceRef!
-  grid: PageGrid!  @fetch(from: "@categoryPageGridAdapter.to(#this)")
+  grid: PageGrid!  @fetch(from: "@categoryPageGridAdapter.to(#this, #dataFetchingEnvironment)")
   content: Content_
   picture: CMPicture @fetch(from: "@assetFacade.getPicture(#this.commerceRef)")
   pictures: [CMPicture]! @fetch(from: "@assetFacade.getPictures(#this.commerceRef)")
@@ -45,7 +45,7 @@ type AugmentationImpl implements Augmentation, HasPageGrid {
 }
 
 type ProductAugmentationImpl implements ProductAugmentation @inherit(from: ["AugmentationImpl"]){
-  pdpPagegrid: PageGrid! @fetch(from: "@productPageGridAdapter.to(#this)")
+  pdpPagegrid: PageGrid! @fetch(from: "@productPageGridAdapter.to(#this, #dataFetchingEnvironment)")
 }
 
 type CategoryAugmentationImpl implements CategoryAugmentation @inherit(from: ["AugmentationImpl"]){

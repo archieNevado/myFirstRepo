@@ -4,6 +4,10 @@
   <IntProperty Name="integerProperty">42</IntProperty>
   <StringProperty Name="dateProperty">2010-01-01T10:00:23-10:00</StringProperty>
   <StringProperty Name="doubleProperty">2.3</StringProperty>
+  <StringListProperty Name="stringListProperty">
+    <String>string list 1</String>
+    <String>string list 2</String>
+  </StringListProperty>
   <LinkListProperty Name="linkProperty" LinkType="coremedia:///cap/contenttype/CMTeasable">
     <Link xlink:href="coremedia:///cap/resources/6"/>
   </LinkListProperty>
@@ -17,6 +21,10 @@
     <Struct>
       <StringProperty Name="simpleString1">simple string1</StringProperty>
       <StringProperty Name="simpleString2">simple string2</StringProperty>
+      <StringListProperty Name="simpleStringList1">
+        <String>simple string5</String>
+        <String>simple string6</String>
+      </StringListProperty>
     </Struct>
     <Struct>
       <StringProperty Name="simpleString3">simple string3</StringProperty>

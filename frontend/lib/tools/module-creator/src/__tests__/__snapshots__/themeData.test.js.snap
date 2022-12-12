@@ -2,7 +2,7 @@
 
 exports[`initPackageJson() returns data for package.json 1`] = `
 "{
-  \\"name\\": \\"@coremedia/test-theme\\",
+  \\"name\\": \\"@coremedia/my-test-theme\\",
   \\"version\\": \\"1.0.0\\",
   \\"private\\": true,
   \\"scripts\\": {
@@ -30,7 +30,7 @@ exports[`initPackageJson() returns data for package.json 1`] = `
   \\"main\\": \\"src/js/index.js\\",
   \\"coremedia\\": {
     \\"type\\": \\"theme\\",
-    \\"init\\": \\"src/js/test.js\\"
+    \\"init\\": \\"src/js/my-test.js\\"
   },
   \\"browserslist\\": [
     \\"last 1 Chrome version\\",
@@ -42,13 +42,13 @@ exports[`initPackageJson() returns data for package.json 1`] = `
 `;
 
 exports[`initPreviewJs() returns data for preview.js 1`] = `
-"/*! Theme test: Preview JS */
+"/*! Theme my-test: Preview JS */
 // add preview specific code here...
 "
 `;
 
 exports[`initPreviewSass() returns data for preview.sass 1`] = `
-"/*! Theme test: Preview Styles */
+"/*! Theme my-test: Preview Styles */
 // ### VARIABLES ###
 
 // Own variables (need to be loaded first, so default values can be overridden)
@@ -78,31 +78,31 @@ exports[`initPreviewSass() returns data for preview.sass 1`] = `
 
 exports[`initThemeConfigJson() returns data for theme descriptor 1`] = `
 "{
-  \\"name\\": \\"test\\",
+  \\"name\\": \\"my-test\\",
   \\"styles\\": [
     {
       \\"type\\": \\"webpack\\",
-      \\"src\\": \\"src/sass/test.scss\\"
+      \\"src\\": \\"src/sass/my-test.scss\\"
     }
   ],
   \\"scripts\\": [
     {
       \\"type\\": \\"webpack\\",
-      \\"src\\": \\"src/js/test.js\\"
+      \\"src\\": \\"src/js/my-test.js\\"
     }
   ],
   \\"l10n\\": {
     \\"bundleEncoding\\": \\"UTF-8\\",
     \\"bundleNames\\": [
-      \\"Test\\"
+      \\"My-test\\"
     ]
   }
 }"
 `;
 
 exports[`initThemeIndexJs() returns data for index.js 1`] = `
-"/*! Theme test */
-import \\"./test.js\\";
+"/*! Theme my-test */
+import \\"./my-test.js\\";
 "
 `;
 
@@ -113,7 +113,7 @@ exports[`initThemeJs() returns data for <themeName>.js 1`] = `
 // --- JQUERY DOCUMENT READY -------------------------------------------------------------------------------------------
 
 //$(function () {
-//  utils.log(\\"Theme test is used.\\");
+//  utils.log(\\"Theme my-test is used.\\");
 //});
 "
 `;
@@ -127,7 +127,7 @@ exports[`initThemePrettierignore() returns data for .prettierignore 1`] = `
 `;
 
 exports[`initThemeSass() returns data for <themeName>.sass 1`] = `
-"/*! Theme test */
+"/*! Theme my-test */
 // ### VARIABLES ###
 
 // Own variables (need to be loaded first, so default values can be overridden)

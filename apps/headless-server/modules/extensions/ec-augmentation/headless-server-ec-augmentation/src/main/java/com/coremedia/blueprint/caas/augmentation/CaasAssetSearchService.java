@@ -18,6 +18,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -54,8 +55,9 @@ public class CaasAssetSearchService implements AssetSearchService {
     // Collect all filter queries
     List<String> filterQueries = new ArrayList<>();
 
-    filterQueries.add(SearchQueryHelper.validFromQuery(solrQueryBuilder.getValidFromFieldName()));
-    filterQueries.add(SearchQueryHelper.validToQuery(solrQueryBuilder.getValidToFieldName()));
+    ZonedDateTime viewDate = ZonedDateTime.now();
+    filterQueries.add(SearchQueryHelper.validFromPastToValueQuery(solrQueryBuilder.getValidFromFieldName(), viewDate));
+    filterQueries.add(SearchQueryHelper.validFromValueToFutureQuery(solrQueryBuilder.getValidToFieldName(), viewDate));
 
     // Content type filter
     docTypeFilterQuery(contentType).ifPresent(filterQueries::add);

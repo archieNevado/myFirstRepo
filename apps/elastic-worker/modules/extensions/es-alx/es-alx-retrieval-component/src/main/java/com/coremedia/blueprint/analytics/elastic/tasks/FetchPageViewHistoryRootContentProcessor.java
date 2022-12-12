@@ -54,7 +54,13 @@ class FetchPageViewHistoryRootContentProcessor {
                           @NonNull AnalyticsServiceProvider analyticsServiceProvider) {
     final String serviceKey = analyticsServiceProvider.getServiceKey();
     LOG.trace("Processing analytics provider {} for root navigation content {}", serviceKey, root);
-    int interval = RetrievalUtil.getInterval(serviceProviderSettings, INTERVAL);
+
+    Map<String, Object> effectiveRetrievalSettings = analyticsServiceProvider.computeEffectiveRetrievalSettings(null, root);
+    if (effectiveRetrievalSettings.isEmpty()) {
+      return;
+    }
+
+    int interval = RetrievalUtil.getInterval(effectiveRetrievalSettings, INTERVAL);
     if (interval <= 0) {
       LOG.debug("Retrieval for content ({}, {}) is disabled. Set setting '{}' greater than 0 to enable retrieval",
               root, serviceKey, interval);
@@ -63,12 +69,12 @@ class FetchPageViewHistoryRootContentProcessor {
     ReportModel taskModelForRoot = taskReportModelService.getReportModel(root, serviceKey);
     Date now = new Date();
 
-    if (!serviceProviderSettings.equals(taskModelForRoot.getSettings()) || needsUpdate(taskModelForRoot.getLastSaved(), now.getTime(), interval)) {
-      Map<String, Map<String, Long>> data = getValidatedPageViews(analyticsServiceProvider, root, serviceProviderSettings);
+    if (!effectiveRetrievalSettings.equals(taskModelForRoot.getSettings()) || needsUpdate(taskModelForRoot.getLastSaved(), now.getTime(), interval)) {
+      Map<String, Map<String, Long>> data = getValidatedPageViews(analyticsServiceProvider, root, effectiveRetrievalSettings);
       LOG.info("Updating {} page views for ('{}' / '{}')", data.size(), root, analyticsServiceProvider.getServiceKey());
       final Collection<ReportModel> reportModels = Maps.transformEntries(data, new ReportModelUpdater(now, serviceKey)).values();
       modelService.saveAll(reportModels);
-      taskModelForRoot.setSettings(serviceProviderSettings);
+      taskModelForRoot.setSettings(effectiveRetrievalSettings);
       savedAt(taskModelForRoot, now);
       taskModelForRoot.setReportData(Lists.newLinkedList(data.keySet()));
       taskModelForRoot.save();

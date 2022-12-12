@@ -1,8 +1,9 @@
 package com.coremedia.blueprint.assets.validation;
 
 import com.coremedia.blueprint.assets.contentbeans.AMAsset;
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.blueprint.common.services.validation.AbstractValidator;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.function.Predicate;
@@ -27,7 +28,7 @@ public class HasPublishedRenditionsValidator extends AbstractValidator<AMAsset> 
   }
 
   @Override
-  public boolean supports(Class<?> clazz) {
+  public boolean supports(@NonNull Class<?> clazz) {
     return AMAsset.class.isAssignableFrom(clazz);
   }
 }

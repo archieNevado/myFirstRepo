@@ -1,5 +1,8 @@
 package com.coremedia.blueprint.common.services.validation;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
+
 import java.util.List;
 
 /**
@@ -33,13 +36,14 @@ public interface ValidationService<S> {
    * caching dependencies.
    *
    * @param source   The objects to be filtered
-   * @return the filtered objects or null
+   * @return the filtered objects
    */
-  List<? extends S> filterList(List<? extends S> source);
+  @NonNull
+  List<? extends S> filterList(@NonNull List<? extends S> source);
 
   /**
    * @param source   A single object to be tested
    * @return true if valid, false otherwise
    */
-  boolean validate(S source);
+  boolean validate(@Nullable S source);
 }

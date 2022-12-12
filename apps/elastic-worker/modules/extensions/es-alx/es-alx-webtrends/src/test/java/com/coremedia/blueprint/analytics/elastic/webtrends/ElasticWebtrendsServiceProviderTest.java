@@ -18,6 +18,7 @@ import java.util.Map;
 
 import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCTYPE_EVENTLIST;
 import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCTYPE_PAGELIST;
+import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCUMENT_PROPERTY_ANALYTICS_PROVIDER;
 import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCUMENT_PROPERTY_TIME_RANGE;
 import static com.coremedia.blueprint.analytics.elastic.webtrends.ElasticWebtrendsServiceProvider.WEBTRENDS_SERVICE_KEY;
 import static java.util.Collections.emptyList;
@@ -59,6 +60,7 @@ public class ElasticWebtrendsServiceProviderTest {
   public void setUp() throws Exception {
     serviceSettings.clear();
     when(settingsService.mergedSettingAsMap(eq(WEBTRENDS_SERVICE_KEY), eq(String.class), eq(Object.class), eq(Content.class), any(Content.class))).thenReturn(serviceSettings);
+    when(settingsService.setting(eq(DOCUMENT_PROPERTY_ANALYTICS_PROVIDER), eq(String.class), any(Content.class), any(Content.class))).thenReturn(provider.getServiceKey());
 
     ContentType pageType = mock(ContentType.class);
     ContentType eventType = mock(ContentType.class);

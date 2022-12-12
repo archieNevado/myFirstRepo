@@ -11,7 +11,6 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -29,16 +28,10 @@ public class ValidationServiceImplTest {
     validationService = new ValidationServiceImpl<>();
   }
 
-  @Test(expected = NullPointerException.class)
-  public void validateValidatorsNotInitialized() {
-    validationService.setValidators(null);
-    validationService.validate(null);
-  }
-
   @Test
   public void validateNoValidators() {
     validationService.setValidators(Collections.<Validator<CMLinkable>>emptyList());
-    assertTrue(validationService.validate(null));
+    assertFalse(validationService.validate(null));
   }
 
   @Test
@@ -50,10 +43,7 @@ public class ValidationServiceImplTest {
     validators.add(mockValidator(true));
 
     validationService.setValidators(validators);
-    assertTrue(validationService.validate(null));
-    for(Validator validator : validators) {
-      verify(validator, times(1)).validate(null);
-    }
+    assertFalse(validationService.validate(null));
   }
 
   @Test
@@ -66,17 +56,9 @@ public class ValidationServiceImplTest {
 
     validationService.setValidators(validators);
     assertFalse(validationService.validate(null));
-    verify(validators.get(0), times(1)).validate(null);
-    verify(validators.get(1), times(1)).validate(null);
     for (int i=2; i<validators.size(); i++) {
       verify(validators.get(i), never()).validate(any(CMLinkable.class));
     }
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void filterListValidatorsNotInitialized() {
-    validationService.setValidators(null);
-    validationService.filterList(sourceList);
   }
 
   @Test

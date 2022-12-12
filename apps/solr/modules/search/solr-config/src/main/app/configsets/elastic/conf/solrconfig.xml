@@ -658,6 +658,12 @@
     </arr>
   </requestHandler>
 
+  <!--
+    Disable /sql request handler, which is implicitly enabled if running in SolrCloud mode.
+    It is not needed and disabled to avoid possible security vulnerability CVE-2022-39135.
+  -->
+  <requestHandler name="/sql" class="solr.NotFoundRequestHandler"/>
+
   <!-- Search Components
 
        Search components are registered to SolrCore and used by

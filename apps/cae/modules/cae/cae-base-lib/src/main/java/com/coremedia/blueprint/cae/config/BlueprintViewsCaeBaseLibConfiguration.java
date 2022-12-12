@@ -58,7 +58,7 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.annotation.Order;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -247,7 +247,8 @@ public class BlueprintViewsCaeBaseLibConfiguration {
                                                     HttpHeadView httpHeadView,
                                                     RobotsView robotsView,
                                                     FeedView feedView) {
-    Map<String, View> viewMap = new HashMap();
+    // the order is relevant as ResourceViewRepository iterates over the entries
+    Map<String, View> viewMap = new LinkedHashMap();
 
     viewMap.put("com.coremedia.xml.Markup", richtextMarkupView);
     viewMap.put("com.coremedia.xml.Markup#html", htmlMarkupView);
@@ -451,7 +452,8 @@ public class BlueprintViewsCaeBaseLibConfiguration {
   @Order(10000)
   public Map<String, Object> blueprintViewResolverCustomizer(ContextHelper contextHelper,
                                                              ContextStrategy contextStrategy) {
-    Map<String, Object> map = new HashMap<>();
+    // maintain the order of the entries of org.springframework.web.servlet.view.AbstractView#staticAttributes
+    Map<String, Object> map = new LinkedHashMap<>();
 
     map.put(ContextHelper.NAME_CONTEXTHELPER, contextHelper);
     map.put(ContextStrategy.NAME_CONTEXTSTRATEGY, contextStrategy);

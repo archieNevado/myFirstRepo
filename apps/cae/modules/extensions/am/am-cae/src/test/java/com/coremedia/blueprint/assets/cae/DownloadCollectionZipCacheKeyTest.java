@@ -9,6 +9,7 @@ import com.coremedia.cap.common.TempFileService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.mimetype.MimeTypeService;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.io.IOUtils;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -19,10 +20,10 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.activation.MimeType;
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -91,7 +92,7 @@ public class DownloadCollectionZipCacheKeyTest {
 
   @BeforeClass
   public static void prepare() throws IOException {
-    zipFile = File.createTempFile("temp-file-name", ".zip");
+    zipFile = Files.createTempFile("temp-file-name", ".zip").toFile();
   }
 
   @Before

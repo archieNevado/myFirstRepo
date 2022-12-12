@@ -12,7 +12,7 @@ yarn build
 ```
 
 Create a new theme and run the built-in command for developer mode.
-It will will automatically reload the browser if you make changes to the code.
+It will automatically reload the browser if you make changes to the code.
 
 ```sh
 yarn run create-theme <name>

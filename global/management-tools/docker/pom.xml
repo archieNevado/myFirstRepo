@@ -37,7 +37,7 @@
     |
     | For the tools, we use the jdk type of the image here to enable the JShell integration.
     -->
-    <docker.tools-base-image.tag>2.4.5-temurin-11-jdk-focal</docker.tools-base-image.tag>
+    <docker.tools-base-image.tag>1.1.0-cm-11.0.17-temurin-jdk-focal</docker.tools-base-image.tag>
 
     <application-plugin.version>3.0.1</application-plugin.version>
   </properties>

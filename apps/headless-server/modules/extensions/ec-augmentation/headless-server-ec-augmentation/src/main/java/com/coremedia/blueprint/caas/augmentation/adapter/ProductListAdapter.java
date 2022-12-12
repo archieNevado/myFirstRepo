@@ -18,8 +18,6 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,21 +33,17 @@ import static com.coremedia.blueprint.caas.augmentation.adapter.CommerceSearchFa
 import static com.coremedia.blueprint.caas.augmentation.adapter.CommerceSearchFacade.SEARCH_PARAM_OFFSET;
 import static com.coremedia.blueprint.caas.augmentation.adapter.CommerceSearchFacade.SEARCH_PARAM_ORDERBY;
 import static com.coremedia.blueprint.caas.augmentation.adapter.CommerceSearchFacade.SEARCH_PARAM_TOTAL;
-import static java.lang.invoke.MethodHandles.lookup;
 import static java.util.stream.Collectors.toList;
 
 @DefaultAnnotation(NonNull.class)
 public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
-
-  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
-
-  static final String STRUCT_KEY_EXTERNAL_ID = "externalId";
-  static final String STRUCT_KEY_PRODUCTLIST = "productList";
   static final String STRUCT_KEY_PRODUCTLIST_SELECT_FACET_VALUE = "selectedFacetValue";
-  static final String STRUCT_KEY_PRODUCTLIST_OFFSET = "offset";
-  static final String STRUCT_KEY_PRODUCTLIST_MAX_LENGTH = "maxLength";
-  static final String STRUCT_KEY_PRODUCTLIST_ORDER_BY = "orderBy";
-  static final String STRUCT_KEY_PRODUCTLIST_FILTER_FACET_QUERIES = "filterFacets";
+  public static final String STRUCT_KEY_EXTERNAL_ID = "externalId";
+  public static final String STRUCT_KEY_PRODUCTLIST = "productList";
+  public static final String STRUCT_KEY_PRODUCTLIST_OFFSET = "offset";
+  public static final String STRUCT_KEY_PRODUCTLIST_MAX_LENGTH = "maxLength";
+  public static final String STRUCT_KEY_PRODUCTLIST_ORDER_BY = "orderBy";
+  public static final String STRUCT_KEY_PRODUCTLIST_FILTER_FACET_QUERIES = "filterFacets";
 
   static final String ORDER_BY_DEFAULT = "";
   static final Map<String, Map<String, List<String>>> FILTER_FACET_DEFAULT = Map.of();

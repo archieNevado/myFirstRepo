@@ -8,10 +8,10 @@
   <version>1-SNAPSHOT</version>
 
   <properties>
-    <commerce-adapter-mock.version>1.6.16</commerce-adapter-mock.version>
-    <commerce-adapter-hybris.version>1.4.12</commerce-adapter-hybris.version>
-    <commerce-adapter-sfcc.version>1.4.14</commerce-adapter-sfcc.version>
-    <commerce-adapter-wcs.version>1.6.9</commerce-adapter-wcs.version>
+    <commerce-adapter-mock.version>1.7.3</commerce-adapter-mock.version>
+    <commerce-adapter-hybris.version>1.5.3</commerce-adapter-hybris.version>
+    <commerce-adapter-sfcc.version>1.5.3</commerce-adapter-sfcc.version>
+    <commerce-adapter-wcs.version>1.7.3</commerce-adapter-wcs.version>
   </properties>
 
   <!--

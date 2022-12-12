@@ -17,13 +17,9 @@ import com.coremedia.rest.invalidations.SimpleInvalidationSource;
 import com.coremedia.rest.linking.Linker;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.TaskScheduler;
-import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -48,8 +44,6 @@ import static java.util.stream.Stream.of;
 @SuppressWarnings("java:S1874" /* "@Deprecated" code should not be used */)
 public class CommerceCacheInvalidationSource extends SimpleInvalidationSource implements InvalidationPropagator {
 
-  private static final Logger LOG = LoggerFactory.getLogger(CommerceCacheInvalidationSource.class);
-
   private static final Set<String> GENERIC_INVALIDATION_URI_PATTERNS = Set.of(
           "livecontext/facets/{siteId:.*}/{catalogAlias:.*}/{workspaceId:.*}/{id:.*}",
           "livecontext/searchfacets/{siteId:.*}/{catalogAlias:.*}/{workspaceId:.*}/{id:.*}",
@@ -65,16 +59,6 @@ public class CommerceCacheInvalidationSource extends SimpleInvalidationSource im
   private TaskScheduler taskScheduler;
   private Linker linker;
   private SettingsService settingsService;
-
-  @Override
-  public void afterPropertiesSet() {
-    super.afterPropertiesSet();
-
-    if (taskScheduler == null) {
-      LOG.info("creating single threaded task scheduler for delayed invalidations");
-      taskScheduler = new ConcurrentTaskScheduler();
-    }
-  }
 
   @EventListener(CommerceCacheInvalidationEvent.class)
   @Order(1)
@@ -218,17 +202,14 @@ public class CommerceCacheInvalidationSource extends SimpleInvalidationSource im
     taskScheduler.schedule(addInvalidations, startTime);
   }
 
-  @Autowired(required = false)
   void setTaskScheduler(TaskScheduler taskScheduler) {
     this.taskScheduler = taskScheduler;
   }
 
-  @Autowired
   void setLinker(Linker linker) {
     this.linker = linker;
   }
 
-  @Autowired
   void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
   }

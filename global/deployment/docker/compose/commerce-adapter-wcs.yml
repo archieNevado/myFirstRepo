@@ -27,7 +27,9 @@ x-logging:
 
 services:
   commerce-adapter-wcs:
-    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-wcs:${COMMERCE_ADAPTER_WCS_VERSION:-1.6.9}
+    volumes:
+      - commerce-adapter-wcs-cache:/coremedia/cache
+    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-wcs:${COMMERCE_ADAPTER_WCS_VERSION:-1.7.3}
     container_name: commerce-adapter-wcs
     restart: always
     logging: *default-logging

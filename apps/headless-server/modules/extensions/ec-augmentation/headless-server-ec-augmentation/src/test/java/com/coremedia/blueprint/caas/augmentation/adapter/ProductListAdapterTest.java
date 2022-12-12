@@ -5,6 +5,7 @@ import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.caas.augmentation.CommerceEntityHelper;
 import com.coremedia.blueprint.caas.augmentation.model.CommerceRef;
 import com.coremedia.blueprint.caas.augmentation.model.CommerceRefFactory;
+import com.coremedia.caas.filter.ValidityDateFilterPredicate;
 import com.coremedia.caas.model.adapter.ExtendedLinkListAdapter;
 import com.coremedia.caas.model.adapter.ExtendedLinkListAdapterFactory;
 import com.coremedia.cap.common.CapPropertyDescriptor;
@@ -14,12 +15,15 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
+import graphql.GraphQLContext;
+import graphql.schema.DataFetchingEnvironment;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -99,6 +103,12 @@ class ProductListAdapterTest {
   @Mock
   private Site site;
 
+  @Mock
+  private DataFetchingEnvironment dataFetchingEnvironment;
+
+  @Mock
+  private GraphQLContext graphQLContext;
+
   private final Map<String, Object> PRODUCT_LIST_STRUCT_DEFAULTS = Map.of(
           STRUCT_KEY_PRODUCTLIST_SELECT_FACET_VALUE, "true",
           STRUCT_KEY_PRODUCTLIST_ORDER_BY, "priceDesc");
@@ -139,6 +149,8 @@ class ProductListAdapterTest {
     productSearchResult = Stream.of(dynamicTarget1, dynamicTarget2, dynamicTarget3).collect(Collectors.toList());
     lenient().when(commerceSearchFacade.searchProducts(eq(ProductListAdapter.ALL_QUERY), anyMap(), eq(site))).thenReturn(productSearchResult);
     lenient().when(site.getId()).thenReturn("sideId");
+
+    lenient().when(graphQLContext.get(ValidityDateFilterPredicate.VIEW_DATE)).thenReturn(ZonedDateTime.now());
 
     productListAdapter = new ProductListAdapter(extendedLinkListAdapterFactory, productList, settingsService, commerceEntityHelper, commerceSearchFacade, site, 0);
     when(settingsService.setting(STRUCT_KEY_PRODUCTLIST, Struct.class, productList)).thenReturn(struct);

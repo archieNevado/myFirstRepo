@@ -22,7 +22,7 @@ interface CommerceRef {
   internalLink: String!
 }
 
-type ProductRef implements CommerceRef, CollectionItem {
+type ProductRef implements CommerceRef & CollectionItem {
   id: ID!
   externalId: String!
   catalogId: String!
