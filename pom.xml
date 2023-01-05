@@ -13,6 +13,10 @@
   <version>1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
+  <properties>
+    <nvdFeedsMirror>https://nvd.nist.gov/feeds</nvdFeedsMirror>
+  </properties>
+
   <modules>
     <module>shared/common</module>
     <module>shared/middle</module>
@@ -79,7 +83,7 @@
           <plugin>
             <groupId>org.owasp</groupId>
             <artifactId>dependency-check-maven</artifactId>
-            <version>7.1.1</version>
+            <version>7.4.1</version>
             <configuration>
               <skipArtifactType>pom|coremedia-application</skipArtifactType>
               <skipProvidedScope>true</skipProvidedScope>
@@ -88,8 +92,8 @@
               <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
               <nodeAnalyzerEnabled>false</nodeAnalyzerEnabled>
               <nodeAuditAnalyzerEnabled>false</nodeAuditAnalyzerEnabled>
-              <cveUrlBase>https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-%d.json.gz</cveUrlBase>
-              <cveUrlModified>https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-modified.json.gz</cveUrlModified>
+              <cveUrlBase>${nvdFeedsMirror}/json/cve/1.1/nvdcve-1.1-%d.json.gz</cveUrlBase>
+              <cveUrlModified>${nvdFeedsMirror}/json/cve/1.1/nvdcve-1.1-modified.json.gz</cveUrlModified>
             </configuration>
           </plugin>
         </plugins>

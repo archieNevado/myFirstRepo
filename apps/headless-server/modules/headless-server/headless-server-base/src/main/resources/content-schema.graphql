@@ -298,6 +298,7 @@ interface CMPicture @inherit(from: ["CMVisual"]) {
 }
 
 interface CMPlaceholder @inherit(from: ["CMTeasable"]) {
+  placeholderId: String!
 }
 
 interface CMResourceBundle @inherit(from: ["CMLocalized"]) {
@@ -563,6 +564,7 @@ type CMPictureImpl implements CMPicture @inherit(from: ["CMVisualImpl"]) {
 }
 
 type CMPlaceholderImpl implements CMPlaceholder @inherit(from: ["CMTeasableImpl"]) {
+  placeholderId: String! @fetch(from: "#this.getString('id')")
 }
 
 type CMResourceBundleImpl implements CMResourceBundle @inherit(from: ["CMLocalizedImpl"]) {

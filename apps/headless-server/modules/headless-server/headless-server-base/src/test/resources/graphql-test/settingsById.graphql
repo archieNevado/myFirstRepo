@@ -1,0 +1,13 @@
+query getContentById($id: String!) {
+  content {
+    content(id: $id, type: "CMSettings") {
+      ... on CMSettings {
+        id
+        name
+        type
+        repositoryPath
+        settings
+      }
+    }
+  }
+}

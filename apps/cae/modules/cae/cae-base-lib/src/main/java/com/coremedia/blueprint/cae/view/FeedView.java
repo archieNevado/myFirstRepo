@@ -233,6 +233,7 @@ public class FeedView implements ServletView {
 
     feed.setLink(link);
     feed.setUri(link);
+    feed.setPublishedDate(feedSource.getPublishedDate());
     feed.setEncoding(DEFAULT_ENCODING);
   }
 

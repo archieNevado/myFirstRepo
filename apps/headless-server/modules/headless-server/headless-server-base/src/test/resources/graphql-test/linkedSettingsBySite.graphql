@@ -1,0 +1,15 @@
+query getSiteById($siteId: String!) {
+  content {
+    site(siteId: $siteId) {
+      id
+      name
+      repositoryPath
+      root {
+        id
+        name
+        type
+        settings(paths: ["clandestine"])
+      }
+    }
+  }
+}

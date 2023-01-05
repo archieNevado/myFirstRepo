@@ -42,10 +42,10 @@ Object {
     "index.js": "import \\"./newest.js\\";
 ",
     "init.js": "//import $ from \\"jquery\\";
-import * as newest from \\"./newest\\";
+import { consolePrint } from \\"./newest\\";
 // --- JQUERY DOCUMENT READY -------------------------------------------------------------------------------------------
 //$(function () {
-//  newest.consolePrint(\\"Brick newest is used.\\");
+//  consolePrint(\\"Brick newest is used.\\");
 //});
 ",
     "newest.js": "//import * as utils from \\"@coremedia/brick-utils\\";
@@ -131,10 +131,10 @@ Object {
     "index.js": "import \\"./newest.js\\";
 ",
     "init.js": "//import $ from \\"jquery\\";
-import * as newest from \\"./newest\\";
+import { consolePrint } from \\"./newest\\";
 // --- JQUERY DOCUMENT READY -------------------------------------------------------------------------------------------
 //$(function () {
-//  newest.consolePrint(\\"Brick newest is used.\\");
+//  consolePrint(\\"Brick newest is used.\\");
 //});
 ",
     "newest.js": "//import * as utils from \\"@coremedia/brick-utils\\";

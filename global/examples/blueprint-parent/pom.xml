@@ -66,23 +66,23 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.64</tomcat.embed.version>
+    <tomcat.embed.version>9.0.68</tomcat.embed.version>
     <cm.examples.core.version>1-SNAPSHOT</cm.examples.core.version>
-    <cm.common.core.version>2207.1</cm.common.core.version>
+    <cm.common.core.version>2207.2</cm.common.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
-    <cm.middle.core.version>2207.1</cm.middle.core.version>
+    <cm.middle.core.version>2207.2</cm.middle.core.version>
     <cm.middle.bp.version>1-SNAPSHOT</cm.middle.bp.version>
-    <cm.cae.core.version>2207.1</cm.cae.core.version>
+    <cm.cae.core.version>2207.2</cm.cae.core.version>
     <cm.cae.bp.version>1-SNAPSHOT</cm.cae.bp.version>
-    <cm.content-feeder.core.version>2207.1</cm.content-feeder.core.version>
+    <cm.content-feeder.core.version>2207.2</cm.content-feeder.core.version>
     <cm.content-feeder.bp.version>1-SNAPSHOT</cm.content-feeder.bp.version>
-    <cm.cae-feeder.core.version>2207.1</cm.cae-feeder.core.version>
+    <cm.cae-feeder.core.version>2207.2</cm.cae-feeder.core.version>
     <cm.cae-feeder.bp.version>1-SNAPSHOT</cm.cae-feeder.bp.version>
-    <cm.content-server.core.version>2207.1</cm.content-server.core.version>
+    <cm.content-server.core.version>2207.2</cm.content-server.core.version>
     <cm.content-server.bp.version>1-SNAPSHOT</cm.content-server.bp.version>
-    <cm.workflow-server.core.version>2207.1</cm.workflow-server.core.version>
+    <cm.workflow-server.core.version>2207.2</cm.workflow-server.core.version>
     <cm.workflow-server.bp.version>1-SNAPSHOT</cm.workflow-server.bp.version>
-    <cm.studio-server.core.version>2207.1</cm.studio-server.core.version>
+    <cm.studio-server.core.version>2207.2</cm.studio-server.core.version>
     <cm.studio-server.bp.version>1-SNAPSHOT</cm.studio-server.bp.version>
     <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
 
@@ -507,6 +507,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-clean-plugin</artifactId>
+          <version>3.1.0</version>
           <configuration>
             <filesets>
               <fileset>
@@ -527,6 +528,11 @@
             <showDeprecation>${showDeprecation}</showDeprecation>
             <showWarnings>${showWarnings}</showWarnings>
           </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>3.1.2</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -570,6 +576,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
+          <version>3.4.0</version>
           <configuration>
             <doclint>none</doclint>
           </configuration>
@@ -633,7 +640,7 @@
                 <X-Compile-Target-JDK>${maven.compiler.release}</X-Compile-Target-JDK>
                 <!-- Configure WebSphere to not scan ASM jars in the WAR, because they contain Java 9 module-info.class
                      files and cause exceptions in WebSphere. See CMS-12354 -->
-                <Ignore-Scanning-Archives>asm-analysis-9.3.jar,asm-9.3.jar,asm-commons-9.3.jar,asm-tree-9.3.jar</Ignore-Scanning-Archives>
+                <Ignore-Scanning-Archives>asm-analysis-9.4.jar,asm-9.4.jar,asm-commons-9.4.jar,asm-tree-9.4.jar</Ignore-Scanning-Archives>
               </manifestEntries>
             </archive>
             <failOnMissingWebXml>false</failOnMissingWebXml>

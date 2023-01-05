@@ -12,7 +12,7 @@ const {
   },
 } = require("@coremedia/tool-utils");
 
-function getXmlPath(path) {
+function normalizePath(path) {
   return path.replace(/\\/g, "/");
 }
 
@@ -83,7 +83,7 @@ class ThemeDescriptorPlugin {
           fs.copyFileSync(thumbnailSrcPath, thumbnailTargetPath);
           root.ele(
             "thumbnail",
-            getXmlPath(
+            normalizePath(
               path.relative(themeConfig.themeTargetPath, thumbnailTargetPath)
             )
           );
@@ -98,7 +98,7 @@ class ThemeDescriptorPlugin {
               .filter((target) => !alreadyAddedStyles.has(target))
               .forEach((target) => {
                 // avoid windows path separators!
-                styleSheets.ele("css", getXmlPath(target), {
+                styleSheets.ele("css", normalizePath(target), {
                   ...(style.ieExpression !== null
                     ? { ieExpression: style.ieExpression }
                     : {}),
@@ -116,7 +116,7 @@ class ThemeDescriptorPlugin {
           if (compilation.assets[themeConfig.buildConfig.chunkMappingPath]) {
             javaScripts.ele(
               "javaScript",
-              getXmlPath(themeConfig.buildConfig.chunkMappingPath),
+              normalizePath(themeConfig.buildConfig.chunkMappingPath),
               {
                 inHead: true,
                 notLinked: false,
@@ -130,7 +130,7 @@ class ThemeDescriptorPlugin {
               .filter((target) => !alreadyAddedScripts.has(target))
               .forEach((target) => {
                 alreadyAddedScripts.add(target);
-                javaScripts.ele("javaScript", getXmlPath(target), {
+                javaScripts.ele("javaScript", normalizePath(target), {
                   ...(scripts.ieExpression !== null
                     ? { ieExpression: scripts.ieExpression }
                     : {}),
@@ -162,7 +162,7 @@ class ThemeDescriptorPlugin {
         const templateSets = root.ele("templateSets");
         templateSets.ele(
           "templateSet",
-          getXmlPath(
+          normalizePath(
             path.relative(
               themeConfig.themeTargetPath,
               themeConfig.themeTemplatesJarTargetPath
@@ -221,10 +221,10 @@ class ThemeDescriptorPlugin {
             const absoluteSettingsDirPath = path.dirname(
               path.resolve(themeConfig.themeTargetPath, assetPath)
             );
-            return path.relative(
+            return normalizePath(path.relative(
               absoluteSettingsDirPath,
               newAbsoluteTargetPath
-            );
+            ));
           }
           // no matching paths in theme config
           throw new Error(
@@ -264,7 +264,7 @@ class ThemeDescriptorPlugin {
           previewCss = {
             previewCss: [
               {
-                $Link: getXmlPath(
+                $Link: normalizePath(
                   path.relative(
                     relativePreviewSettingsFolder,
                     filesToLoadByEntryPoint["preview"].find((filename) =>
@@ -281,7 +281,7 @@ class ThemeDescriptorPlugin {
           deepMerge(previewAssetJson, {
             previewJs: [
               {
-                $Link: getXmlPath(
+                $Link: normalizePath(
                   path.relative(
                     relativePreviewSettingsFolder,
                     filesToLoadByEntryPoint["preview"].find((filename) =>
@@ -304,7 +304,7 @@ class ThemeDescriptorPlugin {
         Object.keys(compilation.assets)
           .filter((assetKey) => /(.+)\.settings\.json$/.test(assetKey))
           .forEach((assetKey) => {
-            settings.ele("setting", getXmlPath(assetKey));
+            settings.ele("setting", normalizePath(assetKey));
           });
 
         const xml = root.end({

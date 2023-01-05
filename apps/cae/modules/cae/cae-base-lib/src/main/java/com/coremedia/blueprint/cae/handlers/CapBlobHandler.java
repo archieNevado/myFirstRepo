@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -114,18 +115,22 @@ public class CapBlobHandler extends HandlerBase {
   // --- Handlers ------------------------------------------------------------------------------------------------------
 
   @GetMapping(value = CODERESOURCEBLOB_URI_PATTERN)
-  public ModelAndView handleCodeResourceBlobRequest(@PathVariable(SEGMENT_ID) ContentBean contentBean,
+  public ModelAndView handleCodeResourceBlobRequest(@org.springframework.lang.Nullable @PathVariable(SEGMENT_ID) ContentBean contentBean,
                                                     @PathVariable(SEGMENT_ETAG) String eTag,
                                                     @PathVariable(SEGMENT_PROPERTY) String propertyName,
                                                     @PathVariable(SEGMENT_EXTENSION) String extension,
                                                     WebRequest webRequest,
                                                     HttpServletRequest request,
                                                     HttpServletResponse response) {
+    if (contentBean == null) {
+      return notFound();
+    }
+
     // Check for a developer variant first.
     // This can succeed on content management servers only.
     // Live servers do not support developer variants.
     User developer = UserVariantHelper.getUser(request);
-    if (developer!=null) {
+    if (developer != null) {
       CapBlobRef developerVariant = lookupDeveloperVariant(contentBean, propertyName, extension, developer);
       if (developerVariant != null) {
         // The eTag is meaningless in this case, since it refers to the
@@ -145,6 +150,10 @@ public class CapBlobHandler extends HandlerBase {
                                     WebRequest webRequest,
                                     HttpServletRequest request,
                                     HttpServletResponse response) {
+    if (contentBean == null) {
+      return notFound();
+    }
+
     // we have to extract the filename ourselves because the injected path variable has problems with some special characters (e.g. ';')
     StringBuffer requestURL = request.getRequestURL();
     int lastSlashIndex = requestURL.lastIndexOf("/");
@@ -169,13 +178,13 @@ public class CapBlobHandler extends HandlerBase {
     return notFound();
   }
 
-  public ModelAndView handleRequest(ContentBean contentBean,
+  public ModelAndView handleRequest(@NonNull ContentBean contentBean,
                                     String eTag,
                                     String propertyName,
                                     String extension,
                                     WebRequest webRequest,
                                     HttpServletResponse response) {
-    if (contentBean == null || !validationService.validate(contentBean)) {
+    if (!validationService.validate(contentBean)) {
       return notFound();
     }
 
@@ -202,13 +211,13 @@ public class CapBlobHandler extends HandlerBase {
   // --- LinkSchemes ---------------------------------------------------------------------------------------------------
 
   @Link(type = CapBlobRef.class)
-  public UriComponentsBuilder buildLink(CapBlobRef bean) {
+  public UriComponents buildLink(CapBlobRef bean) {
     return buildLink(bean, null);
   }
 
   @Link(type = CMDownload.class)
   @SuppressWarnings("unused")
-  public UriComponentsBuilder buildLinkForDownload(@NonNull CMDownload download, @Nullable String viewName) {
+  public UriComponents buildLinkForDownload(@NonNull CMDownload download, @Nullable String viewName) {
     if (FRAGMENT_PREVIEW.equals(viewName)) {
       // Do not build the download link for the fragment preview. Let other handlers build the link instead.
       return null;
@@ -216,10 +225,10 @@ public class CapBlobHandler extends HandlerBase {
     CapBlobRef blob = (CapBlobRef) download.getData();
     return blob != null
             ? buildLink(blob, download.getFilename())
-            : UriComponentsBuilder.newInstance();
+            : UriComponentsBuilder.newInstance().build();
   }
 
-  private UriComponentsBuilder buildLink(CapBlobRef bean, String filename) {
+  private UriComponents buildLink(CapBlobRef bean, String filename) {
     String classifier = mayHaveDeveloperVariants(bean) ? CLASSIFIER_CODERESOURCEBLOB : CLASSIFIER_BLOB;
     String id = String.valueOf(IdHelper.parseContentId(bean.getCapObject().getId()));
     String etag = bean.getETag();
@@ -238,7 +247,8 @@ public class CapBlobHandler extends HandlerBase {
     }
 
     return UriComponentsBuilder.newInstance()
-            .pathSegment(PREFIX_RESOURCE, classifier, id, etag, effectiveFilename);
+            .pathSegment(PREFIX_RESOURCE, classifier, id, etag, effectiveFilename)
+            .build();
   }
 
   /**
@@ -247,7 +257,7 @@ public class CapBlobHandler extends HandlerBase {
    * @return the link to the CMImage's data property
    */
   @Link(type = CMImage.class)
-  public UriComponentsBuilder buildLink(CMImage image) {
+  public UriComponents buildLink(CMImage image) {
     return buildLink((CapBlobRef) image.getData());
   }
 
@@ -270,7 +280,7 @@ public class CapBlobHandler extends HandlerBase {
   /**
    * Look for a developer variant of the blob.
    */
-  private CapBlobRef lookupDeveloperVariant(ContentBean contentBean, String propertyName, String extension, User developer) {
+  private CapBlobRef lookupDeveloperVariant(@NonNull ContentBean contentBean, String propertyName, String extension, User developer) {
     Content original = contentBean.getContent();
     Content developerVariant = themeService.developerVariant(original, developer);
     if (!original.equals(developerVariant)) {
@@ -334,9 +344,8 @@ public class CapBlobHandler extends HandlerBase {
     if(extension.equalsIgnoreCase(validExtension) ) {
       return true;
     }
-    if (LOG.isInfoEnabled()) {
-      LOG.info("Requested blob property " + blobRef + " with illegal extension. Valid extensions are " + validExtension + " and no extension");
-    }
+    LOG.info("Requested blob property '{}' with illegal extension. Valid extensions are '{}' and no extension.",
+            blobRef, validExtension);
     return BLOB_DEFAULT_EXTENSION.equals(extension);
   }
 }

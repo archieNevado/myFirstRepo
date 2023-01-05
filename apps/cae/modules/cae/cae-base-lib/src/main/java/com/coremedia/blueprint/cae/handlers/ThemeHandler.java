@@ -18,6 +18,7 @@ import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_N
 import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.VIEW_PARAMETER;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ID;
 import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_RESOURCE;
+import static com.coremedia.objectserver.web.HandlerHelper.notFound;
 
 /**
  * Controller and LinkScheme for
@@ -43,8 +44,11 @@ public class ThemeHandler extends HandlerBase {
    *             view name and must match an existing view - see {@link ModelAndView#setViewName(String)}.
    */
   @GetMapping(value = URI_PATTERN)
-  public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) CMTheme theme,
+  public ModelAndView handleRequest(@org.springframework.lang.Nullable @PathVariable(SEGMENT_ID) CMTheme theme,
                                     @RequestParam(value = VIEW_PARAMETER, required = false) String view) {
+    if (theme == null) {
+      return notFound();
+    }
 
     return HandlerHelper.createModelWithView(theme, view);
   }

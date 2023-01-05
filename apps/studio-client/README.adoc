@@ -291,7 +291,7 @@ test, package, and publish the Studio client workspace.
 One of the tools is Sencha Cmd. The default download URL is
 https://cdn.sencha.com/cmd/7.2.0.84/no-jre/SenchaCmd-7.2.0.84-linux-amd64.sh.zip
 - we recommend using a proxy if possible. The path to the zip can be
-passed as `--build arg SENCHA_COMMAND_SH_ZIP_DOWNLOAD_URL_DIRECTIVE`.
+passed as `--build-arg SENCHA_COMMAND_SH_ZIP_DOWNLOAD_URL_DIRECTIVE`.
 
 _Recommendation_ Build this image only if there are changes in the
 `Dockerfile.tooling` file and store it in your local Docker registry.
@@ -449,7 +449,11 @@ DOCKER_BUILDKIT=1 docker build . \
   --build-arg TYPE="build" \
   --build-arg EXTENSIONS_ZIP="target/extensions.zip" \
   --build-arg STUDIO_CLIENT_TOOLING_IMAGE="cm/studio-client-tooling:latest"
+  --build-arg SKIP_GENERATE_LOCK_FILE=false
 ----
+
+Please mind that the `SKIP_GENERATE_LOCK_FILE` flag needs to be disabled. Due to extensions being handed under a different folder the paths to
+the corresponding extension packages changes and generated files need to be rewritten.
 
 ==== Test the Studio Client workspace
 

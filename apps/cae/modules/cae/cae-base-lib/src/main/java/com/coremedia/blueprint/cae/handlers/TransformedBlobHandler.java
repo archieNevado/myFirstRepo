@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -97,7 +98,7 @@ public class TransformedBlobHandler extends HandlerBase {
   // --- Handlers ------------------------------------------------------------------------------------------------------
 
   @GetMapping(value = URI_PATTERN)
-  public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) ContentBean contentBean,
+  public ModelAndView handleRequest(@Nullable @PathVariable(SEGMENT_ID) ContentBean contentBean,
                                     @PathVariable(TRANSFORMATION_SEGMENT) String transformationName,
                                     @PathVariable(WIDTH_SEGMENT) Integer width,
                                     @PathVariable(HEIGHT_SEGMENT) Integer height,

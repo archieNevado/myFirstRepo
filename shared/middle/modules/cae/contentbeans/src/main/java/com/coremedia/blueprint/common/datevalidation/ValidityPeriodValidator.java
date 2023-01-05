@@ -62,7 +62,8 @@ public class ValidityPeriodValidator extends AbstractValidator<ValidityPeriod> i
 
   @Override
   protected Predicate<ValidityPeriod> createPredicate() {
-    return new ValidationPeriodPredicate(getPreviewDate());
+    var previewMode = deliveryConfigurationProperties.isPreviewMode();
+    return new ValidationPeriodPredicate(getPreviewDate(previewMode));
   }
 
   @Override
@@ -71,12 +72,13 @@ public class ValidityPeriodValidator extends AbstractValidator<ValidityPeriod> i
       return;
     }
 
-    if (deliveryConfigurationProperties.isPreviewMode()) {
+    var previewMode = deliveryConfigurationProperties.isPreviewMode();
+    if (previewMode) {
       // we don't want to cache anything in preview if somewhere a validation period is used
       // (the reason is: it could influence the validity decision at any time if later a previewdate is used)
       Cache.uncacheable();
     } else {
-      Calendar validTime = getPreviewDate();
+      Calendar validTime = getPreviewDate(previewMode);
       Optional<Calendar> validUntil = findNearestDate(result, validTime);
       validUntil.ifPresent(cal -> validUntilConsumers.forEach(c -> c.accept(cal.toInstant())));
     }
@@ -110,7 +112,12 @@ public class ValidityPeriodValidator extends AbstractValidator<ValidityPeriod> i
   }
 
   @NonNull
-  private static Calendar getPreviewDate() {
+  private static Calendar getPreviewDate(boolean previewMode) {
+    if (!previewMode) {
+      //in live mode the current date is the preview date
+      return Calendar.getInstance();
+    }
+    //only in preview mode the preview date can be passed via request param
     //is previewDate stored in the request attributes?
     Optional<Calendar> previewDateFromReqAttr = ContextAttributes
             .findRequestAttribute(REQUEST_ATTRIBUTE_PREVIEW_DATE, Calendar.class);
@@ -152,7 +159,7 @@ public class ValidityPeriodValidator extends AbstractValidator<ValidityPeriod> i
 
   @Override
   public List<Condition> getFilter(boolean isPreview) {
-    Calendar date = isPreview ? getPreviewDate() : Calendar.getInstance();
+    Calendar date = getPreviewDate(isPreview);
     date = getDateRounded(date, INTERVAL);
     String formattedDate = SolrSearchFormatHelper.calendarToString(date);
 

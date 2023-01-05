@@ -891,7 +891,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
       int size = rootFolder.getChildrenFulfilling("TYPE " + taxonomyContentType.getName()).size();
       if (size > maxDocumentsPerFolder) {
         this.maxDocumentsPerFolder = ((size + 99) / 100) * 100;
-        LOG.warn("Cannot apply a value maxDocumentsPerFolder=" + maxDocumentsPerFolder
+        LOG.warn("Cannot apply a value maxDocumentsPerFolder=" + max
                 + " on " + this.getClass().getSimpleName() + " for taxonomy folder "
                 + rootFolder.getPath() + ", since there are already more documents in this folder. The value was auto-corrected to " + maxDocumentsPerFolder);
       }

@@ -7,6 +7,7 @@ import com.coremedia.cap.multisite.SitesService;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.web.ManagementContextConfiguration;
+import org.springframework.boot.actuate.autoconfigure.web.server.ManagementServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 
@@ -64,8 +65,8 @@ public class CaeSitemapManagementConfiguration {
   public SitemapTriggerImpl sitemapTrigger(SitesService sitesService,
                                            UrlPathFormattingHelper urlPathFormattingHelper,
                                            SitemapSetupSelector sitemapSetupSelector,
-                                           CaeSitemapConfigurationProperties caeSitemapConfigurationProperties) {
-    var port = caeSitemapConfigurationProperties.getCaePort();
+                                           ManagementServerProperties managementServerProperties) {
+    int port = managementServerProperties.getPort();
     return new SitemapTriggerImpl(sitemapSetupSelector, urlPathFormattingHelper, sitesService, port);
   }
 }

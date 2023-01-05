@@ -76,7 +76,8 @@ class InterceptorsStudioConfiguration {
   @Bean
   public PictureUploadInterceptor pictureUploadInterceptor(@Value("CMPicture") ContentType contentType,
                                                            BlobTransformer blobTransformer,
-                                                           ImageDimensionsExtractor imageDimensionsExtractor) {
+                                                           ImageDimensionsExtractor imageDimensionsExtractor,
+                                                           @Value("${pictureUploadInterceptor.autoScale:true}") boolean autoScale) {
     PictureUploadInterceptor pictureUploadInterceptor = new PictureUploadInterceptor();
     pictureUploadInterceptor.setPriority(2);
     pictureUploadInterceptor.setType(contentType);
@@ -86,9 +87,10 @@ class InterceptorsStudioConfiguration {
     // uploadLimit: max image size (width * height) in pixels. Images are not uploaded if too big to prevent
     // OutOfMemoryExceptions.
     pictureUploadInterceptor.setUploadLimit(100000000);
-    // maxDimension: max width and height in pixels of stored images in the database. Images are scaled down
-    // if too big.
+    // maxDimension: max width and height in pixels of stored images in the database.
+    // If autoScale is true, images are scaled down if too big.
     pictureUploadInterceptor.setMaxDimension(4000);
+    pictureUploadInterceptor.setAutoScale(autoScale);
     pictureUploadInterceptor.setBlobTransformer(blobTransformer);
     pictureUploadInterceptor.setExtractor(imageDimensionsExtractor);
     return pictureUploadInterceptor;

@@ -29,6 +29,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -52,6 +53,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes={PageGridImplTest.LocalConfig.class, XmlRepoConfiguration.class})
+@TestPropertySource(properties = "delivery.preview-mode=true")
 public class PageGridImplTest {
 
   @Configuration(proxyBeanMethods = false)

@@ -62,12 +62,12 @@ public class P13NNavigationHandler extends PageHandlerBase {
    */
   @GetMapping(value = DYNAMIC_NAVIGATION_URI_PATTERN)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ROOT) String context,
-                                    @PathVariable(ID_VARIABLE) CMLinkable linkable,
+                                    @org.springframework.lang.Nullable @PathVariable(ID_VARIABLE) CMLinkable linkable,
                                     @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
                                     HttpServletRequest request) {
 
     Optional<Navigation> navigation = findNavigation(context, linkable);
-    if (!navigation.isPresent()){
+    if (navigation.isEmpty()){
       return HandlerHelper.notFound();
     }
 

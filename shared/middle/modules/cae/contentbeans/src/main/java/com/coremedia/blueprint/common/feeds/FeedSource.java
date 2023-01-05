@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.common.feeds;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,5 +42,11 @@ public interface FeedSource<T> {
    * @return the description for the feed
    */
   String getFeedDescription();
+
+  /**
+   * Get creation date.
+   * @return the creation date of the feed
+   */
+  Date getPublishedDate();
 
 }

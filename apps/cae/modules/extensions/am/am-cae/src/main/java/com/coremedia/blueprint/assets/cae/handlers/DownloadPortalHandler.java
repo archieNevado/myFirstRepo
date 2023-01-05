@@ -60,6 +60,7 @@ import java.util.Map;
 
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
+import static com.coremedia.objectserver.web.HandlerHelper.notFound;
 
 /**
  * Handles all Download Portal related request and link processing.
@@ -208,11 +209,15 @@ public class DownloadPortalHandler {
    * @return the ModelAndView
    */
   @GetMapping(value = DYNAMIC_PATTERN_PORTAL)
-  public ModelAndView handleDownloadPortalRequest(@PathVariable(CONTEXT_ID) CMChannel navigation,
+  public ModelAndView handleDownloadPortalRequest(@org.springframework.lang.Nullable @PathVariable(CONTEXT_ID) CMChannel navigation,
                                                   @RequestParam(value = CATEGORY_REQUEST_PARAMETER_NAME, required = false) AMTaxonomy categoryBean,
                                                   @RequestParam(value = CATEGORY_REQUEST_PARAMETER_NAME, required = false) String categoryId,
                                                   @RequestParam(value = ASSET_REQUEST_PARAMETER_NAME, required = false) AMAsset assetBean,
                                                   @RequestParam(value = ASSET_REQUEST_PARAMETER_NAME, required = false) String assetId) {
+    if (navigation == null) {
+      return notFound();
+    }
+
     ModelAndView modelAndView;
     // we are passing the id AND the bean to be able to distinguish between requests with invalid ids and requests
     // without ids
@@ -249,8 +254,12 @@ public class DownloadPortalHandler {
    * @return the ModelAndView
    */
   @GetMapping(value = DYNAMIC_PATTERN_PORTAL, params = SUBJECT_REQUEST_PARAMETER_NAME)
-  public ModelAndView handleSubjectAssetsRequest(@PathVariable(CONTEXT_ID) CMChannel navigation,
-                                                 @RequestParam(value = SUBJECT_REQUEST_PARAMETER_NAME) CMTaxonomy subjectBean) {
+  public ModelAndView handleSubjectAssetsRequest(@org.springframework.lang.Nullable @PathVariable(CONTEXT_ID) CMChannel navigation,
+                                                 @org.springframework.lang.Nullable @RequestParam(value = SUBJECT_REQUEST_PARAMETER_NAME) CMTaxonomy subjectBean) {
+    if (navigation == null) {
+      return notFound();
+    }
+
     if (null != subjectBean && subjectBean.getContent().isInProduction()) {
       TaxonomyOverview subjectOverview = downloadPortalFactory.createSubjectOverview(subjectBean);
       return getModelAndViewWithNavigation(subjectOverview, navigation, null);
@@ -273,8 +282,12 @@ public class DownloadPortalHandler {
    * @return the ModelAndView
    */
   @GetMapping(value = DYNAMIC_PATTERN_PORTAL, params = SEARCH_REQUEST_PARAMETER_NAME)
-  public ModelAndView handleSearchRequest(@PathVariable(CONTEXT_ID) CMChannel navigation,
+  public ModelAndView handleSearchRequest(@org.springframework.lang.Nullable @PathVariable(CONTEXT_ID) CMChannel navigation,
                                           @RequestParam(value = SEARCH_REQUEST_PARAMETER_NAME) String query) {
+    if (navigation == null) {
+      return notFound();
+    }
+
     // query is a required request param, so it cannot be null
     SearchOverview searchOverview = downloadPortalFactory.createSearchOverview(query);
     return getModelAndViewWithNavigation(searchOverview, navigation, null);
@@ -287,7 +300,11 @@ public class DownloadPortalHandler {
    * @return the ModelAndView
    */
   @GetMapping(value = DYNAMIC_PATTERN_PORTAL, params = DOWNLOAD_COLLECTION_REQUEST_PARAMETER_NAME)
-  public ModelAndView handleDownloadCollectionOverviewRequest(@PathVariable(CONTEXT_ID) CMChannel navigation) {
+  public ModelAndView handleDownloadCollectionOverviewRequest(@org.springframework.lang.Nullable @PathVariable(CONTEXT_ID) CMChannel navigation) {
+    if (navigation == null) {
+      return notFound();
+    }
+
     DownloadCollectionOverview downloadCollectionOverview = downloadPortalFactory.createDownloadCollectionOverview(Collections.emptyList());
     return getModelAndViewWithNavigation(downloadCollectionOverview, navigation, null);
   }
@@ -302,10 +319,14 @@ public class DownloadPortalHandler {
    * @return the ModelAndView
    */
   @GetMapping(value = DYNAMIC_PATTERN_PAGINATED_ASSETS)
-  public ModelAndView handlePaginatedCategoryAssetsRequest(@PathVariable(CONTEXT_ID) CMChannel navigation,
+  public ModelAndView handlePaginatedCategoryAssetsRequest(@org.springframework.lang.Nullable @PathVariable(CONTEXT_ID) CMChannel navigation,
                                                            @RequestParam(value = CATEGORY_REQUEST_PARAMETER_NAME, required = false) AMTaxonomy categoryBean,
                                                            @RequestParam(value = PAGE_REQUEST_PARAMETER_NAME, defaultValue = "1") Integer page,
                                                            HttpServletResponse response) {
+    if (navigation == null) {
+      return notFound();
+    }
+
     PaginatedAssets paginatedCategoryAssets = downloadPortalFactory.createPaginatedCategoryAssets(
             categoryBean, navigation, page);
     if (null != categoryBean) {
@@ -325,10 +346,14 @@ public class DownloadPortalHandler {
    * @return the ModelAndView
    */
   @GetMapping(value = DYNAMIC_PATTERN_PAGINATED_ASSETS, params = SUBJECT_REQUEST_PARAMETER_NAME)
-  public ModelAndView handlePaginatedSubjectAssetsRequest(@PathVariable(CONTEXT_ID) CMChannel navigation,
+  public ModelAndView handlePaginatedSubjectAssetsRequest(@org.springframework.lang.Nullable @PathVariable(CONTEXT_ID) CMChannel navigation,
                                                           @RequestParam(value = SUBJECT_REQUEST_PARAMETER_NAME) CMTaxonomy subjectBean,
                                                           @RequestParam(value = PAGE_REQUEST_PARAMETER_NAME, defaultValue = "1") Integer page,
                                                           HttpServletResponse response) {
+    if (navigation == null) {
+      return notFound();
+    }
+
     PaginatedAssets paginatedSubjectAssets = downloadPortalFactory.createPaginatedSubjectAssets(
             subjectBean, navigation, page);
     paginatedSubjectAssets.setBaseRequestParams(Map.of(SUBJECT_REQUEST_PARAMETER_NAME, Integer.toString(subjectBean.getContentId())));
@@ -350,10 +375,13 @@ public class DownloadPortalHandler {
    * @return the ModelAndView
    */
   @GetMapping(value = DYNAMIC_PATTERN_PAGINATED_ASSETS, params = SEARCH_REQUEST_PARAMETER_NAME)
-  public ModelAndView handlePaginatedSearchAssetsRequest(@PathVariable(CONTEXT_ID) CMChannel navigation,
+  public ModelAndView handlePaginatedSearchAssetsRequest(@org.springframework.lang.Nullable @PathVariable(CONTEXT_ID) CMChannel navigation,
                                                          @RequestParam(value = SEARCH_REQUEST_PARAMETER_NAME) String query,
                                                          @RequestParam(value = PAGE_REQUEST_PARAMETER_NAME, defaultValue = "1") Integer page,
                                                          HttpServletResponse response) {
+    if (navigation == null) {
+      return notFound();
+    }
 
     PaginatedAssets paginatedSearchAssets;
     if (isSearchQueryTooShort(query)) {
@@ -469,49 +497,49 @@ public class DownloadPortalHandler {
   @Link(type = DownloadPortal.class, uri = DYNAMIC_PATTERN_PORTAL)
   public UriComponents buildAmDownloadPortalLink(UriTemplate uriTemplate) {
     Navigation navigation = contextHelper.currentSiteContext();
-    return getUriComponentsBuilder(uriTemplate, navigation).build();
+    return getUriComponents(uriTemplate, navigation);
   }
 
   @SuppressWarnings("UnusedDeclaration")
   @Link(type = DownloadPortalContext.class, view = DOWNLOAD_COLLECTION_PREPARE_VIEW, uri = PATTERN_DOWNLOAD_COLLECTION_PREPARE)
   public UriComponents buildDownloadCollectionPrepareLink(UriTemplate uriTemplate) {
     Navigation navigation = contextHelper.currentSiteContext();
-    return getUriComponentsBuilder(uriTemplate, navigation).build();
+    return getUriComponents(uriTemplate, navigation);
   }
 
   @SuppressWarnings("UnusedDeclaration")
   @Link(type = DownloadPortalContext.class, view = DOWNLOAD_COLLECTION_DOWNLOAD_VIEW, uri = PATTERN_DOWNLOAD_COLLECTION_DOWNLOAD)
   public UriComponents buildDownloadCollectionDownloadLink(UriTemplate uriTemplate) {
     Navigation navigation = contextHelper.currentSiteContext();
-    return getUriComponentsBuilder(uriTemplate, navigation).build();
+    return getUriComponents(uriTemplate, navigation);
   }
 
   @SuppressWarnings("UnusedDeclaration")
   @Link(type = CategoryOverview.class, view = ASSETS_VIEW, uri = DYNAMIC_PATTERN_PAGINATED_ASSETS)
   public UriComponents buildAmPaginatedCategoryAssetsLink(UriTemplate uriTemplate) {
     Navigation navigation = contextHelper.currentSiteContext();
-    return getUriComponentsBuilder(uriTemplate, navigation).build();
+    return getUriComponents(uriTemplate, navigation);
   }
 
   @SuppressWarnings("UnusedDeclaration")
   @Link(type = SearchOverview.class, view = ASSETS_VIEW, uri = DYNAMIC_PATTERN_PAGINATED_ASSETS)
   public UriComponents buildAmPaginatedSearchAssetsLink(UriTemplate uriTemplate) {
     Navigation navigation = contextHelper.currentSiteContext();
-    return getUriComponentsBuilder(uriTemplate, navigation).build();
+    return getUriComponents(uriTemplate, navigation);
   }
 
   @SuppressWarnings("UnusedDeclaration")
   @Link(type = TaxonomyOverview.class, view = ASSETS_VIEW, uri = DYNAMIC_PATTERN_PAGINATED_ASSETS)
   public UriComponents buildAmPaginatedSubjectAssetsLink(UriTemplate uriTemplate) {
     Navigation navigation = contextHelper.currentSiteContext();
-    return getUriComponentsBuilder(uriTemplate, navigation).build();
+    return getUriComponents(uriTemplate, navigation);
   }
 
   @SuppressWarnings("UnusedDeclaration")
   @Link(type = DownloadCollectionOverview.class, view = DOWNLOAD_COLLECTION_OVERVIEW_VIEW, uri = PATTERN_DOWNLOAD_COLLECTION_OVERVIEW)
   public UriComponents buildDownloadCollectionOverviewLink(UriTemplate uriTemplate) {
     Navigation navigation = contextHelper.currentSiteContext();
-    return getUriComponentsBuilder(uriTemplate, navigation).build();
+    return getUriComponents(uriTemplate, navigation);
   }
 
   private ModelAndView getModelAndViewWithNavigation(@NonNull Object bean,
@@ -525,13 +553,13 @@ public class DownloadPortalHandler {
 
   private ModelAndView getDownloadPortalError(Navigation navigation) {
     ModelAndView modelAndView;
-    modelAndView = HandlerHelper.notFound();
+    modelAndView = notFound();
     modelAndView.setViewName(DOWNLOAD_PORTAL_ERROR_VIEW);
     NavigationLinkSupport.setNavigation(modelAndView, navigation);
     return modelAndView;
   }
 
-  private UriComponentsBuilder getUriComponentsBuilder(UriTemplate uriTemplate, Navigation navigation) {
+  private UriComponents getUriComponents(UriTemplate uriTemplate, Navigation navigation) {
     CMContext navigationContext = null;
     if (null != navigation) {
       navigationContext = navigation.getContext();
@@ -543,7 +571,8 @@ public class DownloadPortalHandler {
     String rootNavigationSegment = navigationContext.getRootNavigation().getSegment();
 
     URI uri = uriTemplate.expand(rootNavigationSegment, nearestNavigationId);
-    return UriComponentsBuilder.fromUri(uri);
+    // UriComponentsBuilder#fromUri should go together with UriComponentsBuilder#build(true) according to the docs
+    return UriComponentsBuilder.fromUri(uri).build(true);
   }
 
   /**

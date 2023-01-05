@@ -17,6 +17,7 @@ import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -104,11 +105,15 @@ public class PageSearchActionHandler extends PageHandlerBase {
    * @see "SearchActionState.ftl"
    */
   @GetMapping(value = URI_PATTERN)
-  public ModelAndView handleSearchAction(@PathVariable(SEGMENT_ID) CMAction action,
+  public ModelAndView handleSearchAction(@Nullable @PathVariable(SEGMENT_ID) CMAction action,
                                    @PathVariable(SEGMENT_ROOT) String context,
                                    @ModelAttribute() SearchFormBean searchForm,
                                    @RequestParam(value = VIEW_PARAMETER, required = false) String view,
                                    HttpServletRequest request) {
+    if (action == null) {
+      return notFound();
+    }
+
     Navigation navigation = getValidNavigation(action, context, ACTION_NAME);
     if (navigation != null) {
       CMChannel searchChannel = settingsService.setting(SEARCH_CHANNEL_SETTING, CMChannel.class, navigation);

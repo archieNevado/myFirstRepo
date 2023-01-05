@@ -2,6 +2,7 @@
 
 ARG TYPE=zip
 ARG STUDIO_CLIENT_TOOLING_IMAGE=scratch
+ARG APPLICATION_BASE_IMAGE=coremedia/nginx-base:1.0.1-cm-1.23.2-alpine
 
 # builder stage to extract all necessary artifacts
 FROM alpine:3.9.4 as source-zip
@@ -43,7 +44,7 @@ RUN mkdir /app/ && \
     rm /tmp/studio-client.studio.zip
 
 
-FROM nginx:1.21.5-alpine as final-stage
+FROM ${APPLICATION_BASE_IMAGE} as final-stage
 LABEL maintainer="CoreMedia GmbH <support@coremedia.com>"
 # set this empty for http/1.1
 ENV PROTOCOL=http2

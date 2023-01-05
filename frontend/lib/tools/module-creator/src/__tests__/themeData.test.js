@@ -15,7 +15,7 @@ describe("initPackageJson()", () => {
   it("returns data for package.json", () => {
     expect(
       initPackageJson(
-        "test",
+        "my-test",
         "src/js/index.js",
         {},
         {
@@ -35,36 +35,36 @@ describe("initWebpackConfigJs()", () => {
 
 describe("initThemeConfigJson()", () => {
   it("returns data for theme descriptor", () => {
-    expect(initThemeConfigJson("test", false)).toMatchSnapshot();
+    expect(initThemeConfigJson("my-test", false)).toMatchSnapshot();
   });
 });
 
 describe("initThemeSass()", () => {
   it("returns data for <themeName>.sass", () => {
-    expect(initThemeSass("test")).toMatchSnapshot();
+    expect(initThemeSass("my-test")).toMatchSnapshot();
   });
 });
 
 describe("initPreviewSass()", () => {
   it("returns data for preview.sass", () => {
-    expect(initPreviewSass("test")).toMatchSnapshot();
+    expect(initPreviewSass("my-test")).toMatchSnapshot();
   });
 });
 
 describe("initThemeIndexJs()", () => {
   it("returns data for index.js", () => {
-    expect(initThemeIndexJs("test")).toMatchSnapshot();
+    expect(initThemeIndexJs("my-test")).toMatchSnapshot();
   });
 });
 
 describe("initThemeJs()", () => {
   it("returns data for <themeName>.js", () => {
-    expect(initThemeJs("test")).toMatchSnapshot();
+    expect(initThemeJs("my-test")).toMatchSnapshot();
   });
 });
 
 describe("initPreviewJs()", () => {
   it("returns data for preview.js", () => {
-    expect(initPreviewJs("test")).toMatchSnapshot();
+    expect(initPreviewJs("my-test")).toMatchSnapshot();
   });
 });

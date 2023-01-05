@@ -361,6 +361,10 @@
       padding-left: 15px;
     }
 
+    > .cm-navigation-item__picture-link {
+      display: none;
+    }
+
     @include breakpoints($cm-navigation-full-menu-breakpoints) {
       > .cm-navigation-item__menu {
         display: block;

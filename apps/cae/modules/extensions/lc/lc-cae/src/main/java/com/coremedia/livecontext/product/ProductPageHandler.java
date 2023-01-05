@@ -36,6 +36,7 @@ import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_S
 import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.VIEW_PARAMETER;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_REST;
 import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_SERVICE;
+import static com.coremedia.objectserver.web.HandlerHelper.notFound;
 
 @RequestMapping
 @LinkPostProcessor
@@ -108,14 +109,21 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
 
   @GetMapping(value = REST_URI_PATTERN, produces = CONTENT_TYPE_HTML)
   @ResponseBody
-  public ModelAndView getProducts(@PathVariable(SITE_CHANNEL_ID) CMNavigation context,
+  public ModelAndView getProducts(@org.springframework.lang.Nullable @PathVariable(SITE_CHANNEL_ID) CMNavigation context,
                                   @PathVariable(PRODUCT_SEO_SEGMENT) String productId,
                                   HttpServletRequest request) {
+    if (context == null) {
+      return notFound();
+    }
+
     var storeContext = CurrentStoreContext.get(request);
     CommerceConnection connection = storeContext.getConnection();
 
-    Product product = connection.getCatalogService()
-            .findProductBySeoSegment(productId, storeContext);
+    Product product = connection.getCatalogService().findProductBySeoSegment(productId, storeContext);
+    if (product == null) {
+      LOG.warn("No product found for product SEO segment '{}'.", productId);
+      return notFound();
+    }
 
     Site site = getSitesService().getContentSiteAspect(context.getContent()).findSite()
             .orElseThrow(() -> new IllegalArgumentException("Site for context does not exist"));

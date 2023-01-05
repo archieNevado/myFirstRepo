@@ -22,6 +22,7 @@ import com.coremedia.caas.config.CaasGraphqlConfigurationProperties;
 import com.coremedia.caas.config.RemoteServiceConfigurationProperties;
 import com.coremedia.caas.config.StaxContextConfigurationProperties;
 import com.coremedia.caas.filter.InProductionFilterPredicate;
+import com.coremedia.caas.filter.RepositoryPathExcludePatternFilterPredicate;
 import com.coremedia.caas.filter.ValidityDateFilterPredicate;
 import com.coremedia.caas.headless_server.plugin_support.PluginSupport;
 import com.coremedia.caas.headless_server.plugin_support.extensionpoints.CaasWiringFactory;
@@ -212,6 +213,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -729,6 +732,14 @@ public class CaasConfig implements WebMvcConfigurer {
 
   @Bean
   @Qualifier(QUALIFIER_CAAS_FILTER_PREDICATE)
+  // NEVER RENAME THIS BEANS NAME NOR REMOVE WITHOUT GIVEN SOME SERIOUS THOUGHT / CONSIDER TALKING TO THE CLOUD TEAM
+  // (see Jira Ticket CMS-22421)
+  public FilterPredicate<Object> repositoryPathExcludePatternFilterPredicate() {
+    return new RepositoryPathExcludePatternFilterPredicate(caasGraphqlConfigurationProperties.getRepositoryPathExcludePatterns());
+  }
+
+  @Bean
+  @Qualifier(QUALIFIER_CAAS_FILTER_PREDICATE)
   public FilterPredicate<Object> inProductionFilterPredicate() {
     return new InProductionFilterPredicate();
   }
@@ -1073,7 +1084,9 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public DataLoader<String, Try<String>> remoteLinkDataLoader(RemoteServiceAdapterFactory rsa, @Qualifier("remoteLinkCacheMap") CacheMap<Object, Object> remoteLinkCacheMap) {
+  public DataLoader<String, Try<String>> remoteLinkDataLoader(RemoteServiceAdapterFactory rsa,
+                                                              @Qualifier("remoteLinkCacheMap") CacheMap<Object, Object> remoteLinkCacheMap,
+                                                              @Qualifier("remoteLinkExecutorService") ExecutorService remoteLinkExecutorService) {
     BatchLoaderWithContext<String, Try<String>> batchLoader = (keys, environment) -> {
       AtomicReference<Map<String, String>> fwdHeaderMapRef = new AtomicReference<>();
       List<UrlServiceRequestParams> requestParams = keys
@@ -1088,10 +1101,15 @@ public class CaasConfig implements WebMvcConfigurer {
                 );
               }).collect(Collectors.toList());
       Map<String, String> fwdHeaderMap = fwdHeaderMapRef.get() != null ? fwdHeaderMapRef.get() : new HashMap<>();
-      return CompletableFuture.supplyAsync(() -> rsa.to().formatLinks(requestParams, fwdHeaderMap));
+      return CompletableFuture.supplyAsync(() -> rsa.to().formatLinks(requestParams, fwdHeaderMap), remoteLinkExecutorService);
     };
     DataLoaderOptions options = DataLoaderOptions.newOptions().setCacheMap(remoteLinkCacheMap);
     return DataLoaderFactory.newDataLoader(batchLoader, options);
+  }
+
+  @Bean(name = "remoteLinkExecutorService", destroyMethod = "shutdown")
+  ExecutorService remoteLinkExecutorService() {
+    return Executors.newFixedThreadPool(5);
   }
 
   @Bean

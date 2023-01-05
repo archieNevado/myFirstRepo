@@ -27,7 +27,7 @@
 
     <jib.skip>true</jib.skip>
     <jib.goal>dockerBuild</jib.goal>
-    <application.image-base>coremedia/java-application-base:2.4.4-corretto-11</application.image-base>
+    <application.image-base>coremedia/java-application-base:1.1.0-cm-11.0.17-corretto</application.image-base>
     <application.image-prefix>coremedia</application.image-prefix>
     <application.image-suffix>content-server</application.image-suffix>
     <application.image-tag>${project.version}</application.image-tag>
@@ -190,6 +190,17 @@
                         <ownership>1000:1000</ownership>
                       </rule>
                     </rules>
+                  </configuration>
+                </pluginExtension>
+                <pluginExtension>
+                  <implementation>com.google.cloud.tools.jib.maven.extension.layerfilter.JibLayerFilterExtension</implementation>
+                  <configuration implementation="com.google.cloud.tools.jib.maven.extension.layerfilter.Configuration">
+                    <filters>
+                      <!-- Delete pom.xml.jar file falsely added by jib, see https://github.com/GoogleContainerTools/jib/issues/3736-->
+                      <filter>
+                        <glob>/coremedia/libs/pom.xml.jar</glob>
+                      </filter>
+                    </filters>
                   </configuration>
                 </pluginExtension>
               </pluginExtensions>

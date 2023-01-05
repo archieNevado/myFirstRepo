@@ -5,6 +5,8 @@
   "compilerOptions": {
     "rootDir": ".",
     "outDir": "../build/joounit/src",
+    "emitDeclarationOnly": false,
+    "noEmit": true,
     "moduleResolution": "nodenext",
     "types": [
       "@coremedia/studio-client.client-core"

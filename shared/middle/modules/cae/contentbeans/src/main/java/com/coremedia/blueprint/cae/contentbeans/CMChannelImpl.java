@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Required;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -198,6 +199,11 @@ public class CMChannelImpl extends CMChannelBase {
   @Override
   public String getFeedDescription() {
     return getFeedTitle();
+  }
+
+  @Override
+  public Date getPublishedDate() {
+    return this.getContent().getCreationDate().getTime();
   }
 
   @Override

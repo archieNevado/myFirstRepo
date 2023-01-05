@@ -13,11 +13,9 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.TaskScheduler;
-import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -50,19 +48,14 @@ public class CommerceCacheInvalidationSource extends SimpleInvalidationSource {
   private final SettingsService settingsService;
   private final CommerceBeanClassResolver commerceBeanClassResolver;
 
-  public CommerceCacheInvalidationSource(ObjectProvider<TaskScheduler> taskScheduler,
+  public CommerceCacheInvalidationSource(TaskScheduler taskScheduler,
                                          Linker linker,
                                          SettingsService settingsService,
                                          CommerceBeanClassResolver commerceBeanClassResolver) {
-    this.taskScheduler = taskScheduler.getIfAvailable(CommerceCacheInvalidationSource::getDefaultTaskScheduler);
+    this.taskScheduler = taskScheduler;
     this.linker = linker;
     this.settingsService = settingsService;
     this.commerceBeanClassResolver = commerceBeanClassResolver;
-  }
-
-  private static TaskScheduler getDefaultTaskScheduler() {
-    LOG.info("Creating single threaded task scheduler for delayed invalidations.");
-    return new ConcurrentTaskScheduler();
   }
 
   @EventListener(CommerceCacheInvalidationEvent.class)

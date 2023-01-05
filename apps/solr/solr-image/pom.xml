@@ -31,7 +31,7 @@
      | structure in the base image
     -->
     <solr.version>8.11.2</solr.version>
-    <solr.image-base-tag>8.11.2</solr.image-base-tag>
+    <solr.image-base-tag>1.1.0-cm-8.11.2</solr.image-base-tag>
     <solr.image-base>coremedia/solr-base:${solr.image-base-tag}</solr.image-base>
     <application.image-prefix>coremedia</application.image-prefix>
     <application.image-suffix>solr</application.image-suffix>
@@ -102,12 +102,17 @@
       <plugin>
         <groupId>com.google.cloud.tools</groupId>
         <artifactId>jib-maven-plugin</artifactId>
-        <version>3.1.4</version>
+        <version>3.2.1</version>
         <dependencies>
           <dependency>
             <groupId>com.google.cloud.tools</groupId>
             <artifactId>jib-ownership-extension-maven</artifactId>
             <version>0.1.0</version>
+          </dependency>
+          <dependency>
+            <groupId>com.google.cloud.tools</groupId>
+            <artifactId>jib-layer-filter-extension-maven</artifactId>
+            <version>0.3.0</version>
           </dependency>
         </dependencies>
         <configuration>
@@ -164,6 +169,17 @@
                     <ownership>8983:8983</ownership>
                   </rule>
                 </rules>
+              </configuration>
+            </pluginExtension>
+            <pluginExtension>
+              <implementation>com.google.cloud.tools.jib.maven.extension.layerfilter.JibLayerFilterExtension</implementation>
+              <configuration implementation="com.google.cloud.tools.jib.maven.extension.layerfilter.Configuration">
+                <filters>
+                  <!-- Delete pom.xml.jar file falsely added by jib, see https://github.com/GoogleContainerTools/jib/issues/3736-->
+                  <filter>
+                    <glob>**/pom.xml.jar</glob>
+                  </filter>
+                </filters>
               </configuration>
             </pluginExtension>
           </pluginExtensions>

@@ -6,12 +6,12 @@
     "@coremedia/brick-media": "workspace:*",
     "@coremedia/brick-node-decoration-service": "workspace:*",
     "@coremedia/brick-utils": "workspace:*",
-    "jquery": "^3.6.0",
+    "jquery": "^3.6.3",
     "mediaelement": "^4.2.17",
     "promise-polyfill": "^8.2.3"
   },
   "devDependencies": {
-    "prettier": "^2.6.2"
+    "prettier": "^2.8.1"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{js,json}\""
