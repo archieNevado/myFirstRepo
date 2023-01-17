@@ -13,12 +13,6 @@ public class CaeSitemapConfigurationProperties {
   private String targetRoot = "/sitemap";
 
   /**
-   * Set the delivery cae port. Defaults to 'management.server.port'.
-   */
-  @Value("${management.server.port:8081}")
-  private int caePort = 8081;
-
-  /**
    * Initial time of day to start sitemap generation.
    * <p>
    * Supported formats:
@@ -54,14 +48,6 @@ public class CaeSitemapConfigurationProperties {
 
   public void setStarttime(String starttime) {
     this.starttime = starttime;
-  }
-
-  public int getCaePort() {
-    return caePort;
-  }
-
-  public void setCaePort(int caePort) {
-    this.caePort = caePort;
   }
 
   public String getTargetRoot() {

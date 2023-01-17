@@ -4,10 +4,10 @@
   "private": true,
   "dependencies": {
     "@coremedia/brick-utils": "workspace:1.0.0",
-    "jquery": "^3.6.1"
+    "jquery": "^3.6.3"
   },
   "devDependencies": {
-    "prettier": "^2.7.1"
+    "prettier": "^2.8.1"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{js,json}\""

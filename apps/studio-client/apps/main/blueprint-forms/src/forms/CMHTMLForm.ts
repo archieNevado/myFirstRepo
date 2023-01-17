@@ -1,9 +1,10 @@
 import CKEditorTypes from "@coremedia/studio-client.ckeditor-common/CKEditorTypes";
-import RichTextPropertyField from "@coremedia/studio-client.main.editor-components/sdk/premular/fields/richtext/RichTextPropertyField";
 import DocumentForm from "@coremedia/studio-client.main.editor-components/sdk/premular/DocumentForm";
 import DocumentTabPanel from "@coremedia/studio-client.main.editor-components/sdk/premular/DocumentTabPanel";
 import PropertyFieldGroup from "@coremedia/studio-client.main.editor-components/sdk/premular/PropertyFieldGroup";
 import StringPropertyField from "@coremedia/studio-client.main.editor-components/sdk/premular/fields/StringPropertyField";
+import RichTextPropertyField from "@coremedia/studio-client.main.editor-components/sdk/premular/fields/richtext/RichTextPropertyField";
+import VBoxLayout from "@jangaroo/ext-ts/layout/container/VBox";
 import Config from "@jangaroo/runtime/Config";
 import ConfigUtils from "@jangaroo/runtime/ConfigUtils";
 import BlueprintDocumentTypes_properties from "../BlueprintDocumentTypes_properties";
@@ -55,6 +56,7 @@ class CMHTMLForm extends DocumentTabPanel {
                   propertyName: "data",
                 }),
               ],
+              layout: Config(VBoxLayout, { align: "stretch" }),
             }),
           ],
         }),

@@ -12,6 +12,7 @@ import LocaleUtil from "@coremedia/studio-client.cap-base-models/locale/LocaleUt
 import { CKEditorPluginConfig, CreateCKEditorFunction } from "@coremedia/studio-client.ckeditor-common/CKEditorCreateFunctionType";
 import '../theme/custom.css';
 import AutoSave from "@ckeditor/ckeditor5-autosave/src/autosave";
+import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 
 /**
  * Localization the editor configuration
@@ -48,6 +49,7 @@ export const createSlimCKEditor: CreateCKEditorFunction = (domElement:(string | 
       //@ts-ignore
       Differencing,
       Essentials,
+      Paragraph,
     ],
     toolbar: {
       items: defaultToolbarItems

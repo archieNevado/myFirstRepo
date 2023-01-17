@@ -36,6 +36,7 @@ import com.coremedia.image.ImageDimensionsExtractor;
 import com.coremedia.rest.cap.validation.ContentTypeValidator;
 import com.coremedia.rest.cap.validators.AvailableLocalesConfigurationProperties;
 import com.coremedia.rest.cap.validators.AvailableLocalesValidator;
+import com.coremedia.rest.cap.validators.ColorSettingValidator;
 import com.coremedia.rest.cap.validators.ContentLocaleMatchesSiteLocaleValidator;
 import com.coremedia.rest.cap.validators.CrossSiteLinkValidator;
 import com.coremedia.rest.cap.validators.DuplicateDerivedInSiteValidator;
@@ -121,16 +122,16 @@ public class ValidatorsConfiguration {
   @ConditionalOnProperty(name = "validator.enabled.content-type-validator.cm-localized-master-length", matchIfMissing = true)
   ContentTypeValidator cmLocalizedValidator(CapConnection connection) {
     return new ContentTypeValidator(type(connection, CM_LOCALIZED),
-                                    true,
-                                    List.of(new LinkListMaxLengthValidator("master", Set.of(Issues.LOCALIZATION_ISSUE_CATEGORY))));
+            true,
+            List.of(new LinkListMaxLengthValidator("master", Set.of(Issues.LOCALIZATION_ISSUE_CATEGORY))));
   }
 
   @Bean
   @ConditionalOnProperty(name = "validator.enabled.content-type-validator.cm-teaser-targets-length", matchIfMissing = true)
   ContentTypeValidator cmTeaserValidator(CapConnection connection) {
     return new ContentTypeValidator(type(connection, "CMTeaser"),
-                                    false,
-                                    List.of(new StructLinkListMaxLengthValidator("targets", "links")));
+            false,
+            List.of(new StructLinkListMaxLengthValidator("targets", "links")));
   }
 
   @Bean
@@ -179,16 +180,16 @@ public class ValidatorsConfiguration {
   @ConditionalOnProperty(name = "validator.enabled.content-type-validator.cm-channel-title-not-empty", matchIfMissing = true)
   ContentTypeValidator cmChannelValidator(CapConnection connection) {
     return new ContentTypeValidator(type(connection, "CMChannel"),
-                                    true,
-                                    List.of(new NotEmptyValidator("title")));
+            true,
+            List.of(new NotEmptyValidator("title")));
   }
 
   @Bean
   @ConditionalOnProperty(name = "validator.enabled.content-type-validator.cm-viewtype-layout-not-empty", matchIfMissing = true)
   ContentTypeValidator cmViewtype(CapConnection connection) {
     return new ContentTypeValidator(type(connection, "CMViewtype"),
-                                    true,
-                                    List.of(new NotEmptyValidator("layout")));
+            true,
+            List.of(new NotEmptyValidator("layout")));
   }
 
   @Bean
@@ -284,19 +285,19 @@ public class ValidatorsConfiguration {
   @ConditionalOnProperty(name = "validator.enabled.content-type-validator.cm-article-not-empty", matchIfMissing = true)
   ContentTypeValidator cmArticleValidator(CapConnection connection) {
     return new ContentTypeValidator(type(connection, "CMArticle"),
-                                    true,
-                                    List.of(new NotEmptyValidator("title"),
-                                            new NotEmptyMarkupValidator("detailText")));
+            true,
+            List.of(new NotEmptyValidator("title"),
+                    new NotEmptyMarkupValidator("detailText")));
   }
 
   @Bean
   @ConditionalOnProperty(name = "validator.enabled.content-type-validator.cm-person", matchIfMissing = true)
   ContentTypeValidator cmPersonValidator(CapConnection connection) {
     return new ContentTypeValidator(type(connection, "CMPerson"),
-                                    true,
-                                    List.of(new NotEmptyValidator("firstName"),
-                                            new NotEmptyValidator("lastName"),
-                                            new EmailValidator("eMail")));
+            true,
+            List.of(new NotEmptyValidator("firstName"),
+                    new NotEmptyValidator("lastName"),
+                    new EmailValidator("eMail")));
   }
 
   @Bean
@@ -349,10 +350,10 @@ public class ValidatorsConfiguration {
           @Value("${possiblyMissingMasterReferenceFromMasterValidator.severity:WARN}") Severity severity,
           @Value("${possiblyMissingMasterReferenceFromMasterValidator.maxIssues:20}") long maxIssues) {
     return new PossiblyMissingMasterReferenceValidator(type(connection, CM_LOCALIZED),
-                                                       true,
-                                                       sitesService,
-                                                       severity,
-                                                       maxIssues);
+            true,
+            sitesService,
+            severity,
+            maxIssues);
   }
 
   @Bean
@@ -414,19 +415,19 @@ public class ValidatorsConfiguration {
     RegExpValidator regExpValidator = new RegExpValidator("filename", "^[^\\\\/:*?\"<>|]*$");
     regExpValidator.setCode("FilenameValidator");
     return new ContentTypeValidator(type(connection, "CMDownload"),
-                                    true,
-                                    List.of(new NotEmptyValidator("data"),
-                                            new NotEmptyValidator("title"),
-                                            regExpValidator));
+            true,
+            List.of(new NotEmptyValidator("data"),
+                    new NotEmptyValidator("title"),
+                    regExpValidator));
   }
 
   @Bean
   @ConditionalOnProperty(name = "validator.enabled.content-type-validator.cm-external-link", matchIfMissing = true)
   ContentTypeValidator cmExternalLinkValidator(CapConnection connection) {
     return new ContentTypeValidator(type(connection, "CMExternalLink"),
-                                    true,
-                                    List.of(new NotEmptyValidator("url"),
-                                            new UrlValidator("url", null)));
+            true,
+            List.of(new NotEmptyValidator("url"),
+                    new UrlValidator("url", null)));
   }
 
   @Bean
@@ -491,9 +492,19 @@ public class ValidatorsConfiguration {
     return validator;
   }
 
+  @Bean
+  @ConditionalOnProperty(name = "validator.enabled.image-background-color-validator.cm-picture", matchIfMissing = true)
+  ColorSettingValidator imageBackgroundColorValidator(CapConnection connection) {
+    return new ColorSettingValidator(type(connection, "CMPicture"),
+            false,
+            "localSettings",
+            "coloring.background",
+            "background");
+  }
+
   @NonNull
   private static ContentType type(@NonNull CapConnection connection, @Nullable String typeStr) {
-    return Objects.requireNonNull(typeStr!=null ?
+    return Objects.requireNonNull(typeStr != null ?
             connection.getContentRepository().getContentType(typeStr) :
             connection.getContentRepository().getDocumentContentType());
   }

@@ -4,13 +4,15 @@ import com.coremedia.blueprint.common.services.validation.AbstractValidator;
 import com.coremedia.livecontext.contentbeans.CMExternalChannel;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.function.Predicate;
+
+import static java.lang.invoke.MethodHandles.lookup;
 
 /**
  * {@link com.coremedia.livecontext.contentbeans.CMExternalChannel} may link to categories that
@@ -21,7 +23,7 @@ import java.util.function.Predicate;
  */
 public class CMExternalChannelValidator extends AbstractValidator<CMExternalChannel> {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ExternalReferencePredicate.class);
+  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
 
   @Override
   protected Predicate<CMExternalChannel> createPredicate() {
@@ -29,11 +31,11 @@ public class CMExternalChannelValidator extends AbstractValidator<CMExternalChan
   }
 
   @Override
-  public boolean supports(Class<?> clazz) {
+  public boolean supports(@NonNull Class<?> clazz) {
     return CMExternalChannel.class.isAssignableFrom(clazz);
   }
 
-  private class ExternalReferencePredicate implements Predicate<CMExternalChannel> {
+  private static class ExternalReferencePredicate implements Predicate<CMExternalChannel> {
     @Override
     public boolean test(@Nullable CMExternalChannel externalChannel) {
       if (!(externalChannel == null || externalChannel.isCatalogRoot())) {

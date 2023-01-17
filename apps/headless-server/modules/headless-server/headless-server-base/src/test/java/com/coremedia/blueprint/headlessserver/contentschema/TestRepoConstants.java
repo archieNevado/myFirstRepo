@@ -39,6 +39,7 @@ public final class TestRepoConstants {
 
   public static final Integer ARTICLE_ID = 111116;
   public static final String ARTICLE_UUID = "a3eef115-05f6-4d62-a784-37218575ff79";
+  public static final Integer TIME_TRAVEL_ARTICLE_ID = 111126;
   public static final String ARTICLE_REPO_PATH = MASTER_SITE_REPO_PATH + "/Content/Articles";
 
   public static final Integer BLOG_TAXONOMY_ID = 130;
@@ -50,4 +51,7 @@ public final class TestRepoConstants {
   public static final Integer SETTINGS_VALUE = 5;
   public static final String SUB_SETTINGS_KEY = "subStruct.subLevelStringProperty";
   public static final String SUB_SETTINGS_VALUE = "First Sub Level";
+
+  public static final Integer CLANDESTINE_SETTINGS_ID = 111124;
+  public static final String SETTINGS_REPO_PATH = MASTER_SITE_REPO_PATH + "/Content/Settings";
 }

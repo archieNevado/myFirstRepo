@@ -6,7 +6,7 @@
     "prettier": "prettier --write \"src/**/*.{js,json}\""
   },
   "devDependencies": {
-    "prettier": "^2.7.1"
+    "prettier": "^2.8.1"
   },
   "dependencies": {
     "@coremedia/brick-default-teaser": "workspace:1.0.0",
@@ -16,7 +16,7 @@
     "@coremedia/brick-mediaelement": "workspace:1.0.0",
     "@coremedia/brick-node-decoration-service": "workspace:1.0.0",
     "@coremedia/brick-utils": "workspace:1.0.0",
-    "jquery": "^3.6.1",
+    "jquery": "^3.6.3",
     "magnific-popup": "1.1.0"
   },
   "main": "src/js/index.js",

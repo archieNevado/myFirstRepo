@@ -11,7 +11,7 @@ ResourceBundleUtil.override(TaxonomyStudioPlugin_properties, {
   TaxonomySearch_empty_search_text: "Schlagwortsuche…",
   TaxonomySearch_loading_text: "Laden…",
   TaxonomySearch_no_hit: "Keine Suchergebnisse",
-  TaxonomyEditor_deletion_blocked_text: "Die selektierten Schlagwörter oder deren Kind-Schlagwörter sind in {0} Dokumenten verlinkt. Bitte entfernen Sie diese Verknüpfungen bevor Sie die ausgew�hlten Schlagworte löschen.",
+  TaxonomyEditor_deletion_blocked_text: "Die selektierten Schlagwörter oder deren Kind-Schlagwörter sind in {0} Dokumenten verlinkt. Bitte entfernen Sie diese Verknüpfungen bevor Sie die ausgewählten Schlagworte löschen.",
   TaxonomyEditor_deletion_failed_text: "Fehler beim Löschen Schlagwörter: {0}<br><br> Bitte überprüfen Sie die Log-Datei auf dem Server.",
   TaxonomyEditor_deletion_failed_title: "Fehler",
   TaxonomyEditor_deletion_text: "Möchten Sie die augewählten Schlagworte wirklich löschen?",

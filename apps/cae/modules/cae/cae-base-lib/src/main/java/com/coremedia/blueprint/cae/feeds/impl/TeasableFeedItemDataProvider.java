@@ -95,7 +95,9 @@ public class TeasableFeedItemDataProvider implements FeedItemDataProvider {
     entry.setTitle(getTitle(request, response, teasable));
     entry.setPublishedDate(teasable.getContent().getCreationDate().getTime());
     entry.setUpdatedDate(teasable.getContent().getModificationDate().getTime());
-    entry.setLink(getLink(request, response, teasable, null));
+    String link = getLink(request, response, teasable, null);
+    entry.setLink(link);
+    entry.setUri(link);
     entry.setDescription(createSyndContent(teasable));
 
     return entry;

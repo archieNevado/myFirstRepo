@@ -4,12 +4,15 @@ import com.coremedia.blueprint.common.services.validation.AbstractValidator;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.livecontext.contentbeans.CMProductTeaser;
 import com.coremedia.livecontext.ecommerce.common.NotFoundException;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.function.Predicate;
+
+import static java.lang.invoke.MethodHandles.lookup;
 
 /**
  * {@link com.coremedia.livecontext.contentbeans.CMProductTeaser Product teaser} may link to products that
@@ -22,7 +25,7 @@ import java.util.function.Predicate;
  */
 public class EmptyProductValidator extends AbstractValidator<CMProductTeaser> {
 
-  private static final Logger LOG = LoggerFactory.getLogger(EmptyProductValidator.class);
+  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
 
   private DeliveryConfigurationProperties deliveryConfigurationProperties;
 
@@ -37,7 +40,7 @@ public class EmptyProductValidator extends AbstractValidator<CMProductTeaser> {
   }
 
   @Override
-  public boolean supports(Class<?> clazz) {
+  public boolean supports(@NonNull Class<?> clazz) {
     return CMProductTeaser.class.isAssignableFrom(clazz);
   }
 

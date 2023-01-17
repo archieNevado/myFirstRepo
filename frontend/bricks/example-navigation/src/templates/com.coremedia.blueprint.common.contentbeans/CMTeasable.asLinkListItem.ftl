@@ -14,7 +14,7 @@
 <li class="${cssClass} cm-navigation-item cm-navigation-item--depth-${depth}" <@preview.metadata collectionProperty!["properties.children"]/>>
   <@cm.include self=self view="asLink" params={"cssClass" : "cm-navigation-item__title"}/>
 
-  <#if showPicturesInNavigation && depth == 2 && self.picture?has_content>
+  <#if showPicturesInNavigation && self.picture?has_content>
     <a class="cm-navigation-item__picture-link" href="${cm.getLink(self.target!cm.UNDEFINED)}">
       <@cm.include self=self.picture!cm.UNDEFINED view="media" params={
         "classBox": "cm-navigation-item__picture-box",

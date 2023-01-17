@@ -22,6 +22,7 @@ import com.coremedia.caas.config.CaasGraphqlConfigurationProperties;
 import com.coremedia.caas.config.RemoteServiceConfigurationProperties;
 import com.coremedia.caas.config.StaxContextConfigurationProperties;
 import com.coremedia.caas.filter.InProductionFilterPredicate;
+import com.coremedia.caas.filter.RepositoryPathExcludePatternFilterPredicate;
 import com.coremedia.caas.filter.ValidityDateFilterPredicate;
 import com.coremedia.caas.headless_server.plugin_support.PluginSupport;
 import com.coremedia.caas.headless_server.plugin_support.extensionpoints.CaasWiringFactory;
@@ -719,6 +720,14 @@ public class CaasConfig implements WebMvcConfigurer {
 
   @Bean
   @Qualifier(QUALIFIER_CAAS_FILTER_PREDICATE)
+  // NEVER RENAME THIS BEANS NAME NOR REMOVE WITHOUT GIVEN SOME SERIOUS THOUGHT / CONSIDER TALKING TO THE CLOUD TEAM
+  // (see Jira Ticket CMS-22421)
+  public FilterPredicate<Object> repositoryPathExcludePatternFilterPredicate() {
+    return new RepositoryPathExcludePatternFilterPredicate(caasGraphqlConfigurationProperties.getRepositoryPathExcludePatterns());
+  }
+
+  @Bean
+  @Qualifier(QUALIFIER_CAAS_FILTER_PREDICATE)
   public FilterPredicate<Object> inProductionFilterPredicate() {
     return new InProductionFilterPredicate();
   }
@@ -1091,7 +1100,7 @@ public class CaasConfig implements WebMvcConfigurer {
     return DataLoaderFactory.newDataLoader(batchLoader, options);
   }
 
-  @Bean(name = "remoteLinkExecutorService", destroyMethod= "shutdown")
+  @Bean(name = "remoteLinkExecutorService", destroyMethod = "shutdown")
   ExecutorService remoteLinkExecutorService() {
     return Executors.newFixedThreadPool(5);
   }

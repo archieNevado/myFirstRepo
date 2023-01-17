@@ -1,0 +1,12 @@
+<Struct xmlns="http://www.coremedia.com/2008/struct">
+  <StructProperty Name="transforms">
+    <Struct>
+      <StringProperty Name="testCrop">b;a=0;c=1/crop;x=0;y=0;width=200;height=200</StringProperty>
+    </Struct>
+  </StructProperty>
+  <StructProperty Name="isDefault">
+    <Struct>
+      <StringProperty Name="testCrop">true</StringProperty>
+    </Struct>
+  </StructProperty>
+</Struct>

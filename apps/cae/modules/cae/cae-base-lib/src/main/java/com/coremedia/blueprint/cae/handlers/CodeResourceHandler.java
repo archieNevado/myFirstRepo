@@ -266,12 +266,16 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
 
   @GetMapping(value = URI_PATTERN_SINGLE)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_PATH) List<String> path,
-                                    @PathVariable(SEGMENT_ID) CMAbstractCode cmAbstractCode,
+                                    @Nullable @PathVariable(SEGMENT_ID) CMAbstractCode cmAbstractCode,
                                     @PathVariable(SEGMENT_ETAG) int version,
                                     @PathVariable(SEGMENT_NAME) String baseName,
                                     @PathVariable(SEGMENT_EXTENSION) String extension,
                                     WebRequest webRequest,
                                     HttpServletResponse response) throws IOException, MimeTypeParseException {
+    if (cmAbstractCode == null) {
+      return notFound();
+    }
+
     if (localResourcesEnabled) {
       ModelAndView mav = localResource(path, baseName, extension, webRequest);
       // null represents "not modified" and is an appropriate return value

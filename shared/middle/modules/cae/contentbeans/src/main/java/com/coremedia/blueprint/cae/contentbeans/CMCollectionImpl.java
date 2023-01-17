@@ -6,6 +6,7 @@ import com.coremedia.blueprint.common.util.ContainerFlattener;
 import com.coremedia.xml.MarkupUtil;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -63,6 +64,11 @@ public class CMCollectionImpl<T> extends CMCollectionBase<T> {
     }
 
     return description;
+  }
+
+  @Override
+  public Date getPublishedDate() {
+    return this.getContent().getCreationDate().getTime();
   }
 
   /**

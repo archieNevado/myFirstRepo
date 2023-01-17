@@ -22,7 +22,8 @@
   },
   "pnpm": {
     "overrides": {
-      "glob-parent@<5.1.2": ">=5.1.2"
+      "glob-parent@<5.1.2": ">=5.1.2",
+      "loader-utils@<1.4.2": ">=2.0.4"
     }
   }
 }

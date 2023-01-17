@@ -33,6 +33,7 @@ import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_N
 import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.VIEW_PARAMETER;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ID;
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_NAME;
+import static com.coremedia.objectserver.web.HandlerHelper.notFound;
 
 @Link
 @RequestMapping
@@ -58,11 +59,15 @@ public class LiveContextExternalChannelPreviewHandler extends LiveContextPageHan
    *             {@link com.coremedia.blueprint.cae.handlers.DefaultPageHandler#setViewToBean(Map) DefaultPageHandler#setViewToBean(Map)}.
    */
   @GetMapping({PREVIEW_URI_PATTERN})
-  public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) LiveContextExternalChannelImpl liveContextExternalChannel,
+  public ModelAndView handleRequest(@org.springframework.lang.Nullable @PathVariable(SEGMENT_ID) LiveContextExternalChannelImpl liveContextExternalChannel,
                                     @PathVariable(SEGMENT_NAME) String vanityName,
                                     @PathVariable(SHOP_NAME_VARIABLE) String siteSegment,
                                     @RequestParam(value = VIEW_PARAMETER, required = false) final String view,
                                     @NonNull HttpServletRequest request) {
+    if (liveContextExternalChannel == null) {
+      return notFound();
+    }
+
     Navigation navigation = getNavigation(siteSegment);
     if (navigation == null || !vanityName.equals(getVanityName(liveContextExternalChannel))) {
       return HandlerHelper.notFound();

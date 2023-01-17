@@ -19,12 +19,12 @@
     "@coremedia/theme-importer": "workspace:1.0.1",
     "@coremedia/tool-utils": "workspace:1.0.0",
     "@coremedia/zipper": "workspace:1.0.0",
-    "inquirer": "^8.2.4",
+    "inquirer": "^8.2.5",
     "yargs": "^15.4.1"
   },
   "devDependencies": {
     "jest": "^27.5.1",
-    "prettier": "^2.7.1"
+    "prettier": "^2.8.1"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{js,json}\"",

@@ -76,7 +76,7 @@ public class P13NPlacementHandler extends PageHandlerBase {
    */
   @GetMapping(value = DYNAMIC_PLACEMENT_URI_PATTERN)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ROOT) String context,
-                                    @PathVariable(ID_VARIABLE) CMObject cmObject,
+                                    @org.springframework.lang.Nullable @PathVariable(ID_VARIABLE) CMObject cmObject,
                                     @PathVariable(PAGEGRID_VARIABLE) String pageGridName,
                                     @PathVariable(PLACEMENT_VARIABLE) String placementName,
                                     @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,

@@ -36,7 +36,7 @@ public class CorporateManagementConfiguration {
   public SitemapSetup corporateSitemapConfiguration(CaeSitemapConfigurationProperties properties,
                                                     SitemapRendererFactory sitemapIndexRendererFactory,
                                                     SitemapUrlGenerator corporateSitemapContentUrlGenerator) {
-    var sitemapSetup = new SitemapSetup(properties);
+    SitemapSetup sitemapSetup = new SitemapSetup(properties);
     sitemapSetup.setSitemapRendererFactory(sitemapIndexRendererFactory);
     sitemapSetup.setUrlGenerators(List.of(corporateSitemapContentUrlGenerator));
     return sitemapSetup;
@@ -45,7 +45,7 @@ public class CorporateManagementConfiguration {
   @SuppressWarnings("unchecked")
   @Bean
   public ContentUrlGenerator corporateSitemapContentUrlGenerator(ContentBeanFactory contentBeanFactory, LinkFormatter linkFormatter, ValidationService validationService) {
-    var exclusionPaths = List.of("Options");
+    List<String> exclusionPaths = List.of("Options");
     return new ContentUrlGenerator(linkFormatter, contentBeanFactory, validationService, exclusionPaths, List.of(
             new ValidContentPredicate(contentBeanFactory),
             new SitemapDoctypePredicate(List.of(

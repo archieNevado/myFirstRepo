@@ -11,12 +11,12 @@
   },
   "dependencies": {
     "chalk": "^4.1.2",
-    "date-fns": "^2.29.2",
+    "date-fns": "^2.29.3",
     "log-symbols": "^4.1.0"
   },
   "devDependencies": {
     "jest": "^27.5.1",
-    "prettier": "^2.7.1"
+    "prettier": "^2.8.1"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{js,json}\"",

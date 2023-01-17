@@ -1,0 +1,21 @@
+<Struct xmlns="http://www.coremedia.com/2008/struct">
+  <StructProperty Name="responsiveImageSettings">
+    <Struct>
+      <StructProperty Name="testCrop">
+        <Struct>
+          <IntProperty Name="widthRatio">1</IntProperty>
+          <IntProperty Name="heightRatio">1</IntProperty>
+          <IntProperty Name="minWidth">200</IntProperty>
+          <IntProperty Name="minHeight">200</IntProperty>
+          <IntProperty Name="previewWidth">200</IntProperty>
+          <StructProperty Name="">
+            <Struct>
+              <IntProperty Name="width">200</IntProperty>
+              <IntProperty Name="height">200</IntProperty>
+            </Struct>
+          </StructProperty>
+        </Struct>
+      </StructProperty>
+    </Struct>
+  </StructProperty>
+</Struct>

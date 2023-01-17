@@ -10,6 +10,7 @@ import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,11 +58,11 @@ public class PaginationHandler extends PageHandlerBase {
    */
   @GetMapping(value = URI_PATTERN)
   public <T> ModelAndView handlePaginationRequest(
-          @PathVariable(SEGMENT_ID) CMCollection<T> container,
+          @Nullable @PathVariable(SEGMENT_ID) CMCollection<T> container,
           @RequestParam(value = VIEW_PARAMETER, required = false) String view,
           @RequestParam(value = PARAMETER_PAGENUM, required = false, defaultValue = "0") int pagenum,
           HttpServletRequest request) {
-    if (!container.isPaginated()) {
+    if (container == null || !container.isPaginated()) {
       LOG.debug("{} does not support pagination, cannot create pagination ModelAndView.", container);
       return HandlerHelper.notFound();
     }

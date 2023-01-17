@@ -11,6 +11,7 @@ import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,9 +48,9 @@ public class BlobHandler {
           "/{" + SEGMENT_ETAG + "}" +
           "/{" + SEGMENT_FILENAME + "}";
 
-  private MimeTypeService mimeTypeService;
-  private SettingsService settingsService;
-  private ValidationService<ContentBean> validationService;
+  private final MimeTypeService mimeTypeService;
+  private final SettingsService settingsService;
+  private final ValidationService<ContentBean> validationService;
 
   public BlobHandler(ValidationService<ContentBean> validationService,
                      MimeTypeService mimeTypeService,
@@ -60,7 +61,7 @@ public class BlobHandler {
   }
 
   @GetMapping(value = BLOB_PATTERN)
-  public ModelAndView handleRequest(@PathVariable(SEGMENT_ID) ContentBean contentBean,
+  public ModelAndView handleRequest(@Nullable @PathVariable(SEGMENT_ID) ContentBean contentBean,
                                     @PathVariable(SEGMENT_NAME) String name,
                                     @PathVariable(SEGMENT_ETAG) String eTag) {
     if (contentBean == null || !validationService.validate(contentBean)) {

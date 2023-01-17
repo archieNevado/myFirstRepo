@@ -1,0 +1,11 @@
+query getPageById($id: String!) {
+  content {
+    page(id: $id) {
+      id
+      name
+      type
+      repositoryPath
+      settings(paths: ["clandestine"])
+    }
+  }
+}

@@ -2,3 +2,17 @@
   /* set modal z-index to be higher than Studio's default windows in order to make balloons visible if the editor is rendered in a window */
   --ck-z-modal: 9001;
 }
+
+
+/*
+ * This rule overrides the dropdown menu position on the find-and-replace button in the editor toolbar.
+ * We cannot automatically adjust the position by changing the css class in the dropdown from
+ * "ck-dropdown__panel_se" to "ck-dropdown__panel_sw", so we have to apply the styles manually.
+ *
+ * Overflowing the premular's middle splitter does not work due to how ExtJS layouts work.
+ * This is why we need to open the menu to the left to prevent layout issues.
+ */
+.ck-dropdown__panel:has(.ck-find-and-replace-form) {
+  left: auto !important;
+  right: 0;
+}

@@ -11,6 +11,7 @@ import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.elastic.core.api.models.Model;
 import com.coremedia.elastic.core.api.models.Query;
@@ -104,6 +105,9 @@ public class EsAlxRetrievalApplicationContextTest {
   @Inject
   private SettingsService settingsService;
 
+  @Inject
+  private SitesService sitesService;
+
   private Content pageList;
   private long start;
 
@@ -112,12 +116,12 @@ public class EsAlxRetrievalApplicationContextTest {
     pageList = contentRepository.getContent("12348"); // compare with contenttest.xml
 
     when(analyticsServiceProvider.getServiceKey()).thenReturn(SERVICE);
-    when(analyticsServiceProvider.computeEffectiveRetrievalSettings(eq(pageList), any(Content.class)))
+    when(analyticsServiceProvider.computeEffectiveRetrievalSettings(any(), any(Content.class)))
     .then(new Answer<Object>() {
       @Override
       public Object answer(InvocationOnMock invocation) throws Throwable {
         final Object[] args = invocation.getArguments();
-        return RetrievalUtil.computeEffectiveRetrievalSettings(SERVICE, EFFECTIVE_SETTINGS, (Content)args[0], (Content) args[1], settingsService);
+        return RetrievalUtil.computeEffectiveRetrievalSettings(SERVICE, EFFECTIVE_SETTINGS, (Content)args[0], (Content) args[1], settingsService, sitesService);
       }
     });
 

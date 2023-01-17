@@ -3,12 +3,14 @@ package com.coremedia.blueprint.headlessserver.contentschema;
 import com.coremedia.blueprint.base.caas.web.BlueprintBaseMediaConfig;
 import com.coremedia.blueprint.coderesources.ThemeServiceConfiguration;
 import com.coremedia.blueprint.headlessserver.CaasConfig;
+import com.coremedia.caas.headless_server.plugin_support.extensionpoints.CopyToContextParameter;
 import com.coremedia.caas.media.TransformationServiceConfiguration;
 import com.coremedia.caas.plugin.PluginConfiguration;
 import com.coremedia.caas.web.GraphQLRestMappingConfig;
 import com.coremedia.caas.web.controller.ViewController;
 import com.coremedia.caas.web.controller.graphql.GraphQLController;
 import com.coremedia.caas.web.filter.GraphQlControllerFilter;
+import com.coremedia.caas.web.wiring.PreviewDateContextParameter;
 import com.coremedia.caas.wrapper.UrlPathFormater;
 import io.restassured.module.webtestclient.RestAssuredWebTestClient;
 import org.dataloader.CacheMap;
@@ -17,26 +19,31 @@ import org.dataloader.Try;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.time.ZonedDateTime;
 import java.util.concurrent.CompletableFuture;
 
 import static com.coremedia.blueprint.headlessserver.contentschema.TestRepoConstants.MASTER_SITE_ID;
+import static com.coremedia.blueprint.headlessserver.contentschema.TestRepoConstants.TIME_TRAVEL_ARTICLE_ID;
+import static com.coremedia.caas.headless_server.plugin_support.PluginSupport.HTTP_HEADER_NAME_X_PREVIEW_DATE;
+import static com.coremedia.caas.headless_server.plugin_support.PluginSupport.QUALIFIER_CAAS_COPY_TO_CONTEXT_PARAMETER;
 import static io.restassured.module.webtestclient.RestAssuredWebTestClient.given;
 import static org.hamcrest.Matchers.blankOrNullString;
 import static org.hamcrest.Matchers.equalTo;
@@ -53,14 +60,15 @@ import static org.mockito.Mockito.lenient;
         ThemeServiceConfiguration.class,
         TransformationServiceConfiguration.class,
         JacksonAutoConfiguration.class,
+        ContentSchemaRestApiTest.LocalTestConfiguration.class,
 }, properties = {
         "repository.factoryClassName=com.coremedia.cap.xmlrepo.XmlCapConnectionFactory",
         "repository.params.contentxml=classpath:/content/contentrepository.xml",
-        "repository.params.userxml=classpath:/com/coremedia/cap/common/xml/users-default.xml"
+        "repository.params.userxml=classpath:/com/coremedia/cap/common/xml/users-default.xml",
+        "caas.preview=true",
 })
 @AutoConfigureMockMvc
 @AutoConfigureWebTestClient
-@ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class ContentSchemaRestApiTest {
@@ -138,5 +146,40 @@ class ContentSchemaRestApiTest {
             .then()
             .status(HttpStatus.NOT_FOUND)
             .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename("api.json").build().toString());
+  }
+
+  @Test
+  @SuppressWarnings("java:S2699")
+    // status assertion from rest-assured is not detected by sonar
+  void testGetArticleByIdCurrentPreviewDate() {
+    given()
+            .when()
+            .get("/article/" + TIME_TRAVEL_ARTICLE_ID).then()
+            .status(HttpStatus.NOT_FOUND)
+            .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename("api.json").build().toString());
+  }
+
+  @Test
+  @SuppressWarnings("java:S2699")
+    // status assertion from rest-assured is not detected by sonar
+  void testGetArticleByIdWithFuturePreviewDate() {
+    given()
+            .header(HTTP_HEADER_NAME_X_PREVIEW_DATE, "Fri, 01 Jan 2100 00:00:00 GMT")
+            .when()
+            .get("/article/" + TIME_TRAVEL_ARTICLE_ID).then()
+            .status(HttpStatus.OK)
+            .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename("api.json").build().toString())
+            .body("article.id", equalTo(TIME_TRAVEL_ARTICLE_ID.toString()))
+            .body("article.type", equalTo("CMArticle"))
+            .body("errors", blankOrNullString());
+  }
+
+  @Configuration(proxyBeanMethods = false)
+  public static class LocalTestConfiguration {
+    @Bean
+    @Qualifier(QUALIFIER_CAAS_COPY_TO_CONTEXT_PARAMETER)
+    public CopyToContextParameter<Long, ZonedDateTime> previewDateContextParameter() {
+      return new PreviewDateContextParameter();
+    }
   }
 }

@@ -2,13 +2,14 @@ package com.coremedia.blueprint.assets.cae.handlers;
 
 import com.coremedia.blueprint.assets.contentbeans.AMAsset;
 import com.coremedia.blueprint.assets.contentbeans.AMAssetRendition;
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.blueprint.cae.handlers.CapBlobHandler;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.common.CapBlobRef;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.objectserver.web.links.Link;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -72,12 +72,16 @@ public class AssetRenditionBlobHandler {
   }
 
   @GetMapping(value = ASSET_URI_PATTERN)
-  public ModelAndView handleAssetRenditionRequest(@PathVariable(SEGMENT_ID) AMAsset asset,
+  public ModelAndView handleAssetRenditionRequest(@Nullable @PathVariable(SEGMENT_ID) AMAsset asset,
                                                   @PathVariable(SEGMENT_ETAG) String eTag,
                                                   @PathVariable(SEGMENT_PROPERTY) String propertyName,
                                                   @PathVariable(SEGMENT_EXTENSION) String extension,
                                                   WebRequest webRequest,
                                                   HttpServletResponse response) {
+    if (asset == null) {
+      return notFound();
+    }
+
     //maybe the asset name contains separator symbols, so we are only interested in the last segment
     String[] propertySegments = propertyName.split(String.valueOf(ASSET_NAME_SEPARATOR));
     String cleanPropertyName = propertySegments[propertySegments.length-1];
@@ -103,9 +107,7 @@ public class AssetRenditionBlobHandler {
     if (blob == null) {
       throw new IllegalArgumentException("Cannot render link for asset rendition without blob");
     }
-    Map<String, String> uriComponentParameters = new HashMap<>();
-    uriComponentParameters.putAll(capBlobHandler.linkParameters((CapBlobRef) blob));
 
-    return Collections.unmodifiableMap(uriComponentParameters);
+    return Collections.unmodifiableMap(capBlobHandler.linkParameters((CapBlobRef) blob));
   }
 }

@@ -453,7 +453,7 @@ function parseSettings(filename, settings = undefined) {
   checkPathsInSettingsJson(settingsJson, settingsDirPath);
 
   const transformLinksRelativeToSrcPath = (relativeFilePath) =>
-    path.join(settingsDirPath, relativeFilePath);
+    path.join(settingsDirPath, relativeFilePath).replace(/\\/g, "/");
   transformLinksInJson(settingsJson, transformLinksRelativeToSrcPath);
 
   return settingsJson;

@@ -3,13 +3,13 @@ package com.coremedia.blueprint.assets.cae;
 import com.coremedia.blueprint.assets.contentbeans.AMAsset;
 import com.coremedia.blueprint.base.links.UriConstants.Patterns;
 import com.coremedia.blueprint.base.links.UriConstants.RequestParameters;
-import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.handlers.PageHandlerBase;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.beans.UnexpectedBeanTypeException;
 import com.coremedia.objectserver.web.HandlerHelper;
@@ -29,6 +29,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+
+import static com.coremedia.objectserver.web.HandlerHelper.notFound;
 
 @Link
 @RequestMapping
@@ -77,10 +79,14 @@ public class AMAssetPreviewHandler extends PageHandlerBase {
    *             view name and must match an existing view - see {@link ModelAndView#setViewName(String)}.
    */
   @GetMapping(value = URI_PATTERN)
-  public ModelAndView handleAssetRequest(@PathVariable(ID_VARIABLE) AMAsset asset,
+  public ModelAndView handleAssetRequest(@org.springframework.lang.Nullable @PathVariable(ID_VARIABLE) AMAsset asset,
                                          @RequestParam(value = RequestParameters.VIEW_PARAMETER, required = false) String view,
                                          @RequestParam(value = STUDIO_PREFERRED_SITE_PARAMETER, required = false) String studioPreferredSiteId,
                                          HttpServletRequest webRequest) {
+    if (asset == null) {
+      return notFound();
+    }
+
     ModelAndView modelAndView = HandlerHelper.createModelWithView(asset, view);
     Page assetContext = resolveAssetContextForPreferredSite(studioPreferredSiteId, webRequest);
     if (assetContext != null) {

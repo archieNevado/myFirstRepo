@@ -36,6 +36,9 @@
                       <link id="1111112"/>
                       <link id="1111114"/>
                     </linkProperty>
+                    <linkProperty name="linkedSettings">
+                      <link id="111124"/>
+                    </linkProperty>
                   </version>
                 </document>
                 <document id="1111112" name="Subpage" type="CMChannel" creationDate="1967-01-10T20:59:42.000+01:00">
@@ -75,6 +78,7 @@
                   <version number="1">
                     <markupProperty name="caption" url="4teaserText.xml" grammar="coremedia-richtext-1.0"/>
                     <blobProperty name="data" url="16data.jpg" type="image/jpeg"/>
+                    <markupProperty name="localSettings" url="cropSettings.xml" grammar="coremedia-struct-2008"/>
                   </version>
                 </document>
                 <document id="111118" uuid="47112af0-97b1-49bd-84e7-80701297422e" type="CMVideo" name="vid18">
@@ -101,6 +105,20 @@
                     <dateProperty name="creationDate" value="10.01.1967"/>
                     <markupProperty name="detailText" url="4teaserText.xml" grammar="coremedia-richtext-1.0"/>
                     <markupProperty name="teaserText" url="4teaserText.xml" grammar="coremedia-richtext-1.0"/>
+                  </version>
+                </document>
+                <document name="The Art Of Time Traveling" id="111126" type="CMArticle" creationDate="2022-12-29T11:00:00.000+01:00">
+                  <version number="1">
+                    <dateProperty name="validFrom" value="2099-01-01T00:00:00.000+01:00"/>
+                    <markupProperty name="detailText" url="4teaserText.xml" grammar="coremedia-richtext-1.0"/>
+                    <markupProperty name="teaserText" url="4teaserText.xml" grammar="coremedia-richtext-1.0"/>
+                  </version>
+                </document>
+              </folder>
+              <folder id="111117" name="Settings">
+                <document id="111124" type="CMSettings" name="ClandestineSettings">
+                  <version number="1">
+                    <markupProperty name="settings" url="secretSettings.xml" grammar="coremedia-struct-2008"/>
                   </version>
                 </document>
               </folder>
@@ -146,6 +164,15 @@
         </folder>
       </folder>
       <folder id="3111" name="Settings">
+        <folder name="Options" id="15">
+          <folder name="Settings" id="151">
+            <document name="Responsive Image Settings" id="1510" type="CMSettings">
+              <version number="1">
+                <markupProperty name="settings" url="responsiveImageSettings.xml" grammar="coremedia-struct-2008"/>
+              </version>
+            </document>
+          </folder>
+        </folder>
         <folder id="13" name="Taxonomies">
           <document name="Blog" id="130" uuid="39395448-62e6-412a-a1cb-ad31bff67ed0" type="CMTaxonomy">
             <version number="1">

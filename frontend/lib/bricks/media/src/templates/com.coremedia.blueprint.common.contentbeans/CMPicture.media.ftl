@@ -1,6 +1,7 @@
 <@cm.responseHeader name="Content-Type" value="text/html; charset=UTF-8"/>
 <#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.CMPicture" -->
 <#-- @ftlvariable name="classBox" type="java.lang.String" -->
+<#-- @ftlvariable name="altText" type="java.lang.String" -->
 <#-- @ftlvariable name="classMedia" type="java.lang.String" -->
 <#-- @ftlvariable name="disableCropping" type="java.lang.Boolean" -->
 <#-- @ftlvariable name="background" type="java.lang.Boolean" -->
@@ -12,6 +13,7 @@
 
 <#assign classBox=cm.localParameters().classBox!""/>
 <#assign classMedia=cm.localParameters().classMedia!""/>
+<#assign altText=cm.localParameters().altText!""/>
 <#assign disableCropping=cm.localParameters().disableCropping!false/>
 <#assign background=cm.localParameters().background!false/>
 <#assign metadata=cm.localParameters().metadata![]/>
@@ -42,7 +44,10 @@
     <#if self.alt?has_content>
       <#assign alt=self.alt />
     </#if>
-
+    <#-- if alt property is set explicitly (e.g. via richtext), use it as alt -->
+    <#if altText?has_content>
+      <#assign alt=altText />
+    </#if>
     <@media.renderPicture asBackground=background
                           additionalClass=classMedia
                           src=imageLink

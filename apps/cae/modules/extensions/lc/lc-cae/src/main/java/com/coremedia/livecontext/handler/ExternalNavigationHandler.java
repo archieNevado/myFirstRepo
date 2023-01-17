@@ -21,6 +21,7 @@ import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.LinkPostProcessor;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +42,7 @@ import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_REST;
 import static com.coremedia.blueprint.cae.constants.RequestAttributeConstants.setPage;
 import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_SERVICE;
+import static com.coremedia.objectserver.web.HandlerHelper.notFound;
 import static org.springframework.util.Assert.hasText;
 
 @RequestMapping
@@ -104,12 +106,16 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
   @GetMapping(value = REST_URI_PATTERN, produces = CONTENT_TYPE_HTML)
   @ResponseBody
   public ModelAndView getProducts(
-          @PathVariable(SITE_CHANNEL_ID) CMNavigation context,
+          @Nullable @PathVariable(SITE_CHANNEL_ID) CMNavigation context,
           @PathVariable(CATEGORY_SEO_SEGMENT) String categorySeoSegment,
           @RequestParam(value = PARAM_START, required = false, defaultValue = "0") Integer start,
           @RequestParam(value = PARAM_STEPS, required = false, defaultValue = DEFAULT_STEPS) Integer steps,
           @NonNull HttpServletRequest request
   ) {
+    if (context == null) {
+      return notFound();
+    }
+
     LiveContextNavigation navigation = getLiveContextNavigationFactory()
             .createNavigationBySeoSegment(context.getContent(), categorySeoSegment);
 

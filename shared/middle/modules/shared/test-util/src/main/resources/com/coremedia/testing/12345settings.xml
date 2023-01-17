@@ -10,4 +10,5 @@
       <StringProperty Name="password">password</StringProperty>
     </Struct>
   </StructProperty>
+  <StringProperty Name="analyticsProvider">service</StringProperty>
 </Struct>

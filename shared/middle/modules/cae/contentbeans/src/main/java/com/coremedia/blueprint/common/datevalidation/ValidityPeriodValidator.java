@@ -30,13 +30,15 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static java.lang.invoke.MethodHandles.lookup;
+
 /**
  * This validator checks if an item is an instance of {@link ValidityPeriod} and, if so, it is also within the preview date, if any.
  */
 @DefaultAnnotation(NonNull.class)
 public class ValidityPeriodValidator extends AbstractValidator<ValidityPeriod> implements SearchFilterProvider<Condition> {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ValidityPeriodValidator.class);
+  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
 
   public static final String REQUEST_PARAMETER_PREVIEW_DATE = "previewDate";
   public static final String REQUEST_ATTRIBUTE_PREVIEW_DATE = "previewDateObj";
@@ -56,7 +58,7 @@ public class ValidityPeriodValidator extends AbstractValidator<ValidityPeriod> i
    * This Validator validates classes implementing the ValidityPeriod interface
    */
   @Override
-  public boolean supports(Class clazz) {
+  public boolean supports(@NonNull Class<?> clazz) {
     return ValidityPeriod.class.isAssignableFrom(clazz);
   }
 

@@ -1,4 +1,4 @@
-import { createDefaultCKEditor, createSlimCKEditor } from "@coremedia-blueprint/studio-client.ckeditor5/";
+import { createDefaultCKEditor, createSlimCKEditor, createHtmlViewerCKEditor } from "@coremedia-blueprint/studio-client.ckeditor5/";
 import { serviceAgent } from "@coremedia/service-agent";
 import CKEditorTypes from "@coremedia/studio-client.ckeditor-common/CKEditorTypes";
 import RichTextAreaConstants from "@coremedia/studio-client.ckeditor-common/RichTextAreaConstants";
@@ -47,11 +47,12 @@ richTextAreaRegistry.registerRichTextArea(RichTextAreaConstants.CKE5_EDITOR, Con
   editorTypeMap: new Map([
     [CKEditorTypes.DEFAULT_EDITOR_TYPE, createDefaultCKEditor],
     [CKEditorTypes.NO_TOOLBAR_EDITOR_TYPE, createSlimCKEditor],
+    [CKEditorTypes.HTML_VIEWER_EDITOR_TYPE, createHtmlViewerCKEditor],
   ]),
 }));
 
 /**
- * Registers the RichTextPropertyField for ckeditor 5 with highest priority and therefore
+ * Registers the RichTextPropertyField for ckeditor 5 with the highest priority and therefore
  * overrides CKEditor 4 for core components.
  *
  * This mechanism will be removed with ckeditor 4 in the future.

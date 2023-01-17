@@ -115,18 +115,22 @@ public class CapBlobHandler extends HandlerBase {
   // --- Handlers ------------------------------------------------------------------------------------------------------
 
   @GetMapping(value = CODERESOURCEBLOB_URI_PATTERN)
-  public ModelAndView handleCodeResourceBlobRequest(@PathVariable(SEGMENT_ID) ContentBean contentBean,
+  public ModelAndView handleCodeResourceBlobRequest(@org.springframework.lang.Nullable @PathVariable(SEGMENT_ID) ContentBean contentBean,
                                                     @PathVariable(SEGMENT_ETAG) String eTag,
                                                     @PathVariable(SEGMENT_PROPERTY) String propertyName,
                                                     @PathVariable(SEGMENT_EXTENSION) String extension,
                                                     WebRequest webRequest,
                                                     HttpServletRequest request,
                                                     HttpServletResponse response) {
+    if (contentBean == null) {
+      return notFound();
+    }
+
     // Check for a developer variant first.
     // This can succeed on content management servers only.
     // Live servers do not support developer variants.
     User developer = UserVariantHelper.getUser(request);
-    if (developer!=null) {
+    if (developer != null) {
       CapBlobRef developerVariant = lookupDeveloperVariant(contentBean, propertyName, extension, developer);
       if (developerVariant != null) {
         // The eTag is meaningless in this case, since it refers to the
@@ -146,6 +150,10 @@ public class CapBlobHandler extends HandlerBase {
                                     WebRequest webRequest,
                                     HttpServletRequest request,
                                     HttpServletResponse response) {
+    if (contentBean == null) {
+      return notFound();
+    }
+
     // we have to extract the filename ourselves because the injected path variable has problems with some special characters (e.g. ';')
     StringBuffer requestURL = request.getRequestURL();
     int lastSlashIndex = requestURL.lastIndexOf("/");
@@ -170,13 +178,13 @@ public class CapBlobHandler extends HandlerBase {
     return notFound();
   }
 
-  public ModelAndView handleRequest(ContentBean contentBean,
+  public ModelAndView handleRequest(@NonNull ContentBean contentBean,
                                     String eTag,
                                     String propertyName,
                                     String extension,
                                     WebRequest webRequest,
                                     HttpServletResponse response) {
-    if (contentBean == null || !validationService.validate(contentBean)) {
+    if (!validationService.validate(contentBean)) {
       return notFound();
     }
 
@@ -272,7 +280,7 @@ public class CapBlobHandler extends HandlerBase {
   /**
    * Look for a developer variant of the blob.
    */
-  private CapBlobRef lookupDeveloperVariant(ContentBean contentBean, String propertyName, String extension, User developer) {
+  private CapBlobRef lookupDeveloperVariant(@NonNull ContentBean contentBean, String propertyName, String extension, User developer) {
     Content original = contentBean.getContent();
     Content developerVariant = themeService.developerVariant(original, developer);
     if (!original.equals(developerVariant)) {

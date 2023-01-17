@@ -13,13 +13,13 @@
     "find-up": "^5.0.0",
     "glob": "^7.2.3",
     "js-yaml": "^4.1.0",
-    "json5": "^2.2.1",
+    "json5": "^2.2.3",
     "lodash": "^4.17.21",
     "selfsigned": "^2.1.1"
   },
   "devDependencies": {
     "jest": "^27.5.1",
-    "prettier": "^2.7.1"
+    "prettier": "^2.8.1"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{js,json}\"",
