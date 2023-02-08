@@ -4,6 +4,7 @@ import com.coremedia.blueprint.cae.search.Condition;
 import com.coremedia.blueprint.cae.search.SearchConstants;
 import com.coremedia.blueprint.cae.search.SearchQueryBean;
 import com.coremedia.blueprint.cae.search.SearchResultBean;
+import com.coremedia.blueprint.cae.search.SearchResultFactory;
 import com.coremedia.blueprint.cae.search.Value;
 import com.coremedia.blueprint.cae.search.solr.SolrQueryBuilder;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
@@ -47,6 +48,24 @@ public class CMTeasableImpl extends CMTeasableBase {
 
   static final String LEGACY_STRUCT_CTA_DISABLED_PROPERTY_NAME = "callToActionDisabled";
   static final String LEGACY_STRUCT_CTA_CUSTOM_TEXT_PROPERTY_NAME = "callToActionCustomText";
+
+  private SearchResultFactory resultFactory;
+
+  public SearchResultFactory getResultFactory() {
+    return resultFactory;
+  }
+
+  public void setResultFactory(SearchResultFactory resultFactory) {
+    this.resultFactory = resultFactory;
+  }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (resultFactory == null) {
+      throw new IllegalStateException("Required property not set: resultFactory");
+    }
+  }
 
   @Override
   public Markup getTeaserText() {

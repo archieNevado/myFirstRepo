@@ -7,8 +7,8 @@ import com.coremedia.elastic.social.api.ContributionType;
 import com.coremedia.elastic.social.api.comments.Comment;
 import com.coremedia.elastic.social.api.reviews.Review;
 import com.coremedia.elastic.social.api.users.CommunityUser;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

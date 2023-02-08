@@ -1,5 +1,3 @@
-version: "3.4"
-
 # default environment variables
 x-default-boot-envs:
   &default-boot-envs
@@ -39,7 +37,7 @@ x-logging:
 
 services:
   commerce-adapter-hybris:
-    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-hybris:${COMMERCE_ADAPTER_HYBRIS_VERSION:-2.0.9}
+    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-hybris:${COMMERCE_ADAPTER_HYBRIS_VERSION:-2.1.1}
     container_name: commerce-adapter-hybris
     restart: always
     logging: *default-logging
@@ -49,6 +47,9 @@ services:
       - 44265:6565
       - 44281:8081
       - 44205:5005
+    read_only: true
+    cap_drop:
+      - ALL
     environment:
       <<: *default-boot-envs
       <<: *development-boot-envs
@@ -63,6 +64,13 @@ services:
       METADATA_REPLACEMENTTOKENS_HYBRIS_HOST: ${METADATA_REPLACEMENTTOKENS_HYBRIS_HOST}
       MANAGEMENT_HEALTH_STORES_ENABLED: ${MANAGEMENT_HEALTH_STORES_ENABLED:-true}
     healthcheck: *default-boot-healthcheck
+    volumes:
+      # to reuse the cache, the cache needs to be copied to the volume before starting the adapter.
+      # the write access needs to be exclusive. An existing cache can be copied from a common shared location
+      # by using a script that is run before the application script.
+      - /coremedia/cache
+      - /coremedia/log
+      - /var/tmp
 
   studio-server:
     environment:

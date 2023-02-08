@@ -14,8 +14,8 @@ import com.google.common.annotations.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -38,24 +38,18 @@ public class ThemeTemplateViewRepositoryProvider extends AbstractTemplateViewRep
   private JarBlobResourceLoader jarBlobResourceLoader;
   private boolean useLocalResources = false;
 
-
-  // --- construct and configure ------------------------------------
-
   public void setCache(Cache cache) {
     this.cache = cache;
   }
 
-  @Required
   public void setThemeService(ThemeService themeService) {
     this.themeService = themeService;
   }
 
-  @Required
   public void setCapConnection(CapConnection capConnection) {
     this.capConnection = capConnection;
   }
 
-  @Required
   public void setJarBlobResourceLoader(JarBlobResourceLoader jarBlobResourceLoader) {
     this.jarBlobResourceLoader = jarBlobResourceLoader;
   }
@@ -64,8 +58,18 @@ public class ThemeTemplateViewRepositoryProvider extends AbstractTemplateViewRep
     this.useLocalResources = useLocalResources;
   }
 
-
-  // --- ViewRepositoryProvider -------------------------------------
+  @PostConstruct
+  protected void initialize() {
+    if (capConnection == null) {
+      throw new IllegalStateException("Required property not set: capConnection");
+    }
+    if (jarBlobResourceLoader == null) {
+      throw new IllegalStateException("Required property not set: jarBlobResourceLoader");
+    }
+    if (themeService == null) {
+      throw new IllegalStateException("Required property not set: themeService");
+    }
+  }
 
   /**
    * Get the view repository for the given name.
@@ -85,9 +89,6 @@ public class ThemeTemplateViewRepositoryProvider extends AbstractTemplateViewRep
     return createViewRepository(templateLocations(name));
   }
 
-
-  // --- more features ----------------------------------------------
-
   /**
    * Returns the view repository names of the theme.
    */
@@ -99,9 +100,6 @@ public class ThemeTemplateViewRepositoryProvider extends AbstractTemplateViewRep
       return viewRepositoryNamesUncached(theme, developer);
     }
   }
-
-
-  // --- internal ---------------------------------------------------
 
   /**
    * Returns the template locations for the given view repository name.

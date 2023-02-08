@@ -6,9 +6,9 @@ import com.coremedia.objectserver.view.TextView;
 import com.coremedia.objectserver.view.XmlFilterFactory;
 import com.coremedia.xml.Markup;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.springframework.beans.factory.annotation.Required;
 import org.xml.sax.XMLFilter;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Writer;
@@ -45,8 +45,15 @@ public class ScriptView implements TextView {
    *
    * @param xmlFilterFactory the filter factory
    */
-  @Required
   public void setXmlFilterFactory(XmlFilterFactory xmlFilterFactory) {
     this.xmlFilterFactory = xmlFilterFactory;
   }
+
+  @PostConstruct
+  protected void initialize() {
+    if (xmlFilterFactory == null) {
+      throw new IllegalStateException("Required property not set: xmlFilterFactory");
+    }
+  }
+
 }

@@ -3,9 +3,9 @@ package com.coremedia.blueprint.cae.exception.handler;
 import com.coremedia.objectserver.web.HttpError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 import static java.lang.invoke.MethodHandles.lookup;
@@ -47,7 +47,6 @@ public class SimpleExceptionHandler<T extends Exception> extends AbstractErrorAn
   /**
    * The status code to send if this resolver handles the exception
    */
-  @Required
   public void setStatusCode(int statusCode) {
     this.statusCode = statusCode;
   }
@@ -55,9 +54,18 @@ public class SimpleExceptionHandler<T extends Exception> extends AbstractErrorAn
   /**
    * The exception type to handle
    */
-  @Required
   public void setExceptionType(Class<T> exceptionType) {
     this.exceptionType = exceptionType;
+  }
+
+  @PostConstruct
+  protected void initialize() {
+    if (exceptionType == null) {
+      throw new IllegalStateException("Required property not set: exceptionType");
+    }
+    if (statusCode == 0) {
+      throw new IllegalStateException("Required property not set: statusCode");
+    }
   }
 
 }

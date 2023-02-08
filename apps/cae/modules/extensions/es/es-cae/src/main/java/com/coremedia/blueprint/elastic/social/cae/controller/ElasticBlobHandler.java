@@ -1,5 +1,7 @@
 package com.coremedia.blueprint.elastic.social.cae.controller;
 
+import com.coremedia.blueprint.base.links.ContentLinkBuilder;
+import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
 import com.coremedia.blueprint.cae.handlers.HandlerBase;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
@@ -7,17 +9,17 @@ import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.elastic.core.api.blobs.Blob;
 import com.coremedia.elastic.core.api.blobs.BlobService;
+import com.coremedia.mimetype.MimeTypeService;
+import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.web.SecureHashCodeGeneratorStrategy;
 import com.coremedia.objectserver.web.links.Link;
 import com.coremedia.transform.BlobTransformer;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -79,20 +81,29 @@ public class ElasticBlobHandler extends HandlerBase {
                   "/{" + SEGMENT_NAME + "}";
 
   private static final String EMPTY_ETAG = "-";
-  @Inject
-  private SecureHashCodeGeneratorStrategy secureHashCodeGeneratorStrategy;
 
-  @Inject
-  private BlobTransformer blobTransformer;
+  private final SecureHashCodeGeneratorStrategy secureHashCodeGeneratorStrategy;
+  private final BlobTransformer blobTransformer;
+  private final BlobService blobService;
+  private final DeliveryConfigurationProperties deliveryConfigurationProperties;
 
-  @Inject
-  private BlobService blobService;
-
-  private DeliveryConfigurationProperties deliveryConfigurationProperties;
-
-  @Autowired
-  public void setDeliveryConfigurationProperties(DeliveryConfigurationProperties deliveryConfigurationProperties) {
+  public ElasticBlobHandler(SecureHashCodeGeneratorStrategy secureHashCodeGeneratorStrategy,
+                            BlobTransformer blobTransformer,
+                            BlobService blobService,
+                            ContentLinkBuilder contentLinkBuilder,
+                            UrlPathFormattingHelper urlPathFormattingHelper,
+                            MimeTypeService mimeTypeService,
+                            DataViewFactory dataViewFactory,
+                            DeliveryConfigurationProperties deliveryConfigurationProperties) {
+    this.secureHashCodeGeneratorStrategy = secureHashCodeGeneratorStrategy;
+    this.blobTransformer = blobTransformer;
+    this.blobService = blobService;
     this.deliveryConfigurationProperties = deliveryConfigurationProperties;
+    // the following parameters must be set to satisfy HandlerBase#initialize
+    setContentLinkBuilder(contentLinkBuilder);
+    setUrlPathFormattingHelper(urlPathFormattingHelper);
+    setMimeTypeService(mimeTypeService);
+    setDataViewFactory(dataViewFactory);
   }
 
   protected String getName(Blob o) {
@@ -210,12 +221,9 @@ public class ElasticBlobHandler extends HandlerBase {
     return Collections.unmodifiableMap(result);
   }
 
-
   protected String getSecureHashCode(Map<String, Object> parameters) {
     return secureHashCodeGeneratorStrategy.generateSecureHashCode(parameters);
   }
-
-  // --- Handlers ------------------------------------------------------------------------------------------------------
 
   @GetMapping(value = SIMPLE_URI_PATTERN)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_SITE) String rootSegment,
@@ -259,7 +267,6 @@ public class ElasticBlobHandler extends HandlerBase {
 
     return result;
   }
-
 
   @GetMapping(value = URI_PATTERN)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_SITE) String siteId,
@@ -313,8 +320,6 @@ public class ElasticBlobHandler extends HandlerBase {
 
     return result;
   }
-
-  // --- LinkSchemes ---------------------------------------------------------------------------------------------------
 
   @Link(type = Blob.class, uri = SIMPLE_URI_PATTERN)
   public Map<String, ?> buildLink(Blob bean, HttpServletRequest request) {

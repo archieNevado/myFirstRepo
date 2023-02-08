@@ -26,7 +26,6 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,6 +33,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
 
@@ -223,18 +223,27 @@ public class CMChannelImpl extends CMChannelBase {
     return !contentType.isSubtypeOf(CMMedia.NAME) && !contentType.isSubtypeOf(CMHTML.NAME);
   }
 
-  @Required
   public void setPageGridService(PageGridService pageGridService) {
     this.pageGridService = pageGridService;
   }
 
-  @Required
   public void setThemeService(ThemeService themeService) {
     this.themeService = themeService;
   }
 
   public void setCache(Cache cache) {
     this.cache = cache;
+  }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (pageGridService == null) {
+      throw new IllegalStateException("Required property not set: pageGridService");
+    }
+    if (themeService == null) {
+      throw new IllegalStateException("Required property not set: themeService");
+    }
   }
 
   @Override
@@ -249,10 +258,14 @@ public class CMChannelImpl extends CMChannelBase {
     return result;
   }
 
-  @SuppressWarnings("unchecked")
   private List<? extends CMLinkable> getItems() {
-    //TODO broaden to implements FeedSource<Object>
-    return (List<? extends CMLinkable>) getPageGrid().getMainItems();
+    List<?> items = getPageGrid().getMainItems();
+    return items.stream()
+            .filter(Content.class::isInstance)
+            .map(Content.class::cast)
+            .filter(item -> item.getType().isSubtypeOf(CMLinkable.NAME))
+            .map(item -> createBeanFor(item, CMLinkable.class))
+            .collect(Collectors.toList());
   }
 
   /**

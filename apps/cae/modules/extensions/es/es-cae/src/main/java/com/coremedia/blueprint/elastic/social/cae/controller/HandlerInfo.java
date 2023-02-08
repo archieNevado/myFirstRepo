@@ -1,16 +1,15 @@
 package com.coremedia.blueprint.elastic.social.cae.controller;
 
-import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.elastic.core.api.models.Model;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 public class HandlerInfo {
-  
+
   private boolean success = true;
   private String link;
   private Model model;

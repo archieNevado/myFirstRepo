@@ -14,12 +14,12 @@ import com.coremedia.livecontext.studio.asset.validators.LcAssetValidatorsConfig
 import com.coremedia.rest.cap.CapRestServiceSearchConfiguration;
 import com.coremedia.rest.cap.content.search.SearchService;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @Import({
         CapRestServiceSearchConfiguration.class,
         BaseCommerceServicesConfiguration.class,

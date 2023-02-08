@@ -26,8 +26,8 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -65,17 +65,14 @@ public class FeedView implements ServletView {
    *
    * @param feedItemDataProviders the feed item providers configured via spring
    */
-  @Required
   public void setFeedItemDataProviders(List<FeedItemDataProvider> feedItemDataProviders) {
     this.feedItemDataProviders = feedItemDataProviders;
   }
 
-  @Required
   public void setSitesService(SitesService sitesService) {
     this.sitesService = sitesService;
   }
 
-  @Required
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
   }
@@ -94,9 +91,24 @@ public class FeedView implements ServletView {
    *
    * @param linkFormatter setter for spring configuration link formatter
    */
-  @Required
   public void setLinkFormatter(LinkFormatter linkFormatter) {
     this.linkFormatter = linkFormatter;
+  }
+
+  @PostConstruct
+  protected void initialize() {
+    if (feedItemDataProviders == null || feedItemDataProviders.isEmpty()) {
+      throw new IllegalStateException("Required property not set: feedItemDataProviders");
+    }
+    if (linkFormatter == null) {
+      throw new IllegalStateException("Required property not set: linkFormatter");
+    }
+    if (settingsService == null) {
+      throw new IllegalStateException("Required property not set: settingsService");
+    }
+    if (sitesService == null) {
+      throw new IllegalStateException("Required property not set: sitesService");
+    }
   }
 
   /**

@@ -29,6 +29,7 @@
     <module>p13n</module>
     <module>taxonomy</module>
     <module>validators</module>
+    <module>workflows</module>
   </modules>
 
 </project>

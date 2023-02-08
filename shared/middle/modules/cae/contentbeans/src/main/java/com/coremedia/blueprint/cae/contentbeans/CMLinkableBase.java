@@ -21,7 +21,6 @@ import com.coremedia.cap.struct.Struct;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.Calendar;
 import java.util.Collection;
@@ -58,11 +57,7 @@ public abstract class CMLinkableBase extends CMLocalizedImpl implements CMLinkab
     return contextStrategy;
   }
 
-  @Required
   public void setContextStrategy(ContextStrategy<CMLinkable, CMContext> contextStrategy) {
-    if(contextStrategy == null) {
-      throw new IllegalArgumentException("supplied 'contextStrategy' must not be null");
-    }
     this.contextStrategy = contextStrategy;
   }
 
@@ -71,11 +66,7 @@ public abstract class CMLinkableBase extends CMLocalizedImpl implements CMLinkab
     return validationService;
   }
 
-  @Required
   public void setValidationService(ValidationService<Linkable> validationService) {
-    if(validationService == null) {
-      throw new IllegalArgumentException("supplied 'validationService' must not be null");
-    }
     this.validationService = validationService;
   }
 
@@ -265,14 +256,29 @@ public abstract class CMLinkableBase extends CMLocalizedImpl implements CMLinkab
     return urlPathFormattingHelper;
   }
 
-  @Required
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
   }
 
-  @Required
   public void setUrlPathFormattingHelper(UrlPathFormattingHelper urlPathFormattingHelper) {
     this.urlPathFormattingHelper = urlPathFormattingHelper;
+  }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (contextStrategy == null) {
+      throw new IllegalStateException("Required property not set: contextStrategy");
+    }
+    if (settingsService == null) {
+      throw new IllegalStateException("Required property not set: settingsService");
+    }
+    if (urlPathFormattingHelper == null) {
+      throw new IllegalStateException("Required property not set: urlPathFormattingHelper");
+    }
+    if (validationService == null) {
+      throw new IllegalStateException("Required property not set: validationService");
+    }
   }
 
   /**

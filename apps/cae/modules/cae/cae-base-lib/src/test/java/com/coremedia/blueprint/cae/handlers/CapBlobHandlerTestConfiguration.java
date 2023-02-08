@@ -8,6 +8,7 @@ import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
+import com.coremedia.objectserver.dataviews.DataViewFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,7 +29,8 @@ class CapBlobHandlerTestConfiguration extends AbstractHandlerTestConfiguration {
                                 ValidationService<ContentBean> validationService,
                                 ThemeService themeService,
                                 ContentLinkBuilder contentLinkBuilder,
-                                ContentBeanFactory contentBeanFactory) {
+                                ContentBeanFactory contentBeanFactory,
+                                DataViewFactory dataviewFactory) {
     CapBlobHandler testling = new CapBlobHandler();
     testling.setMimeTypeService(mimeTypeService);
     testling.setUrlPathFormattingHelper(urlPathFormattingHelper);
@@ -36,6 +38,7 @@ class CapBlobHandlerTestConfiguration extends AbstractHandlerTestConfiguration {
     testling.setThemeService(themeService);
     testling.setContentLinkBuilder(contentLinkBuilder);
     testling.setContentBeanFactory(contentBeanFactory);
+    testling.setDataViewFactory(dataviewFactory);
     return testling;
   }
 

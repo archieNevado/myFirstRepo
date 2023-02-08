@@ -9,13 +9,13 @@ import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.user.User;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
-import org.springframework.beans.factory.annotation.Required;
+import edu.umd.cs.findbugs.annotations.Nullable;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.jstl.core.Config;
@@ -28,19 +28,19 @@ import java.util.ResourceBundle;
  * A handler interceptor that makes a {@link Page page's} resource bundle and locale available to the template engine so
  * that <code>&lt;fmt:message&gt;</code>, <code>&lt;spring:message&gt;</code> make use of the bundle.
  */
-public class ResourceBundleInterceptor extends HandlerInterceptorAdapter {
+public class ResourceBundleInterceptor implements HandlerInterceptor {
   private PageResourceBundleFactory resourceBundleFactory;
 
-
-  // --- configure --------------------------------------------------
-
-  @Required
   public void setResourceBundleFactory(PageResourceBundleFactory resourceBundleFactory) {
     this.resourceBundleFactory = resourceBundleFactory;
   }
 
-
-  // --- HandlerInterceptorAdapter ----------------------------------
+  @PostConstruct
+  protected void initialize() {
+    if (resourceBundleFactory == null) {
+      throw new IllegalStateException("Required property not set: resourceBundleFactory");
+    }
+  }
 
   @Override
   public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
@@ -65,9 +65,6 @@ public class ResourceBundleInterceptor extends HandlerInterceptorAdapter {
     }
   }
 
-
-  // --- features ---------------------------------------------------
-
   /**
    * Register the resource bundle configured in the {@link Page Page's}
    * settings for the given request / response.
@@ -79,9 +76,6 @@ public class ResourceBundleInterceptor extends HandlerInterceptorAdapter {
     ResourceBundle bundle = resourceBundleFactory.resourceBundle(page, developer);
     registerResourceBundle(bundle, locale, request, response);
   }
-
-
-  // --- internal ---------------------------------------------------
 
   private static void registerResourceBundle(ResourceBundle bundle, Locale locale, HttpServletRequest request, HttpServletResponse response) {
     // --- 1.) registering locale to be used by <spring:message> etc.

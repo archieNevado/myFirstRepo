@@ -7,8 +7,8 @@ import com.coremedia.blueprint.cae.search.SegmentResolver;
 import com.google.common.base.CharMatcher;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.util.Objects;
 
 import static com.coremedia.blueprint.cae.search.SearchConstants.FIELDS.CONTEXTS;
@@ -30,7 +30,6 @@ public class SolrSegmentResolver implements SegmentResolver {
    *
    * @param searchResultFactory the {@link com.coremedia.blueprint.cae.search.SearchResultFactory}
    */
-  @Required
   public void setSearchResultFactory(@NonNull SearchResultFactory searchResultFactory) {
     Objects.requireNonNull(searchResultFactory);
     this.searchResultFactory = searchResultFactory;
@@ -45,6 +44,13 @@ public class SolrSegmentResolver implements SegmentResolver {
    */
   public void setCacheForSeconds(int cacheForSeconds) {
     this.cacheForSeconds = cacheForSeconds;
+  }
+
+  @PostConstruct
+  void initialize() {
+    if (searchResultFactory == null) {
+      throw new IllegalStateException("Required property not set: searchResultFactory");
+    }
   }
 
   @Override

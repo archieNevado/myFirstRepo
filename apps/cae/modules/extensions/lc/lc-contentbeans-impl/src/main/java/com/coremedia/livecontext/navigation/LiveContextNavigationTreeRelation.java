@@ -16,8 +16,8 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -137,24 +137,36 @@ public class LiveContextNavigationTreeRelation implements TreeRelation<Linkable>
     return null;
   }
 
-  @Required
   public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
     this.contentBeanFactory = contentBeanFactory;
   }
 
-  @Required
   public void setNavigationFactory(LiveContextNavigationFactory navigationFactory) {
     this.navigationFactory = navigationFactory;
   }
 
-  @Required
   public void setSitesService(SitesService sitesService) {
     this.sitesService = sitesService;
   }
 
-  @Required
   public void setDelegate(ExternalChannelContentTreeRelation delegate) {
     this.delegate = delegate;
+  }
+
+  @PostConstruct
+  protected void initialize() {
+    if (contentBeanFactory == null) {
+      throw new IllegalStateException("Required property not set: contentBeanFactory");
+    }
+    if (delegate == null) {
+      throw new IllegalStateException("Required property not set: delegate");
+    }
+    if (navigationFactory == null) {
+      throw new IllegalStateException("Required property not set: navigationFactory");
+    }
+    if (sitesService == null) {
+      throw new IllegalStateException("Required property not set: sitesService");
+    }
   }
 
   private class CategoryToLiveContextNavigationTransformer implements Function<Category, Linkable> {

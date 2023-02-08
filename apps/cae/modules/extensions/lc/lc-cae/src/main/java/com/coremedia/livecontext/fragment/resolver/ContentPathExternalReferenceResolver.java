@@ -1,16 +1,12 @@
 package com.coremedia.livecontext.fragment.resolver;
 
-import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.fragment.FragmentParameters;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Resolves the relative or absolute path to identify a content.
@@ -23,8 +19,6 @@ public class ContentPathExternalReferenceResolver extends ExternalReferenceResol
   public ContentPathExternalReferenceResolver() {
     super(PREFIX);
   }
-
-  // --- interface --------------------------------------------------
 
   @Override
   protected boolean include(@NonNull FragmentParameters fragmentParameters, @NonNull String referenceInfo) {
@@ -61,13 +55,11 @@ public class ContentPathExternalReferenceResolver extends ExternalReferenceResol
     return new LinkableAndNavigation(linkable, navigation);
   }
 
-// --- internal ---------------------------------------------------
-
   private Content resolveLinkable(String referencePath, Site site) {
     Content siteRoot = site.getSiteRootFolder();
 
     String path = asCMSPath(referencePath);
-    Content result = isAbsoluteCMSPath(path) ? contentRepository.getChild(asRelativePath(path)) : siteRoot.getChild(asRelativePath(path));
+    Content result = isAbsoluteCMSPath(path) ? getContentRepository().getChild(asRelativePath(path)) : siteRoot.getChild(asRelativePath(path));
 
     // Exclude folders
     if (result != null && result.isFolder()) {

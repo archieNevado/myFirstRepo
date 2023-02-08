@@ -12,13 +12,10 @@ import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.layout.DynamizableCMTeasableContainer;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.common.services.context.ContextHelper;
-import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HandlerHelper;
 import org.junit.Before;
@@ -42,7 +39,6 @@ import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DY
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_CONTAINER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -59,9 +55,6 @@ public class P13NContainerHandlerTest {
   private ContentBeanFactory contentBeanFactory;
 
   @Mock
-  private ContentRepository contentRepository;
-
-  @Mock
   private ContextHelper contextHelper;
 
   @Mock
@@ -69,9 +62,6 @@ public class P13NContainerHandlerTest {
 
   @Mock
   private SitesService sitesService;
-
-  @Mock
-  private ValidationService validationService;
 
   @Mock
   private ContentLinkBuilder contentLinkBuilder;
@@ -87,9 +77,7 @@ public class P13NContainerHandlerTest {
     testling = new P13NContainerHandler();
     testling.setBeanFactory(beanFactory);
     testling.setContentBeanFactory(contentBeanFactory);
-    testling.setContentRepository(contentRepository);
     testling.setSitesService(sitesService);
-//    testling.setValidationService(validationService);
     testling.setNavigationSegmentsUriHelper(navigationSegmentsUriHelper);
     testling.setContextHelper(contextHelper);
     testling.setContentLinkBuilder(contentLinkBuilder);
@@ -106,24 +94,13 @@ public class P13NContainerHandlerTest {
 
   @Test
   public void testHandleChannelRequest() {
-
-    Content cmContent = mock(Content.class);
-    ContentType cmContentType = mock(ContentType.class);
     CMChannel cmContentBean = mock(CMChannel.class);
-
-    when(contentRepository.getContent(anyString())).thenReturn(cmContent);
-    when(contentBeanFactory.createBeanFor(cmContent, ContentBean.class)).thenReturn(cmContentBean);
-    when(validationService.validate(cmContentBean)).thenReturn(true);
-
-    when(cmContentBean.getContent()).thenReturn(cmContent);
-    when(cmContent.getType()).thenReturn(cmContentType);
-    when(cmContentType.getName()).thenReturn(CMChannel.NAME);
 
     configureContext("helios", navigation);
 
     MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
-    ModelAndView modelAndView = testling.handleRequest("helios", 4711, "related", "myView", mockRequest);
+    ModelAndView modelAndView = testling.handleRequest("helios", cmContentBean, "related", "myView", mockRequest);
 
     assertEquals("myView", modelAndView.getViewName());
     assertTrue(modelAndView.getModel().get("self") instanceof DynamizableCMTeasableContainer);
@@ -133,12 +110,9 @@ public class P13NContainerHandlerTest {
 
   @Test
   public void testHandleFragmentRequestWrongContent() {
-    Content wrongContent = mock(Content.class);
-    when(contentRepository.getContent(anyString())).thenReturn(wrongContent);
     CMArticle cmArticle = mock(CMArticle.class);
-    when(contentBeanFactory.createBeanFor(wrongContent, CMArticle.class)).thenReturn(cmArticle);
 
-    ModelAndView modelAndView = testling.handleRequest("helios", 4711, "related", "myView", new MockHttpServletRequest());
+    ModelAndView modelAndView = testling.handleRequest("helios", cmArticle, "related", "myView", new MockHttpServletRequest());
     assertEquals(HandlerHelper.notFound().getModel(), modelAndView.getModel());
   }
 

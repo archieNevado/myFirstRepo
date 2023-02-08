@@ -20,19 +20,17 @@ import java.util.Map;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper.format;
 import static com.coremedia.ecommerce.studio.rest.CategoryAugmentationHelper.CATEGORY_PRODUCT_PAGEGRID_STRUCT_PROPERTY;
+import static java.lang.invoke.MethodHandles.lookup;
 
 /**
  * A REST service to augment a product.
  */
 @Named
 public class ProductAugmentationHelper extends AugmentationHelperBase<Product> {
-  private static final Logger LOGGER = LoggerFactory.getLogger(CategoryAugmentationHelper.class);
-
+  private static final Logger LOGGER = LoggerFactory.getLogger(lookup().lookupClass());
   private static final String CM_EXTERNAL_PRODUCT = "CMExternalProduct";
   private static final String PAGEGRID_STRUCT_PROPERTY = "pdpPagegrid";
-
   static final String TITLE = "title";
-
   private AugmentationService categoryAugmentationService;
 
   @Override
@@ -46,7 +44,7 @@ public class ProductAugmentationHelper extends AugmentationHelperBase<Product> {
 
     // create folder hierarchy for category
     Content categoryFolder = contentRepository.createSubfolders(computerFolderPath(parentCategory, site, getBaseFolderName(),
-            (CommerceBean bean) -> this.getCatalog(parentCategory)));
+            (CommerceBean bean) -> getCatalog(parentCategory)));
 
     if (categoryFolder == null) {
       return null;
@@ -108,7 +106,7 @@ public class ProductAugmentationHelper extends AugmentationHelperBase<Product> {
 
   @NonNull
   public static String computeDocumentName(@NonNull Product product) {
-    return (product.getName() + " (" + product.getExternalId() + ")")
+    return shortenContentNameIfNeeded(product.getName() + " (" + product.getExternalId() + ")")
             .replace('/', '_');
   }
 

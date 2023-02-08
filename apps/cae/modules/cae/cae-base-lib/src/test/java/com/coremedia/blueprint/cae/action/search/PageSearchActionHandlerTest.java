@@ -28,6 +28,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MvcResult;
@@ -63,6 +64,9 @@ import static org.mockito.Mockito.when;
 @WebAppConfiguration
 @ContextConfiguration(classes = PageSearchActionHandlerTest.LocalConfig.class)
 @ActiveProfiles(PROFILE)
+@TestPropertySource(properties = {
+        "cae.hashing.backward-compatibility=true",
+})
 public class PageSearchActionHandlerTest {
 
   @Configuration(proxyBeanMethods = false)

@@ -5,7 +5,6 @@ import com.coremedia.xml.Markup;
 import com.coremedia.xml.MarkupFactory;
 import com.coremedia.xml.MarkupUtil;
 import com.google.common.annotations.VisibleForTesting;
-
 import edu.umd.cs.findbugs.annotations.Nullable;
 
 public class RichtextHelper {

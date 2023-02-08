@@ -228,8 +228,12 @@ svg:not(:root) {
   margin: 0;
 }
 
-.cm-hero__version {
+.cm-hero__infos {
   color: rgb(255, 255, 255);
+}
+
+.cm-hero__infos span:not(:last-child)::after {
+  content: ", ";
 }
 
 .cm-hero__button {

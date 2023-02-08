@@ -28,9 +28,9 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
 import javax.activation.MimeType;
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
@@ -59,9 +59,6 @@ public class TeasableFeedItemDataProvider implements FeedItemDataProvider {
 
   private LinkFormatter linkFormatter;
 
-  // --- configure --------------------------------------------------
-
-  @Required
   public void setLinkFormatter(LinkFormatter linkFormatter) {
     this.linkFormatter = linkFormatter;
   }
@@ -71,7 +68,12 @@ public class TeasableFeedItemDataProvider implements FeedItemDataProvider {
     return linkFormatter;
   }
 
-  // --- FeedItemDataProvider ---------------------------------------
+  @PostConstruct
+  protected void initialize() {
+    if (linkFormatter == null) {
+      throw new IllegalStateException("Required property not set: linkFormatter");
+    }
+  }
 
   @Override
   public boolean isSupported(Object item) {

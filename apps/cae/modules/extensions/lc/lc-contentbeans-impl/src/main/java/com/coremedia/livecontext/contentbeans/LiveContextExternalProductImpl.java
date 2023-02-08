@@ -20,7 +20,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.Optional;
 
@@ -130,13 +130,13 @@ public class LiveContextExternalProductImpl extends CMExternalProductBase implem
     return getChannel();
   }
 
-  @Required
+  @Autowired
   public void setCommerceConnectionSupplier(CommerceConnectionSupplier commerceConnectionSupplier) {
     this.commerceConnectionSupplier = commerceConnectionSupplier;
   }
 
-  @Required
-  public void setPageGridService(PageGridService pageGridService) {
+  @Autowired
+  public void setPageGridService(@Qualifier("productPageGridService") PageGridService pageGridService) {
     this.pageGridService = pageGridService;
   }
 

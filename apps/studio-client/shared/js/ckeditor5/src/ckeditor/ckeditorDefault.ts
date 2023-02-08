@@ -259,10 +259,6 @@ export const createDefaultCKEditor: CreateCKEditorFunction = (domElement:(string
     autosave: {
       save: pluginConfig.autosave.save,
       waitingTime: 1000,
-    },
-    //@ts-ignore (ignore instead of expect-error because of other ignores in module) ClassicEditor.create(..., EditorConfig), EditorConfig does not know about custom plugin configurations.
-    "coremedia:richtext": {
-      strictness: Strictness.LOOSE,
-    },
+    }
   });
 }

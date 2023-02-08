@@ -1,9 +1,9 @@
 package com.coremedia.livecontext.fragment;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

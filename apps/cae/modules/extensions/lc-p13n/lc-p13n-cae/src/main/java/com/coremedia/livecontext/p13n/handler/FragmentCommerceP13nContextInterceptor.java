@@ -11,8 +11,8 @@ import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
 import com.coremedia.personalization.preview.PreviewPersonalizationHandlerInterceptor;
 import com.coremedia.personalization.preview.TestContextSource;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
@@ -24,9 +24,15 @@ public class FragmentCommerceP13nContextInterceptor extends AbstractCommerceCont
 
   private LiveContextSiteResolver liveContextSiteResolver;
 
-  @Required
   public void setLiveContextSiteResolver(LiveContextSiteResolver liveContextSiteResolver) {
     this.liveContextSiteResolver = liveContextSiteResolver;
+  }
+
+  @PostConstruct
+  void initialize() {
+    if (liveContextSiteResolver == null) {
+      throw new IllegalStateException("Required property not set: liveContextSiteResolver");
+    }
   }
 
   @Override

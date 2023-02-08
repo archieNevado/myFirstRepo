@@ -2,7 +2,6 @@ package com.coremedia.blueprint.common.contentbeans;
 
 
 import com.coremedia.blueprint.common.layout.HasPageGrid;
-import com.coremedia.blueprint.common.layout.PageGrid;
 import com.coremedia.cae.aspect.Aspect;
 
 import java.util.Collection;

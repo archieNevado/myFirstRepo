@@ -9,9 +9,8 @@ import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.CommerceObject;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.p13n.MarketingSpot;
-import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
 import java.util.List;
@@ -24,9 +23,7 @@ public class CMMarketingSpotImpl extends CMDynamicListImpl implements CMMarketin
 
   public static final String EXTERNAL_ID = "externalId";
 
-  private LiveContextNavigationFactory liveContextNavigationFactory;
-
-  CommerceConnectionSupplier commerceConnectionSupplier;
+  private CommerceConnectionSupplier commerceConnectionSupplier;
 
   /**
    * Returns the value of the document property {@link #MASTER}.
@@ -97,12 +94,7 @@ public class CMMarketingSpotImpl extends CMDynamicListImpl implements CMMarketin
     return teaserTitle;
   }
 
-  @Required
-  public void setLiveContextNavigationFactory(LiveContextNavigationFactory liveContextNavigationFactory) {
-    this.liveContextNavigationFactory = liveContextNavigationFactory;
-  }
-
-  @Required
+  @Autowired
   public void setCommerceConnectionSupplier(CommerceConnectionSupplier commerceConnectionSupplier) {
     this.commerceConnectionSupplier = commerceConnectionSupplier;
   }

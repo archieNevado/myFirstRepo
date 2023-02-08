@@ -38,7 +38,6 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletRequest;
@@ -296,9 +295,6 @@ public class ProductFragmentHandler extends FragmentHandler {
             && (isNullOrEmpty(params.getExternalRef()) || !params.getExternalRef().startsWith("cm-"));
   }
 
-  // ------------ Config --------------------------------------------
-
-  @Required
   public void setContextStrategy(ResolveContextStrategy contextStrategy) {
     this.contextStrategy = contextStrategy;
   }
@@ -318,4 +314,13 @@ public class ProductFragmentHandler extends FragmentHandler {
   public void setProductAugmentationService(AugmentationService augmentationService) {
     this.productAugmentationService = augmentationService;
   }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (contextStrategy == null) {
+      throw new IllegalStateException("Required property not set: contextStrategy");
+    }
+  }
+
 }

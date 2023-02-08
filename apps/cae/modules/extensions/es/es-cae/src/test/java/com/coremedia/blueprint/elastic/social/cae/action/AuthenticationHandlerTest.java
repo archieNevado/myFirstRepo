@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -44,6 +45,9 @@ import static org.mockito.Mockito.when;
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = AuthenticationHandlerTest.LocalConfig.class)
+@TestPropertySource(properties = {
+        "cae.hashing.backward-compatibility=true",
+})
 public class AuthenticationHandlerTest {
 
   @Configuration(proxyBeanMethods = false)

@@ -13,7 +13,7 @@ import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import com.coremedia.objectserver.web.links.LinkFormatter;
-import org.springframework.beans.factory.annotation.Required;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +24,6 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
@@ -79,7 +78,6 @@ public class AuthenticationHandler extends WebflowHandlerBase {
   private LinkFormatter linkFormatter;
 
   // --- configure --------------------------------------------------
-  @Required
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
   }
@@ -204,13 +202,26 @@ public class AuthenticationHandler extends WebflowHandlerBase {
     return linkFormatter.formatLink(passwordExpiredState, null, request, response, true);
   }
 
-  @Required
   public void setPasswordExpiryPolicy(PasswordExpiryPolicy passwordExpiryPolicy) {
     this.passwordExpiryPolicy = passwordExpiryPolicy;
   }
 
-  @Required
   public void setLinkFormatter(LinkFormatter linkFormatter) {
     this.linkFormatter = linkFormatter;
   }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (linkFormatter == null) {
+      throw new IllegalStateException("Required property not set: linkFormatter");
+    }
+    if (passwordExpiryPolicy == null) {
+      throw new IllegalStateException("Required property not set: passwordExpiryPolicy");
+    }
+    if (settingsService == null) {
+      throw new IllegalStateException("Required property not set: settingsService");
+    }
+  }
+
 }

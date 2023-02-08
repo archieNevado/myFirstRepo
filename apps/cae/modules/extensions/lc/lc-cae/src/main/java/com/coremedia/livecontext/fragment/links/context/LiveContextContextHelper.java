@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.fragment.links.context;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 

@@ -7,8 +7,8 @@ import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.cap.content.Content;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,14 +24,22 @@ public class CMNavigationLinkListContentTreeRelation implements TreeRelation<Lin
 
   // --- construct and configure ------------------------------------
 
-  @Required
   public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
     this.contentBeanFactory = contentBeanFactory;
   }
 
-  @Required
   public void setTreeRelation(NavigationLinkListContentTreeRelation treeRelation) {
     this.treeRelation = treeRelation;
+  }
+
+  @PostConstruct
+  void initialize() {
+    if (contentBeanFactory == null) {
+      throw new IllegalStateException("Required property not set: contentBeanFactory");
+    }
+    if (treeRelation == null) {
+      throw new IllegalStateException("Required property not set: treeRelation");
+    }
   }
 
   @Override

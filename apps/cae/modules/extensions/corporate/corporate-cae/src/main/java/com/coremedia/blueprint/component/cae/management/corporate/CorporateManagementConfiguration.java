@@ -9,6 +9,7 @@ import com.coremedia.blueprint.cae.sitemap.SitemapRendererFactory;
 import com.coremedia.blueprint.cae.sitemap.SitemapSetup;
 import com.coremedia.blueprint.cae.sitemap.SitemapUrlGenerator;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
+import com.coremedia.blueprint.component.cae.management.CaeManagementConfiguration;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.coremedia.springframework.customizer.Customize;
@@ -16,14 +17,15 @@ import com.coremedia.springframework.customizer.CustomizerConfiguration;
 import org.springframework.boot.actuate.autoconfigure.web.ManagementContextConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.core.annotation.Order;
 
 import java.util.List;
 import java.util.Map;
 
 @ManagementContextConfiguration(proxyBeanMethods = false)
-@Order(100) // load after CaeManagementConfiguration
-@Import(CustomizerConfiguration.class)
+@Import({
+        CustomizerConfiguration.class,
+        CaeManagementConfiguration.class,
+})
 public class CorporateManagementConfiguration {
 
   @Bean

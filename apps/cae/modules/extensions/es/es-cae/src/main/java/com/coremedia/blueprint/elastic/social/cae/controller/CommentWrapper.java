@@ -1,9 +1,9 @@
 package com.coremedia.blueprint.elastic.social.cae.controller;
 
 import com.coremedia.elastic.social.api.comments.Comment;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+
 import java.util.List;
 
 /**

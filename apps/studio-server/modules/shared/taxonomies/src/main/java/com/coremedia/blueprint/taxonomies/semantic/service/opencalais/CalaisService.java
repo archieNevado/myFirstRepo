@@ -14,7 +14,6 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -48,6 +47,12 @@ public class CalaisService extends AbstractSemanticService {
   @PostConstruct
   @Override
   public void initialize() {
+    if (settingsService == null) {
+      throw new IllegalStateException("Required property not set: settingsService");
+    }
+    if (sitesService == null) {
+      throw new IllegalStateException("Required property not set: sitesService");
+    }
     client = new CalaisClient();
   }
 
@@ -110,12 +115,10 @@ public class CalaisService extends AbstractSemanticService {
     client.setUniqueAccessKey(apiKeyToUse);
   }
 
-  @Required
   public void setSitesService(SitesService sitesService) {
     this.sitesService = sitesService;
   }
 
-  @Required
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
   }

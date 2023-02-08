@@ -14,8 +14,8 @@ import com.google.common.base.Strings;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -34,14 +34,19 @@ public class RobotsView implements TextView {
   private LinkFormatter linkFormatter;
   private SitemapHelper sitemapHelper;
 
-  @Required
   public void setLinkFormatter(LinkFormatter linkFormatter) {
     this.linkFormatter = linkFormatter;
   }
 
-  @Required
   public void setSitemapHelper(SitemapHelper sitemapHelper) {
     this.sitemapHelper = sitemapHelper;
+  }
+
+  @PostConstruct
+  protected void initialize() {
+    if (linkFormatter == null) {
+      throw new IllegalStateException("Required property not set: linkFormatter");
+    }
   }
 
   @Override
@@ -128,7 +133,7 @@ public class RobotsView implements TextView {
   }
 
   private void writeSitemapEntry(Writer writer, Site site) throws IOException {
-    if (sitemapHelper.isSitemapEnabled(site)) {
+    if (sitemapHelper != null && sitemapHelper.isSitemapEnabled(site)) {
       writer.write(RobotsEntry.SITEMAP_TAG);
       writer.write(COLON_SPACE);
       writer.write(sitemapHelper.sitemapIndexUrl(site));

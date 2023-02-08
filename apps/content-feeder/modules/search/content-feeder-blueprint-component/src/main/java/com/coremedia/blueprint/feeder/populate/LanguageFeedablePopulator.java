@@ -5,8 +5,8 @@ import com.coremedia.cap.feeder.MutableFeedable;
 import com.coremedia.cap.feeder.TextParameters;
 import com.coremedia.cap.feeder.populate.FeedablePopulator;
 import com.coremedia.cap.multisite.SitesService;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.util.Locale;
 
 public class LanguageFeedablePopulator implements FeedablePopulator<Content> {
@@ -29,8 +29,15 @@ public class LanguageFeedablePopulator implements FeedablePopulator<Content> {
     }
   }
 
-  @Required
   public void setSitesService(SitesService sitesService) {
     this.sitesService = sitesService;
   }
+
+  @PostConstruct
+  protected void initialize() {
+    if (sitesService == null) {
+      throw new IllegalStateException("Required property not set: sitesService");
+    }
+  }
+
 }

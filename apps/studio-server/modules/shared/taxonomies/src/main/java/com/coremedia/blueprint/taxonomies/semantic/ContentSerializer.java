@@ -1,9 +1,9 @@
 package com.coremedia.blueprint.taxonomies.semantic;
 
-import com.coremedia.xml.MarkupUtil;
 import com.coremedia.cap.common.NoSuchPropertyDescriptorException;
 import com.coremedia.cap.content.Content;
 import com.coremedia.xml.Markup;
+import com.coremedia.xml.MarkupUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

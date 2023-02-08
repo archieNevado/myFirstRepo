@@ -31,8 +31,6 @@
   <modules>
     <module>blueprint-parent</module>
     <module>importer-template</module>
-    <module>resourcebundle-migration</module>
-    <module>resourcebundle-migration2</module>
     <module>uapi-client</module>
   </modules>
 

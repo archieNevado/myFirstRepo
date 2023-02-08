@@ -1,5 +1,3 @@
-version: "3.4"
-
 # default environment variables
 x-default-boot-envs:
   &default-boot-envs
@@ -39,7 +37,7 @@ x-logging:
 
 services:
   commerce-adapter-mock:
-    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-mock:${COMMERCE_ADAPTER_MOCK_VERSION:-2.0.9}
+    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-mock:${COMMERCE_ADAPTER_MOCK_VERSION:-2.1.2}
     container_name: commerce-adapter-mock
     restart: always
     logging: *default-logging
@@ -49,10 +47,17 @@ services:
       - 44065:6565
       - 44081:8081
       - 44005:5005
+    read_only: true
+    cap_drop:
+      - ALL
     environment:
       <<: *default-boot-envs
       <<: *development-boot-envs
     healthcheck: *default-boot-healthcheck
+    volumes:
+      - /coremedia/cache
+      - /coremedia/log
+      - /var/tmp
 
   traefik:
     environment:

@@ -11,11 +11,11 @@ import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.objectserver.dataviews.AssumesIdentity;
 import com.coremedia.objectserver.dataviews.DataViewHelper;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;

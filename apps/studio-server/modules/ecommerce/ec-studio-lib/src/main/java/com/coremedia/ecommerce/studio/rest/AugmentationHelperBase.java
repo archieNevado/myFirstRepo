@@ -3,8 +3,11 @@ package com.coremedia.ecommerce.studio.rest;
 import com.coremedia.blueprint.base.livecontext.util.CommerceBeanUtils;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridService;
 import com.coremedia.blueprint.base.pagegrid.PageGridContentKeywords;
+import com.coremedia.cap.common.CapException;
 import com.coremedia.cap.common.CapStructHelper;
+import com.coremedia.cap.common.CapType;
 import com.coremedia.cap.common.DuplicateNameException;
+import com.coremedia.cap.common.descriptors.StringPropertyDescriptor;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
@@ -29,22 +32,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
 import static com.coremedia.cap.struct.StructBuilderMode.LOOSE;
+import static java.lang.invoke.MethodHandles.lookup;
 
 abstract class AugmentationHelperBase<T> {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(AugmentationHelperBase.class);
-
+  private static final Logger LOGGER = LoggerFactory.getLogger(lookup().lookupClass());
   private static final String OTHER_CATALOGS_FOLDER_NAME = "_other_catalogs";
-
   public static final String DEFAULT_BASE_FOLDER_NAME = "Augmentation";
-
   static final String EXTERNAL_ID = "externalId";
+  public static final int MAX_CONTENT_NAME_LENGTH = 233;
 
   protected ContentRepository contentRepository;
   protected AugmentationService augmentationService;
@@ -57,6 +60,7 @@ abstract class AugmentationHelperBase<T> {
   @Nullable
   abstract Content augment(@NonNull T type);
 
+  @SuppressWarnings("OverlyComplexMethod")
   @Nullable
   protected Content createContent(@NonNull String type, @NonNull Content parent, @NonNull String name, @NonNull Map<String, Object> properties) {
     // Create content (taking possible interceptors into consideration)
@@ -67,8 +71,10 @@ abstract class AugmentationHelperBase<T> {
       return null;
     }
 
+    Map<String, Object> shortenedProperties = shortenPropertyValuesIfNeeded(properties, contentType, List.of(EXTERNAL_ID));
+
     if (interceptService != null) {
-      writeRequest = interceptService.interceptCreate(parent, name, contentType, properties);
+      writeRequest = interceptService.interceptCreate(parent, name, contentType, shortenedProperties);
       interceptService.handleErrorIssues(writeRequest);
     }
 
@@ -78,14 +84,14 @@ abstract class AugmentationHelperBase<T> {
     }
 
     try {
-      Map<String, Object> myProperties = writeRequest != null ? writeRequest.getProperties() : properties;
+      Map<String, Object> myProperties = writeRequest != null ? writeRequest.getProperties() : shortenedProperties;
       content = contentType.create(parent, name.trim(), myProperties);
     } catch (DuplicateNameException e) {
       LOGGER.debug("Ignored concurrent (redundant) augmentation request", e);
       content = parent.getChild(name);
-    } catch (Throwable t) {
-      LOGGER.error("An error occured while augmenting category", t);
-      throw t;
+    } catch (CapException e) {
+      LOGGER.error("An error occured while augmenting category", e);
+      throw e;
     }
 
     // will most likely be non-null but maybe we're facing a concurrent content deletion
@@ -100,6 +106,42 @@ abstract class AugmentationHelperBase<T> {
     return content;
   }
 
+  /**
+   * Checks if property values are too long for the underlying StringProperty fields and shorten items
+   * to the maximum number of characters automatically.
+   *
+   * @param properties the input parameters
+   * @param contentType the target content type
+   * @param excludedProperties property names, which shall not be shortened automatically
+   * @return a copy of the map with shortened values if needed
+   */
+  @VisibleForTesting
+  @NonNull
+  protected static Map<String, Object> shortenPropertyValuesIfNeeded(@NonNull Map<String, Object> properties, @NonNull CapType contentType, @NonNull Collection<String> excludedProperties) {
+    Map<String, Object> shortenedProperties = new HashMap<>(properties);
+
+    contentType.getDescriptors().stream()
+            .filter(StringPropertyDescriptor.class::isInstance)
+            .filter(descriptor -> !excludedProperties.contains(descriptor.getName()))
+            .map(StringPropertyDescriptor.class::cast)
+            .forEach(descriptor -> {
+              var propertyName = descriptor.getName();
+              var propertyValue = shortenedProperties.get(propertyName);
+              if (propertyValue instanceof String) {
+                var string = (String) propertyValue;
+                var length = descriptor.getLength();
+                if (string.length() > length) {
+                  shortenedProperties.put(propertyName, string.substring(0, length - 1));
+                  LOGGER.info("Problem while augmenting catalog object. Properties: '{}'. " +
+                          "Predefined property value for '{}' too long. " +
+                          "Value is shortened automatically to '{}' chars. ", properties, propertyName, length);
+                }
+              }
+            });
+
+    return shortenedProperties;
+  }
+
   @NonNull
   public static String computeFolderPath(@NonNull CommerceBean commerceBean, @NonNull Site site, @NonNull String baseFolderName) {
     return computerFolderPath(commerceBean, site, baseFolderName, CommerceBeanUtils::getCatalog);
@@ -112,7 +154,7 @@ abstract class AugmentationHelperBase<T> {
 
     String rootPath = site.getSiteRootFolder().getPath();
 
-    List<String> subPathsToJoin = new ArrayList<>(List.of(rootPath, baseFolderName));
+    Collection<String> subPathsToJoin = new ArrayList<>(List.of(rootPath, baseFolderName));
 
     //Each catalog needs a separate folder. If not default catalog use the catalog alias as the basefolder.
     Optional<Catalog> catalog = catalogExtractor.apply(category);
@@ -126,15 +168,20 @@ abstract class AugmentationHelperBase<T> {
     }
 
     for (Category breadcrumbCategory : category.getBreadcrumb()) {
-      subPathsToJoin.add(getEscapedDisplayName(breadcrumbCategory));
+      subPathsToJoin.add(shortenContentNameIfNeeded(getEscapedDisplayName(breadcrumbCategory)));
     }
 
     return String.join("/", subPathsToJoin);
   }
 
-  @VisibleForTesting
   @NonNull
-  Optional<Catalog> getCatalog(@NonNull Category category) {
+  static String shortenContentNameIfNeeded(@NonNull String name) {
+    int maxLength = Math.min(name.length(), MAX_CONTENT_NAME_LENGTH);
+    return name.substring(0, maxLength);
+  }
+
+  @NonNull
+  Optional<Catalog> getCatalog(@NonNull CommerceBean category) {
     return CommerceBeanUtils.getCatalog(category);
   }
 
@@ -148,7 +195,7 @@ abstract class AugmentationHelperBase<T> {
   abstract Content getCategoryContent(@NonNull Category category);
 
   @NonNull
-  protected Category getRootCategory(@NonNull CommerceBean commerceBean) {
+  protected static Category getRootCategory(@NonNull CommerceBean commerceBean) {
     Category currentCategory = getCategoryForCommerceBean(commerceBean);
 
     // Checkmarx complains about "Unchecked input for loop condition" here.
@@ -168,7 +215,7 @@ abstract class AugmentationHelperBase<T> {
   }
 
   @Nullable
-  protected Site getSite(Category category) {
+  protected Site getSite(CommerceBean category) {
     return this.sitesService.getSite(category.getContext().getSiteId());
   }
 
@@ -184,7 +231,7 @@ abstract class AugmentationHelperBase<T> {
   }
 
   @Nullable
-  protected static Content getLayoutSettings(@NonNull Content content, @NonNull String pageGridName) {
+  protected static Content getLayoutSettings(@SuppressWarnings("TypeMayBeWeakened") @NonNull Content content, @NonNull String pageGridName) {
     Struct placementStruct = CapStructHelper.getStruct(content, pageGridName);
     if (placementStruct == null) {
       return null;

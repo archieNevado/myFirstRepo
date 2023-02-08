@@ -1,10 +1,12 @@
 package com.coremedia.blueprint.cae.handlers;
 
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
+import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.blueprint.testing.ContentTestHelper;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.transform.TransformImageService;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.configuration.CaeConfigurationProperties;
 import com.coremedia.objectserver.request.RequestUtils;
 import com.coremedia.objectserver.web.HandlerHelper;
@@ -62,6 +64,9 @@ public class TransformedBlobHandlerTest {
   @MockBean
   private TransformImageService transformImageService;
 
+  @MockBean
+  private ValidationService<ContentBean> validationService;
+
   @Inject
   private MockMvc mockMvc;
   @Inject
@@ -87,6 +92,7 @@ public class TransformedBlobHandlerTest {
             .thenReturn(Map.of(TRANSFORM_NAME, TRANSFORM_NAME));
 
     when(transformImageService.transformWithDimensions(any(Content.class), anyString(), anyString(), anyInt(), anyInt(), anyString())).thenReturn(Optional.of(transformedBlob));
+    when(validationService.validate(any())).thenReturn(true);
   }
 
   /**

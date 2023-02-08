@@ -8,8 +8,8 @@ import com.coremedia.rest.cap.intercept.ContentWriteRequest;
 import com.google.common.base.MoreObjects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.List;
 
@@ -54,7 +54,6 @@ public class LinkedAssetMetadataExtractorInterceptor extends ContentWriteInterce
    * The name of the property that links the derived document to the source asset.
    * @param assetLinkProperty The name of the property.
    */
-  @Required
   public void setAssetLinkProperty(String assetLinkProperty) {
     this.assetLinkProperty = assetLinkProperty;
   }
@@ -67,7 +66,6 @@ public class LinkedAssetMetadataExtractorInterceptor extends ContentWriteInterce
    * The name of the property that source picture assets keep their metadata in.
    * @param assetMetadataProperty The name of the asset metadata property.
    */
-  @Required
   public void setAssetMetadataProperty(String assetMetadataProperty) {
     this.assetMetadataProperty = assetMetadataProperty;
   }
@@ -82,13 +80,25 @@ public class LinkedAssetMetadataExtractorInterceptor extends ContentWriteInterce
    *
    * @param linkedAssetType the type of the linked asset
    */
-  @Required
   public void setLinkedAssetType(String linkedAssetType) {
     this.linkedAssetTypeProperty = linkedAssetType;
   }
 
   public String getLinkedAssetType() {
     return linkedAssetTypeProperty;
+  }
+
+  @PostConstruct
+  void initialize() {
+    if (assetLinkProperty == null) {
+      throw new IllegalStateException("Required property not set: assetLinkProperty");
+    }
+    if (assetMetadataProperty == null) {
+      throw new IllegalStateException("Required property not set: assetMetadataProperty");
+    }
+    if (linkedAssetTypeProperty == null) {
+      throw new IllegalStateException("Required property not set: linkedAssetTypeProperty");
+    }
   }
 
   @Override

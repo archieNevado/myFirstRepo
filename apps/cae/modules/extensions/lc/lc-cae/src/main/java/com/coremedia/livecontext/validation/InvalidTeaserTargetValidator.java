@@ -10,8 +10,8 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -43,9 +43,15 @@ public class InvalidTeaserTargetValidator extends AbstractValidator<Object> {
     return CMTeaser.class.isAssignableFrom(clazz) || Page.class.isAssignableFrom(clazz);
   }
 
-  @Required
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
+  }
+
+  @PostConstruct
+  protected void initialize() {
+    if (settingsService == null) {
+      throw new IllegalStateException("Required property not set: settingsService");
+    }
   }
 
   private class InvalidTeaserTargetPredicate implements Predicate<Object> {

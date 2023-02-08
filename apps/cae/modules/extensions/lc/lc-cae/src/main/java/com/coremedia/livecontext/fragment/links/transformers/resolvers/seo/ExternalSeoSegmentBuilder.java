@@ -15,9 +15,9 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 import static java.text.MessageFormat.format;
@@ -112,24 +112,36 @@ public class ExternalSeoSegmentBuilder implements SeoSegmentBuilder {
             .replaceAll(ID_DELIMITER_END_REGEX, "");
   }
 
-  @Required
   public void setNavigationSegmentsUriHelper(NavigationSegmentsUriHelper navigationSegmentsUriHelper) {
     this.navigationSegmentsUriHelper = navigationSegmentsUriHelper;
   }
 
-  @Required
   public void setCache(Cache cache) {
     this.cache = cache;
   }
 
-  @Required
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
   }
 
-  @Required
   public void setUrlPathFormattingHelper(UrlPathFormattingHelper urlPathFormattingHelper) {
     this.urlPathFormattingHelper = urlPathFormattingHelper;
+  }
+
+  @PostConstruct
+  protected void initialize() {
+    if (cache == null) {
+      throw new IllegalStateException("Required property not set: cache");
+    }
+    if (navigationSegmentsUriHelper == null) {
+      throw new IllegalStateException("Required property not set: navigationSegmentsUriHelper");
+    }
+    if (settingsService == null) {
+      throw new IllegalStateException("Required property not set: settingsService");
+    }
+    if (urlPathFormattingHelper == null) {
+      throw new IllegalStateException("Required property not set: urlPathFormattingHelper");
+    }
   }
 
 }

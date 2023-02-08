@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.taxonomies.semantic.service.matching;
 
+import com.coremedia.blueprint.base.taxonomies.TaxonomyLocalizationStrategy;
 import com.coremedia.blueprint.taxonomies.Taxonomy;
 import com.coremedia.blueprint.taxonomies.TaxonomyNode;
 import com.coremedia.blueprint.taxonomies.TaxonomyUtil;
@@ -24,10 +25,15 @@ public class NameMatchingStrategy implements SemanticStrategy, InitializingBean 
   private static final Logger LOG = LoggerFactory.getLogger(NameMatchingStrategy.class);
 
   private ContentRepository contentRepository;
+  private TaxonomyLocalizationStrategy taxonomyLocalizationStrategy;
   private String serviceId;
 
   public void setServiceId(String serviceId) {
     this.serviceId = serviceId;
+  }
+
+  public void setTaxonomyLocalizationStrategy(TaxonomyLocalizationStrategy taxonomyLocalizationStrategy) {
+    this.taxonomyLocalizationStrategy = taxonomyLocalizationStrategy;
   }
 
   public void setContentRepository(ContentRepository contentRepository) {
@@ -38,7 +44,9 @@ public class NameMatchingStrategy implements SemanticStrategy, InitializingBean 
   public Suggestions suggestions(Taxonomy<?> taxonomy, String capId) {
     HashMap<String, TaxonomyNode> nameMapping = new HashMap<>();
     for (TaxonomyNode node : taxonomy.getAllChildren()) {
-      nameMapping.put(node.getName().toLowerCase().trim(), node);    //NOSONAR
+      Content content = contentRepository.getContent(TaxonomyUtil.asContentId(node.getRef()));
+      String name = taxonomyLocalizationStrategy.getDisplayName(content, null);
+      nameMapping.put(name.toLowerCase().trim(), node);    //NOSONAR
     }
 
     Suggestions items = new Suggestions();

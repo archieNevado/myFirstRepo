@@ -7,16 +7,16 @@ import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.objectserver.web.HandlerHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 
-public class ContentValidityInterceptor extends HandlerInterceptorAdapter {
+public class ContentValidityInterceptor implements HandlerInterceptor {
 
   private static final Logger LOG = LoggerFactory.getLogger(ContentValidityInterceptor.class);
 
@@ -49,8 +49,15 @@ public class ContentValidityInterceptor extends HandlerInterceptorAdapter {
     }
   }
 
-  @Required
   public void setValidationService(ValidationService<Object> validationService) {
     this.validationService = validationService;
   }
+
+  @PostConstruct
+  protected void initialize() {
+    if (validationService == null) {
+      throw new IllegalStateException("Required property not set: validationService");
+    }
+  }
+
 }

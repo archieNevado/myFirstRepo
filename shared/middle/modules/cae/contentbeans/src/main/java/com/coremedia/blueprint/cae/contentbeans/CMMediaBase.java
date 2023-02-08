@@ -4,7 +4,11 @@ import com.coremedia.blueprint.common.contentbeans.CMMedia;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.xml.Markup;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * Generated base class for immutable beans of document type CMMedia.

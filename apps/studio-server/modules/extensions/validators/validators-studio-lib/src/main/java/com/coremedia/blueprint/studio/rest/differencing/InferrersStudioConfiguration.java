@@ -8,11 +8,11 @@ import com.coremedia.cap.transform.TransformImageServiceConfiguration;
 import com.coremedia.rest.cap.content.imagevariants.ImageVariantsPropertiesInferrer;
 import com.coremedia.rest.cap.differencing.ZeroDefaultValuePropertyInferrer;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @Import({
         TransformImageServiceConfiguration.class,
 })

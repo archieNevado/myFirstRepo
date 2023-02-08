@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.taxonomies.strategy;
 
+import com.coremedia.blueprint.base.taxonomies.TaxonomyLocalizationStrategy;
 import com.coremedia.blueprint.taxonomies.Taxonomy;
 import com.coremedia.blueprint.taxonomies.cycleprevention.TaxonomyCycleValidator;
 import com.coremedia.cache.Cache;
@@ -60,6 +61,7 @@ public class TaxonomyStrategiesCacheKey extends CacheKey<Map<String, Taxonomy<Co
                                     SitesService sitesService,
                                     SearchService searchService,
                                     TaxonomyCycleValidator taxonomyCycleValidator,
+                                    TaxonomyLocalizationStrategy taxonomyLocalizationStrategy,
                                     String contentType,
                                     String siteConfigPath,
                                     String globalConfigPath,
@@ -77,6 +79,7 @@ public class TaxonomyStrategiesCacheKey extends CacheKey<Map<String, Taxonomy<Co
                     contentRepository,
                     searchService,
                     taxonomyCycleValidator,
+                    taxonomyLocalizationStrategy,
                     documentsPerFolder
             )
     );

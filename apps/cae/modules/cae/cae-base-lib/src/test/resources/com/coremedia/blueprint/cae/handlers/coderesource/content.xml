@@ -82,6 +82,12 @@
                         </version>
                       </document>
                     </folder>
+                    <folder id="155" name="css">
+                      <document id="52" type="CMCSS" name="my-cústom.css"
+                                modificationDate="2004-05-01T20:59:00.000+01:00">
+                        <version number="1"/>
+                      </document>
+                    </folder>
                   </folder>
                 </folder>
               </folder>

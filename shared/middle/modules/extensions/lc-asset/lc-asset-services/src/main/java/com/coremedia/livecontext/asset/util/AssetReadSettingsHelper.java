@@ -1,10 +1,11 @@
 package com.coremedia.livecontext.asset.util;
 
 import com.coremedia.blueprint.base.settings.SettingsService;
+import com.coremedia.springframework.beans.RequiredPropertyNotSetException;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 
@@ -125,9 +126,13 @@ public class AssetReadSettingsHelper {
     return assetReferences != null && assetReferences.getReferences() != null;
   }
 
-  @Required
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
+  }
+
+  @PostConstruct
+  void initialize() {
+    RequiredPropertyNotSetException.ifNull("settingsService", settingsService);
   }
 
   @Nullable

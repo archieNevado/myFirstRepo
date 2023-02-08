@@ -85,13 +85,13 @@
       <artifactId>slf4j-api</artifactId>
     </dependency>
     <dependency>
+      <groupId>jakarta.annotation</groupId>
+      <artifactId>jakarta.annotation-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>jakarta.servlet</groupId>
       <artifactId>jakarta.servlet-api</artifactId>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-beans</artifactId>
     </dependency>
     <dependency>
       <groupId>com.github.spotbugs</groupId>
@@ -166,6 +166,7 @@
             <!-- Transitive compile *AND* direct test dependencies. -->
             <ignoredDependency>com.coremedia.cms:cae-viewservices</ignoredDependency>
             <ignoredDependency>com.coremedia.cms:cae-contentbeanservices</ignoredDependency>
+            <ignoredDependency>org.springframework:spring-beans</ignoredDependency>
           </ignoredDependencies>
           <failOnWarning>true</failOnWarning>
         </configuration>

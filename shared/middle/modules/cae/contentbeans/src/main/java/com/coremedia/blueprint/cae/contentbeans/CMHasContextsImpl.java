@@ -1,20 +1,30 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
-import com.coremedia.objectserver.dataviews.DataViewFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
+import com.coremedia.blueprint.common.services.context.CurrentContextService;
 
 /**
  * Generated extension class for immutable beans of document type "CMHasContexts".
  */
 public class CMHasContextsImpl extends CMHasContextsBase {
-  private static final Logger LOG = LoggerFactory.getLogger(CMHasContextsImpl.class);
 
-  private DataViewFactory dataViewFactory;
+  private CurrentContextService currentContextService;
 
-  @Required
-  public void setDataViewFactory(DataViewFactory dataViewFactory) {
-    this.dataViewFactory = dataViewFactory;
+  public void setCurrentContextService(CurrentContextService currentContextService) {
+    this.currentContextService = currentContextService;
+  }
+
+  // This should be protected, since it is not meant to be a feature of
+  // a contentbean, but only for internal usage in subclasses.
+  // public only for compatibility reasons.
+  public CurrentContextService getCurrentContextService() {
+    return currentContextService;
+  }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (currentContextService == null) {
+      throw new IllegalStateException("Required property not set: currentContextService");
+    }
   }
 }

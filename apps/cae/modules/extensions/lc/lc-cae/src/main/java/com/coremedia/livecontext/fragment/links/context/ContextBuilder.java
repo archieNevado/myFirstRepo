@@ -1,6 +1,7 @@
 package com.coremedia.livecontext.fragment.links.context;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;

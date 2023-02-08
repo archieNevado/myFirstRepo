@@ -1,4 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.coremedia.blueprint.studio.rest.differencing.InferrersStudioConfiguration,\
-com.coremedia.blueprint.studio.rest.intercept.InterceptorsStudioConfiguration,\
-com.coremedia.cms.middle.blueprint.validators.ValidatorsConfiguration

@@ -13,15 +13,13 @@ import com.coremedia.blueprint.personalization.contentbeans.CMP13NSearch;
 import com.coremedia.blueprint.personalization.contentbeans.CMSelectionRules;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentRepository;
-import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.SitesService;
-import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HandlerHelper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.BeanFactory;
@@ -40,7 +38,6 @@ import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DY
 import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENTS_FRAGMENT;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -55,9 +52,6 @@ public class P13NFragmentHandlerTest {
 
   @Mock
   ContentBeanFactory contentBeanFactory;
-
-  @Mock
-  ContentRepository contentRepository;
 
   @Mock
   private ContextHelper contextHelper;
@@ -76,7 +70,6 @@ public class P13NFragmentHandlerTest {
     testling = new P13NFragmentHandler();
     testling.setBeanFactory(beanFactory);
     testling.setContentBeanFactory(contentBeanFactory);
-    testling.setContentRepository(contentRepository);
     testling.setSitesService(sitesService);
     testling.setNavigationSegmentsUriHelper(navigationSegmentsUriHelper);
     testling.setContextHelper(contextHelper);
@@ -87,20 +80,11 @@ public class P13NFragmentHandlerTest {
 
   @Test
   public void testHandleFragmentRequest() {
-    Content p13nContent = mock(Content.class);
-    Content cmNavigationContent = mock(Content.class);
-    ContentType cmNavigationContentType = mock(ContentType.class);
     CMSelectionRules cmSelectionRules = mock(CMSelectionRules.class);
-    CMNavigation cmNavigation = mock(CMNavigation.class);
-    when(contentRepository.getContent(anyString())).thenReturn(p13nContent);
-    when(contentBeanFactory.createBeanFor(p13nContent, ContentBean.class)).thenReturn(cmSelectionRules);
+    CMNavigation cmNavigation = mock(CMNavigation.class, Answers.RETURNS_DEEP_STUBS);
     configureContext("helios", cmNavigation);
 
-    when(cmNavigation.getContent()).thenReturn(cmNavigationContent);
-    when(cmNavigationContent.getType()).thenReturn(cmNavigationContentType);
-    when(cmNavigationContentType.getName()).thenReturn(CMSelectionRules.NAME);
-
-    ModelAndView modelAndView = testling.handleFragmentRequest("helios", 4711, "myView", new MockHttpServletRequest());
+    ModelAndView modelAndView = testling.handleFragmentRequest("helios", cmSelectionRules, "myView", new MockHttpServletRequest());
     assertEquals("myView", modelAndView.getViewName());
     assertTrue(modelAndView.getModel().get("self") instanceof CMSelectionRules);
     assertTrue(modelAndView.getModel().get(NavigationLinkSupport.ATTR_NAME_CMNAVIGATION) instanceof CMNavigation);
@@ -109,12 +93,9 @@ public class P13NFragmentHandlerTest {
 
   @Test
   public void testHandleFragmentRequestWrongContent() {
-    Content wrongContent = mock(Content.class);
-    when(contentRepository.getContent(anyString())).thenReturn(wrongContent);
     CMArticle cmArticle = mock(CMArticle.class);
-    when(contentBeanFactory.createBeanFor(wrongContent, ContentBean.class)).thenReturn(cmArticle);
 
-    ModelAndView modelAndView = testling.handleFragmentRequest("helios", 4711, "myView", new MockHttpServletRequest());
+    ModelAndView modelAndView = testling.handleFragmentRequest("helios", cmArticle, "myView", new MockHttpServletRequest());
     assertEquals(HandlerHelper.notFound().getModel(), modelAndView.getModel());
   }
 

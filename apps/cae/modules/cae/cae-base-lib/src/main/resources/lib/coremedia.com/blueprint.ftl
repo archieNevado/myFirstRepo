@@ -12,6 +12,7 @@
 <#include "blueprint/core.ftl" />
 <#include "blueprint/grid.ftl" />
 <#include "blueprint/image.ftl" />
+<#include "blueprint/localization.ftl" />
 
 <#-- PRIVATE -->
 <#include "blueprint/imagemap.ftl" />

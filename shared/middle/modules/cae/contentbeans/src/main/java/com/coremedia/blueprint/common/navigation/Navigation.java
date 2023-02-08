@@ -7,8 +7,8 @@ import com.coremedia.blueprint.common.contentbeans.CMTheme;
 import com.coremedia.cae.aspect.provider.AspectsProvider;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.user.User;
-
 import edu.umd.cs.findbugs.annotations.Nullable;
+
 import java.util.List;
 
 /**

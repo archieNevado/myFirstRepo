@@ -31,13 +31,20 @@ class CMLocTaxonomyForm extends DocumentTabPanel {
             Config(PropertyFieldGroup, {
               itemId: "locTaxonomy",
               title: CustomLabels_properties.PropertyGroup_Location_label,
-              propertyNames: ["value", "externalReference", "postcode"],
+              propertyNames: ["value"],
               items: [
                 Config(StringPropertyField, {
                   bindTo: config.bindTo,
                   propertyName: "value",
                   itemId: "value",
                 }),
+              ],
+            }),
+            Config(PropertyFieldGroup, {
+              itemId: "externalReference",
+              title: BlueprintDocumentTypes_properties.CMTaxonomy_externalReference_text,
+              propertyNames: ["externalReference", "postcode"],
+              items: [
                 Config(StringPropertyField, {
                   bindTo: config.bindTo,
                   propertyName: "externalReference",

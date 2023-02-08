@@ -4,9 +4,9 @@ import com.coremedia.blueprint.elastic.social.cae.controller.CommentWrapper;
 import com.coremedia.elastic.core.api.SortOrder;
 import com.coremedia.elastic.social.api.comments.Comment;
 import com.coremedia.elastic.social.api.comments.SortHelper;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

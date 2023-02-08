@@ -12,10 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.InvalidPropertyException;
 import org.springframework.beans.PropertyAccessException;
 import org.springframework.beans.PropertyAccessorFactory;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ import java.util.Map;
  * Each taxonomy is supplied as an event to a {@link com.coremedia.personalization.scoring.ScoringContext} retrieved
  * from the installed {@link com.coremedia.personalization.context.ContextCollection}.
  */
-public class TaxonomyInterceptor extends HandlerInterceptorAdapter {
+public class TaxonomyInterceptor implements HandlerInterceptor {
   private static final Logger LOG = LoggerFactory.getLogger(TaxonomyInterceptor.class);
 
   private ContextCollection contextCollection;
@@ -47,7 +47,6 @@ public class TaxonomyInterceptor extends HandlerInterceptorAdapter {
    *
    * @param map the mapping to set
    */
-  @Required
   public void setPropertyToContextMap(Map<String, String> map) {
     if(map == null || map.isEmpty()) {
       throw new IllegalArgumentException("propertyToContextMap mapping must neither be null nor empty");
@@ -60,9 +59,18 @@ public class TaxonomyInterceptor extends HandlerInterceptorAdapter {
    *
    * @param contextCollection the context collection to be used
    */
-  @Required
   public void setContextCollection(final ContextCollection contextCollection) {
     this.contextCollection = contextCollection;
+  }
+
+  @PostConstruct
+  protected void initialize() {
+    if (contextCollection == null) {
+      throw new IllegalStateException("Required property not set: contextCollection");
+    }
+    if (propertyToContextMap.isEmpty()) {
+      throw new IllegalStateException("Required property not set: propertyToContextMap");
+    }
   }
 
   @Override

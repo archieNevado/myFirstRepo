@@ -65,7 +65,7 @@ class SegmentsResourceTest {
   Segment segment2;
 
   @BeforeEach
-  private void setup() {
+  void setup() {
     segmentsResource = new SegmentsResource(catalogAliasTranslationService, sitesService, settingsService);
 
     when(storeContext.getSiteId()).thenReturn(SITE_ID);

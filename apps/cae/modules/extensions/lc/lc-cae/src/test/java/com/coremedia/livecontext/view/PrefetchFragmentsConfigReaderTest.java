@@ -42,7 +42,10 @@ import static org.mockito.Mockito.when;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = {PrefetchFragmentsConfigReaderTest.LocalConfig.class})
-@TestPropertySource(properties = "cache.capacities.java.lang.Object=50")
+@TestPropertySource(properties = {
+        "cache.capacities.java.lang.Object=50",
+        "cae.hashing.backward-compatibility=true",
+})
 public class PrefetchFragmentsConfigReaderTest {
 
   @Configuration(proxyBeanMethods = false)

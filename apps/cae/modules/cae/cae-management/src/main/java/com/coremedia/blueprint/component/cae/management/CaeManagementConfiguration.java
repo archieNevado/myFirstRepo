@@ -5,6 +5,7 @@ import com.coremedia.blueprint.cae.common.predicates.ValidContentPredicate;
 import com.coremedia.blueprint.cae.handlers.PreviewUrlHandler;
 import com.coremedia.blueprint.cae.handlers.UrlHandler;
 import com.coremedia.blueprint.cae.sitemap.CaeSitemapConfigurationProperties;
+import com.coremedia.blueprint.cae.sitemap.CaeSitemapManagementConfiguration;
 import com.coremedia.blueprint.cae.sitemap.ContentBasedSitemapSetupFactory;
 import com.coremedia.blueprint.cae.sitemap.ContentUrlGenerator;
 import com.coremedia.blueprint.cae.sitemap.PlainSitemapRendererFactory;
@@ -28,9 +29,9 @@ import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.annotation.Order;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,7 +40,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 @ManagementContextConfiguration(proxyBeanMethods = false)
-@Order(0)
+@Import(CaeSitemapManagementConfiguration.class)
 public class CaeManagementConfiguration {
 
   private final String caeServletPath;
@@ -66,14 +67,10 @@ public class CaeManagementConfiguration {
   @Bean
   @ConditionalOnProperty("delivery.preview-mode")
   public PreviewUrlHandler previewUrlHandler(LinkFormatter linkFormatter,
-                                             IdProvider idProvider,
                                              ContentBeanFactory contentBeanFactory,
+                                             IdProvider idProvider,
                                              SitesService sitesService) {
-    var previewUrlHandler = new PreviewUrlHandler(linkFormatter);
-    previewUrlHandler.setIdProvider(idProvider);
-    previewUrlHandler.setContentBeanFactory(contentBeanFactory);
-    previewUrlHandler.setSitesService(sitesService);
-    return previewUrlHandler;
+    return new PreviewUrlHandler(linkFormatter, contentBeanFactory, idProvider, sitesService);
   }
 
   @Bean
@@ -81,11 +78,7 @@ public class CaeManagementConfiguration {
                                ContentBeanFactory contentBeanFactory,
                                IdProvider idProvider,
                                SitesService sitesService) {
-    var urlHandler = new UrlHandler(linkFormatter);
-    urlHandler.setContentBeanFactory(contentBeanFactory);
-    urlHandler.setIdProvider(idProvider);
-    urlHandler.setSitesService(sitesService);
-    return urlHandler;
+    return new UrlHandler(linkFormatter, contentBeanFactory, idProvider, sitesService);
   }
 
   /**

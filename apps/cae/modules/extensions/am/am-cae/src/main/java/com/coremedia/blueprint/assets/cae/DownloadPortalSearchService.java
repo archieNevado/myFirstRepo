@@ -1,7 +1,6 @@
 package com.coremedia.blueprint.assets.cae;
 
 import com.coremedia.blueprint.assets.contentbeans.AMTaxonomy;
-import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.blueprint.cae.search.Condition;
 import com.coremedia.blueprint.cae.search.SearchConstants;
 import com.coremedia.blueprint.cae.search.SearchQueryBean;
@@ -15,17 +14,17 @@ import com.coremedia.blueprint.cae.search.solr.SolrQueryBuilder;
 import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,7 +59,19 @@ public class DownloadPortalSearchService implements InitializingBean {
   List<String> assetTypes = Collections.emptyList();
 
   @Override
-  public void afterPropertiesSet() throws Exception {
+  public void afterPropertiesSet() {
+    if (contentBeanFactory == null) {
+      throw new IllegalStateException("Required property not set: contentBeanFactory");
+    }
+    if (contentRepository == null) {
+      throw new IllegalStateException("Required property not set: contentRepository");
+    }
+    if (dataViewFactory == null) {
+      throw new IllegalStateException("Required property not set: dataViewFactory");
+    }
+    if (searchResultFactory == null) {
+      throw new IllegalStateException("Required property not set: searchResultFactory");
+    }
     // retrieve the list of concrete asset types
     assetTypes = AMUtils.getAssetSubtypes(contentRepository);
   }
@@ -70,22 +81,18 @@ public class DownloadPortalSearchService implements InitializingBean {
     this.deliveryConfigurationProperties = deliveryConfigurationProperties;
   }
 
-  @Required
   public void setSearchResultFactory(SearchResultFactory searchResultFactory) {
     this.searchResultFactory = searchResultFactory;
   }
 
-  @Required
   public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
     this.contentBeanFactory = contentBeanFactory;
   }
 
-  @Required
   public void setContentRepository(ContentRepository contentRepository) {
     this.contentRepository = contentRepository;
   }
 
-  @Required
   public void setDataViewFactory(DataViewFactory dataViewFactory) {
     this.dataViewFactory = dataViewFactory;
   }

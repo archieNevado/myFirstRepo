@@ -7,12 +7,12 @@ import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.user.User;
 import com.coremedia.objectserver.view.resolver.ViewRepositoryNameProvider;
 import com.coremedia.objectserver.web.UserVariantHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,12 +46,10 @@ public class BlueprintViewRepositoryNameProvider implements ViewRepositoryNamePr
   /**
    * Common view repositories that are stored in a list
    */
-  private List<String> commonViewRepositoryNames;
+  private List<String> commonViewRepositoryNames = List.of();
 
   private SettingsService settingsService;
   private ThemeTemplateViewRepositoryProvider themeTemplateViewRepositoryProvider;
-
-  // --- ViewRepositoryNameProvider ---------------------------------
 
   @NonNull
   @Override
@@ -66,8 +64,6 @@ public class BlueprintViewRepositoryNameProvider implements ViewRepositoryNamePr
 
     return viewRepositoryNames;
   }
-
-  // --- internal ---------------------------------------------------
 
   /**
    * Combines view repository names configured for the instance of this class with view repository names loaded from
@@ -104,8 +100,6 @@ public class BlueprintViewRepositoryNameProvider implements ViewRepositoryNamePr
     return result;
   }
 
-  // --- configure --------------------------------------------------
-
   /**
    * @param commonViewRepositoryNames list of
    *                                  {@link #getViewRepositoryNames(String, java.util.Map, java.util.Locale, javax.servlet.http.HttpServletRequest)}.
@@ -114,13 +108,22 @@ public class BlueprintViewRepositoryNameProvider implements ViewRepositoryNamePr
     this.commonViewRepositoryNames = commonViewRepositoryNames;
   }
 
-  @Required
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
   }
 
-  @Required
   public void setThemeTemplateViewRepositoryProvider(ThemeTemplateViewRepositoryProvider themeTemplateViewRepositoryProvider) {
     this.themeTemplateViewRepositoryProvider = themeTemplateViewRepositoryProvider;
   }
+
+  @PostConstruct
+  protected void initialize() {
+    if (settingsService == null) {
+      throw new IllegalStateException("Required property not set: settingsService");
+    }
+    if (themeTemplateViewRepositoryProvider == null) {
+      throw new IllegalStateException("Required property not set: themeTemplateViewRepositoryProvider");
+    }
+  }
+
 }

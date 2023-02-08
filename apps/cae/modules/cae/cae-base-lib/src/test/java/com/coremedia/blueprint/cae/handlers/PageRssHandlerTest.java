@@ -24,6 +24,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -49,6 +50,9 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 @WebAppConfiguration
 @ContextConfiguration(classes = PageRssHandlerTest.LocalConfig.class)
 @ActiveProfiles(PROFILE)
+@TestPropertySource(properties = {
+        "cae.hashing.backward-compatibility=true",
+})
 public class PageRssHandlerTest {
 
   @Configuration(proxyBeanMethods = false)

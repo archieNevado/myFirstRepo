@@ -4,12 +4,11 @@ import com.coremedia.blueprint.common.contentbeans.CMLocalized;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.objectserver.beans.ContentBeanCollections;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Generated extension class for immutable beans of document type "CMLocalized".
@@ -18,20 +17,26 @@ public abstract class CMLocalizedImpl extends CMLocalizedBase {
   private SitesService sitesService;
   private ContentBeanCollections contentBeanCollections;
 
-  @Required
   public void setSitesService(SitesService sitesService) {
-    Objects.requireNonNull(sitesService);
     this.sitesService = sitesService;
   }
 
-  @Required
   public void setContentBeanCollections(ContentBeanCollections contentBeanCollections) {
-    Objects.requireNonNull(sitesService);
     this.contentBeanCollections = contentBeanCollections;
   }
 
   protected SitesService getSitesService() {
     return sitesService;
+  }
+
+  @PostConstruct
+  protected void initialize() {
+    if (contentBeanCollections == null) {
+      throw new IllegalStateException("Required property not set: contentBeanCollections");
+    }
+    if (sitesService == null) {
+      throw new IllegalStateException("Required property not set: sitesService");
+    }
   }
 
   @Override

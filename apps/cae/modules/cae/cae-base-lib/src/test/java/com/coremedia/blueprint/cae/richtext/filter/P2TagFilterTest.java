@@ -28,10 +28,12 @@ import javax.inject.Inject;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static com.coremedia.blueprint.cae.richtext.filter.P2TagFilterTest.LocalConfig.PROFILE;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SINGLETON;
 
+@SuppressWarnings("deprecation")
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = P2TagFilterTest.LocalConfig.class)
@@ -60,25 +62,38 @@ public class P2TagFilterTest {
   private List<Filter> newXmlFilters;
   private Markup markup;
 
-  @Inject
   private P2TagFilter p2TagFilter;
   @Inject
   private ContentTestHelper contentTestHelper;
   @Inject
   private MockHttpServletRequest request;
-  @SuppressWarnings("SpringJavaAutowiringInspection")
+  @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
   @Inject
   private MockHttpServletResponse response;
 
   @Before
   public void setUp() throws Exception {
+    p2TagFilter = new P2TagFilter();
+    p2TagFilter.setMapping(Map.of(
+            "p--heading-1", "h1",
+            "p--heading-2", "h2",
+            "p--heading-3", "h3",
+            "p--heading-4", "h4",
+            "p--heading-5", "h5",
+            "p--heading-6", "h6",
+            "p--heading-7", "h7",
+            "p--heading-8", "h8",
+            "p--standard", "p",
+            "p--pre", "pre"
+    ));
+
     markup = contentTestHelper.getContent(40).getMarkup("detailText");
     newXmlFilters = new ArrayList<>();
     newXmlFilters.add(p2TagFilter.getInstance(request, response));
   }
 
   @Test
-  public void testFilter() throws Exception {
+  public void testFilter() {
     StringWriter stringWriter = new StringWriter();
     markup.writeOn(newXmlFilters, stringWriter);
     Assert.assertEquals("<div xmlns=\"http://www.coremedia.com/2003/richtext-1.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n" +

@@ -1,6 +1,3 @@
-
-version: "3.4"
-
 services:
   hybris-proxy:
     image: ${REPOSITORY_PREFIX:-coremedia}/hybris-proxy

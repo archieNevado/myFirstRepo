@@ -8,7 +8,6 @@ import com.coremedia.objectserver.view.events.ViewHookEventListener;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import java.util.Arrays;
 
 import static com.coremedia.blueprint.base.cae.web.taglib.ViewHookEventNames.VIEW_HOOK_HEAD;

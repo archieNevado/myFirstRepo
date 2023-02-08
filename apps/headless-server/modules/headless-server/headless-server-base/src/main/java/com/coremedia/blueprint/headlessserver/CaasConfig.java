@@ -16,8 +16,10 @@ import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
 import com.coremedia.blueprint.base.navigation.context.ContextStrategy;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridService;
 import com.coremedia.blueprint.base.settings.SettingsService;
+import com.coremedia.blueprint.base.taxonomies.TaxonomyLocalizationStrategy;
 import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.blueprint.image.transformation.ImageTransformationConfiguration;
+import com.coremedia.blueprint.localization.configuration.TaxonomyLocalizationStrategyConfiguration;
 import com.coremedia.caas.config.CaasGraphqlConfigurationProperties;
 import com.coremedia.caas.config.RemoteServiceConfigurationProperties;
 import com.coremedia.caas.config.StaxContextConfigurationProperties;
@@ -257,6 +259,7 @@ import static java.lang.invoke.MethodHandles.lookup;
         ImageTransformationConfiguration.class,
         CustomizerConfiguration.class,
         CapRepositoriesConfiguration.class,
+        TaxonomyLocalizationStrategyConfiguration.class,
 })
 public class CaasConfig implements WebMvcConfigurer {
 
@@ -544,8 +547,10 @@ public class CaasConfig implements WebMvcConfigurer {
   }
 
   @Bean
-  public TaxonomyAdapterFactory taxonomyAdapter(ContentRepository contentRepository, SitesService sitesService) {
-    return new TaxonomyAdapterFactory(contentRepository, sitesService,
+  public TaxonomyAdapterFactory taxonomyAdapter(ContentRepository contentRepository,
+                                                TaxonomyLocalizationStrategy taxonomyLocalizationStrategy,
+                                                SitesService sitesService) {
+    return new TaxonomyAdapterFactory(contentRepository, taxonomyLocalizationStrategy, sitesService,
             contentConfigurationProperties.getGlobalConfigurationPath() + "/Taxonomies",
             contentConfigurationProperties.getSiteConfigurationPath() + "/Taxonomies");
   }

@@ -3,7 +3,8 @@ package com.coremedia.blueprint.id;
 import com.coremedia.id.IdProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
+
+import javax.annotation.PostConstruct;
 
 /*
  * Convenience wrapper. Simplification of IdProvider requested in DENALI-1393
@@ -49,8 +50,15 @@ public abstract class RepresentationMapper<T> implements Representation<T> {
     return id;
   }
 
-  @Required
   public void setIdProvider(IdProvider idProvider) {
     this.idProvider = idProvider;
   }
+
+  @PostConstruct
+  void initialize() {
+    if (idProvider == null) {
+      throw new IllegalStateException("Required property not set: idProvider");
+    }
+  }
+
 }

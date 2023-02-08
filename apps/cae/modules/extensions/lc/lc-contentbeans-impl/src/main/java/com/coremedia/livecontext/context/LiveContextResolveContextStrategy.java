@@ -11,8 +11,8 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -35,12 +35,10 @@ public class LiveContextResolveContextStrategy implements ResolveContextStrategy
     return null;
   }
 
-  @Required
   public void setCache(Cache cache) {
     this.cache = cache;
   }
 
-  @Required
   public void setLiveContextNavigationFactory(LiveContextNavigationFactory liveContextNavigationFactory) {
     this.liveContextNavigationFactory = liveContextNavigationFactory;
   }
@@ -49,15 +47,20 @@ public class LiveContextResolveContextStrategy implements ResolveContextStrategy
     this.cachedInSeconds = cachedInSeconds;
   }
 
+  @PostConstruct
+  protected void initialize() {
+    if (cache == null) {
+      throw new IllegalStateException("Required property not set: cache");
+    }
+    if (liveContextNavigationFactory == null) {
+      throw new IllegalStateException("Required property not set: liveContextNavigationFactory");
+    }
+  }
+
   @NonNull
   @Override
   public Optional<LiveContextNavigation> resolveContext(@NonNull Site site, @NonNull CommerceBean commerceBean) {
-    // cache is required for performance concerns in production use,
-    // functionally it also works without. Maybe useful for testing.
-    LiveContextNavigation navigation = cache != null
-            ? cache.get(new CommerceContextProviderCacheKey(site, commerceBean))
-            : resolveContextUncached(site, commerceBean);
-
+    LiveContextNavigation navigation = cache.get(new CommerceContextProviderCacheKey(site, commerceBean));
     return Optional.ofNullable(navigation);
   }
 

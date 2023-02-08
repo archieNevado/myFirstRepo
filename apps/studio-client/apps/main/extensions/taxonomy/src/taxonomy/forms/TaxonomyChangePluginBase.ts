@@ -1,6 +1,5 @@
 import session from "@coremedia/studio-client.cap-rest-client/common/session";
 import Content from "@coremedia/studio-client.cap-rest-client/content/Content";
-import Struct from "@coremedia/studio-client.cap-rest-client/struct/Struct";
 import PropertyChangeEvent from "@coremedia/studio-client.client-core/data/PropertyChangeEvent";
 import ValueExpression from "@coremedia/studio-client.client-core/data/ValueExpression";
 import ValueExpressionFactory from "@coremedia/studio-client.client-core/data/ValueExpressionFactory";
@@ -9,10 +8,11 @@ import Premular from "@coremedia/studio-client.main.editor-components/sdk/premul
 import Base from "@jangaroo/ext-ts/Base";
 import Component from "@jangaroo/ext-ts/Component";
 import Plugin from "@jangaroo/ext-ts/Plugin";
-import { as, bind, is, mixin } from "@jangaroo/runtime";
+import { as, bind, cast, mixin } from "@jangaroo/runtime";
 import Config from "@jangaroo/runtime/Config";
 import TaxonomyUtil from "../TaxonomyUtil";
 import TaxonomyChangePlugin from "./TaxonomyChangePlugin";
+import Bean from "@coremedia/studio-client.client-core/data/Bean";
 
 interface TaxonomyChangePluginBaseConfig extends Config<Base>, Partial<Pick<TaxonomyChangePluginBase,
   "properties"
@@ -31,6 +31,7 @@ class TaxonomyChangePluginBase extends Base implements Plugin {
   #propertyList: Array<any> = null;
 
   #listeners: Array<any> = [];
+  #subBeans: Bean[] = [];
 
   constructor(config: Config<TaxonomyChangePlugin> = null) {
     super();
@@ -48,6 +49,7 @@ class TaxonomyChangePluginBase extends Base implements Plugin {
       return;
     }
 
+    form.on("beforedestroy", bind(this, this.#removeListeners));
     form.bindTo.addChangeListener(bind(this, this.#contentChanged));
     this.#content = form.bindTo.getValue();
 
@@ -58,32 +60,11 @@ class TaxonomyChangePluginBase extends Base implements Plugin {
     if (this.#propertyList) {
       for (var p of this.#propertyList as string[]) {
         if (p.indexOf(".") !== -1) {
-          /*
-           * Returns a ValueExpression that keeps a String representation
-           * of the annotated link list. This is just a convenient way to
-           * allow the ValueExpression to detect any changes in the link list.
-           */
-          const structListAsStringVE = ValueExpressionFactory.createFromFunction((): string => {
-            const structValue = ValueExpressionFactory.create("properties." + p, this.#content).getValue();
-            if (!structValue) {
-              return undefined;
-            }
-
-            let listAsString = "";
-
-            if (is(structValue, Array)) {
-              structValue.forEach((listEntry: Struct): void => {
-                listAsString = listAsString + listEntry.toJson();
-              });
-            } else {
-              listAsString = "" + structValue;
-            }
-
-            return listAsString;
+          ValueExpressionFactory.create("properties." + p, this.#content).loadValue(structValue => {
+            const subBean = cast(Bean, structValue);
+            subBean.addValueChangeListener(bind(this, this.#propertiesChanged));
+            this.#subBeans.push(subBean);
           });
-
-          structListAsStringVE.addChangeListener(bind(this, this.#propertiesChanged));
-          this.#listeners.push(structListAsStringVE);
         } else {
           const ve = ValueExpressionFactory.create("properties." + p, this.#content);
           ve.addChangeListener(bind(this, this.#propertiesChanged));
@@ -96,10 +77,18 @@ class TaxonomyChangePluginBase extends Base implements Plugin {
   }
 
   #removeListeners(): void {
+    if(this.#subBeans) {
+      this.#subBeans.forEach(bean => {
+        bean.removeValueChangeListener(bind(this, this.#propertiesChanged));
+      });
+      this.#subBeans = [];
+    }
+
     if (this.#propertyList) {
       for (const ve of this.#listeners as ValueExpression[]) {
         ve.removeChangeListener(bind(this, this.#propertiesChanged));
       }
+      this.#listeners = [];
     } else {
       this.#content && this.#content.removeValueChangeListener(bind(this, this.#lazyChange));
     }
@@ -111,7 +100,7 @@ class TaxonomyChangePluginBase extends Base implements Plugin {
     this.#content && this.#content.load(bind(this, this.#addListeners));
   }
 
-  #propertiesChanged(ve: ValueExpression): void {
+  #propertiesChanged(): void {
     this.#checkUpdate();
   }
 
@@ -156,10 +145,6 @@ class TaxonomyChangePluginBase extends Base implements Plugin {
       this.#updateQueue = 0;
       this.#lazyChange();
     }
-  }
-
-  #onTabDestroy(): void {
-    this.#content && this.#content.removeValueChangeListener(bind(this, this.#lazyChange));
   }
 }
 mixin(TaxonomyChangePluginBase, Plugin);

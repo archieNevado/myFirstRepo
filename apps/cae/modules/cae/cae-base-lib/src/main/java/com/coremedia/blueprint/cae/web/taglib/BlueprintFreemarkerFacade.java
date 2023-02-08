@@ -5,8 +5,8 @@ import com.coremedia.blueprint.base.cae.web.taglib.UniqueIdGenerator;
 import com.coremedia.blueprint.base.cae.web.taglib.ViewHookEventNamesFreemarker;
 import com.coremedia.blueprint.base.links.UriConstants;
 import com.coremedia.blueprint.base.settings.SettingsService;
+import com.coremedia.blueprint.base.taxonomies.TaxonomyLocalizationStrategy;
 import com.coremedia.blueprint.cae.action.webflow.BlueprintFlowUrlHandler;
-import com.coremedia.blueprint.cae.handlers.BlobHandler;
 import com.coremedia.blueprint.cae.web.FreemarkerEnvironment;
 import com.coremedia.blueprint.cae.web.links.ThemeResourceLinkBuilder;
 import com.coremedia.blueprint.coderesources.ThemeService;
@@ -19,6 +19,7 @@ import com.coremedia.blueprint.common.contentbeans.CMLocalized;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.blueprint.common.contentbeans.CMPicture;
+import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.blueprint.common.contentbeans.CMTheme;
 import com.coremedia.blueprint.common.contentbeans.Page;
@@ -35,9 +36,7 @@ import com.coremedia.cap.transform.Transformation;
 import com.coremedia.common.util.WordAbbreviator;
 import com.coremedia.image.ImageDimensionsExtractor;
 import com.coremedia.mimetype.MimeTypeService;
-import com.coremedia.objectserver.util.RequestServices;
 import com.coremedia.objectserver.web.UserVariantHelper;
-import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.coremedia.objectserver.web.taglib.MetadataTagSupport;
 import com.coremedia.xml.Markup;
 import com.coremedia.xml.MarkupUtil;
@@ -94,6 +93,7 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
   private ThemeService themeService;
   private ContextHelper contextHelper;
   private DynamicContainerStrategy dynamicContainerStrategy;
+  private TaxonomyLocalizationStrategy taxonomyLocalizationStrategy;
 
   private final ViewHookEventNamesFreemarker viewHookEventNames = new ViewHookEventNamesFreemarker();
 
@@ -122,6 +122,11 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
   @Autowired
   public void setTransformImageService(TransformImageService transformImageService) {
     this.transformImageService = transformImageService;
+  }
+
+  @Autowired
+  public void setTaxonomyLocalizationStrategy(TaxonomyLocalizationStrategy taxonomyLocalizationStrategy) {
+    this.taxonomyLocalizationStrategy = taxonomyLocalizationStrategy;
   }
 
   @Autowired
@@ -671,6 +676,25 @@ public class BlueprintFreemarkerFacade extends MetadataTagSupport {
 
   private static boolean hasItems(PageGridPlacement placement, boolean isInLayout) {
     return isInLayout && !placement.getItems().isEmpty();
+  }
+
+  /**
+   * Returns the value of a translated property
+   * looking it up in the localSettings.translations of the given {@link CMLinkable}.
+   *
+   * @param linkable     the linkable
+   * @param locale       target locale
+   * @param fallback     fallback value that will be returned if no translated value exists
+   * @return
+   */
+  public Object getTranslatedPropertyValue(CMLinkable linkable, Locale locale, Object fallback) {
+    Object value = fallback;
+
+    if(linkable.getContent().getType().isSubtypeOf(CMTaxonomy.NAME)) {
+      value = taxonomyLocalizationStrategy.getDisplayName(linkable.getContent(), locale);
+    }
+
+    return value;
   }
 
   private CMTheme findThemeFor(CMNavigation self) {

@@ -25,6 +25,7 @@ module.exports = jangarooConfig({
           name: "Topic Pages",
           url: "",
           cmAdministrative: true,
+          cmGroups: ["global-manager", "taxonomy-manager", "topic-pages-manager", "developer"],
           cmService: {
             name: "launchSubAppService",
             method: "launchSubApp",

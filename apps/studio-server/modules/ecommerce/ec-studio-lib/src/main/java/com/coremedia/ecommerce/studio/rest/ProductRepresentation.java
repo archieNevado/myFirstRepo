@@ -46,7 +46,6 @@ public class ProductRepresentation extends CommerceBeanRepresentation {
     return longDescription;
   }
 
-  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public String getThumbnailUrl(){
     return thumbnailUrl;
   }

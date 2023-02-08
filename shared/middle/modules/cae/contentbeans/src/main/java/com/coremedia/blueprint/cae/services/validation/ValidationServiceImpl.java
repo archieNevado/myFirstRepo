@@ -5,7 +5,6 @@ import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.blueprint.common.services.validation.Validator;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,6 @@ public class ValidationServiceImpl<T> implements ValidationService<T> {
    *
    * @param validators the list of validators to use
    */
-  @Required
   public void setValidators(List<Validator<T>> validators) {
     this.validators = validators;
   }

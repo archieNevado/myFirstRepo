@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:webflow="http://www.springframework.org/schema/webflow-config"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd
-                           http://www.springframework.org/schema/webflow-config
-                           http://www.springframework.org/schema/webflow-config/spring-webflow-config.xsd
+
+
                            http://www.springframework.org/schema/context
                            https://www.springframework.org/schema/context/spring-context.xsd">
 
@@ -20,13 +19,13 @@
   <import resource="classpath:/com/coremedia/cae/dataview-services.xml"/>
   <import resource="classpath:/com/coremedia/mimetype/mimetype-service.xml"/>
   <import resource="classpath:/com/coremedia/cache/cache-services.xml"/>
-  <import resource="classpath:/com/coremedia/cae/webflow/webflow-services.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/links/bpbase-links-services.xml"/>
   <import resource="classpath:/framework/spring/blueprint-services.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml"/>
   <import resource="classpath:/com/coremedia/cap/multisite/multisite-services.xml"/>
 
   <import resource="blueprint-i18n.xml"/>
+  <import resource="blueprint-l10n.xml"/>
 
   <!-- Java Config -->
   <bean class="com.coremedia.blueprint.cae.config.BlueprintHandlersCaeBaseLibConfiguration"/>
@@ -89,29 +88,4 @@
     <property name="resourceBundleInterceptor" ref="pageResourceBundlesInterceptor"/>
   </bean>
 
-  <!-- Other -->
-  <webflow:flow-registry id="flowRegistry" flow-builder-services="flowBuilderServices">
-    <!--
-      <description>
-        Add this location pattern to flowBuilderServices that are provided by the CAE.
-
-        Custom webflows can be added without customizations to a package
-        "/com/coremedia/blueprint/customername/webflow/".
-
-        Multiple flow-location-pattern may coexist, but only one flow-registry (with the externalId "flowRegistry")
-        is used by the webflow engine.
-
-        If a custom pattern should be registered, it's necessary to "customize:replace" this bean and add
-        both the pattern configured here, and the custom pattern, for example:
-
-        <customize:replace externalId="overwriteFlowRegistry" bean="flowRegistry" custom-ref="myFlowRegistry"/>
-
-        <webflow:flow-registry externalId="myFlowRegistry" flow-builder-services="flowBuilderServices">
-          <webflow:flow-location-pattern value="classpath*:/com/coremedia/blueprint/**/webflow/*.xml"/>
-          <webflow:flow-location-pattern value="classpath*:/my/package/**/*.xml"/>
-        </webflow:flow-registry>
-      </description>
-     -->
-    <webflow:flow-location-pattern value="classpath*:/com/coremedia/blueprint/**/webflow/*.xml"/>
-  </webflow:flow-registry>
 </beans>

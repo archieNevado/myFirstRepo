@@ -8,14 +8,14 @@ import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.content.Content;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.List;
 
 /**
  * A {@link com.coremedia.blueprint.base.navigation.context.finder.ContextFinder} that uses a configured {@link com.coremedia.blueprint.base.navigation.context.finder.ContextFinder}&lt;{@link Content},{@link Content}&gt;
- * delegate to retrieve contexts and generates content beans for those. 
+ * delegate to retrieve contexts and generates content beans for those.
  */
 public class LinkableBeanContextFinder implements ContextFinder<Linkable, Navigation> {
 
@@ -39,18 +39,29 @@ public class LinkableBeanContextFinder implements ContextFinder<Linkable, Naviga
     return findContextsFor(linkable, null);
   }
 
-  @Required
   public void setDelegate(ContextFinder<Content, Content> delegate) {
     this.delegate = delegate;
   }
 
-  @Required
   public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
     this.contentBeanFactory = contentBeanFactory;
   }
 
-  @Required
   public void setDataViewFactory(DataViewFactory dataViewFactory) {
     this.dataViewFactory = dataViewFactory;
   }
+
+  @PostConstruct
+  void initialize() {
+    if (contentBeanFactory == null) {
+      throw new IllegalStateException("Required property not set: contentBeanFactory");
+    }
+    if (dataViewFactory == null) {
+      throw new IllegalStateException("Required property not set: dataViewFactory");
+    }
+    if (delegate == null) {
+      throw new IllegalStateException("Required property not set: delegate");
+    }
+  }
+
 }

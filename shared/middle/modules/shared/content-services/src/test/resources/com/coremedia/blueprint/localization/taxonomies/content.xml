@@ -1,0 +1,25 @@
+<content>
+  <folder id="1" name="">
+    <folder id="11" name="Settings">
+      <folder id="111" name="Options">
+        <folder id="1111" name="Settings">
+          <document id="2" name="TaxonomySettings" type="CMSettings">
+            <version number="1">
+              <markupProperty name="settings" url="settings.xml" grammar="coremedia-struct-2008"/>
+            </version>
+          </document>
+        </folder>
+      </folder>
+      <folder id="3" name="Taxonomies">
+        <folder id="33" name="Subject">
+          <document id="4" name="Article" type="CMTaxonomy">
+            <version number="1">
+              <stringProperty name="value">Article</stringProperty>
+              <markupProperty name="localSettings" url="localSettings.xml" grammar="coremedia-struct-2008"/>
+            </version>
+          </document>
+        </folder>
+      </folder>
+    </folder>
+  </folder>
+</content>

@@ -1,4 +1,3 @@
-version: "3.4"
 # default logging configuration
 x-logging:
   &default-logging
@@ -18,8 +17,6 @@ x-development-boot-envs:
   # that directory to inspect the heapdumps
   HEAP_DUMP_ON_OOM: "${HEAP_DUMP_ON_OOM:-true}"
   JAVA_OPTS: "-Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses -XX:MetaspaceSize=64m -XX:MaxMetaspaceSize=192m -XX:TieredStopAtLevel=1"
-  # the maximum timeout in seconds to wait for service dependencies
-  WAIT_TIMEOUT: 300
 
 services:
   mysql:
@@ -57,12 +54,14 @@ services:
       HEAP_DUMP_FILENAME: content-management-server-heapdump
       # enables the runlevel endpoint. When enabling it, the management port and actuators should be secured.
       MANAGEMENT_ENDPOINT_RUNLEVEL_ENABLED: "true"
-      WAIT_HOSTS: "mysql:3306,solr:8983"
     volumes:
       - heapdumps:/coremedia/heapdumps
+      - /coremedia/log
     depends_on:
-      - mysql
-      - solr
+      mysql:
+        condition: service_healthy
+      solr:
+        condition: service_healthy
 
   master-live-server:
     ports:
@@ -82,11 +81,12 @@ services:
       HEAP_DUMP_FILENAME: master-live-server-heapdump
       # enables the runlevel endpoint. When enabling it, the management port and actuators should be secured.
       MANAGEMENT_ENDPOINT_RUNLEVEL_ENABLED: "true"
-      WAIT_HOSTS: "mysql:3306"
     volumes:
       - heapdumps:/coremedia/heapdumps
+      - /coremedia/log
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
 
   workflow-server:
     ports:
@@ -107,13 +107,16 @@ services:
       SQL_STORE_USER: cm_management
       SQL_STORE_PASSWORD: cm_management
       HEAP_DUMP_FILENAME: workflow-server-heapdump
-      WAIT_HOSTS: "content-management-server:${CMS_ORB_PORT:-40183},mysql:3306"
     volumes:
       - heapdumps:/coremedia/heapdumps
+      - /coremedia/log
     depends_on:
-      - mysql
-      - mongodb
-      - content-management-server
+      mysql:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      content-management-server:
+        condition: service_healthy
 
   content-feeder:
     ports:
@@ -124,6 +127,7 @@ services:
       # we mount this volume here and not in backend.yml as we can do this only in a local single machine setup
       - content-feeder-cache:/coremedia/cache
       - heapdumps:/coremedia/heapdumps
+      - /coremedia/log
     environment:
       <<: *development-boot-envs
       REPOSITORY_URL: http://content-management-server:8080/ior
@@ -132,10 +136,11 @@ services:
       HEAP_DUMP_FILENAME: content-feeder-heapdump
       COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_CATALOGVERSION: Staged
       COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_ENVIRONMENT: preview
-      WAIT_HOSTS: "content-management-server:${CMS_ORB_PORT:-40183},solr:8983"
     depends_on:
-      - content-management-server
-      - solr
+      content-management-server:
+        condition: service_healthy
+      solr:
+        condition: service_healthy
 
   cae-feeder-preview:
     ports:
@@ -152,13 +157,16 @@ services:
       JDBC_USER: cm_mcaefeeder
       JDBC_PASSWORD: cm_mcaefeeder
       HEAP_DUMP_FILENAME: cae-feeder-preview-heapdump
-      WAIT_HOSTS: "content-management-server:${CMS_ORB_PORT:-40183},solr:8983,mysql:3306"
     volumes:
       - heapdumps:/coremedia/heapdumps
+      - /coremedia/log
     depends_on:
-      - mysql
-      - solr
-      - content-management-server
+      mysql:
+        condition: service_healthy
+      solr:
+        condition: service_healthy
+      content-management-server:
+        condition: service_healthy
 
   cae-feeder-live:
     ports:
@@ -177,13 +185,16 @@ services:
       JDBC_USER: cm_caefeeder
       JDBC_PASSWORD: cm_caefeeder
       HEAP_DUMP_FILENAME: cae-feeder-live-heapdump
-      WAIT_HOSTS: "master-live-server:${MLS_ORB_PORT:-40283},solr:8983,mysql:3306"
     volumes:
       - heapdumps:/coremedia/heapdumps
+      - /coremedia/log
     depends_on:
-      - mysql
-      - solr
-      - master-live-server
+      mysql:
+        condition: service_healthy
+      solr:
+        condition: service_healthy
+      master-live-server:
+        condition: service_healthy
 
   user-changes:
     ports:
@@ -194,13 +205,15 @@ services:
       <<: *development-boot-envs
       REPOSITORY_URL: http://content-management-server:8080/ior
       HEAP_DUMP_FILENAME: user-changes-heapdump
-      WAIT_HOSTS: "content-management-server:${CMS_ORB_PORT:-40183},workflow-server:${WFS_ORB_PORT:-40383},mongodb:27017"
     volumes:
       - heapdumps:/coremedia/heapdumps
     depends_on:
-      - mongodb
-      - content-management-server
-      - workflow-server
+      mongodb:
+        condition: service_healthy
+      content-management-server:
+        condition: service_healthy
+      workflow-server:
+        condition: service_healthy
 
   elastic-worker:
     ports:
@@ -213,41 +226,49 @@ services:
       ELASTIC_SOLR_URL: http://solr:8983/solr
       TENANT_DEFAULT: helios
       HEAP_DUMP_FILENAME: elastic-worker-heapdump
-      WAIT_HOSTS: "content-management-server:${CMS_ORB_PORT:-40183},solr:8983,mongodb:27017"
     volumes:
       - heapdumps:/coremedia/heapdumps
+      - /coremedia/log
     depends_on:
-      - content-management-server
-      - solr
-      - mongodb
+      content-management-server:
+        condition: service_healthy
+      solr:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
 
   studio-server:
     # we mount this volume here and not in frontend.yml as we can do this only in a local single machine setup
     volumes:
       - studio-cache:/coremedia/cache
       - heapdumps:/coremedia/heapdumps
+      - /coremedia/log
     ports:
       - 41080:8080
       - 41081:8081
       - 41005:5005
     environment:
       EDITORIAL_COMMENTS_DATASOURCE_URL: jdbc:mysql://mysql:3306/cm_editorial_comments?useUnicode=yes&characterEncoding=UTF-8
-
       <<: *development-boot-envs
       HEAP_DUMP_FILENAME: studio-server-heapdump
-      WAIT_HOSTS: "content-management-server:${CMS_ORB_PORT:-40183},workflow-server:${WFS_ORB_PORT:-40383},mongodb:27017,mysql:3306,solr:8983"
     depends_on:
-      - mysql
-      - mongodb
-      - solr
-      - content-management-server
-      - workflow-server
+      mysql:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      solr:
+        condition: service_healthy
+      content-management-server:
+        condition: service_healthy
+      workflow-server:
+        condition: service_healthy
 
   cae-preview:
     # we mount this volume here and not in frontend.yml as we can do this only in a local single machine setup
     volumes:
       - cae-preview-cache:/coremedia/cache
       - heapdumps:/coremedia/heapdumps
+      - /coremedia/log
     ports:
       - 40980:8080
       - 40981:8081
@@ -255,25 +276,32 @@ services:
     environment:
       << : *development-boot-envs
       HEAP_DUMP_FILENAME: cae-preview-heapdump
-      WAIT_HOSTS: "content-management-server:${CMS_ORB_PORT:-40183},solr:8983,mongodb:27017"
     depends_on:
-      - content-management-server
-      - solr
-      - mongodb
+      content-management-server:
+        condition: service_healthy
+      solr:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
 
   replication-live-server:
     # in the dev setup we simply override the startup
     entrypoint: /bin/true
     restart: "no"
+    volumes:
+      - /coremedia/log
     depends_on:
-      - mysql
-      - master-live-server
+      mysql:
+        condition: service_healthy
+      master-live-server:
+        condition: service_healthy
 
   cae-live:
     # we mount this volume here and not in frontend.yml as we can do this only in a local single machine setup
     volumes:
       - cae-live-cache:/coremedia/cache
       - heapdumps:/coremedia/heapdumps
+      - /coremedia/log
     ports:
       - 42180:8080
       - 42181:8081
@@ -286,14 +314,16 @@ services:
       # this file is listed after the compose/default.yml in the COMPOSE_FILE environment variable
       REPOSITORY_URL: http://master-live-server:8080/ior
       HEAP_DUMP_FILENAME: cae-live-heapdump
-      WAIT_HOSTS: "master-live-server:${MLS_ORB_PORT:-40283},solr:8983,mongodb:27017"
     command:
       - enable-sitemap-generation
       - application
     depends_on:
-      - master-live-server
-      - solr
-      - mongodb
+      master-live-server:
+        condition: service_healthy
+      solr:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
 
   management-tools:
     image: ${REPOSITORY_PREFIX:-coremedia}/management-tools:${MANAGEMENT_TOOLS_TAG:-latest}
@@ -321,9 +351,6 @@ services:
       THEMES_ARCHIVE_URL: "${THEMES_ARCHIVE_URL:-/coremedia/import/frontend.zip}"
       # configure the tools against the content-management-server
       CONFD_PREFIX: "dev/management"
-      WAIT_HOSTS: "content-management-server:${CMS_ORB_PORT:-40183},master-live-server:${MLS_ORB_PORT:-40283},workflow-server:${WFS_ORB_PORT:-40383}"
-      # the maximum timeout in seconds to wait for service dependencies
-      WAIT_TIMEOUT: 300
       # set to either console|log|null
       OUTPUT_REDIRECT: ${OUTPUT_REDIRECT:-console}
       # increases verbosity of CoreMedia tools application runtime, not the tool itself
@@ -339,6 +366,13 @@ services:
     ]
     volumes:
       - heapdumps:/coremedia/heapdumps
+    depends_on:
+      content-management-server:
+        condition: service_healthy
+      master-live-server:
+        condition: service_healthy
+      workflow-server:
+        condition: service_healthy
 
   headless-server-preview:
     ports:
@@ -360,14 +394,15 @@ services:
       HEAP_DUMP_FILENAME: headless-server-preview-heapdump
       COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_CATALOGVERSION: Staged
       COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_ENVIRONMENT: preview
-      WAIT_HOSTS: "content-management-server:${CMS_ORB_PORT:-40183},solr:8983,mongodb:27017"
-
     volumes:
       - heapdumps:/coremedia/heapdumps
       - headless-server-preview-cache:/coremedia/cache
+      - /coremedia/log
     depends_on:
-      - content-management-server
-      - solr
+      content-management-server:
+        condition: service_healthy
+      solr:
+        condition: service_healthy
 
   headless-server-live:
     ports:
@@ -387,13 +422,15 @@ services:
       BLUEPRINT_SITE_MAPPING_SFRA: //sfra.${ENVIRONMENT_FQDN:-docker.localhost}
       HEAP_DUMP_FILENAME: headless-server-live-heapdump
       COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_ENVIRONMENT: live
-      WAIT_HOSTS: "master-live-server:${MLS_ORB_PORT:-40283},solr:8983,mongodb:27017"
     volumes:
       - heapdumps:/coremedia/heapdumps
       - headless-server-live-cache:/coremedia/cache
+      - /coremedia/log
     depends_on:
-      - master-live-server
-      - solr
+      master-live-server:
+        condition: service_healthy
+      solr:
+        condition: service_healthy
 
   overview:
     image: ${REPOSITORY_PREFIX:-coremedia}/overview

@@ -22,9 +22,9 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.servlet.HandlerInterceptor;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.ZonedDateTime;
@@ -33,7 +33,7 @@ import java.util.Optional;
 /**
  * Initializes the StoreContextProvider according to the current request.
  */
-public abstract class AbstractCommerceContextInterceptor extends HandlerInterceptorAdapter {
+public abstract class AbstractCommerceContextInterceptor implements HandlerInterceptor {
 
   private static final Logger LOG = LoggerFactory.getLogger(AbstractCommerceContextInterceptor.class);
 
@@ -63,14 +63,22 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
     this.initUserContext = initUserContext;
   }
 
-  @Required
   public void setSiteResolver(SiteResolver siteResolver) {
     this.siteResolver = siteResolver;
   }
 
-  @Required
   public void setCommerceConnectionSupplier(CommerceConnectionSupplier commerceConnectionSupplier) {
     this.commerceConnectionSupplier = commerceConnectionSupplier;
+  }
+
+  @PostConstruct
+  void initialize() {
+    if (commerceConnectionSupplier == null) {
+      throw new IllegalStateException("Required property not set: commerceConnectionSupplier");
+    }
+    if (siteResolver == null) {
+      throw new IllegalStateException("Required property not set: siteResolver");
+    }
   }
 
   // --- HandlerInterceptor -----------------------------------------
@@ -128,10 +136,7 @@ public abstract class AbstractCommerceContextInterceptor extends HandlerIntercep
   }
 
   @Override
-  public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-          throws Exception {
-    super.afterCompletion(request, response, handler, ex);
-
+  public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
     CurrentStoreContext.remove();
     CurrentUserContext.remove();
   }

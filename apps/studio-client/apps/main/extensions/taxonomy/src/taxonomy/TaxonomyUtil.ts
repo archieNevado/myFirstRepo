@@ -5,7 +5,8 @@ import ValueExpression from "@coremedia/studio-client.client-core/data/ValueExpr
 import ValueExpressionFactory from "@coremedia/studio-client.client-core/data/ValueExpressionFactory";
 import beanFactory from "@coremedia/studio-client.client-core/data/beanFactory";
 import EventUtil from "@coremedia/studio-client.client-core/util/EventUtil";
-import StudioConfigurationUtil from "@coremedia/studio-client.ext.cap-base-components/util/config/StudioConfigurationUtil";
+import StudioConfigurationUtil
+  from "@coremedia/studio-client.ext.cap-base-components/util/config/StudioConfigurationUtil";
 import BeanRecord from "@coremedia/studio-client.ext.ui-components/store/BeanRecord";
 import EditorMainView from "@coremedia/studio-client.main.editor-components/sdk/desktop/EditorMainView";
 import WorkArea from "@coremedia/studio-client.main.editor-components/sdk/desktop/WorkArea";

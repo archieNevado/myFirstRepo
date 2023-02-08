@@ -1,11 +1,11 @@
 package com.coremedia.blueprint.analytics.elastic.rest;
 
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @ImportResource(value = {
         "classpath:/com/coremedia/cap/common/uapi-services.xml",
         "classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml",

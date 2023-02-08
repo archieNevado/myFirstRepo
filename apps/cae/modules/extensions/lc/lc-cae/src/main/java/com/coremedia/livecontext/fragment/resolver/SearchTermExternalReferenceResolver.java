@@ -28,8 +28,6 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,7 +44,7 @@ import java.util.concurrent.TimeUnit;
  * <p>The implementation uses a search engine to find matching content for the search term. The search engine is
  * configured in {@link #setSearchResultFactory(SearchResultFactory)}.
  */
-public class SearchTermExternalReferenceResolver extends ExternalReferenceResolverBase implements InitializingBean {
+public class SearchTermExternalReferenceResolver extends ExternalReferenceResolverBase {
   private static final Logger LOG = LoggerFactory.getLogger(SearchTermExternalReferenceResolver.class);
 
   public static final String PREFIX = "cm-searchterm:";
@@ -75,8 +73,6 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
     this.cacheForSeconds = cacheConfigurationProperties.getTimeoutSeconds().getOrDefault(CACHE_CLASS,60L);
   }
 
-  // --- configuration ----------------------------------------------
-
   /**
    * Sets the cache to use for caching external reference resolution.
    *
@@ -85,9 +81,7 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
    *
    * @param cache cache
    */
-  @Required
   public void setCache(@NonNull Cache cache) {
-    Objects.requireNonNull(cache);
     this.cache = cache;
   }
 
@@ -97,9 +91,7 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
    *
    * @param navigationTreeRelation navigation tree relation
    */
-  @Required
   public void setNavigationTreeRelation(@NonNull TreeRelation<Content> navigationTreeRelation) {
-    Objects.requireNonNull(navigationTreeRelation);
     this.navigationTreeRelation = navigationTreeRelation;
   }
 
@@ -108,9 +100,7 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
    *
    * @param searchResultFactory the {@link SearchResultFactory}
    */
-  @Required
   public void setSearchResultFactory(@NonNull SearchResultFactory searchResultFactory) {
-    Objects.requireNonNull(searchResultFactory);
     this.searchResultFactory = searchResultFactory;
   }
 
@@ -130,7 +120,6 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
    * @throws IllegalArgumentException if the path starts with a slash
    */
   public void setSegmentPath(@NonNull String segmentPath) {
-    Objects.requireNonNull(segmentPath);
     Preconditions.checkArgument(!segmentPath.startsWith("/"),
             "Segment path must be relative and not start with a slash: " + segmentPath);
     this.segmentPath = segmentPath;
@@ -144,9 +133,7 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
    *
    * @param contentType content type name
    */
-  @Required
   public void setContentType(@NonNull String contentType) {
-    Objects.requireNonNull(contentType);
     this.contentType = contentType;
   }
 
@@ -157,15 +144,27 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
    *
    * @param field field to search in
    */
-  @Required
   public void setField(@NonNull String field) {
-    Objects.requireNonNull(field);
     this.field = field;
   }
 
   @Override
-  public void afterPropertiesSet() {
-    ContentType type = contentRepository.getContentType(contentType);
+  protected void initialize() {
+    super.initialize();
+    if (cache == null) {
+      throw new IllegalStateException("Required property not set: cache");
+    }
+    if (contentType == null) {
+      throw new IllegalStateException("Required property not set: contentType");
+    }
+    if (field == null) {
+      throw new IllegalStateException("Required property not set: field");
+    }
+    if (searchResultFactory == null) {
+      throw new IllegalStateException("Required property not set: searchResultFactory");
+    }
+
+    ContentType type = getContentRepository().getContentType(contentType);
     if (type == null) {
       throw new IllegalStateException("The configured content type '" + contentType + "' does not exist.");
     }
@@ -176,8 +175,6 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
       escapedContentTypes.add(escapeLiteralForSearch(subtype.getName()));
     }
   }
-
-  // --- interface --------------------------------------------------
 
   @Nullable
   @Override
@@ -247,7 +244,7 @@ public class SearchTermExternalReferenceResolver extends ExternalReferenceResolv
       return null;
     }
 
-    QueryService queryService = contentRepository.getQueryService();
+    QueryService queryService = getContentRepository().getQueryService();
     Iterator<String> it = segments.iterator();
     while (it.hasNext() && context != null) {
       String segment = it.next();

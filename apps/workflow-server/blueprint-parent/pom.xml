@@ -32,13 +32,12 @@
     <maven.compiler.release>11</maven.compiler.release>
     <sonar.java.source>${maven.compiler.release}</sonar.java.source>
     <spring-boot-maven-plugin.layout>JAR</spring-boot-maven-plugin.layout>
-    <spring-boot-maven-plugin.version>2.5.3</spring-boot-maven-plugin.version>
     <google.api.services.analytics.version>v3-rev99-1.19.0</google.api.services.analytics.version>
     <google.api.services.youtube.version>v3-rev152-1.19.0</google.api.services.youtube.version>
 
     <customer>Blueprint</customer>
 
-    <spring.boot.version>2.6.8</spring.boot.version>
+    <spring-boot.version>2.7.7</spring-boot.version>
     <application-plugin.version>3.0.1</application-plugin.version>
 
     <!--
@@ -73,9 +72,9 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.70</tomcat.embed.version>
-    <cm.workflow-server.core.version>2210.2</cm.workflow-server.core.version>
-    <cm.common.core.version>2210.2</cm.common.core.version>
+    <tomcat.version>9.0.71</tomcat.version>
+    <cm.workflow-server.core.version>2301.1</cm.workflow-server.core.version>
+    <cm.common.core.version>2301.1</cm.common.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
     <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
 
@@ -293,12 +292,6 @@
       </dependency>
 
       <dependency>
-        <groupId>org.skyscreamer</groupId>
-        <artifactId>jsonassert</artifactId>
-        <version>1.2.1</version>
-      </dependency>
-
-      <dependency>
         <groupId>org.codehaus.groovy</groupId>
         <artifactId>groovy-all</artifactId>
         <version>2.4.21</version>
@@ -309,32 +302,22 @@
       <dependency>
         <groupId>org.apache.tomcat.embed</groupId>
         <artifactId>tomcat-embed-core</artifactId>
-        <version>${tomcat.embed.version}</version>
+        <version>${tomcat.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.tomcat.embed</groupId>
         <artifactId>tomcat-embed-el</artifactId>
-        <version>${tomcat.embed.version}</version>
+        <version>${tomcat.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.tomcat.embed</groupId>
         <artifactId>tomcat-embed-websocket</artifactId>
-        <version>${tomcat.embed.version}</version>
+        <version>${tomcat.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.tomcat.embed</groupId>
         <artifactId>tomcat-embed-jasper</artifactId>
-        <version>${tomcat.embed.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-actuator</artifactId>
-        <version>${spring.boot.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-actuator-autoconfigure</artifactId>
-        <version>${spring.boot.version}</version>
+        <version>${tomcat.version}</version>
       </dependency>
       <dependency>
         <groupId>com.coremedia.cms</groupId>
@@ -502,7 +485,7 @@
         <plugin>
           <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-maven-plugin</artifactId>
-          <version>${spring-boot-maven-plugin.version}</version>
+          <version>${spring-boot.version}</version>
         </plugin>
 
         <plugin>
@@ -611,23 +594,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
         <executions>
-          <execution>
-            <id>enforce-no-web-fragments</id>
-            <!-- web-fragments have been converted to java (spring) config -->
-            <configuration>
-              <rules>
-                <requireFilesDontExist>
-                  <files>
-                    <file>${project.basedir}/src/main/resources/META-INF/web-fragment.xml</file>
-                  </files>
-                </requireFilesDontExist>
-              </rules>
-            </configuration>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <phase>validate</phase>
-          </execution>
           <execution>
             <id>enforce-versions</id>
             <phase>validate</phase>

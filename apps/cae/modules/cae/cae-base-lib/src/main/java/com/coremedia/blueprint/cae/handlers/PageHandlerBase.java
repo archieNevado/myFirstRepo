@@ -1,6 +1,5 @@
 package com.coremedia.blueprint.cae.handlers;
 
-import com.coremedia.blueprint.base.links.ContentLinkBuilder;
 import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.blueprint.cae.constants.RequestAttributeConstants;
 import com.coremedia.blueprint.cae.contentbeans.PageImpl;
@@ -24,7 +23,6 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -53,39 +51,50 @@ public abstract class PageHandlerBase extends HandlerBase implements BeanFactory
 
   private Cache cache;
 
-  // --- configuration ----------------------------------------------
-
   @Override
   public void setBeanFactory(BeanFactory beanFactory) {
     this.beanFactory = beanFactory;
   }
 
-  @Required
   public void setContextHelper(ContextHelper contextHelper) {
     this.contextHelper = contextHelper;
   }
 
-  @Required
   public void setNavigationSegmentsUriHelper(NavigationSegmentsUriHelper navigationSegmentsUriHelper) {
     this.navigationSegmentsUriHelper = navigationSegmentsUriHelper;
   }
 
-  @Required
   public void setSitesService(SitesService sitesService) {
     this.sitesService = sitesService;
   }
 
-  @Required
   public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
     this.contentBeanFactory = contentBeanFactory;
   }
 
-  @Required
   public void setCache(Cache cache) {
     this.cache = cache;
   }
 
-  // --- features ---------------------------------------------------
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (cache == null) {
+      throw new IllegalStateException("Required property not set: cache");
+    }
+    if (contentBeanFactory == null) {
+      throw new IllegalStateException("Required property not set: contentBeanFactory");
+    }
+    if (contextHelper == null) {
+      throw new IllegalStateException("Required property not set: contextHelper");
+    }
+    if (navigationSegmentsUriHelper == null) {
+      throw new IllegalStateException("Required property not set: navigationSegmentsUriHelper");
+    }
+    if (sitesService == null) {
+      throw new IllegalStateException("Required property not set: sitesService");
+    }
+  }
 
   protected BeanFactory getBeanFactory() {
     return beanFactory;
@@ -105,10 +114,6 @@ public abstract class PageHandlerBase extends HandlerBase implements BeanFactory
 
   protected SitesService getSitesService() {
     return sitesService;
-  }
-
-  protected ContentLinkBuilder getContentLinkBuilder() {
-    return contentLinkBuilder;
   }
 
   /**

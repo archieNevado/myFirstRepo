@@ -1,9 +1,9 @@
 package com.coremedia.blueprint.elastic.social.cae.tenant;
 
-import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
 import com.coremedia.blueprint.base.elastic.tenant.TenantSiteMapping;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.elastic.core.api.tenant.TenantService;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,16 +1,14 @@
 package com.coremedia.cms.content_feeder.blueprint.validators;
 
-import com.coremedia.cms.middle.blueprint.validators.ValidatorsConfiguration;
+import com.coremedia.cms.middle.blueprint.validators.ValidatorsAutoConfiguration;
 import com.coremedia.springframework.customizer.Customize;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * Customizations of Validators for the Content Feeder.
  */
-@AutoConfigureAfter(ValidatorsConfiguration.class)
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration(after = ValidatorsAutoConfiguration.class)
 public class ContentFeederValidatorsAutoConfiguration {
 
   /**

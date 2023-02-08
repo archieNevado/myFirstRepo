@@ -14,8 +14,8 @@ import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,32 +56,44 @@ public class DownloadPortalFactory {
 
   private DownloadPortalSearchService downloadPortalSearchService;
 
-  @Required
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
   }
 
-  @Required
   public void setDownloadPortalSearchService(DownloadPortalSearchService downloadPortalSearchService) {
     this.downloadPortalSearchService = downloadPortalSearchService;
   }
 
-  @Required
   public void setDataViewFactory(DataViewFactory dataViewFactory) {
     this.dataViewFactory = dataViewFactory;
   }
 
-  @Required
   public void setContentRepository(ContentRepository contentRepository) {
     this.contentRepository = contentRepository;
   }
 
-
-  @Required
   public void setMimeTypeService(MimeTypeService mimeTypeService) {
     this.mimeTypeService = mimeTypeService;
   }
 
+  @PostConstruct
+  void initialize() {
+    if (contentRepository == null) {
+      throw new IllegalStateException("Required property not set: contentRepository");
+    }
+    if (dataViewFactory == null) {
+      throw new IllegalStateException("Required property not set: dataViewFactory");
+    }
+    if (downloadPortalSearchService == null) {
+      throw new IllegalStateException("Required property not set: downloadPortalSearchService");
+    }
+    if (mimeTypeService == null) {
+      throw new IllegalStateException("Required property not set: mimeTypeService");
+    }
+    if (settingsService == null) {
+      throw new IllegalStateException("Required property not set: settingsService");
+    }
+  }
 
   /**
    * <p>

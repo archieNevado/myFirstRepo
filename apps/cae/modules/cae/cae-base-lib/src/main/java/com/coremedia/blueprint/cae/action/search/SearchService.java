@@ -26,9 +26,9 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -62,28 +62,40 @@ public class SearchService {
   private ContentRepository contentRepository;
   private SettingsService settingsService;
 
-  @Required
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
   }
 
-  @Required
   public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
     this.contentBeanFactory = contentBeanFactory;
   }
 
-  @Required
   public void setContentRepository(ContentRepository contentRepository) {
     this.contentRepository = contentRepository;
   }
 
-  @Required
   public void setResultFactory(SearchResultFactory resultFactory) {
     this.resultFactory = resultFactory;
   }
 
   public void setHighlightingEnabled(boolean highlightingEnabled) {
     this.highlightingEnabled = highlightingEnabled;
+  }
+
+  @PostConstruct
+  protected void initialize() {
+    if (contentBeanFactory == null) {
+      throw new IllegalStateException("Required property not set: contentBeanFactory");
+    }
+    if (contentRepository == null) {
+      throw new IllegalStateException("Required property not set: contentRepository");
+    }
+    if (resultFactory == null) {
+      throw new IllegalStateException("Required property not set: resultFactory");
+    }
+    if (settingsService == null) {
+      throw new IllegalStateException("Required property not set: settingsService");
+    }
   }
 
   /**

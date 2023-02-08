@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.taxonomies.strategy;
 
+import com.coremedia.blueprint.base.taxonomies.TaxonomyLocalizationStrategy;
 import com.coremedia.blueprint.taxonomies.TaxonomyNode;
 import com.coremedia.blueprint.taxonomies.TaxonomyNodeList;
 import com.coremedia.blueprint.taxonomies.TaxonomyUtil;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -46,7 +48,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
   private static final Logger LOG = LoggerFactory.getLogger(DefaultTaxonomy.class);
 
   private static final int LIMIT = 10;
-  private static final String VALUE = "value";
+  public static final String VALUE = "value";
   private static final String CHILDREN = "children";
 
   private static final String NEW_KEYWORD = "new keyword";
@@ -58,14 +60,21 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
   private final ContentRepository contentRepository;
   private final ContentType taxonomyContentType;
   private final TaxonomyCycleValidator taxonomyCycleValidator;
+  private final TaxonomyLocalizationStrategy taxonomyLocalizationStrategy;
   private final TaxonomyNode root;
   private final Content rootFolder;
 
   private final SearchService searchService;
   private int maxDocumentsPerFolder = 0;
 
-  public DefaultTaxonomy(Content rootFolder, String siteId, ContentType type, ContentRepository contentRepository,
-                         SearchService searchService, TaxonomyCycleValidator taxonomyCycleValidator, int documentsPerFolder) {
+  public DefaultTaxonomy(Content rootFolder,
+                         String siteId,
+                         ContentType type,
+                         ContentRepository contentRepository,
+                         SearchService searchService,
+                         TaxonomyCycleValidator taxonomyCycleValidator,
+                         TaxonomyLocalizationStrategy taxonomyLocalizationStrategy,
+                         int documentsPerFolder) {
     super(rootFolder.getName(), siteId);
 
     this.rootFolder = rootFolder;
@@ -73,6 +82,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     this.searchService = searchService;
     this.taxonomyContentType = type;
     this.taxonomyCycleValidator = taxonomyCycleValidator;
+    this.taxonomyLocalizationStrategy = taxonomyLocalizationStrategy;
 
     // Constructor Calls Overridable Method
     root = createEmptyNode();
@@ -240,9 +250,24 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
    */
   protected boolean shouldMatchBeDisplayed(@NonNull Content match, @NonNull String text) {
     String nodeName = getNodeName(match);
-    return StringUtils.containsIgnoreCase(match.getName(), text) ||
+
+    if(StringUtils.containsIgnoreCase(match.getName(), text) ||
             StringUtils.containsIgnoreCase(match.getString(VALUE), text) ||
-            StringUtils.containsIgnoreCase(nodeName, text);
+            StringUtils.containsIgnoreCase(nodeName, text)) {
+      return true;
+    }
+
+    if(this.taxonomyLocalizationStrategy != null && this.taxonomyLocalizationStrategy.isSearchAllLocalesEnabled()) {
+      List<Locale> supportedLocales = this.taxonomyLocalizationStrategy.getSupportedLocales();
+      for (Locale supportedLocale : supportedLocales) {
+        String localizedValue = this.taxonomyLocalizationStrategy.getDisplayName(match, supportedLocale);
+        if(StringUtils.equalsAnyIgnoreCase(localizedValue, text)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   @Override
@@ -867,6 +892,10 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
 
   @NonNull
   protected String getNodeName(@NonNull Content content) {
+    if(this.taxonomyLocalizationStrategy != null) {
+      return taxonomyLocalizationStrategy.getDisplayName(content, null);
+    }
+
     String name = content.getString(VALUE);
     if (Strings.isNullOrEmpty(name)) {
       name = content.getName();

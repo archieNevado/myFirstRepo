@@ -14,7 +14,11 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
+import com.coremedia.id.IdProvider;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
+import com.coremedia.objectserver.view.RichtextToHtmlFilterFactory;
+import com.coremedia.objectserver.view.XmlFilterFactory;
+import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -61,7 +65,6 @@ public class MergedCssResourcesViewTest {
           value = {
                   CONTENT_BEAN_FACTORY,
                   "classpath:/framework/spring/blueprint-contentbeans.xml",
-                  "classpath:spring/test/dummy-views.xml",
           },
           reader = ResourceAwareXmlBeanDefinitionReader.class
   )
@@ -80,6 +83,22 @@ public class MergedCssResourcesViewTest {
     @Scope(SCOPE_SINGLETON)
     public XmlUapiConfig xmlUapiConfig() {
       return new XmlUapiConfig(CONTENT_REPOSITORY);
+    }
+
+    @Bean
+    RichtextToHtmlFilterFactory filterFactory(IdProvider idProvider, LinkFormatter linkFormatter) {
+      var factory = new RichtextToHtmlFilterFactory();
+      factory.setIdProvider(idProvider);
+      factory.setLinkFormatter(linkFormatter);
+      return factory;
+    }
+
+    @Bean
+    MergeableResourcesView mergeableResourcesView(XmlFilterFactory factory) {
+      var view = new MergeableResourcesView();
+      view.setXmlFilterFactory(factory);
+      view.setContentType("text/css");
+      return view;
     }
   }
 

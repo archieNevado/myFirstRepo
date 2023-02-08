@@ -1,9 +1,9 @@
 package com.coremedia.blueprint.assets.cae;
 
 import com.coremedia.blueprint.assets.contentbeans.AMAsset;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;

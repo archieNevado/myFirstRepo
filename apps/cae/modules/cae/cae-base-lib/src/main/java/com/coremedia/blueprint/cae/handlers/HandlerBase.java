@@ -22,6 +22,7 @@ import org.springframework.web.servlet.support.WebContentGenerator;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.activation.MimeType;
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Collections;
@@ -38,9 +39,9 @@ public abstract class HandlerBase extends WebContentGenerator {
   public static final String FRAGMENT_PREVIEW = "fragmentPreview";
 
   protected static final Logger LOG = LoggerFactory.getLogger(HandlerBase.class);
-  protected ContentLinkBuilder contentLinkBuilder;
-  protected UrlPathFormattingHelper urlPathFormattingHelper;
 
+  private ContentLinkBuilder contentLinkBuilder;
+  private UrlPathFormattingHelper urlPathFormattingHelper;
   private MimeTypeService mimeTypeService;
   private DataViewFactory dataViewFactory;
   private ContentBeanIdConverter contentBeanIdConverter = new ContentBeanIdConverter();
@@ -48,11 +49,9 @@ public abstract class HandlerBase extends WebContentGenerator {
   private CaeConfigurationProperties caeConfigurationProperties;
 
   @Autowired
-  public void setDeliveryConfigurationProperties(CaeConfigurationProperties deliveryConfigurationProperties) {
-    this.caeConfigurationProperties = deliveryConfigurationProperties;
+  public void setCaeConfigurationProperties(CaeConfigurationProperties caeConfigurationProperties) {
+    this.caeConfigurationProperties = caeConfigurationProperties;
   }
-
-  // --- Spring Config -------------------------------------------------------------------------------------------------
 
   public void setMimeTypeService(MimeTypeService mimeTypeService) {
     this.mimeTypeService = mimeTypeService;
@@ -94,7 +93,37 @@ public abstract class HandlerBase extends WebContentGenerator {
     return caeConfigurationProperties.isSingleNode();
   }
 
-  // ===================================================================================================================
+  protected MimeTypeService getMimeTypeService() {
+    return mimeTypeService;
+  }
+
+  protected DataViewFactory getDataViewFactory() {
+    return dataViewFactory;
+  }
+
+  protected ContentLinkBuilder getContentLinkBuilder() {
+    return contentLinkBuilder;
+  }
+
+  protected UrlPathFormattingHelper getUrlPathFormattingHelper() {
+    return urlPathFormattingHelper;
+  }
+
+  @PostConstruct
+  protected void initialize() {
+    if (contentLinkBuilder == null) {
+      throw new IllegalStateException("Required property not set: contentLinkBuilder");
+    }
+    if (dataViewFactory == null) {
+      throw new IllegalStateException("Required property not set: dataViewFactory");
+    }
+    if (mimeTypeService == null) {
+      throw new IllegalStateException("Required property not set: mimeTypeService");
+    }
+    if (urlPathFormattingHelper == null) {
+      throw new IllegalStateException("Required property not set: urlPathFormattingHelper");
+    }
+  }
 
   /**
    * Either build model with view for the given bean or redirect to the very same bean when the request targets an
@@ -149,18 +178,6 @@ public abstract class HandlerBase extends WebContentGenerator {
     return getExtension(contentType.toString(), fallback);
   }
 
-  protected MimeTypeService getMimeTypeService() {
-    return mimeTypeService;
-  }
-
-  protected DataViewFactory getDataViewFactory() {
-    return dataViewFactory;
-  }
-
-  protected Logger getLogger() {
-    return LOG;
-  }
-
   /**
    * Adds all permitted
    * {@link com.coremedia.objectserver.view.ViewUtils#getParameters(javax.servlet.ServletRequest) cm parameters} to
@@ -185,11 +202,10 @@ public abstract class HandlerBase extends WebContentGenerator {
     }
 
     return source;
-
   }
 
   protected String removeSpecialCharacters(String segment) {
-    return urlPathFormattingHelper==null ? segment : urlPathFormattingHelper.tidyUrlPath(segment);
+    return urlPathFormattingHelper.tidyUrlPath(segment);
   }
 
   public List<String> splitPathInfo(String path) {

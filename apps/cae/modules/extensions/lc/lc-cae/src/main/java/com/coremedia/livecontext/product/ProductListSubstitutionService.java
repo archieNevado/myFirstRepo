@@ -13,8 +13,8 @@ import com.coremedia.objectserver.view.substitution.Substitution;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
@@ -113,8 +113,15 @@ public class ProductListSubstitutionService {
     }
   }
 
-  @Required
   public void setLiveContextNavigationFactory(LiveContextNavigationFactory liveContextNavigationFactory) {
     this.liveContextNavigationFactory = liveContextNavigationFactory;
   }
+
+  @PostConstruct
+  protected void initialize() {
+    if (liveContextNavigationFactory == null) {
+      throw new IllegalStateException("Required property not set: liveContextNavigationFactory");
+    }
+  }
+
 }

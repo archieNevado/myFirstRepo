@@ -12,7 +12,6 @@ import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.view.substitution.SubstitutionRegistry;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,9 +25,6 @@ public abstract class WebflowHandlerBase extends PageHandlerBase {
   private FlowRunner flowRunner;
   private ResourceBundleInterceptor resourceBundleInterceptor;
 
-  // --- spring config -------------------------------------------------------------------------------------------------
-
-  @Required
   public void setFlowRunner(FlowRunner flowRunner) {
     this.flowRunner = flowRunner;
   }
@@ -37,9 +33,19 @@ public abstract class WebflowHandlerBase extends PageHandlerBase {
     return flowRunner;
   }
 
-  @Required
   public void setResourceBundleInterceptor(ResourceBundleInterceptor resourceBundleInterceptor) {
     this.resourceBundleInterceptor = resourceBundleInterceptor;
+  }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (flowRunner == null) {
+      throw new IllegalStateException("Required property not set: flowRunner");
+    }
+    if (resourceBundleInterceptor == null) {
+      throw new IllegalStateException("Required property not set: resourceBundleInterceptor");
+    }
   }
 
   /**

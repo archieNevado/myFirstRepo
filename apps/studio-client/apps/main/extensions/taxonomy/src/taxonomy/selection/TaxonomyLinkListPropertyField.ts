@@ -93,6 +93,7 @@ class TaxonomyLinkListPropertyField extends TaxonomyLinkListPropertyFieldBase {
             selectedPositionsExpression: this$.getSelectedPositionsVE(),
           }),
           new OpenTaxonomyChooserAction({
+            itemId: "openTaxonomyChooser",
             text: TaxonomyStudioPlugin_properties.Taxonomy_action_tooltip,
             tooltip: TaxonomyStudioPlugin_properties.Taxonomy_action_tooltip,
             iconCls: TaxonomyStudioPlugin_properties.Taxonomy_action_icon,

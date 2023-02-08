@@ -530,6 +530,11 @@
           <markupProperty name="settings" url="122settings.xml" grammar="coremedia-struct-2008"/>
         </version>
       </document>
+      <document name="PagegridNavigation2" id="1220" type="CMSettings">
+        <version number="1">
+          <markupProperty name="settings" url="1220settings.xml" grammar="coremedia-struct-2008"/>
+        </version>
+      </document>
       <document name="aChannelsLinkedSetting" id="124" type="CMSettings">
         <version number="1">
           <markupProperty name="settings" url="124settings.xml" grammar="coremedia-struct-2008"/>
@@ -679,6 +684,7 @@
               <link id="10022"/>
               <link id="10024"/>
             </linkProperty>
+            <markupProperty name="localSettings" url="1002settings.xml" grammar="coremedia-struct-2008"/>
           </version>
         </document>
         <document id="10022" name="ChannelA1" type="CMChannel">
@@ -753,7 +759,6 @@
         <document id="1022" name="ChannelC" type="CMChannel">
           <version number="1">
             <stringProperty name="segment" value="ChannelC"/>
-            <markupProperty name="localSettings" url="1022settings.xml" grammar="coremedia-struct-2008"/>
           </version>
         </document>
 

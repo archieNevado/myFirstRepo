@@ -1,7 +1,8 @@
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
   <StructProperty Name="placements_2">
     <Struct>
-      <LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/CMSettings"/>
+      <!-- layout "PagegridNavigation2" with "main" and "sidebar" placements -->
+      <LinkProperty Name="layout" LinkType="coremedia:///cap/contenttype/CMSettings" xlink:href="coremedia:///cap/content/1220"/>
       <StructProperty Name="placements">
         <Struct>
           <StructProperty Name="30">

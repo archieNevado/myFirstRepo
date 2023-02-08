@@ -48,6 +48,8 @@ interface LiveContextStudioPluginValidator_properties {
   Validator_CMChannel_FallbackSegmentReservedCharsFound_text: string;
   Validator_CMChannel_FallbackSegmentReservedPrefix_text: string;
   Validator_CMChannel_FallbackSegmentReservedSuffix_text: string;
+  Validator_possibly_missing_master_reference_from_master_augmentation_text: string;
+  Validator_possibly_missing_master_reference_from_derived_augmentation_text: string;
 }
 
 /**
@@ -92,6 +94,8 @@ const LiveContextStudioPluginValidator_properties: LiveContextStudioPluginValida
   Validator_CMChannel_FallbackSegmentReservedCharsFound_text: "The segment is inherited from the title and will be \"{1}\". But it contains \"{0}\" which is used as internal separator.",
   Validator_CMChannel_FallbackSegmentReservedPrefix_text: "The segment is inherited from the title and will be \"{1}\". But it is not allowed to start with \"{0}\".",
   Validator_CMChannel_FallbackSegmentReservedSuffix_text: "The segment is inherited from the title and will be \"{1}\" But it is not allowed to end with \"{0}\".",
+  Validator_possibly_missing_master_reference_from_master_augmentation_text: "An augmenting content in derived site {0} exists, which may miss a link to this content as its master: {1} (ID: {2}).",
+  Validator_possibly_missing_master_reference_from_derived_augmentation_text: "An augmenting content in master site {0} exists, which should possibly be linked to as master: {1} (ID: {2}). Consider setting an appropriate master version carefully. Most likely the current master version.",
 };
 
 export default LiveContextStudioPluginValidator_properties;

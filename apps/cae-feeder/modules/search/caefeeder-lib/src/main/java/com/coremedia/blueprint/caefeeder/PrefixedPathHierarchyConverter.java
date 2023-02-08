@@ -4,9 +4,9 @@ import com.coremedia.blueprint.base.caefeeder.TreePathKeyFactory;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.feeder.bean.PropertyConverter;
 import com.coremedia.objectserver.beans.ContentBean;
-import org.springframework.beans.factory.annotation.Required;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
+
+import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -52,9 +52,15 @@ public class PrefixedPathHierarchyConverter implements PropertyConverter {
    *
    * @param pathKeyFactory the path key factory
    */
-  @Required
   public void setPathKeyFactory(TreePathKeyFactory<NamedTaxonomy> pathKeyFactory) {
     this.pathKeyFactory = pathKeyFactory;
+  }
+
+  @PostConstruct
+  protected void initialize() {
+    if (pathKeyFactory == null) {
+      throw new IllegalStateException("Required property not set: pathKeyFactory");
+    }
   }
 
   @Override

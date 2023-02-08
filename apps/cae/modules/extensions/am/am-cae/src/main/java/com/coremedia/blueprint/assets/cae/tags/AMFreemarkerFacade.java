@@ -2,10 +2,11 @@ package com.coremedia.blueprint.assets.cae.tags;
 
 import com.coremedia.blueprint.assets.cae.AMUtils;
 import com.coremedia.blueprint.assets.cae.DownloadPortal;
-import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.cae.web.FreemarkerEnvironment;
-import org.springframework.beans.factory.annotation.Required;
+import com.coremedia.cap.multisite.SiteHelper;
+
+import javax.annotation.PostConstruct;
 
 public class AMFreemarkerFacade {
 
@@ -13,14 +14,22 @@ public class AMFreemarkerFacade {
 
   private DownloadPortal downloadPortal;
 
-  @Required
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
   }
 
-  @Required
   public void setDownloadPortal(DownloadPortal downloadPortal) {
     this.downloadPortal = downloadPortal;
+  }
+
+  @PostConstruct
+  void initialize() {
+    if (downloadPortal== null) {
+      throw new IllegalStateException("Required property not set: downloadPortal");
+    }
+    if (settingsService == null) {
+      throw new IllegalStateException("Required property not set: settingsService");
+    }
   }
 
   public DownloadPortal getDownloadPortal() {

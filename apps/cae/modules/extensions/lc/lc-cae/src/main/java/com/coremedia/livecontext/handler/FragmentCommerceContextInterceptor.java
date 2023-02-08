@@ -24,8 +24,8 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
@@ -272,17 +272,14 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
     return Optional.ofNullable(value);
   }
 
-  @Required
   public void setCatalogAliasTranslationService(CatalogAliasTranslationService catalogAliasTranslationService) {
     this.catalogAliasTranslationService = catalogAliasTranslationService;
   }
 
-  @Required
   public void setFragmentContextAccessor(LiveContextContextAccessor fragmentContextAccessor) {
     this.fragmentContextAccessor = fragmentContextAccessor;
   }
 
-  @Required
   public void setLiveContextSiteResolver(LiveContextSiteResolver liveContextSiteResolver) {
     this.liveContextSiteResolver = liveContextSiteResolver;
   }
@@ -314,4 +311,18 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
   public void setContextNameUserGroupIds(String contextNameUserGroupIds) {
     this.contextNameUserGroupIds = contextNameUserGroupIds;
   }
+
+  @PostConstruct
+  protected void initialize() {
+    if (catalogAliasTranslationService == null) {
+      throw new IllegalStateException("Required property not set: catalogAliasTranslationService");
+    }
+    if (fragmentContextAccessor == null) {
+      throw new IllegalStateException("Required property not set: fragmentContextAccessor");
+    }
+    if (liveContextSiteResolver == null) {
+      throw new IllegalStateException("Required property not set: liveContextSiteResolver");
+    }
+  }
+
 }

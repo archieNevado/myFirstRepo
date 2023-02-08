@@ -7,7 +7,8 @@ import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Required;
+
+import javax.annotation.PostConstruct;
 
 /**
  * A utility class for {@link CMContext} determination for a {@link CMLinkable}.
@@ -57,18 +58,29 @@ public class ContextHelper {
 
   // --- configuration ----------------------------------------------
 
-  @Required
   public void setContextStrategy(ContextStrategy<CMLinkable, CMContext> contextStrategy) {
     this.contextStrategy = contextStrategy;
   }
 
-  @Required
   public void setDataViewFactory(DataViewFactory dataViewFactory) {
     this.dataViewFactory = dataViewFactory;
   }
 
-  @Required
   public void setCurrentContextService(CurrentContextService currentContextService) {
     this.currentContextService = currentContextService;
   }
+
+  @PostConstruct
+  void initialize() {
+    if (contextStrategy == null) {
+      throw new IllegalStateException("Required property not set: contextStrategy");
+    }
+    if (currentContextService == null) {
+      throw new IllegalStateException("Required property not set: currentContextService");
+    }
+    if (dataViewFactory == null) {
+      throw new IllegalStateException("Required property not set: dataViewFactory");
+    }
+  }
+
 }

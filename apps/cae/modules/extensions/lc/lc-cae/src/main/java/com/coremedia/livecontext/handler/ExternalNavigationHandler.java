@@ -20,7 +20,6 @@ import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.LinkPostProcessor;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -136,8 +135,6 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
     return doMakeAbsoluteUri(originalUri, liveContextNavigation, linkParameters, request);
   }
 
-  // --------------------  Helper ---------------------------
-
   public boolean useCommerceCategoryLinks(@NonNull Site site) {
     return getSettingsService()
             .getSetting(LIVECONTEXT_POLICY_COMMERCE_CATEGORY_LINKS, Boolean.class, site)
@@ -224,9 +221,6 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
     return Optional.of(uri);
   }
 
-  // --------------- Config -------------------------
-
-  @Required
   public void setProductListSubstitutionService(ProductListSubstitutionService productListSubstitutionService) {
     this.productListSubstitutionService = productListSubstitutionService;
   }
@@ -234,4 +228,16 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
   public void setTreeRelation(TreeRelation<Content> treeRelation) {
     this.treeRelation = treeRelation;
   }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (productListSubstitutionService == null) {
+      throw new IllegalStateException("Required property not set: productListSubstitutionService");
+    }
+    if (treeRelation == null) {
+      throw new IllegalStateException("Required property not set: treeRelation");
+    }
+  }
+
 }

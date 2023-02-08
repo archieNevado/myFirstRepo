@@ -5,8 +5,8 @@ import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.xml.Markup;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;

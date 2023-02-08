@@ -48,6 +48,11 @@ interface TaxonomyStudioPlugin_properties {
   TaxonomySuggestions_empty_text: string;
   TaxonomySuggestions_loading: string;
 /**
+ * L10N
+ */
+  TaxonomyTranslationFields_title: string;
+  TaxonomyTranslationFields_emptyText: string;
+/**
  * Taxonomy LinkList
  */
   TaxonomyLinkList_add_suggestion_action_text: string;
@@ -86,6 +91,12 @@ interface TaxonomyStudioPlugin_properties {
  */
   Location: string;
   Subject: string;
+
+
+/**
+ * Tags l10n
+ */
+  Taxonomy_l10n_title: string;
 }
 
 /**
@@ -133,6 +144,8 @@ const TaxonomyStudioPlugin_properties: TaxonomyStudioPlugin_properties = {
   TaxonomyLinkList_suggestions_title: "Suggested Tags",
   TaxonomyLinkList_title: "Selected Tags",
   TaxonomyLinkList_contextMenu_chooseTag: "Choose tag",
+  TaxonomyTranslationFields_title: "Translations",
+  TaxonomyTranslationFields_emptyText: "Enter the translated value here.",
   Taxonomy_action_icon: CoreIcons_properties.taxonomy,
   Taxonomy_action_tooltip: "Choose tag",
   taxonomy_selection_dialog_title: "Choose a Tag",
@@ -146,6 +159,7 @@ const TaxonomyStudioPlugin_properties: TaxonomyStudioPlugin_properties = {
   Favbar_taxonomies_button_label: "Tags",
   Location: "Location",
   Subject: "Subject",
+  Taxonomy_l10n_title: "Title ({0})",
 };
 
 export default TaxonomyStudioPlugin_properties;

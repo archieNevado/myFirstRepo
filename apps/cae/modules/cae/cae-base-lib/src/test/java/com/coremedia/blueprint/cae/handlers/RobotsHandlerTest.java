@@ -58,7 +58,10 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER
 @ContextConfiguration(classes = RobotsHandlerTest.LocalConfig.class)
 @ActiveProfiles(PROFILE)
 @DirtiesContext(classMode = AFTER_CLASS)
-@TestPropertySource(properties = "delivery.standalone=false")
+@TestPropertySource(properties = {
+        "delivery.standalone=false",
+        "cae.hashing.backward-compatibility=true",
+})
 public class RobotsHandlerTest {
 
   @Configuration(proxyBeanMethods = false)
@@ -68,7 +71,6 @@ public class RobotsHandlerTest {
   @ImportResource(
           value = {
                   "classpath:/com/coremedia/cae/view-error-services.xml",
-                  "classpath:/spring/test/dummy-views.xml",
           },
           reader = ResourceAwareXmlBeanDefinitionReader.class
   )

@@ -9,10 +9,10 @@ import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.PropertyProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import static java.lang.Math.min;
 /**
  * Memorizes the IDs of the last visited pages for the current user - up to the value of listSize (through Spring, default: 3)
  */
-public class LastVisitedInterceptor extends HandlerInterceptorAdapter {
+public class LastVisitedInterceptor implements HandlerInterceptor {
 
   private static final Logger LOG = LoggerFactory.getLogger(LastVisitedInterceptor.class);
   private static final PersonalDataLogger PERSONAL_DATA_LOG = new PersonalDataLogger(LOG);
@@ -40,7 +40,6 @@ public class LastVisitedInterceptor extends HandlerInterceptorAdapter {
    *
    * @param contextName the name of the context
    */
-  @Required
   public void setContextName(String contextName) {
     if(contextName == null) {
       throw new IllegalArgumentException("contextName must not be null");
@@ -62,7 +61,6 @@ public class LastVisitedInterceptor extends HandlerInterceptorAdapter {
    *
    * @param contextCollection the contextCollection to use
    */
-  @Required
   public void setContextCollection(ContextCollection contextCollection) {
     if(contextCollection == null) {
       throw new IllegalArgumentException("contextCollection must not be null");
@@ -77,6 +75,16 @@ public class LastVisitedInterceptor extends HandlerInterceptorAdapter {
    */
   public ContextCollection getContextCollection() {
     return contextCollection;
+  }
+
+  @PostConstruct
+  protected void initialize() {
+    if (contextCollection == null) {
+      throw new IllegalStateException("Required property not set: contextCollection");
+    }
+    if (contextName == null) {
+      throw new IllegalStateException("Required property not set: contextName");
+    }
   }
 
   @Override

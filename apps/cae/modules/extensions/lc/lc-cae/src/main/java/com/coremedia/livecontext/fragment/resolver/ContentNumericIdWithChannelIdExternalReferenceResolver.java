@@ -2,11 +2,8 @@ package com.coremedia.livecontext.fragment.resolver;
 
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.fragment.FragmentParameters;
-import org.springframework.beans.factory.annotation.Required;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
@@ -18,8 +15,6 @@ public class ContentNumericIdWithChannelIdExternalReferenceResolver extends Exte
   public ContentNumericIdWithChannelIdExternalReferenceResolver() {
     super(CONTENT_ID_FRAGMENT_PREFIX);
   }
-
-  // --- interface --------------------------------------------------
 
   @Override
   protected boolean include(@NonNull FragmentParameters fragmentParameters, @NonNull String referenceInfo) {
@@ -54,11 +49,9 @@ public class ContentNumericIdWithChannelIdExternalReferenceResolver extends Exte
     return null;
   }
 
-  // --- internal ---------------------------------------------------
-
   private Content getContentById(FragmentParameters params, String number) {
     String capId = IdHelper.formatContentId(number);
-    return contentRepository.getContent(capId);
+    return getContentRepository().getContent(capId);
   }
 
 }

@@ -18,7 +18,6 @@ import com.coremedia.objectserver.web.links.Link;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,9 +44,16 @@ public class AMAssetPreviewHandler extends PageHandlerBase {
 
   private SettingsService settingsService;
 
-  @Required
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
+  }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (settingsService == null) {
+      throw new IllegalStateException("Required property not set: settingsService");
+    }
   }
 
   @SuppressWarnings("UnusedDeclaration")

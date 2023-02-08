@@ -10,13 +10,12 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.fragment.FragmentParameters;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -66,7 +65,7 @@ public class SeoSegmentExternalReferenceResolver extends ExternalReferenceResolv
     CMLinkable target = (CMLinkable) rootChannel.getVanityUrlMapper().forPattern(vanity);
     if (target != null) {
       // vanity URL found: determine the context for the target in the current site
-      CMContext context = contextHelper.findAndSelectContextFor(rootChannel, target);
+      CMContext context = getContextHelper().findAndSelectContextFor(rootChannel, target);
       Content content = context == null ? siteRootDocument : context.getContent();
       Content linkable = target.getContent();
       LOG.debug("vanity URL found for {} pointing to {}", vanity, linkable);
@@ -105,7 +104,7 @@ public class SeoSegmentExternalReferenceResolver extends ExternalReferenceResolv
     }
 
     LOG.debug("trying to lookup content by numeric id {}", potentialContentIdStr);
-    Content content = contentRepository.getContent(formatContentId(potentialContentIdStr));
+    Content content = getContentRepository().getContent(formatContentId(potentialContentIdStr));
     LOG.debug("numeric id {} resolved to {}", potentialContentIdStr, content);
 
     // validate content
@@ -115,11 +114,6 @@ public class SeoSegmentExternalReferenceResolver extends ExternalReferenceResolv
     return content;
   }
 
-  /**
-   *
-   * @param content
-   * @return
-   */
   private boolean isInvalidLinkable(@NonNull Content content) {
     ContentType type = content.getType();
     return !type.isSubtypeOf(CMLinkable.NAME) || type.isSubtypeOf(CMContext.NAME);
@@ -174,13 +168,23 @@ public class SeoSegmentExternalReferenceResolver extends ExternalReferenceResolv
     return str;
   }
 
-  @Required
   public void setNavigationSegmentsUriHelper(NavigationSegmentsUriHelper navigationSegmentsUriHelper) {
     this.navigationSegmentsUriHelper = navigationSegmentsUriHelper;
   }
 
-  @Required
   public void setUrlPathFormattingHelper(UrlPathFormattingHelper urlPathFormattingHelper) {
     this.urlPathFormattingHelper = urlPathFormattingHelper;
   }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (navigationSegmentsUriHelper == null) {
+      throw new IllegalStateException("Required property not set: navigationSegmentsUriHelper");
+    }
+    if (urlPathFormattingHelper == null) {
+      throw new IllegalStateException("Required property not set: urlPathFormattingHelper");
+    }
+  }
+
 }

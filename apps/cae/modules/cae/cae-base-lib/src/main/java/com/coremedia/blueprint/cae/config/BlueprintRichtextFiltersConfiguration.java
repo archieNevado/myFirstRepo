@@ -8,7 +8,6 @@ import com.coremedia.blueprint.cae.richtext.filter.ImageFilter;
 import com.coremedia.blueprint.cae.richtext.filter.ImgCompletionFilter;
 import com.coremedia.blueprint.cae.richtext.filter.LinkEmbedFilter;
 import com.coremedia.blueprint.cae.richtext.filter.LinkValidationFilter;
-import com.coremedia.blueprint.cae.richtext.filter.P2TagFilter;
 import com.coremedia.blueprint.cae.richtext.filter.ReservedClassToElementConfig;
 import com.coremedia.blueprint.cae.richtext.filter.ReservedClassToElementFilter;
 import com.coremedia.blueprint.cae.richtext.filter.UnsurroundFilter;
@@ -50,7 +49,6 @@ public class BlueprintRichtextFiltersConfiguration {
                                                                                   FilterFactory imgCompletionFilter,
                                                                                   FilterFactory linkEmbedFilter,
                                                                                   FilterFactory imageFilter,
-                                                                                  FilterFactory p2TagFilter,
                                                                                   FilterFactory reservedClassToElementFilter,
                                                                                   FilterFactory appendClassToElementFilter,
                                                                                   FilterFactory unsurroundFilter) {
@@ -65,7 +63,6 @@ public class BlueprintRichtextFiltersConfiguration {
             imageFilter
     ));
     factory.setXmlFilters(List.of(
-            p2TagFilter,
             reservedClassToElementFilter,
             appendClassToElementFilter,
             unsurroundFilter
@@ -157,28 +154,6 @@ public class BlueprintRichtextFiltersConfiguration {
   }
 
   /**
-   * Converts p-paragraphs with formatting that has native HTML elements to their
-   * respective HTML element.
-   */
-  @Bean
-  P2TagFilter p2TagFilter() {
-    P2TagFilter filter = new P2TagFilter();
-    filter.setMapping(Map.of(
-       "p--heading-1", "h1",
-       "p--heading-2", "h2",
-       "p--heading-3", "h3",
-       "p--heading-4", "h4",
-       "p--heading-5", "h5",
-       "p--heading-6", "h6",
-       "p--heading-7", "h7",
-       "p--heading-8", "h8",
-       "p--standard", "p",
-       "p--pre", "pre"
-    ));
-    return filter;
-  }
-
-  /**
    * <p>
    * Converts given elements with given marker class to corresponding HTML
    * element (stripping the marker class).
@@ -204,7 +179,19 @@ public class BlueprintRichtextFiltersConfiguration {
             // <span class="underline"> -> <u>
             ReservedClassToElementConfig.of("span", "underline", "u"),
             // <td class="td--header"> -> <th>
-            ReservedClassToElementConfig.of("td", "td--header", "th")
+            ReservedClassToElementConfig.of("td", "td--header", "th"),
+            // <p class="p--heading-X"> -> <hX>
+            ReservedClassToElementConfig.of("p", "p--heading-1", "h1"),
+            ReservedClassToElementConfig.of("p", "p--heading-2", "h2"),
+            ReservedClassToElementConfig.of("p", "p--heading-3", "h3"),
+            ReservedClassToElementConfig.of("p", "p--heading-4", "h4"),
+            ReservedClassToElementConfig.of("p", "p--heading-5", "h5"),
+            ReservedClassToElementConfig.of("p", "p--heading-6", "h6"),
+            // <p class="p--standard"> -> <p>
+            ReservedClassToElementConfig.of("p", "p--standard", "p"),
+            // <p class="p--pre"> -> <pre>
+            // should be obsolete as CoreMedia Rich Text supports <pre> but mapping exists since ages.
+            ReservedClassToElementConfig.of("p", "p--pre", "pre")
     ));
   }
 
@@ -215,5 +202,4 @@ public class BlueprintRichtextFiltersConfiguration {
   UnsurroundFilter unsurroundFilter() {
     return new UnsurroundFilter();
   }
-
 }

@@ -1,9 +1,9 @@
 package com.coremedia.blueprint.elastic.social.cae.guid;
 
 import com.coremedia.elastic.core.api.settings.Settings;
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.codec.binary.Base64;
 
 import java.math.BigInteger;
 import java.security.KeyFactory;

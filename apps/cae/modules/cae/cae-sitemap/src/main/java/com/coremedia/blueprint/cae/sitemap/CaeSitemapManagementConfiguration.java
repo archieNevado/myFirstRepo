@@ -9,13 +9,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.web.ManagementContextConfiguration;
 import org.springframework.boot.actuate.autoconfigure.web.server.ManagementServerProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.annotation.Order;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @ManagementContextConfiguration(proxyBeanMethods = false)
-@Order(1_000)
 public class CaeSitemapManagementConfiguration {
 
   /**

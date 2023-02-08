@@ -93,7 +93,6 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
-          <mainClass>${spring-boot.mainClass}</mainClass>
           <layers>
             <enabled>true</enabled>
           </layers>
@@ -186,6 +185,10 @@
                   <!--Prometheus Agent Port-->
                   <port>8199</port>
                 </ports>
+                <volumes>
+                  <volume>/coremedia/cache</volume>
+                  <volume>/var/tmp</volume>
+                </volumes>
               </container>
               <extraDirectories>
                 <paths>

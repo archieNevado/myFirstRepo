@@ -7,16 +7,12 @@ import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.layout.DynamizableCMTeasableContainer;
 import com.coremedia.blueprint.common.navigation.Navigation;
-import com.coremedia.cap.common.IdHelper;
-import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,8 +58,6 @@ public class P13NContainerHandler extends PageHandlerBase {
           "/{" + ID_VARIABLE + ":" + PATTERN_NUMBER + "}" +
           "/{" + PROPERTY_PATH_VARIABLE + '}';
 
-  private ContentRepository contentRepository;
-
   /**
    * @param view the name of the view
    *             <p>
@@ -72,12 +66,10 @@ public class P13NContainerHandler extends PageHandlerBase {
    */
   @GetMapping(value = DYNAMIC_CONTAINER_URI_PATTERN)
   public ModelAndView handleRequest(@PathVariable(SEGMENT_ROOT) String context,
-                                            @PathVariable(ID_VARIABLE) int contentId,
-                                            @PathVariable(PROPERTY_PATH_VARIABLE) String propertyPath,
-                                            @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
-                                            HttpServletRequest request) {
-    Content content = contentRepository.getContent(IdHelper.formatContentId(contentId));
-    ContentBean contentBean = getContentBeanFactory().createBeanFor(content, ContentBean.class);
+                                    @org.springframework.lang.Nullable @PathVariable(ID_VARIABLE) ContentBean contentBean,
+                                    @PathVariable(PROPERTY_PATH_VARIABLE) String propertyPath,
+                                    @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
+                                    HttpServletRequest request) {
     Navigation navigation = getNavigation(context);
 
     if (!(contentBean instanceof CMTeasable) || navigation == null) {
@@ -101,16 +93,6 @@ public class P13NContainerHandler extends PageHandlerBase {
             ID_VARIABLE, container.getTeasable().getContentId(),
             PROPERTY_PATH_VARIABLE, container.getPropertyPath() != null ? container.getPropertyPath() : "items"));
   }
-
-  @Required
-  public void setContentRepository(ContentRepository contentRepository) {
-    this.contentRepository = contentRepository;
-  }
-
-  public ContentRepository getContentRepository() {
-    return contentRepository;
-  }
-
 
   @NonNull
   private ModelAndView createModelAndView(@NonNull CMTeasable cmTeasable,

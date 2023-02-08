@@ -4,8 +4,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.web.context.SaveContextOnUpdateOrErrorResponseWrapper;
+import org.springframework.security.web.util.OnCommittedResponseWrapper;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -75,16 +74,16 @@ public class CookieLevelerFilter implements Filter {
     this.cookieDomains = cookieDomain;
   }
 
-  protected static class HttpServletResponseCookieAware extends SaveContextOnUpdateOrErrorResponseWrapper {
+  protected static class HttpServletResponseCookieAware extends OnCommittedResponseWrapper {
     private final String cookieDomain;
 
     HttpServletResponseCookieAware(HttpServletResponse response, String cookieDomain) {
-      super(response, false);
+      super(response);
       this.cookieDomain = cookieDomain;
     }
 
     @Override
-    protected void saveContext(SecurityContext context) {
+    protected void onResponseCommitted() {
     }
 
     @Override

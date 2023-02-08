@@ -4,8 +4,8 @@ package com.coremedia.blueprint.common.contentbeans;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.xml.Markup;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
+
 import java.util.List;
 import java.util.Map;
 

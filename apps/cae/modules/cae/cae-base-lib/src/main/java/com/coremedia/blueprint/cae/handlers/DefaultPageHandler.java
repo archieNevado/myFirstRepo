@@ -18,7 +18,6 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -256,7 +255,7 @@ public class DefaultPageHandler extends PageHandlerBase {
     Content defaultTopicPageChannel = topicPageContextFinder.findDefaultTopicpageChannelFor(taxonomy.getContent(),
             ((CMNavigation) siteContext).getContent());
 
-    return defaultTopicPageChannel == null ? null : urlPathFormattingHelper.getVanityName(defaultTopicPageChannel);
+    return defaultTopicPageChannel == null ? null : getUrlPathFormattingHelper().getVanityName(defaultTopicPageChannel);
   }
 
   @NonNull
@@ -293,23 +292,37 @@ public class DefaultPageHandler extends PageHandlerBase {
 
   // --- configuration ----------------------------------------------
 
-  @Required
   public void setNavigationResolver(NavigationResolver navigationResolver) {
     this.navigationResolver = navigationResolver;
   }
 
-  @Required
   public void setTopicPageContextFinder(TopicpageContextFinder topicPageContextFinder) {
     this.topicPageContextFinder = topicPageContextFinder;
   }
 
-  @Required
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
   }
 
-  @Required
   public void setViewToBean(Map<String, Class> viewToBean) {
     this.viewToBean = viewToBean;
   }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (navigationResolver == null) {
+      throw new IllegalStateException("Required property not set: navigationResolver");
+    }
+    if (settingsService == null) {
+      throw new IllegalStateException("Required property not set: settingsService");
+    }
+    if (topicPageContextFinder == null) {
+      throw new IllegalStateException("Required property not set: topicPageContextFinder");
+    }
+    if (viewToBean == null) {
+      throw new IllegalStateException("Required property not set: viewToBean");
+    }
+  }
+
 }

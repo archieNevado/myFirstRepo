@@ -13,6 +13,7 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.solr.SolrHealthIndicator;
 import org.springframework.boot.actuate.system.DiskSpaceHealthIndicator;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -23,7 +24,7 @@ import org.springframework.util.unit.DataSize;
 import javax.inject.Named;
 import java.io.File;
 
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 public class HealthIndicatorAutoConfiguration {
 
   // by using the @Named annotation we can prevent spring from prefixing the json key in the health servlet with the

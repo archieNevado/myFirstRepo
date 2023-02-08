@@ -13,8 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.InvalidPropertyException;
 import org.springframework.beans.PropertyAccessException;
 import org.springframework.beans.PropertyAccessorFactory;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +40,6 @@ public final class TaxonomyExtractor implements TestContextExtractor {
    *
    * @param map the mapping to set
    */
-  @Required
   public void setPropertyToContextMap(Map<String, String> map) {
     if(map == null || map.isEmpty()) {
       throw new IllegalArgumentException("propertyToContextMap mapping must neither be null nor empty");
@@ -48,12 +47,21 @@ public final class TaxonomyExtractor implements TestContextExtractor {
     this.propertyToContextMap.putAll(map);
   }
 
-  @Required
   public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
     if(contentBeanFactory == null) {
       throw new IllegalArgumentException("contentBeanFactory must not be null");
     }
     this.contentBeanFactory = contentBeanFactory;
+  }
+
+  @PostConstruct
+  void initialize() {
+    if (contentBeanFactory == null) {
+      throw new IllegalStateException("Required property not set: contentBeanFactory");
+    }
+    if (propertyToContextMap.isEmpty()) {
+      throw new IllegalStateException("Required property not set: propertyToContextMap");
+    }
   }
 
   @Override

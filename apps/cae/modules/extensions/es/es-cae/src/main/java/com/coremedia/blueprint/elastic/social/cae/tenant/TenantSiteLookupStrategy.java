@@ -1,8 +1,8 @@
 package com.coremedia.blueprint.elastic.social.cae.tenant;
 
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialPlugin;
-import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.elastic.core.api.servlet.TenantLookupStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

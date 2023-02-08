@@ -9,9 +9,9 @@ import com.coremedia.blueprint.elastic.social.cae.controller.ContributionResult;
 import com.coremedia.objectserver.view.RenderNode;
 import com.coremedia.objectserver.view.events.ViewHookEvent;
 import com.coremedia.objectserver.view.events.ViewHookEventListener;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+
 import javax.inject.Inject;
 import java.util.Collections;
 import java.util.List;

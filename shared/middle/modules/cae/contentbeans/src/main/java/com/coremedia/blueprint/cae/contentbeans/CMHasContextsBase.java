@@ -1,9 +1,7 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
-import com.coremedia.blueprint.common.services.context.CurrentContextService;
 import com.coremedia.blueprint.common.contentbeans.CMHasContexts;
 import com.coremedia.cae.aspect.Aspect;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.Collection;
 import java.util.List;
@@ -15,20 +13,6 @@ import java.util.Map;
  * Should not be changed.
  */
 public abstract class CMHasContextsBase extends CMLinkableImpl implements CMHasContexts {
-
-  private CurrentContextService currentContextService;
-
-  @Required
-  public void setCurrentContextService(CurrentContextService currentContextService) {
-    this.currentContextService = currentContextService;
-  }
-
-  // This should be protected, since it is not meant to be a feature of
-  // a contentbean, but only for internal usage in subclasses.
-  // public only for compatibility reasons.
-  public CurrentContextService getCurrentContextService() {
-    return currentContextService;
-  }
 
   /**
    * Returns the value of the document property {@link #MASTER}.

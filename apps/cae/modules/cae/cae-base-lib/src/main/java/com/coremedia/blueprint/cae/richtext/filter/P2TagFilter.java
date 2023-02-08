@@ -19,7 +19,10 @@ import java.util.Map;
  * www-p--h2 -> h4
  * <p/>
  * This class is XHTML compliant. It will render tags like <p/> instead of <p></p>
+ * @deprecated since 2301. Configuration {@link com.coremedia.blueprint.cae.config.BlueprintRichtextFiltersConfiguration}
+ * changed to use {@link ReservedClassToElementFilter}.
  */
+@Deprecated(since = "2301")
 public class P2TagFilter extends Filter implements FilterFactory {
   private static final Attributes EMPTY_ATTRIBUTES = new AttributesImpl();
 

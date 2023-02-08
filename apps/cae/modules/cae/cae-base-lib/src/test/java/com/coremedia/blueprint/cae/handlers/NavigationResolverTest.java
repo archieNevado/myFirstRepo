@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -38,6 +39,9 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_SING
 @ContextConfiguration(classes = NavigationResolverTest.LocalConfig.class)
 @WebAppConfiguration
 @ActiveProfiles(PROFILE)
+@TestPropertySource(properties = {
+        "cae.hashing.backward-compatibility=true",
+})
 public class NavigationResolverTest {
   @Configuration(proxyBeanMethods = false)
   @EnableConfigurationProperties({

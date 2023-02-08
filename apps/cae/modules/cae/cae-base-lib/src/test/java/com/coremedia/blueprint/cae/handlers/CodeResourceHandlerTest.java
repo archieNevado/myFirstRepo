@@ -31,6 +31,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MvcResult;
@@ -64,6 +65,9 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER
 @ContextConfiguration(classes = CodeResourceHandlerTest.LocalConfig.class)
 @ActiveProfiles(PROFILE)
 @DirtiesContext(classMode = AFTER_CLASS)
+@TestPropertySource(properties = {
+        "cae.hashing.backward-compatibility=true",
+})
 public class CodeResourceHandlerTest {
 
   @Configuration(proxyBeanMethods = false)
@@ -89,6 +93,7 @@ public class CodeResourceHandlerTest {
   // package directories.
 
   private static final String LINK_TO_SINGLE_RESOURCE = "/" + PREFIX_RESOURCE + "/com/coremedia/blueprint/cae/handlers/coderesource/js/my-cústom-40-2.js";
+  private static final String LINK_TO_SINGLE_CSS_RESOURCE = "/" + PREFIX_RESOURCE + "/com/coremedia/blueprint/cae/handlers/coderesource/css/my-cústom-52-1.css";
   private static final String ENCODED_LINK_TO_SINGLE_RESOURCE = "/" + PREFIX_RESOURCE + "/com/coremedia/blueprint/cae/handlers/coderesource/js/my-c%C3%BAstom-40-2.js";
   private static final String LINK_TO_NOT_LOCAL_RESOURCE = "/" + PREFIX_RESOURCE + "/com/coremedia/blueprint/cae/handlers/coderesource/js/not-local-42-3.js";
 
@@ -225,7 +230,20 @@ public class CodeResourceHandlerTest {
   public void testHandleLocalResourcesLink() throws Exception {
     testling.setLocalResourcesEnabled(true);
     ModelAndView mav = requestTestHelper.request(LINK_TO_SINGLE_RESOURCE);
-    checkLocalResourceModel(mav);
+    checkLocalResourceModel(mav, "application/javascript", "//this file is for testing purposes");
+  }
+
+  /**
+   * Regression Test for CMS-22433.
+   * <p>
+   * Guessing the mimeType by file content for a css file containing "jQuery" leads to application/javascript.
+   * To this end mimeType is now (again) guessed from file extension in CodeResourceHandler.
+   */
+  @Test
+  public void testCorrectMimeTypeForHandleLocalResourcesLink() throws Exception {
+    testling.setLocalResourcesEnabled(true);
+    ModelAndView mav = requestTestHelper.request(LINK_TO_SINGLE_CSS_RESOURCE);
+    checkLocalResourceModel(mav, "text/css", "/*! jQuery UI ...*/\n");
   }
 
   /**
@@ -298,19 +316,17 @@ public class CodeResourceHandlerTest {
     checkModelAndView(mav, MARKUP_PROGRAMMED_VIEW_NAME, Markup.class);
   }
 
-  private void checkLocalResourceModel(ModelAndView mav) throws IOException {
+  private void checkLocalResourceModel(ModelAndView mav, String expectedMimetype, String expectedContent) throws IOException {
     checkModelAndView(mav, null, Blob.class);
 
     Blob blob = (Blob) HandlerHelper.getRootModel(mav);
 
     MimeType mimetype = blob.getContentType();
-    String expectedMimetype = "application/javascript";
     assertEquals("mimetype does not match", expectedMimetype, mimetype.toString());
 
-    String expected = "//this file is for testing purposes";
     try (InputStream inputStream = blob.getInputStream()) {
       String actual = IOUtils.toString(inputStream, "UTF-8");
-      assertEquals("file content differs", expected, actual);
+      assertEquals("file content differs", expectedContent, actual);
     }
   }
 

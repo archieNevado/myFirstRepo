@@ -24,7 +24,6 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,8 +39,6 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
 
   private List<ExternalReferenceResolver> externalReferenceResolvers;
   private boolean usePageRendering = false;
-
-  // --- FragmentHandler --------------------------------------------
 
   @Override
   public boolean test(FragmentParameters params) {
@@ -152,8 +149,6 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
     return null;
   }
 
-  // --- internal ---------------------------------------------------
-
   @VisibleForTesting
   @NonNull
   protected ModelAndView createModelAndViewForLinkable(@NonNull Content channel, @NonNull Content child, String view,
@@ -210,8 +205,6 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
     return createModelAndViewForPlacementAndView(channelBean, placement, view, developer);
   }
 
-  // --------------- Helper -----------------
-
   /**
    * Based on the linkable, the navigation and the placement name this method evaluates if the request
    * is meant to be a placement request or not. The livecontext include tag allows any combination
@@ -247,9 +240,6 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
     return null;
   }
 
-  // ---------- Config ----------------------------
-
-  @Required
   public void setExternalReferenceResolvers(List<ExternalReferenceResolver> externalReferenceResolvers) {
     this.externalReferenceResolvers = externalReferenceResolvers;
   }
@@ -257,4 +247,13 @@ public class ExternalRefFragmentHandler extends FragmentHandler {
   public void setUsePageRendering(boolean usePageRendering) {
     this.usePageRendering = usePageRendering;
   }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (externalReferenceResolvers == null) {
+      throw new IllegalStateException("Required property not set: externalReferenceResolvers");
+    }
+  }
+
 }

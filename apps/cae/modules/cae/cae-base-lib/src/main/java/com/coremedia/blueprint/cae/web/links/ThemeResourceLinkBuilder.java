@@ -17,8 +17,8 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -47,29 +47,43 @@ public class ThemeResourceLinkBuilder {
     this.useLocalResources = useLocalResources;
   }
 
-  @Required
   public void setLinkFormatter(LinkFormatter linkFormatter) {
     this.linkFormatter = linkFormatter;
   }
 
-  @Required
   public void setContextService(CurrentContextService contextService) {
     this.contextService = contextService;
   }
 
-  @Required
   public void setRepository(ContentRepository repository) {
     this.repository = repository;
   }
 
-  @Required
   public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
     this.contentBeanFactory = contentBeanFactory;
   }
 
-  @Required
   public void setDataViewFactory(DataViewFactory dataViewFactory) {
     this.dataViewFactory = dataViewFactory;
+  }
+
+  @PostConstruct
+  protected void initialize() {
+    if (contentBeanFactory == null) {
+      throw new IllegalStateException("Required property not set: contentBeanFactory");
+    }
+    if (contextService == null) {
+      throw new IllegalStateException("Required property not set: contextService");
+    }
+    if (dataViewFactory == null) {
+      throw new IllegalStateException("Required property not set: dataViewFactory");
+    }
+    if (linkFormatter == null) {
+      throw new IllegalStateException("Required property not set: linkFormatter");
+    }
+    if (repository == null) {
+      throw new IllegalStateException("Required property not set: repository");
+    }
   }
 
   /**

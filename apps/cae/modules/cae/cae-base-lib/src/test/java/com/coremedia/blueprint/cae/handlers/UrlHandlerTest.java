@@ -11,9 +11,9 @@ import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.urlservice.UrlServiceRequestParams;
 import com.coremedia.objectserver.urlservice.UrlServiceResponse;
 import com.coremedia.objectserver.web.links.LinkFormatter;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -35,6 +35,7 @@ public class UrlHandlerTest {
 
   public static final String URL = UrlHandler.URI_PATTERN + "?id=coremedia:///cap/content/1234";
 
+  @InjectMocks
   private UrlHandler urlHandler;
 
   @Mock
@@ -86,14 +87,6 @@ public class UrlHandlerTest {
   private final List<UrlServiceRequestParams> idWithSite = List.of(UrlServiceRequestParams.create(id, siteId, null));
   private final List<UrlServiceRequestParams> idWithContext = List.of(UrlServiceRequestParams.create(id, null, contextId));
   private final List<UrlServiceRequestParams> idWithSiteAndContext = List.of(UrlServiceRequestParams.create(id, siteId, contextId));
-
-  @Before
-  public void setup() {
-    urlHandler = new UrlHandler(linkFormatter);
-    urlHandler.setSitesService(sitesService);
-    urlHandler.setIdProvider(idProvider);
-    urlHandler.setContentBeanFactory(contentBeanFactory);
-  }
 
   @Test
   public void testHandleRequest() {

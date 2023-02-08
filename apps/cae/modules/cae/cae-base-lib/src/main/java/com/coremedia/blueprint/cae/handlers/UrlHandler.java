@@ -2,13 +2,14 @@ package com.coremedia.blueprint.cae.handlers;
 
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.cap.multisite.SiteHelper;
+import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.id.IdProvider;
+import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.urlservice.UrlServiceRequestParams;
 import com.coremedia.objectserver.urlservice.UrlServiceResponse;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,8 +33,6 @@ import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFI
 @DefaultAnnotation(NonNull.class)
 public class UrlHandler extends AbstractUrlHandler {
 
-  private static final Logger LOG = LoggerFactory.getLogger(UrlHandler.class);
-
   public static final String OBJECT_NOT_FOUND = "object not found";
   public static final String SITE_NOT_FOUND = "site not found";
 
@@ -48,8 +47,12 @@ public class UrlHandler extends AbstractUrlHandler {
                   '/' + PREFIX_SERVICE +
                   '/' + PREFIX_HANDLER;
 
-  public UrlHandler(LinkFormatter linkFormatter) {
-    super(linkFormatter);
+
+  public UrlHandler(LinkFormatter linkFormatter,
+                    ContentBeanFactory contentBeanFactory,
+                    IdProvider idProvider,
+                    SitesService sitesService) {
+    super(linkFormatter, contentBeanFactory, idProvider, sitesService);
   }
 
   @PostMapping(value = URI_PATTERN, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -57,7 +60,6 @@ public class UrlHandler extends AbstractUrlHandler {
   public List<UrlServiceResponse> handleId(@RequestBody List<UrlServiceRequestParams> paramList,
                                            HttpServletRequest request,
                                            HttpServletResponse response) {
-    LOG.debug("Incoming request. Request parameter list: {}", paramList);
     return paramList.stream().
             map(param -> {
               // cleanup request attributes for each iteration

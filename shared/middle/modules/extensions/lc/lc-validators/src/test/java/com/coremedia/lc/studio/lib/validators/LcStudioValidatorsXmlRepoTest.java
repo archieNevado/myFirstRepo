@@ -1,5 +1,6 @@
 package com.coremedia.lc.studio.lib.validators;
 
+import com.coremedia.blueprint.base.livecontext.augmentation.AugmentationAutoConfiguration;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CurrentStoreContext;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
@@ -53,6 +54,7 @@ import static org.mockito.MockitoAnnotations.openMocks;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {
         XmlRepoConfiguration.class,
+        AugmentationAutoConfiguration.class,
         LcStudioValidatorsXmlRepoTest.LocalConfig.class
 })
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
@@ -88,6 +90,12 @@ public class LcStudioValidatorsXmlRepoTest {
 
   @Autowired
   private SegmentFormatValidator segmentFormatValidator;
+
+  @Autowired
+  private MasterLinkInAugmentationValidator masterLinkInCategoryAugmentationValidator;
+
+  @Autowired
+  private ExternalPagePartOfNavigationValidator externalPagePartOfNavigationValidator;
 
   @Mock
   private CommerceBeanFactory commerceBeanFactory;
@@ -227,10 +235,7 @@ public class LcStudioValidatorsXmlRepoTest {
 
   @Test
   public void externalPageNotPartOfNavigation() {
-    ExternalPagePartOfNavigationValidator validator = beanFactory.getBean(ExternalPagePartOfNavigationValidator.class);
-
-    Iterable<Issue> issues = validate(validator, 110, null);
-
+    Iterable<Issue> issues = validate(externalPagePartOfNavigationValidator, 110, null);
     assertIssueCode(issues, "not_in_navigation");
   }
 
@@ -253,6 +258,24 @@ public class LcStudioValidatorsXmlRepoTest {
     ReflectionTestUtils.setField(segmentFormatValidator, "commerceConnectionSupplier", commerceConnectionSupplier);
     Iterable<Issue> issues = validate(204, PROPERTY_SEGMENT);
     assertIssueCode(issues, "CMChannel_SegmentReservedSuffix");
+  }
+
+  @Test
+  public void augmentedCategoryIsMissingMasterLinkButCandidateExists() {
+    Iterable<Issue> issues = validate(masterLinkInCategoryAugmentationValidator, 20004, "master");
+    assertIssueCode(issues, "possibly_missing_master_reference_from_derived_augmentation");
+  }
+
+  @Test
+  public void augmentedCategoryIsMissingMasterLinkInDerivedCandidate() {
+    Iterable<Issue> issues = validate(masterLinkInCategoryAugmentationValidator, 10004, null);
+    assertIssueCode(issues, "possibly_missing_master_reference_from_master_augmentation");
+  }
+
+  @Test
+  public void augmentedCategoryIsMissingMasterLinkAndNoCandidateExists() {
+    Iterable<Issue> issues = validate(masterLinkInCategoryAugmentationValidator, 20006, "master");
+    assertNull(issues);
   }
 
   private Iterable<Issue> validate(int contentId, String propertyName) {

@@ -8,11 +8,11 @@ import com.coremedia.cap.struct.StructService;
 import com.coremedia.cap.themeimporter.ThemeImporter;
 import com.coremedia.mimetype.MimeTypeService;
 import com.coremedia.mimetype.MimeTypeServiceConfiguration;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @Import({
         LocalizationServiceConfiguration.class,
         MimeTypeServiceConfiguration.class,

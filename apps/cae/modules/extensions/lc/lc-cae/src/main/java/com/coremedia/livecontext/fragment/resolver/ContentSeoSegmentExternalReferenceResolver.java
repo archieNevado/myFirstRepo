@@ -2,11 +2,8 @@ package com.coremedia.livecontext.fragment.resolver;
 
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.fragment.FragmentParameters;
-import org.springframework.beans.factory.annotation.Required;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
@@ -22,8 +19,6 @@ public class ContentSeoSegmentExternalReferenceResolver extends ExternalReferenc
   public ContentSeoSegmentExternalReferenceResolver() {
     super(SEO_SEGMENT_PREFIX);
   }
-
-  // --- interface --------------------------------------------------
 
   @Override
   protected boolean include(@NonNull FragmentParameters fragmentParameters, @NonNull String referenceInfo) {
@@ -47,11 +42,9 @@ public class ContentSeoSegmentExternalReferenceResolver extends ExternalReferenc
     return new LinkableAndNavigation(linkable, navigation);
   }
 
-// --- internal ---------------------------------------------------
-
   private Content resolveLinkable(@NonNull Ids ids) {
     String capId = IdHelper.formatContentId(ids.contentId);
-    return contentRepository.getContent(capId);
+    return getContentRepository().getContent(capId);
   }
 
   private Content resolveNavigation(@NonNull Ids ids) {
@@ -60,9 +53,8 @@ public class ContentSeoSegmentExternalReferenceResolver extends ExternalReferenc
     }
 
     String capId = IdHelper.formatContentId(ids.contextId);
-    return contentRepository.getContent(capId);
+    return getContentRepository().getContent(capId);
   }
-
 
   public static Ids parseExternalReferenceInfo(@NonNull String externalRef) {
     try {

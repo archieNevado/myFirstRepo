@@ -1,4 +1,5 @@
 package com.coremedia.blueprint.assets.studio;
+
 import com.coremedia.blueprint.assets.AssetManagementConfigurationProperties;
 import com.coremedia.blueprint.assets.studio.intercept.LinkedAssetMetadataExtractorInterceptor;
 import com.coremedia.blueprint.assets.studio.intercept.UpdateAssetMetadataWriteInterceptor;
@@ -10,13 +11,13 @@ import com.coremedia.cap.content.ContentType;
 import com.coremedia.rest.cap.configuration.ConfigurationPublisher;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @ImportResource(value = {"classpath:/com/coremedia/cap/common/uapi-services.xml"},
         reader = ResourceAwareXmlBeanDefinitionReader.class)
 @Import({

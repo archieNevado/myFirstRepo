@@ -21,7 +21,7 @@ import TabbedDocumentFormDispatcher
   from "@coremedia/studio-client.main.editor-components/sdk/premular/TabbedDocumentFormDispatcher";
 import sitesService from "@coremedia/studio-client.multi-site-models/global/sitesService";
 import Component from "@jangaroo/ext-ts/Component";
-import { cast } from "@jangaroo/runtime";
+import { as, cast } from "@jangaroo/runtime";
 import Config from "@jangaroo/runtime/Config";
 import ConfigUtils from "@jangaroo/runtime/ConfigUtils";
 import TaxonomyStudioPluginBase from "./TaxonomyStudioPluginBase";
@@ -36,6 +36,8 @@ import TaxonomyPreferenceWindowPlugin from "./taxonomy/preferences/TaxonomyPrefe
 import TaxonomyPropertyField from "./taxonomy/selection/TaxonomyPropertyField";
 import InputChipsPropertyField
   from "@coremedia/studio-client.main.editor-components/sdk/components/chipsfield/InputChipsPropertyField";
+import TaxonomyTranslationFields from "./taxonomy/l10n/TaxonomyTranslationFields";
+import Container from "@jangaroo/ext-ts/container/Container";
 
 interface TaxonomyStudioPluginConfig extends Config<TaxonomyStudioPluginBase> {
 }
@@ -69,15 +71,41 @@ class TaxonomyStudioPlugin extends TaxonomyStudioPluginBase {
 
       rules: [
         Config(CMTaxonomyForm, {
-          plugins: [
-            Config(TaxonomyChangePlugin),
-          ],
+          ...ConfigUtils.append({
+            plugins: [
+              Config(TaxonomyChangePlugin, {
+                properties: "value,localSettings.translations",
+              }),
+              Config(AddItemsPlugin, {
+                index: 1,
+                applyTo: (panel: Container): Container =>
+                  as(panel.queryById("CMTaxonomy"), Container)
+                ,
+                items: [
+                  Config(TaxonomyTranslationFields),
+                ],
+              }),
+            ],
+          }),
         }),
 
         Config(CMLocTaxonomyForm, {
-          plugins: [
-            Config(TaxonomyChangePlugin),
-          ],
+          ...ConfigUtils.append({
+            plugins: [
+              Config(TaxonomyChangePlugin, {
+                properties: "value,localSettings.translations",
+              }),
+              Config(AddItemsPlugin, {
+                index: 1,
+                applyTo: (panel: Container): Container =>
+                  as(panel.queryById("CMLocTaxonomy"), Container)
+                ,
+                items: [
+                  Config(TaxonomyTranslationFields),
+                ],
+              }),
+            ],
+          }),
         }),
 
         Config(CategoryDocumentForm, {

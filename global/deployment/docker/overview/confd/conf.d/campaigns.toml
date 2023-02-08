@@ -1,0 +1,11 @@
+[template]
+src   = "campaigns.html.tmpl"
+dest  = "/usr/share/nginx/html/assets/campaigns.html"
+keys  = [
+         "/campaign/enabled",
+         "/campaign/delivery/endpoint",
+         "/campaign/delivery/authorization/id",
+         "/studio/campaign/app/graphqlendpoint",
+         "/studio/campaign/app/tenantid",
+         "/environment/fqdn"
+]

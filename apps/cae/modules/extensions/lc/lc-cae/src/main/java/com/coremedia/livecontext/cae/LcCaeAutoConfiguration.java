@@ -8,15 +8,15 @@ import com.coremedia.livecontext.fragment.FragmentContextProvider;
 import com.coremedia.livecontext.hybrid.CookieLevelerFilter;
 import com.coremedia.livecontext.search.CommerceSearchCsrfIgnoringRequestMatcher;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @ComponentScan(basePackages = {
         "com.coremedia.livecontext.web",
 })

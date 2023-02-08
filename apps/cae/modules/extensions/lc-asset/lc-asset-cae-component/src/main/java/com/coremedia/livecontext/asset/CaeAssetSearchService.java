@@ -14,9 +14,9 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.CharMatcher;
-import org.springframework.beans.factory.annotation.Required;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
+
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -84,12 +84,10 @@ public class CaeAssetSearchService implements AssetSearchService {
     return '"' + CharMatcher.is('"').replaceFrom(literal, "\\\"") + '"';
   }
 
-  @Required
   public void setSearchResultFactory(SearchResultFactory searchResultFactory) {
     this.searchResultFactory = searchResultFactory;
   }
 
-  @Required
   public void setContentRepository(ContentRepository contentRepository) {
     this.contentRepository = contentRepository;
   }
@@ -106,4 +104,15 @@ public class CaeAssetSearchService implements AssetSearchService {
   public void setCacheForSeconds(long cacheForSeconds) {
     this.cacheForSeconds = cacheForSeconds;
   }
+
+  @PostConstruct
+  void initialize() {
+    if (contentRepository == null) {
+      throw new IllegalStateException("Required property not set: contentRepository");
+    }
+    if (searchResultFactory == null) {
+      throw new IllegalStateException("Required property not set: searchResultFactory");
+    }
+  }
+
 }

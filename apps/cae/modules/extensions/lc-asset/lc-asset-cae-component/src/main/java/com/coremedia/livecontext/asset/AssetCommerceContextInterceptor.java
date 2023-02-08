@@ -6,8 +6,8 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 import java.util.Optional;
@@ -49,8 +49,15 @@ public class AssetCommerceContextInterceptor extends AbstractCommerceContextInte
     throw new IllegalArgumentException("Cannot handle path " + path);
   }
 
-  @Required
   public void setLiveContextSiteResolver(LiveContextSiteResolver liveContextSiteResolver) {
     this.liveContextSiteResolver = liveContextSiteResolver;
   }
+
+  @PostConstruct
+  void initialize() {
+    if (liveContextSiteResolver == null) {
+      throw new IllegalStateException("Required property not set: liveContextSiteResolver");
+    }
+  }
+
 }

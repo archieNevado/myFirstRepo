@@ -4,7 +4,8 @@ import com.coremedia.blueprint.cae.layout.ContentBeanBackedPageGridPlacement;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.layout.DynamicContainerStrategy;
 import com.coremedia.blueprint.personalization.include.AbstractP13nContainerPredicate;
-import org.springframework.beans.factory.annotation.Required;
+
+import javax.annotation.PostConstruct;
 
 import static com.coremedia.blueprint.cae.view.DynamicIncludeHelper.PLACEMENT_FRAGMENT_ROOT_INDICATOR_VIEW;
 
@@ -12,9 +13,15 @@ public class P13NPlacementPredicate extends AbstractP13nContainerPredicate {
 
   private DynamicContainerStrategy dynamicContainerStrategy;
 
-  @Required
   public void setDynamicContainerStrategy(DynamicContainerStrategy dynamicContainerStrategy) {
     this.dynamicContainerStrategy = dynamicContainerStrategy;
+  }
+
+  @PostConstruct
+  void initialize() {
+    if (dynamicContainerStrategy == null) {
+      throw new IllegalStateException("Required property not set: dynamicContainerStrategy");
+    }
   }
 
   @Override

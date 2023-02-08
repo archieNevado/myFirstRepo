@@ -18,6 +18,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,7 +42,7 @@ import static java.util.Objects.requireNonNull;
 /**
  * Configuration class to be loaded when no customer spring context manager is configured.
  */
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @EnableConfigurationProperties({
         WorkflowAutoMergeConfigurationProperties.class,
         BlueprintWorkflowServerConfigurationProperties.class

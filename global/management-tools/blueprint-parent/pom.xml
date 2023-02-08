@@ -34,9 +34,8 @@
     <google.api.services.youtube.version>v3-rev152-1.19.0</google.api.services.youtube.version>
 
     <customer>Blueprint</customer>
-    <cm.management-tools.core.version>2210.2</cm.management-tools.core.version>
+    <cm.management-tools.core.version>2301.1</cm.management-tools.core.version>
 
-    <spring.boot.version>2.6.8</spring.boot.version>
     <application-plugin.version>3.0.1</application-plugin.version>
 
     <!--
@@ -71,19 +70,19 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.70</tomcat.embed.version>
-    <cm.management-tools.core.version>2210.2</cm.management-tools.core.version>
-    <cm.common.core.version>2210.2</cm.common.core.version>
+    <tomcat.version>9.0.71</tomcat.version>
+    <cm.management-tools.core.version>2301.1</cm.management-tools.core.version>
+    <cm.common.core.version>2301.1</cm.common.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
-    <cm.middle.core.version>2210.2</cm.middle.core.version>
+    <cm.middle.core.version>2301.1</cm.middle.core.version>
     <cm.middle.bp.version>1-SNAPSHOT</cm.middle.bp.version>
-    <cm.cae-feeder.core.version>2210.2</cm.cae-feeder.core.version>
+    <cm.cae-feeder.core.version>2301.1</cm.cae-feeder.core.version>
     <cm.cae-feeder.bp.version>1-SNAPSHOT</cm.cae-feeder.bp.version>
-    <cm.content-server.core.version>2210.2</cm.content-server.core.version>
+    <cm.content-server.core.version>2301.1</cm.content-server.core.version>
     <cm.content-server.bp.version>1-SNAPSHOT</cm.content-server.bp.version>
-    <cm.workflow-server.core.version>2210.2</cm.workflow-server.core.version>
+    <cm.workflow-server.core.version>2301.1</cm.workflow-server.core.version>
     <cm.workflow-server.bp.version>1-SNAPSHOT</cm.workflow-server.bp.version>
-    <cm.studio-server.core.version>2210.2</cm.studio-server.core.version>
+    <cm.studio-server.core.version>2301.1</cm.studio-server.core.version>
     <cm.studio-server.bp.version>1-SNAPSHOT</cm.studio-server.bp.version>
     <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
 
@@ -296,12 +295,6 @@
       </dependency>
 
       <dependency>
-        <groupId>org.skyscreamer</groupId>
-        <artifactId>jsonassert</artifactId>
-        <version>1.2.1</version>
-      </dependency>
-
-      <dependency>
         <groupId>org.codehaus.groovy</groupId>
         <artifactId>groovy-all</artifactId>
         <version>2.4.21</version>
@@ -312,32 +305,22 @@
       <dependency>
         <groupId>org.apache.tomcat.embed</groupId>
         <artifactId>tomcat-embed-core</artifactId>
-        <version>${tomcat.embed.version}</version>
+        <version>${tomcat.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.tomcat.embed</groupId>
         <artifactId>tomcat-embed-el</artifactId>
-        <version>${tomcat.embed.version}</version>
+        <version>${tomcat.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.tomcat.embed</groupId>
         <artifactId>tomcat-embed-websocket</artifactId>
-        <version>${tomcat.embed.version}</version>
+        <version>${tomcat.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.tomcat.embed</groupId>
         <artifactId>tomcat-embed-jasper</artifactId>
-        <version>${tomcat.embed.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-actuator</artifactId>
-        <version>${spring.boot.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-actuator-autoconfigure</artifactId>
-        <version>${spring.boot.version}</version>
+        <version>${tomcat.version}</version>
       </dependency>
       <dependency>
         <groupId>com.coremedia.cms</groupId>
@@ -672,23 +655,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
         <executions>
-          <execution>
-            <id>enforce-no-web-fragments</id>
-            <!-- web-fragments have been converted to java (spring) config -->
-            <configuration>
-              <rules>
-                <requireFilesDontExist>
-                  <files>
-                    <file>${project.basedir}/src/main/resources/META-INF/web-fragment.xml</file>
-                  </files>
-                </requireFilesDontExist>
-              </rules>
-            </configuration>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <phase>validate</phase>
-          </execution>
           <execution>
             <id>enforce-versions</id>
             <phase>validate</phase>

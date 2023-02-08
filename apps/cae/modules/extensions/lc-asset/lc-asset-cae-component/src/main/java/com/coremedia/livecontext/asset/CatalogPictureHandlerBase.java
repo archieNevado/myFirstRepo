@@ -19,7 +19,6 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -128,12 +127,10 @@ public class CatalogPictureHandlerBase extends HandlerBase {
     return pictures.stream().findFirst();
   }
 
-  @Required
   public void setSiteResolver(LiveContextSiteResolver siteResolver) {
     this.siteResolver = siteResolver;
   }
 
-  @Required
   public void setPictureFormats(Map<String, String> pictureFormats) {
     this.pictureFormats = pictureFormats;
   }
@@ -148,8 +145,22 @@ public class CatalogPictureHandlerBase extends HandlerBase {
     this.catalogAliasTranslationService = catalogAliasTranslationService;
   }
 
-  @Required
   public void setTransformImageService(TransformImageService transformImageService) {
     this.transformImageService = transformImageService;
   }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (pictureFormats == null) {
+      throw new IllegalStateException("Required property not set: pictureFormats");
+    }
+    if (siteResolver == null) {
+      throw new IllegalStateException("Required property not set: siteResolver");
+    }
+    if (transformImageService == null) {
+      throw new IllegalStateException("Required property not set: transformImageService");
+    }
+  }
+
 }

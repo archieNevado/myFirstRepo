@@ -26,7 +26,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestPropertySource(properties = {
         "repository.factoryClassName=com.coremedia.cap.xmlrepo.XmlCapConnectionFactory",
         "repository.params.contentxml=classpath:com/coremedia/blueprint/cae/view/resolver/content.xml",
-        "repository.params.contentschemaxml=classpath:com/coremedia/blueprint/cae/view/resolver/test-doctypes.xml"
+        "repository.params.contentschemaxml=classpath:com/coremedia/blueprint/cae/view/resolver/test-doctypes.xml",
+        "cae.hashing.backward-compatibility=true",
 })
 @WebAppConfiguration
 public class ThemeTemplateViewRepositoryProviderTest {

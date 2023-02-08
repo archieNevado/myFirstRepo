@@ -1,9 +1,9 @@
 package com.coremedia.blueprint.elastic.social.cae.controller;
 
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
-import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.navigation.Navigation;
+import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.cap.user.User;
 import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.objectserver.web.HandlerHelper;

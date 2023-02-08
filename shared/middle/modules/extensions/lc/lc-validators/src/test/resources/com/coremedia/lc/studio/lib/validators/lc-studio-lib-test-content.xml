@@ -98,6 +98,13 @@
               <version number="1"/>
             </document>
 
+            <!-- External channel with a missing master link -->
+            <document id="10004" type="CMExternalChannel" name="augmentedCategoryMasterLinkCandidate">
+              <version number="1">
+                <stringProperty name="externalId" value="vendor:///catalog/category/ninja"/>
+              </version>
+            </document>
+
             <document id="30" type="CMProductList" name="cmProductList">
               <version number="1">
                 <stringProperty name="externalId" value="vendor:///catalog/category/WOMEN"/>
@@ -134,6 +141,32 @@
               </version>
             </document>
 
+          </folder>
+          <folder id="20001" name="German">
+            <document id="20000" type="CMSite" name="MySite [Site]">
+              <version number="1">
+                <stringProperty name="id" value="deSiteId"/>
+                <stringProperty name="name" value="deSite"/>
+                <stringProperty name="locale" value="de"/>
+                <linkProperty name="master"><link id="54"/></linkProperty>
+                <linkProperty name="root"><link id="20002"/></linkProperty>
+              </version>
+            </document>
+            <document id="20002" type="CMExternalPage" name="SiteRootDocument">
+              <version number="1">
+                <stringProperty name="locale" value="de"/>
+              </version>
+            </document>
+            <document id="20004" type="CMExternalChannel" name="augmentedCategoryIsMissingMasterLinkButCandidateExists">
+              <version number="1">
+                <stringProperty name="externalId" value="vendor:///catalog/category/ninja"/>
+              </version>
+            </document>
+            <document id="20006" type="CMExternalChannel" name="augmentedCategoryIsMissingMasterLinkAndNoCandidateExists">
+              <version number="1">
+                <stringProperty name="externalId" value="vendor:///catalog/category/mascha"/>
+              </version>
+            </document>
           </folder>
         </folder>
       </folder>

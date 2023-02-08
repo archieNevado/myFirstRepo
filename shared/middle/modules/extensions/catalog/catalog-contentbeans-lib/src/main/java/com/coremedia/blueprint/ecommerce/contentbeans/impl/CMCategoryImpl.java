@@ -9,7 +9,6 @@ import com.coremedia.blueprint.ecommerce.contentbeans.CMProduct;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.content.Content;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -24,11 +23,17 @@ public class CMCategoryImpl extends CMAbstractCategoryImpl implements CMCategory
 
   // --- configuration ----------------------------------------------
 
-  @Required
   public void setCatalogService(CmsCatalogService catalogService) {
     this.catalogService = catalogService;
   }
 
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (catalogService == null) {
+      throw new IllegalStateException("Required property not set: catalogService");
+    }
+  }
 
   // --- Standard Blueprint typing overrides ------------------------
 

@@ -10,7 +10,6 @@ import com.coremedia.personalization.rulelang.XMLCoDec;
 import com.coremedia.xml.Markup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.List;
 
@@ -37,7 +36,6 @@ public class CMSelectionRulesImpl extends CMSelectionRulesBase {
    *
    * @param contextCollection the context-collection bean to be used
    */
-  @Required
   public void setContextCollection(final ContextCollection contextCollection) {
     this.contextCollection = contextCollection;
   }
@@ -47,12 +45,22 @@ public class CMSelectionRulesImpl extends CMSelectionRulesBase {
    *
    * @param contentIdScheme the content-id scheme to be used
    */
-  @Required
   public void setContentIdScheme(IdScheme contentIdScheme) {
     if (contentIdScheme == null) {
       throw new IllegalArgumentException("property contentIdScheme must not be null");
     }
     this.contentIdScheme = contentIdScheme;
+  }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (contentIdScheme == null) {
+      throw new IllegalStateException("Required property not set: contentIdScheme");
+    }
+    if (contextCollection == null) {
+      throw new IllegalStateException("Required property not set: contextCollection");
+    }
   }
 
   /**

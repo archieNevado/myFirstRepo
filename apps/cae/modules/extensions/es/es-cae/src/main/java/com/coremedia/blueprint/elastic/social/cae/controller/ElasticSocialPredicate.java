@@ -4,6 +4,7 @@ import com.coremedia.objectserver.view.RenderNode;
 import com.coremedia.objectserver.view.dynamic.DynamicIncludePredicate;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
+
 import javax.inject.Named;
 
 @Named

@@ -1,11 +1,10 @@
 package com.coremedia.blueprint.analytics.elastic.contentbeans;
 
-import com.coremedia.blueprint.base.analytics.elastic.TopNReportModelService;
 import com.coremedia.blueprint.base.analytics.elastic.ReportModel;
+import com.coremedia.blueprint.base.analytics.elastic.TopNReportModelService;
 import com.coremedia.blueprint.cae.contentbeans.CMDynamicListImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.Collections;
 import java.util.List;
@@ -42,12 +41,15 @@ public abstract class CMALXBaseListBase<V> extends CMDynamicListImpl<V> implemen
     return Collections.emptyList();
   }
 
-  @Required
   public void setCmalxBaseListModelServiceFactory(TopNReportModelService cmalxBaseListModelServiceFactory) {
-    if(cmalxBaseListModelServiceFactory == null) {
-      throw new IllegalArgumentException("supplied 'cmalxBaseListModelServiceFactory' must not be null");
-    }
     this.cmalxBaseListModelServiceFactory = cmalxBaseListModelServiceFactory;
   }
 
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (cmalxBaseListModelServiceFactory == null) {
+      throw new IllegalStateException("Required property not set: cmalxBaseListModelServiceFactory");
+    }
+  }
 }

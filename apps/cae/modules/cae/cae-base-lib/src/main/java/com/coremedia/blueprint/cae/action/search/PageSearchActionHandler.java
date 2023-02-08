@@ -16,7 +16,6 @@ import com.coremedia.objectserver.view.substitution.SubstitutionRegistry;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -79,14 +78,23 @@ public class PageSearchActionHandler extends PageHandlerBase {
   private SettingsService settingsService;
   private int minimalSearchQueryLength = DEFAULT_MINIMAL_SEARCH_QUERY_LENGTH;
 
-  @Required
   public void setSearchService(SearchService searchService) {
     this.searchService = searchService;
   }
 
-  @Required
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
+  }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (searchService == null) {
+      throw new IllegalStateException("Required property not set: searchService");
+    }
+    if (settingsService == null) {
+      throw new IllegalStateException("Required property not set: settingsService");
+    }
   }
 
   @Substitution(ACTION_ID)

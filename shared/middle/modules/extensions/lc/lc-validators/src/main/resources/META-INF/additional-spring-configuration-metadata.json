@@ -1,0 +1,34 @@
+{
+  "properties": [
+    {
+      "name": "validator.enabled.master-link-in-augmentation-validator.cm-external-channel",
+      "type": "java.lang.Boolean",
+      "description": "If false, the master link validator for augmented categories is disabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "validator.enabled.master-link-in-augmentation-validator.cm-external-product",
+      "type": "java.lang.Boolean",
+      "description": "If false, the master link validator for augmented products is disabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "validator.enabled.master-link-in-augmentation-validator.cm-external-page",
+      "type": "java.lang.Boolean",
+      "description": "If false, the master link validator for augmented pages is disabled.",
+      "defaultValue": true
+    },
+    {
+      "name": "master-link-in-augmentation-validator.severity",
+      "type": "java.lang.String",
+      "description": "The severity from which a master link validator for augmenting contents displays issues.",
+      "defaultValue": "WARN"
+    },
+    {
+      "name": "master-link-in-augmentation-validator.max-issues",
+      "type": "java.lang.Integer",
+      "description": "The max number of issues the master link validator for augmenting contents is issueing.",
+      "defaultValue": "WARN"
+    }
+  ]
+}

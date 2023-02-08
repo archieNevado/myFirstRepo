@@ -89,7 +89,6 @@ public class CMMarketingSpotImplTest {
 
     testling = new TestCMMarketingSpotImpl();
     testling.setSitesService(sitesService);
-    testling.setLiveContextNavigationFactory(liveContextNavigationFactory);
     testling.setCommerceConnectionSupplier(commerceConnectionSupplier);
     when(sitesService.getContentSiteAspect(any(Content.class))).thenReturn(contentSiteAspect);
     when(contentSiteAspect.findSite()).thenReturn(Optional.of(site));

@@ -16,6 +16,7 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -31,6 +32,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ContextConfiguration(classes = HandlerInterceptorsListTest.LocalConfig.class)
 @WebAppConfiguration
 @ActiveProfiles("HandlerInterceptorsListTest")
+@TestPropertySource(properties = {
+        "cae.hashing.backward-compatibility=true",
+})
 public class HandlerInterceptorsListTest {
 
   @Configuration(proxyBeanMethods = false)

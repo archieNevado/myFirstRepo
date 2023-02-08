@@ -78,16 +78,16 @@ class ValidityColumn extends IconColumn {
     let clsName = "";
     let dateString: string;
 
-    if (!validFrom && validTo && ValidityColumn.#isBeforeToday(validTo)) {
+    if (!validFrom && validTo && validTo.getDate() && ValidityColumn.#isBeforeToday(validTo)) {
       clsName = ValidityColumn.#INVALID_PAST;
       dateString = DateUtil.format(validTo.getDate(), ValidityColumn.#DATE_FORMAT);
-    } else if (validFrom && !validTo && !ValidityColumn.#isBeforeToday(validFrom)) {
+    } else if (validFrom && validFrom.getDate() && !validTo && !ValidityColumn.#isBeforeToday(validFrom)) {
       clsName = ValidityColumn.#INVALID_FUTURE;
       dateString = DateUtil.format(validFrom.getDate(), ValidityColumn.#DATE_FORMAT);
-    } else if (validTo && ValidityColumn.#isBeforeToday(validTo)) {
+    } else if (validTo && validTo.getDate() && ValidityColumn.#isBeforeToday(validTo)) {
       clsName = ValidityColumn.#INVALID_PAST;
       dateString = DateUtil.format(validTo.getDate(), ValidityColumn.#DATE_FORMAT);
-    } else if (validTo && validFrom && !ValidityColumn.#isBeforeToday(validFrom) && !ValidityColumn.#isBeforeToday(validTo)) {
+    } else if (validTo && validTo.getDate() && validFrom && validFrom.getDate() && !ValidityColumn.#isBeforeToday(validFrom) && !ValidityColumn.#isBeforeToday(validTo)) {
       clsName = ValidityColumn.#INVALID_FUTURE;
       dateString = DateUtil.format(validFrom.getDate(), ValidityColumn.#DATE_FORMAT);
     }

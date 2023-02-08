@@ -4,11 +4,13 @@ import com.coremedia.blueprint.base.links.ContentLinkBuilder;
 import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
 import com.coremedia.blueprint.cae.configuration.BlueprintPageCaeContentBeansConfiguration;
 import com.coremedia.blueprint.cae.util.DefaultSecureHashCodeGeneratorStrategy;
+import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.blueprint.testing.ContentTestConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.cap.test.xmlrepo.XmlUapiConfig;
 import com.coremedia.cap.transform.TransformImageService;
 import com.coremedia.mimetype.MimeTypeService;
+import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +37,8 @@ class TransformedBlobHandlerTestConfiguration extends AbstractHandlerTestConfigu
                                                 UrlPathFormattingHelper urlPathFormattingHelper,
                                                 ContentLinkBuilder contentLinkBuilder,
                                                 TransformImageService transformImageService,
-                                                DataViewFactory dataViewFactory) {
+                                                DataViewFactory dataViewFactory,
+                                                ValidationService<ContentBean> validationService) {
     TransformedBlobHandler testling = new TransformedBlobHandler();
     testling.setMimeTypeService(mimeTypeService);
     testling.setUrlPathFormattingHelper(urlPathFormattingHelper);
@@ -45,6 +48,7 @@ class TransformedBlobHandlerTestConfiguration extends AbstractHandlerTestConfigu
     testling.setSecureHashCodeGeneratorStrategy(secureHashCodeGeneratorStrategy);
     testling.setTransformImageService(transformImageService);
     testling.setDataViewFactory(dataViewFactory);
+    testling.setValidationService(validationService);
     return testling;
   }
 

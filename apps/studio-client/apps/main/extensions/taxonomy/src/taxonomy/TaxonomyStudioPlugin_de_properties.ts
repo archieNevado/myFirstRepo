@@ -45,6 +45,8 @@ ResourceBundleUtil.override(TaxonomyStudioPlugin_properties, {
   TaxonomyLinkList_suggestions_title: "Vorschläge",
   TaxonomyLinkList_title: "Ausgewählte Schlagworte",
   TaxonomyLinkList_contextMenu_chooseTag: "Schlagwort auswählen",
+  TaxonomyTranslationFields_title: "Übersetzungen",
+  TaxonomyTranslationFields_emptyText: "Geben Sie hier die Übersetzung ein.",
   Taxonomy_action_tooltip: "Schlagwort auswählen",
   taxonomy_selection_dialog_title: "Schlagwort auswählen",
   TaxonomyType_Location_text: "Orte Schlagworte",
@@ -55,4 +57,5 @@ ResourceBundleUtil.override(TaxonomyStudioPlugin_properties, {
   Favbar_taxonomies_button_label: "Schlagworte",
   Location: "Orte",
   Subject: "Themen",
+  Taxonomy_l10n_title: "Titel ({0})",
 });

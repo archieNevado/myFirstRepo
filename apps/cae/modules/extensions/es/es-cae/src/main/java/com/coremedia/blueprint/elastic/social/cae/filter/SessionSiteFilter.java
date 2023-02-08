@@ -1,9 +1,9 @@
 package com.coremedia.blueprint.elastic.social.cae.filter;
 
-import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.cap.multisite.Site;
-
+import com.coremedia.cap.multisite.SiteHelper;
 import edu.umd.cs.findbugs.annotations.NonNull;
+
 import javax.inject.Named;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;

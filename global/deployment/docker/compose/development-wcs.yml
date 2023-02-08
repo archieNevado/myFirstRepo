@@ -1,6 +1,3 @@
-
-version: "3.4"
-
 services:
   wcs-proxy:
     image: ${REPOSITORY_PREFIX:-coremedia}/wcs-proxy

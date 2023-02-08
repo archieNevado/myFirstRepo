@@ -44,6 +44,10 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
+      <groupId>com.coremedia.blueprint.base</groupId>
+      <artifactId>bpbase-content-services</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.coremedia.blueprint</groupId>
       <artifactId>content-services</artifactId>
     </dependency>
@@ -394,7 +398,6 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- begin java-11-dependencies -->
     <dependency>
       <groupId>com.sun.activation</groupId>
       <artifactId>jakarta.activation</artifactId>
@@ -402,12 +405,10 @@
     <dependency>
       <groupId>jakarta.annotation</groupId>
       <artifactId>jakarta.annotation-api</artifactId>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>jakarta.validation</groupId>
       <artifactId>jakarta.validation-api</artifactId>
     </dependency>
-    <!-- end java-11-dependencies -->
   </dependencies>
 </project>

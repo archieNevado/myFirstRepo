@@ -12,9 +12,13 @@ import com.coremedia.cache.config.CacheConfiguration;
 import com.coremedia.cap.common.CapConnection;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.rest.cap.validators.StructLinkListIndexValidator;
+import com.coremedia.rest.validation.Severity;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -184,4 +188,53 @@ public class LcStudioValidatorsConfiguration {
   ChannelReferrerValidator cmExternalChannelReferrerValidator(CapConnection connection) {
     return new ChannelReferrerValidator(type(connection, CMEXTERNALCHANNEL_NAME), false);
   }
+
+  @Bean
+  @ConditionalOnProperty(name = "validator.enabled.master-link-in-augmentation-validator.cm-external-channel", matchIfMissing = true)
+  MasterLinkInAugmentationValidator masterLinkInCategoryAugmentationValidator(
+          CapConnection connection,
+          SitesService sitesService,
+          AugmentationService categoryAugmentationService,
+          @Value("${master-link-in-augmentation-validator.severity:WARN}") Severity severity,
+          @Value("${master-link-in-augmentation-validator.max-issues:20}") long maxIssues) {
+    return new MasterLinkInAugmentationValidator(type(connection, "CMExternalChannel"),
+            true,
+            sitesService,
+            categoryAugmentationService,
+            severity,
+            maxIssues);
+  }
+
+  @Bean
+  @ConditionalOnProperty(name = "validator.enabled.master-link-in-augmentation-validator.cm-external-product", matchIfMissing = true)
+  MasterLinkInAugmentationValidator masterLinkInProductAugmentationValidator(
+          CapConnection connection,
+          SitesService sitesService,
+          AugmentationService productAugmentationService,
+          @Value("${master-link-in-augmentation-validator.severity:WARN}") Severity severity,
+          @Value("${master-link-in-augmentation-validator.max-issues:20}") long maxIssues) {
+    return new MasterLinkInAugmentationValidator(type(connection, "CMExternalProduct"),
+            true,
+            sitesService,
+            productAugmentationService,
+            severity,
+            maxIssues);
+  }
+
+  @Bean
+  @ConditionalOnProperty(name = "validator.enabled.master-link-in-augmentation-validator.cm-external-page", matchIfMissing = true)
+  MasterLinkInAugmentationValidator masterLinkInExternalPageAugmentationValidator(
+          CapConnection connection,
+          SitesService sitesService,
+          AugmentationService externalPageAugmentationService,
+          @Value("${master-link-in-augmentation-validator.severity:WARN}") Severity severity,
+          @Value("${master-link-in-augmentation-validator.max-issues:20}") long maxIssues) {
+    return new MasterLinkInAugmentationValidator(type(connection, "CMExternalPage"),
+            true,
+            sitesService,
+            externalPageAugmentationService,
+            severity,
+            maxIssues);
+  }
+
 }

@@ -4,7 +4,6 @@ import com.coremedia.id.IdProvider;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.List;
 import java.util.Objects;
@@ -46,12 +45,19 @@ public abstract class CMALXBaseListImpl<V> extends CMALXBaseListBase<V> {
     return range;
   }
 
-  @Required
   public void setIdProvider(IdProvider idProvider) {
     if (idProvider == null) {
       throw new IllegalArgumentException("supplied 'idProvider' must not be null");
     }
     this.idProvider = idProvider;
+  }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (idProvider == null) {
+      throw new IllegalStateException("Required property not set: idProvider");
+    }
   }
 
   /**

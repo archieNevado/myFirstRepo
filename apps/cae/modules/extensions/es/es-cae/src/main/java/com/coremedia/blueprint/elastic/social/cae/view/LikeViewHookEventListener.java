@@ -3,9 +3,9 @@ package com.coremedia.blueprint.elastic.social.cae.view;
 import com.coremedia.blueprint.base.elastic.social.configuration.ElasticSocialConfiguration;
 import com.coremedia.blueprint.elastic.social.cae.controller.ContributionResult;
 import com.coremedia.blueprint.elastic.social.cae.controller.LikeResult;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+
 import javax.inject.Named;
 import java.util.List;
 

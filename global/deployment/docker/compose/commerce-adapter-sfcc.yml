@@ -1,5 +1,3 @@
-version: "3.4"
-
 # default environment variables
 x-default-boot-envs:
   &default-boot-envs
@@ -39,7 +37,7 @@ x-logging:
 
 services:
   commerce-adapter-sfcc:
-    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-sfcc:${COMMERCE_ADAPTER_SFCC_VERSION:-2.0.12}
+    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-sfcc:${COMMERCE_ADAPTER_SFCC_VERSION:-2.1.1}
     container_name: commerce-adapter-sfcc
     restart: always
     logging: *default-logging
@@ -49,6 +47,9 @@ services:
       - 44165:6565
       - 44181:8081
       - 44105:5005
+    read_only: true
+    cap_drop:
+      - ALL
     environment:
       <<: *default-boot-envs
       <<: *development-boot-envs
@@ -64,6 +65,13 @@ services:
       MANAGEMENT_HEALTH_CATALOGS_ENABLED: ${MANAGEMENT_HEALTH_CATALOGS_ENABLED:-true}
       MANAGEMENT_HEALTH_STORES_ENABLED: ${MANAGEMENT_HEALTH_STORES_ENABLED:-true}
     healthcheck: *default-boot-healthcheck
+    volumes:
+      # to reuse the cache, the cache needs to be copied to the volume before starting the adapter.
+      # the write access needs to be exclusive. An existing cache can be copied from a common shared location
+      # by using a script that is run before the application script.
+      - /coremedia/cache
+      - /coremedia/log
+      - /var/tmp
 
   studio-server:
     environment:

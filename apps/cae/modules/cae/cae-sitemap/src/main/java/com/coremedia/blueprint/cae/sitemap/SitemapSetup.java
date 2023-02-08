@@ -1,7 +1,6 @@
 package com.coremedia.blueprint.cae.sitemap;
 
-import org.springframework.beans.factory.annotation.Required;
-
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
@@ -24,14 +23,22 @@ public class SitemapSetup {
 
   // --- configuration ----------------------------------------------
 
-  @Required
   public void setUrlGenerators(List<SitemapUrlGenerator> urlGenerators) {
     this.urlGenerators = urlGenerators;
   }
 
-  @Required
   public void setSitemapRendererFactory(SitemapRendererFactory sitemapRendererFactory) {
     this.sitemapRendererFactory = sitemapRendererFactory;
+  }
+
+  @PostConstruct
+  void initialize() {
+    if (sitemapRendererFactory == null) {
+      throw new IllegalStateException("Required property not set: sitemapRendererFactory");
+    }
+    if (urlGenerators == null) {
+      throw new IllegalStateException("Required property not set: urlGenerators");
+    }
   }
 
   // --- features ---------------------------------------------------

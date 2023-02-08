@@ -26,7 +26,6 @@ import com.google.common.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -150,7 +149,6 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
 
   // --- spring config -------------------------------------------------------------------------------------------------
 
-  @Required
   public void setCapConnection(CapConnection capConnection) {
     this.capConnection = capConnection;
   }
@@ -175,23 +173,33 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
     this.developerModeEnabled = developerModeEnabled;
   }
 
-  @Required
   public void setCache(Cache cache) {
     this.cache = cache;
   }
 
-  @Required
   public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
     this.contentBeanFactory = contentBeanFactory;
   }
 
-  @Required
   public void setSitesService(SitesService sitesService) {
     this.sitesService = sitesService;
   }
 
   @Override
   public void afterPropertiesSet() {
+    if (cache == null) {
+      throw new IllegalStateException("Required property not set: cache");
+    }
+    if (capConnection == null) {
+      throw new IllegalStateException("Required property not set: capConnection");
+    }
+    if (contentBeanFactory == null) {
+      throw new IllegalStateException("Required property not set: contentBeanFactory");
+    }
+    if (sitesService == null) {
+      throw new IllegalStateException("Required property not set: sitesService");
+    }
+
     if(!developerModeEnabled && localResourcesEnabled) {
       throw new IllegalStateException("Illegal setting for resource delivery detected! " +
           "Either turn on CAE developer mode or turn of local resources!");
@@ -275,6 +283,15 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
     if (cmAbstractCode == null) {
       return notFound();
     }
+    // URL validation: check that extension is OK and name matches expectation
+    if (!isExtensionValid(extension, cmAbstractCode)) {
+      LOG.debug("Extension {} is not valid for CMAbstractCode {}", extension, cmAbstractCode);
+      return notFound();
+    }
+    if (!isNameSegmentValid(baseName, cmAbstractCode)) {
+      LOG.debug("Name segment {} is not valid for CMAbstractCode {}", baseName, cmAbstractCode);
+      return notFound();
+    }
 
     if (localResourcesEnabled) {
       ModelAndView mav = localResource(path, baseName, extension, webRequest);
@@ -282,9 +299,9 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
       if (mav==null || !HandlerHelper.isNotFound(mav)) {
         return mav;
       }
-      // ... else fallbackthrough to contentResource ...
+      // ... else fallback through to contentResource ...
     }
-    return contentResource(extension, cmAbstractCode, baseName, version, response, webRequest);
+    return contentResource(cmAbstractCode, version, response, webRequest);
   }
 
 
@@ -349,17 +366,12 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
   }
 
   // creates a Markup/script model
-  private ModelAndView contentResource(String extension, CMAbstractCode cmAbstractCode, String name,
-                                       int version, HttpServletResponse response, WebRequest webRequest) {
+  private ModelAndView contentResource(CMAbstractCode cmAbstractCode, int version, HttpServletResponse response,
+                                       WebRequest webRequest) {
 
     if (webRequest.checkNotModified(cmAbstractCode.getContent().getModificationDate().getTimeInMillis())) {
       // shortcut exit - no further processing necessary
       return null;
-    }
-
-    // URL validation: check that extension is OK and name matches expectation
-    if (!isExtensionValid(extension, cmAbstractCode) || !isNameSegmentValid(name, cmAbstractCode)) {
-      return notFound();
     }
 
     Markup markup = cmAbstractCode.getCode();
@@ -397,7 +409,8 @@ public class CodeResourceHandler extends HandlerBase implements ApplicationConte
       // buffer resource stream to make it markable
       @SuppressWarnings("IOResourceOpenedButNotSafelyClosed")
       InputStream bufferedInputStream = new BufferedInputStream(resource.getInputStream());
-      String mimeType = getMimeTypeService().detectMimeType(bufferedInputStream, name, null);
+      // CMS-22433: Rely on correct file extension here instead of guessing the mime type from the file content
+      String mimeType = getMimeTypeService().getMimeTypeForResourceName(name);
       Blob blob = capConnection.getBlobService().fromInputStream(bufferedInputStream, mimeType);
       return createModel(blob);
     } else {

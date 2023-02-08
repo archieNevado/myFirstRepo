@@ -17,7 +17,6 @@ import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.links.Link;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -102,9 +101,16 @@ public class P13NPlacementHandler extends PageHandlerBase {
             PLACEMENT_VARIABLE, placement.getName()));
   }
 
-  @Required
   public void setValidationService(ValidationService validationService) {
     this.validationService = validationService;
+  }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (validationService == null) {
+      throw new IllegalStateException("Required property not set: validationService");
+    }
   }
 
   @NonNull

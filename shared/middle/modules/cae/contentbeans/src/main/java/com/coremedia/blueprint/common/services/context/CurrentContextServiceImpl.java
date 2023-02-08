@@ -3,10 +3,10 @@ package com.coremedia.blueprint.common.services.context;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.navigation.Navigation;
+import com.coremedia.blueprint.common.util.ContextAttributes;
 import com.coremedia.cache.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.coremedia.blueprint.common.util.ContextAttributes;
 
 public class CurrentContextServiceImpl implements CurrentContextService {
   private static final Logger LOG = LoggerFactory.getLogger(CurrentContextServiceImpl.class);

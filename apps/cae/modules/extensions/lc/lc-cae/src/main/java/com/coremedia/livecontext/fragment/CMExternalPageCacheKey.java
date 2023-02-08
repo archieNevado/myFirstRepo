@@ -7,8 +7,8 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cotopaxi.common.CacheUtil;
 import com.coremedia.livecontext.contentbeans.CMExternalPage;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
+
 import java.util.List;
 import java.util.Map;
 

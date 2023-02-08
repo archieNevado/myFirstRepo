@@ -8,14 +8,11 @@ import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.personalization.contentbeans.CMP13NSearch;
 import com.coremedia.blueprint.personalization.contentbeans.CMSelectionRules;
-import com.coremedia.cap.common.IdHelper;
-import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import com.coremedia.objectserver.web.links.Link;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,9 +52,6 @@ public class P13NFragmentHandler extends PageHandlerBase {
           "/{" + SEGMENT_ROOT + '}' +
           "/{" + ID_VARIABLE + ":" + PATTERN_NUMBER + "}";
 
-  private ContentRepository contentRepository;
-
-
   /**
    * @param view the name of the view
    *             <p>
@@ -66,14 +60,12 @@ public class P13NFragmentHandler extends PageHandlerBase {
    */
   @GetMapping(value = DYNAMIC_URI_PATTERN)
   public ModelAndView handleFragmentRequest(@PathVariable(SEGMENT_ROOT) String context,
-                                            @PathVariable(ID_VARIABLE) int contentId,
+                                            @Nullable @PathVariable(ID_VARIABLE) ContentBean contentBean,
                                             @RequestParam(value = TARGETVIEW_PARAMETER, required = false) String view,
                                             HttpServletRequest request) {
-    Content content = contentRepository.getContent(IdHelper.formatContentId(contentId));
-    ContentBean contentBean = getContentBeanFactory().createBeanFor(content, ContentBean.class);
     Navigation navigation = getNavigation(context);
 
-    if (contentBean != null && navigation != null
+    if (navigation != null
             && (contentBean instanceof CMP13NSearch || contentBean instanceof CMSelectionRules)) {
       // add navigationContext as navigationContext request param
       ModelAndView modelWithView = HandlerHelper.createModelWithView(contentBean, view);
@@ -100,15 +92,6 @@ public class P13NFragmentHandler extends PageHandlerBase {
     return result.buildAndExpand(Map.of(
             SEGMENT_ROOT, getPathSegments(context).get(0),
             ID_VARIABLE, cmLinkable.getContentId()));
-  }
-
-  @Required
-  public void setContentRepository(ContentRepository contentRepository) {
-    this.contentRepository = contentRepository;
-  }
-
-  public ContentRepository getContentRepository() {
-    return contentRepository;
   }
 
 }

@@ -76,6 +76,7 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>cae-base-lib</artifactId>
       <version>${project.version}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.coremedia.blueprint</groupId>
@@ -121,6 +122,10 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.annotation</groupId>
+      <artifactId>jakarta.annotation-api</artifactId>
     </dependency>
     <dependency>
       <groupId>jakarta.servlet</groupId>

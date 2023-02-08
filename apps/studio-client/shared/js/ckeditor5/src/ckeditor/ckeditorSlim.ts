@@ -58,9 +58,6 @@ export const createSlimCKEditor: CreateCKEditorFunction = (domElement:(string | 
     autosave: {
       save: pluginConfig.autosave.save,
       waitingTime: 1000,
-    },
-    "coremedia:richtext": {
-      strictness: Strictness.LOOSE,
-    },
+    }
   });
 }

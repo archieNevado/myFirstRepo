@@ -1,8 +1,8 @@
 package com.coremedia.blueprint.elastic.social.cae.flows;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.lang3.StringUtils;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.Serializable;
 import java.util.Locale;
 

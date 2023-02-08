@@ -5,10 +5,10 @@
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
   <import resource="classpath:/com/coremedia/cae/uapi-services.xml"/>
-  <import resource="classpath:/framework/spring/blueprint-handlers.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/navigation/context/bpbase-default-contextstrategy.xml"/>
   <import resource="classpath:/com/coremedia/blueprint/base/links/bpbase-urlpathformatting.xml"/>
 
+  <bean class="com.coremedia.blueprint.cae.config.BlueprintHandlersCaeBaseLibConfiguration"/>
   <bean class="com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceServicesConfiguration"/>
 
   <bean id="externalReferenceResolverBase" abstract="true" class="com.coremedia.livecontext.fragment.resolver.ExternalReferenceResolverBase" >

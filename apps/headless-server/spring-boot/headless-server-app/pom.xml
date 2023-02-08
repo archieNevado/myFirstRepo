@@ -150,7 +150,6 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
-          <mainClass>${spring-boot.mainClass}</mainClass>
           <profiles>${headless-server.spring.profiles}</profiles>
           <layers>
             <enabled>true</enabled>
@@ -179,6 +178,10 @@
               <!--Actuator Port-->
               <port>8081</port>
             </ports>
+            <volumes>
+              <volume>/coremedia/cache</volume>
+              <volume>/var/tmp</volume>
+            </volumes>
           </container>
         </configuration>
         <executions>

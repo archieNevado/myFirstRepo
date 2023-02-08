@@ -85,7 +85,6 @@
   <bean name="abstractHasContexts-blueprint-doctypes" scope="prototype" abstract="true"
         parent="abstractLinkable-blueprint-doctypes" class="com.coremedia.blueprint.cae.contentbeans.CMHasContextsImpl">
     <property name="currentContextService" ref="currentContextService"/>
-    <property name="dataViewFactory" ref="dataViewFactory"/>
   </bean>
 
   <bean name="abstractTeasable-blueprint-doctypes" scope="prototype" abstract="true"

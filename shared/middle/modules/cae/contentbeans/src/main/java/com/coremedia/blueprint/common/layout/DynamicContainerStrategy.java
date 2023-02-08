@@ -1,6 +1,7 @@
 package com.coremedia.blueprint.common.layout;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+
 import java.util.List;
 
 public interface DynamicContainerStrategy {

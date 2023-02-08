@@ -1,5 +1,8 @@
 package com.coremedia.blueprint.cae.handlers;
 
+import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.id.IdProvider;
+import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -38,8 +41,11 @@ public class PreviewUrlHandler extends AbstractUrlHandler {
                   '/' + PREFIX_PREVIEW +
                   '/' + PREFIX_HANDLER;
 
-  public PreviewUrlHandler(LinkFormatter linkFormatter) {
-    super(linkFormatter);
+  public PreviewUrlHandler(LinkFormatter linkFormatter,
+                           ContentBeanFactory contentBeanFactory,
+                           IdProvider idProvider,
+                           SitesService sitesService) {
+    super(linkFormatter, contentBeanFactory, idProvider, sitesService);
   }
 
   @GetMapping(value = URI_PATTERN, produces = MediaType.APPLICATION_JSON_VALUE)

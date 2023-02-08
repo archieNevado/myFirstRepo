@@ -1,11 +1,8 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
-import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.CMSite;
-import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cae.aspect.Aspect;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.List;
 import java.util.Map;
@@ -15,20 +12,6 @@ import java.util.Map;
  * Should not be changed.
  */
 public abstract class CMSiteBase extends CMLocalizedImpl implements CMSite {
-
-  private ValidationService<CMLinkable> validationService;
-
-  public ValidationService<CMLinkable> getValidationService() {
-    return validationService;
-  }
-
-  @Required
-  public void setValidationService(ValidationService<CMLinkable> validationService) {
-    if(validationService == null) {
-      throw new IllegalArgumentException("supplied 'validationService' must not be null");
-    }
-    this.validationService = validationService;
-  }
 
   /**
    * @deprecated since 1907.1; Implement optional features as extensions.

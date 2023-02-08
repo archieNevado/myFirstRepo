@@ -3,7 +3,6 @@ package com.coremedia.blueprint.cae.contentbeans;
 import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.cap.content.Content;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.List;
 
@@ -16,13 +15,20 @@ public class CMTaxonomyImpl extends CMTaxonomyBase {
 
   // --- configuration ----------------------------------------------
 
-  @Required
   public void setTreeRelation(TreeRelation<Content> treeRelation) {
     this.treeRelation = treeRelation;
   }
 
   public TreeRelation<Content> getTreeRelation() {
     return treeRelation;
+  }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (treeRelation == null) {
+      throw new IllegalStateException("Required property not set: treeRelation");
+    }
   }
 
   // --- features ---------------------------------------------------

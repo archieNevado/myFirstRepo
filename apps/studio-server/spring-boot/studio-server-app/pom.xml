@@ -105,7 +105,6 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
-          <mainClass>${spring-boot.mainClass}</mainClass>
           <layers>
             <enabled>true</enabled>
           </layers>
@@ -133,6 +132,11 @@
               <!--Actuator Port-->
               <port>8081</port>
             </ports>
+            <volumes>
+              <volume>/coremedia/cache</volume>
+              <volume>/var/tmp</volume>
+              <volume>/coremedia/themeimporter-apiKeyStore</volume>
+            </volumes>
           </container>
         </configuration>
         <executions>

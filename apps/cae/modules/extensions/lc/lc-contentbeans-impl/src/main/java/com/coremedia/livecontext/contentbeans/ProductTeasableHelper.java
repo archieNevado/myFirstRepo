@@ -18,7 +18,6 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.Optional;
 
@@ -161,7 +160,7 @@ public class ProductTeasableHelper {
     this.settingsService = settingsService;
   }
 
-  @Required
+  @Autowired
   public void setCommerceConnectionSupplier(CommerceConnectionSupplier commerceConnectionSupplier) {
     this.commerceConnectionSupplier = commerceConnectionSupplier;
   }

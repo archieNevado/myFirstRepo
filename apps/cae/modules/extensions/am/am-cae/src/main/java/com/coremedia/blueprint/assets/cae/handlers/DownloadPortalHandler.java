@@ -37,7 +37,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,6 +47,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
@@ -161,31 +161,44 @@ public class DownloadPortalHandler {
 
   private ContentBeanFactory contentBeanFactory;
 
-  @Required
   public void setDownloadPortalFactory(DownloadPortalFactory downloadPortalFactory) {
     this.downloadPortalFactory = downloadPortalFactory;
   }
 
-  @Required
   public void setContextHelper(ContextHelper contextHelper) {
     this.contextHelper = contextHelper;
   }
 
-  @Required
   public void setValidationService(ValidationService<ContentBean> validationService) {
     this.validationService = validationService;
   }
 
-  @Required
   public void setContentRepository(ContentRepository contentRepository) {
     this.contentRepository = contentRepository;
   }
 
-  @Required
   public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
     this.contentBeanFactory = contentBeanFactory;
   }
 
+  @PostConstruct
+  void initialize() {
+    if (contentBeanFactory == null) {
+      throw new IllegalStateException("Required property not set: contentBeanFactory");
+    }
+    if (contentRepository == null) {
+      throw new IllegalStateException("Required property not set: contentRepository");
+    }
+    if (contextHelper == null) {
+      throw new IllegalStateException("Required property not set: contextHelper");
+    }
+    if (downloadPortalFactory == null) {
+      throw new IllegalStateException("Required property not set: downloadPortalFactory");
+    }
+    if (validationService == null) {
+      throw new IllegalStateException("Required property not set: validationService");
+    }
+  }
 
   // ---------------------- handling requests ---------------------------------------------------------------------
 

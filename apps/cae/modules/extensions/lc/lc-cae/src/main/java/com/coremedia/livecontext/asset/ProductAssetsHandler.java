@@ -185,7 +185,7 @@ public class ProductAssetsHandler extends PageHandlerBase {
     paramMap.put(SEGMENT_VIEW, VIEW_NAME);
     paramMap.put(SEGMENT_CATALOG_ALIAS, product.getId().getCatalogAlias().value());
     if (rootChannel != null) {
-      String vanityName = urlPathFormattingHelper.getVanityName(rootChannel);
+      String vanityName = getUrlPathFormattingHelper().getVanityName(rootChannel);
       paramMap.put(SEGMENT_SITE, vanityName);
     }
 
@@ -216,7 +216,7 @@ public class ProductAssetsHandler extends PageHandlerBase {
         if (rootChannel == null) {
           continue;
         }
-        String vanityName = urlPathFormattingHelper.getVanityName(rootChannel);
+        String vanityName = getUrlPathFormattingHelper().getVanityName(rootChannel);
         if (siteName.equalsIgnoreCase(vanityName)) {
           return site;
         }

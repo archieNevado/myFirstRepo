@@ -47,6 +47,7 @@ public class BreadcrumbExternalReferenceResolver extends ExternalReferenceResolv
     }
 
     String contentId = IdHelper.formatContentId(ids.contentId);
+    var contentRepository = getContentRepository();
     Content linkable = contentRepository.getContent(contentId);
 
     Content channel;

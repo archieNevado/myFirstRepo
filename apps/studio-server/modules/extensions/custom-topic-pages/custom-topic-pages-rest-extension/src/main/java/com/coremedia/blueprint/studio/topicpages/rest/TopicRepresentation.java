@@ -21,19 +21,16 @@ public class TopicRepresentation {
   private Content rootChannel;
   private Content topicPagesFolder;
 
-  public TopicRepresentation(Content content, Content page, Content rootChannel, Content topicPagesFolder) {
-    this(content);
+  public TopicRepresentation(Content content, String name, Content page, Content rootChannel, Content topicPagesFolder) {
+    this(content, name);
     this.page = page;
     this.rootChannel = rootChannel;
     this.topicPagesFolder = topicPagesFolder;
   }
 
-  public TopicRepresentation(Content content) {
+  public TopicRepresentation(Content content, String name) {
     this.topic = content;
-    this.name = content.getName();
-    if(!Strings.isNullOrEmpty(content.getString("value"))) {
-      this.name = content.getString("value");
-    }
+    this.name = name;
   }
 
   public Content getTopicPagesFolder() {

@@ -32,7 +32,7 @@ public class HandlerBaseTest {
   public void setup() {
     caeConfigurationProperties = new CaeConfigurationProperties();
     caeConfigurationProperties.setSingleNode(false);
-    handlerBase.setDeliveryConfigurationProperties(caeConfigurationProperties);
+    handlerBase.setCaeConfigurationProperties(caeConfigurationProperties);
   }
 
   @Test

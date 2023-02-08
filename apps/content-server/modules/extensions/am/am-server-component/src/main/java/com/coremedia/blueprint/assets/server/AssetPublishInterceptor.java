@@ -7,12 +7,11 @@ import com.coremedia.cap.content.Version;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cms.server.plugins.PublishInterceptorBase;
 import com.coremedia.cms.server.plugins.PublishRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +36,6 @@ public class AssetPublishInterceptor extends PublishInterceptorBase {
    *
    * @param assetMetadataProperty property to use
    */
-  @Required
   public void setAssetMetadataProperty(@NonNull final String assetMetadataProperty) {
     this.assetMetadataProperty = requireNonNull(assetMetadataProperty, "assetMetadataProperty must not be null.");
   }
@@ -62,6 +60,14 @@ public class AssetPublishInterceptor extends PublishInterceptorBase {
     this.removeOverride.clear();
     if (removeOverride != null) {
       this.removeOverride.putAll(removeOverride);
+    }
+  }
+
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    super.afterPropertiesSet();
+    if (assetMetadataProperty == null || assetMetadataProperty.isBlank()) {
+      throw new IllegalStateException("Required property not set: assetMetadataProperty");
     }
   }
 

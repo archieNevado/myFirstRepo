@@ -8,17 +8,17 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.objectserver.web.HandlerHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 
-public class ChannelValidityInterceptor extends HandlerInterceptorAdapter {
+public class ChannelValidityInterceptor implements HandlerInterceptor {
 
   private static final Logger LOG = LoggerFactory.getLogger(ChannelValidityInterceptor.class);
 
@@ -45,9 +45,15 @@ public class ChannelValidityInterceptor extends HandlerInterceptorAdapter {
     }
   }
 
-  @Required
   public void setTreeRelation(NavigationLinkListContentTreeRelation treeRelation) {
     this.treeRelation = treeRelation;
+  }
+
+  @PostConstruct
+  protected void initialize() {
+    if (treeRelation == null) {
+      throw new IllegalStateException("Required property not set: treeRelation");
+    }
   }
 
   private boolean isPartOfGlobalNavigation(CMChannel channel) {

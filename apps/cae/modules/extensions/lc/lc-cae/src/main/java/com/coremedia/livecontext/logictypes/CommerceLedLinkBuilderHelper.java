@@ -8,8 +8,8 @@ import com.coremedia.blueprint.common.contentbeans.CMExternalLink;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.livecontext.contentbeans.CMExternalChannel;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
@@ -61,8 +61,15 @@ public class CommerceLedLinkBuilderHelper {
             LIVECONTEXT_POLICY_COMMERCE_PAGE_LINKS, Boolean.class, linkable).orElse(false);
   }
 
-  @Required
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
   }
+
+  @PostConstruct
+  protected void initialize() {
+    if (settingsService == null) {
+      throw new IllegalStateException("Required property not set: settingsService");
+    }
+  }
+
 }

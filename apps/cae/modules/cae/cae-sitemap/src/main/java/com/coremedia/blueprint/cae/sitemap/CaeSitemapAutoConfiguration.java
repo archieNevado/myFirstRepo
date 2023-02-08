@@ -6,18 +6,14 @@ import com.coremedia.cap.common.CapConnection;
 import com.coremedia.cms.delivery.configuration.DeliveryPropertiesAutoConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import static java.lang.invoke.MethodHandles.lookup;
 
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration(after = DeliveryPropertiesAutoConfiguration.class)
 @EnableConfigurationProperties(CaeSitemapConfigurationProperties.class)
-@AutoConfigureAfter({
-        DeliveryPropertiesAutoConfiguration.class,
-})
 public class CaeSitemapAutoConfiguration {
 
   private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());

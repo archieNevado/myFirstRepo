@@ -2,9 +2,9 @@ package com.coremedia.blueprint.assets.cae;
 
 import com.coremedia.blueprint.assets.contentbeans.AMAsset;
 import com.coremedia.blueprint.assets.contentbeans.AMTaxonomy;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+
 import java.util.Map;
 
 /**

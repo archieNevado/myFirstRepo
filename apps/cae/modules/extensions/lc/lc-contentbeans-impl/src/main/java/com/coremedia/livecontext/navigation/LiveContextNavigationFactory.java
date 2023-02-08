@@ -17,7 +17,8 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Required;
+
+import javax.annotation.PostConstruct;
 
 import static org.springframework.util.Assert.notNull;
 
@@ -99,12 +100,10 @@ public class LiveContextNavigationFactory {
 
   // --- configuration ----------------------------------------------
 
-  @Required
   public void setTreeRelation(LiveContextNavigationTreeRelation treeRelation) {
     this.treeRelation = treeRelation;
   }
 
-  @Required
   public void setSitesService(SitesService sitesService) {
     this.sitesService = sitesService;
   }
@@ -115,12 +114,10 @@ public class LiveContextNavigationFactory {
     this.augmentationService = augmentationService;
   }
 
-  @Required
   public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
     this.contentBeanFactory = contentBeanFactory;
   }
 
-  @Required
   public void setValidationService(ValidationService<LiveContextNavigation> validationService) {
     this.validationService = validationService;
   }
@@ -128,4 +125,24 @@ public class LiveContextNavigationFactory {
   public void setCommerceConnectionSupplier(CommerceConnectionSupplier commerceConnectionSupplier) {
     this.commerceConnectionSupplier = commerceConnectionSupplier;
   }
+
+  @PostConstruct
+  protected void initialize() {
+    if (commerceConnectionSupplier == null) {
+      throw new IllegalStateException("Required property not set: commerceConnectionSupplier");
+    }
+    if (contentBeanFactory == null) {
+      throw new IllegalStateException("Required property not set: contentBeanFactory");
+    }
+    if (sitesService == null) {
+      throw new IllegalStateException("Required property not set: sitesService");
+    }
+    if (treeRelation == null) {
+      throw new IllegalStateException("Required property not set: treeRelation");
+    }
+    if (validationService == null) {
+      throw new IllegalStateException("Required property not set: validationService");
+    }
+  }
+
 }

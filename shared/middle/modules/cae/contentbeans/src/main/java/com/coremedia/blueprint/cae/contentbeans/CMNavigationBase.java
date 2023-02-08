@@ -11,8 +11,8 @@ import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.user.User;
-
 import edu.umd.cs.findbugs.annotations.Nullable;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -149,4 +149,4 @@ public abstract class CMNavigationBase extends CMTeasableImpl implements CMNavig
     return getContent().getStruct(PLACEMENT);
   }
 }
-  
+

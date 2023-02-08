@@ -5,8 +5,8 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
@@ -41,7 +41,6 @@ public class PreferredSitePreviewCommerceContextInterceptor extends AbstractComm
     return Optional.ofNullable(site);
   }
 
-  @Required
   public void setSitesService(SitesService siteService) {
     this.sitesService = siteService;
   }
@@ -49,4 +48,12 @@ public class PreferredSitePreviewCommerceContextInterceptor extends AbstractComm
   public void setQueryParam(String queryParam) {
     this.queryParam = queryParam;
   }
+
+  @PostConstruct
+  protected void initialize() {
+    if (sitesService == null) {
+      throw new IllegalStateException("Required property not set: sitesService");
+    }
+  }
+
 }

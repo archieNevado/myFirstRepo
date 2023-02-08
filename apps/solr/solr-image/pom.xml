@@ -102,7 +102,7 @@
       <plugin>
         <groupId>com.google.cloud.tools</groupId>
         <artifactId>jib-maven-plugin</artifactId>
-        <version>3.2.1</version>
+        <version>3.3.1</version>
         <dependencies>
           <dependency>
             <groupId>com.google.cloud.tools</groupId>
@@ -139,6 +139,15 @@
             <ports>
               <port>8983</port>
             </ports>
+            <volumes>
+              <!--
+               | /etc/default/solr.in.sh is an env file script, that should not be used at all. Instead we should set the env
+               | values it allows directly on the container. The config.sh script should be renamed in leader-follower-setup.sh
+               | and should contain only that logic guarded by envs.
+              -->
+              <volume>/etc/default</volume>
+              <volume>/tmp</volume>
+            </volumes>
           </container>
           <extraDirectories>
             <paths>

@@ -1,5 +1,7 @@
 package com.coremedia.blueprint.taxonomies;
 
+import com.coremedia.blueprint.base.taxonomies.TaxonomyLocalizationStrategy;
+import com.coremedia.blueprint.localization.configuration.TaxonomyLocalizationStrategyConfiguration;
 import com.coremedia.blueprint.taxonomies.cycleprevention.TaxonomyCyclePreventionConfiguration;
 import com.coremedia.blueprint.taxonomies.cycleprevention.TaxonomyCycleValidator;
 import com.coremedia.blueprint.taxonomies.semantic.SemanticTaxonomyConfiguration;
@@ -12,17 +14,18 @@ import com.coremedia.cap.undoc.common.spring.CapRepositoriesConfiguration;
 import com.coremedia.rest.cap.CapRestServiceSearchConfiguration;
 import com.coremedia.rest.cap.content.search.SearchService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import java.util.Map;
 
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @Import({
         TaxonomyCyclePreventionConfiguration.class,
         SemanticTaxonomyConfiguration.class,
+        TaxonomyLocalizationStrategyConfiguration.class,
         CapRestServiceSearchConfiguration.class,
         CapRepositoriesConfiguration.class,
 })
@@ -40,6 +43,7 @@ public class TaxonomyConfiguration {
                                         SitesService sitesService,
                                         SearchService searchService,
                                         TaxonomyCycleValidator taxonomyCycleValidator,
+                                        TaxonomyLocalizationStrategy taxonomyLocalizationStrategy,
                                         ContentConfigurationProperties contentConfigurationProperties,
                                         Cache cache) {
     String globalConfigurationPath = contentConfigurationProperties.getGlobalConfigurationPath();
@@ -47,6 +51,7 @@ public class TaxonomyConfiguration {
             contentRepository,
             searchService,
             taxonomyCycleValidator,
+            taxonomyLocalizationStrategy,
             Map.of("Query", "Subject", "QueryLocation", "Location"),
             "CMTaxonomy",
             "Options/",
@@ -54,5 +59,4 @@ public class TaxonomyConfiguration {
             maxDocumentsPerFolder,
             cache);
   }
-
 }

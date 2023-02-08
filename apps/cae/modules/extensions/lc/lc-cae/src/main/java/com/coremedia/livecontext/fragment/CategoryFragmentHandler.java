@@ -22,7 +22,6 @@ import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,8 +40,6 @@ public class CategoryFragmentHandler extends FragmentHandler {
 
   private ResolveContextStrategy contextStrategy;
   private boolean useOriginalNavigationContext = false;
-
-  // --- FragmentHandler --------------------------------------------
 
   /**
    * Renders the complete context (which is a CMChannel) of the given <code>category</code> using the given <code>view</code>.
@@ -137,17 +134,12 @@ public class CategoryFragmentHandler extends FragmentHandler {
     return !isNullOrEmpty(categoryId) && (isNullOrEmpty(externalRef) || !externalRef.startsWith("cm-"));
   }
 
-  // --- internal ---------------------------------------------------
-
   private void enhanceModelAndView(@NonNull ModelAndView modelAndView, @NonNull Navigation navigation) {
     if (navigation instanceof LiveContextCategoryNavigation) {
       modelAndView.addObject("lcNavigation", navigation);
     }
   }
 
-  // ------------------- Config ---------------------------------
-
-  @Required
   public void setContextStrategy(ResolveContextStrategy contextStrategy) {
     this.contextStrategy = contextStrategy;
   }
@@ -161,4 +153,13 @@ public class CategoryFragmentHandler extends FragmentHandler {
   public void setUseOriginalNavigationContext(boolean useOriginalNavigationContext) {
     this.useOriginalNavigationContext = useOriginalNavigationContext;
   }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (contextStrategy == null) {
+      throw new IllegalStateException("Required property not set: contextStrategy");
+    }
+  }
+
 }

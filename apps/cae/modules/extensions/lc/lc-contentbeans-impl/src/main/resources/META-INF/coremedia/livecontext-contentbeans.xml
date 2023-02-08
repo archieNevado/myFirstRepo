@@ -18,8 +18,6 @@
 
   <bean name="contentBeanFactory:CMMarketingSpot" parent="abstractTeasable-blueprint-doctypes"
         class="com.coremedia.livecontext.contentbeans.CMMarketingSpotImpl" scope="prototype">
-    <property name="liveContextNavigationFactory" ref="liveContextNavigationFactory"/>
-    <property name="commerceConnectionSupplier" ref="commerceConnectionSupplier"/>
   </bean>
 
   <bean name="contentBeanFactory:CMProductList" parent="abstractTeasable-blueprint-doctypes"
@@ -48,23 +46,16 @@
         class="com.coremedia.livecontext.contentbeans.LiveContextExternalChannelImpl" scope="prototype">
     <property name="treeRelation" ref="liveContextNavigationTreeRelation"/>
     <property name="codeResourcesTreeRelation" ref="externalChannelContentTreeRelation"/>
-    <property name="liveContextNavigationFactory" ref="liveContextNavigationFactory"/>
     <property name="pageGridService" ref="extCategoryPageGridService"/>
-    <property name="pdpPageGridService" ref="pdpPageGridService"/>
-    <property name="commerceConnectionSupplier" ref="commerceConnectionSupplier"/>
-
   </bean>
 
   <bean name="contentBeanFactory:CMExternalProduct"
         parent="abstractTeasable-blueprint-doctypes"
         class="com.coremedia.livecontext.contentbeans.LiveContextExternalProductImpl"
         scope="prototype">
-    <property name="pageGridService" ref="productPageGridService"/>
-    <property name="commerceConnectionSupplier" ref="commerceConnectionSupplier"/>
   </bean>
 
   <bean id="productTeasableHelper" class="com.coremedia.livecontext.contentbeans.ProductTeasableHelper">
-    <property name="commerceConnectionSupplier" ref="commerceConnectionSupplier"/>
   </bean>
 
   <bean id="pdpPageGridService" class="com.coremedia.blueprint.cae.layout.PageGridServiceImpl">

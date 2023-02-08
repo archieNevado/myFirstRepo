@@ -12,7 +12,6 @@ import com.coremedia.livecontext.fragment.FragmentParameters;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,20 +31,25 @@ public class SegmentPathResolver extends ExternalReferenceResolverBase {
     super(SEGMENTPATH_PARAM_PREFIX);
   }
 
-// --- configuration ----------------------------------------------
-
-  @Required
   public void setNavigationSegmentsUriHelper(NavigationSegmentsUriHelper navigationSegmentsUriHelper) {
     this.navigationSegmentsUriHelper = navigationSegmentsUriHelper;
   }
 
-  @Required
   public void setSegmentResolver(@NonNull SegmentResolver segmentResolver) {
     Objects.requireNonNull(segmentResolver);
     this.segmentResolver = segmentResolver;
   }
 
-  // --- interface --------------------------------------------------
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (navigationSegmentsUriHelper == null) {
+      throw new IllegalStateException("Required property not set: navigationSegmentsUriHelper");
+    }
+    if (segmentResolver == null) {
+      throw new IllegalStateException("Required property not set: segmentResolver");
+    }
+  }
 
   @Nullable
   @Override

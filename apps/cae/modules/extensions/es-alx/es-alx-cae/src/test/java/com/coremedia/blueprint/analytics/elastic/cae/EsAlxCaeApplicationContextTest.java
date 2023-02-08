@@ -14,6 +14,9 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = EsAlxCaeApplicationContextTest.LocalConfig.class)
 @WebAppConfiguration
+@TestPropertySource(properties = {
+        "cae.hashing.backward-compatibility=true",
+})
 public class EsAlxCaeApplicationContextTest {
 
   @Configuration(proxyBeanMethods = false)
@@ -22,10 +25,8 @@ public class EsAlxCaeApplicationContextTest {
   })
   @ImportResource({
           "classpath:/com/coremedia/blueprint/analytics/elastic/cae/EsAlxCaeApplicationContextTest.xml",
-          "classpath:/spring/test/dummy-views.xml",
           "classpath:/com/coremedia/cap/common/xml/uapi-xml-services.xml",
   })
-  @TestPropertySource(properties = "elastic.core.persistence=memory")
   static class LocalConfig {
   }
 

@@ -10,8 +10,8 @@ import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -98,23 +98,36 @@ public class NavigationSegmentsUriHelper {
 
   // --- configuration ----------------------------------------------
 
-  @Required
   public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
     this.contentBeanFactory = contentBeanFactory;
   }
 
-  @Required
   public void setSitesService(SitesService sitesService) {
     this.sitesService = sitesService;
   }
 
-  @Required
   public void setCache(Cache cache) {
     this.cache = cache;
   }
 
-  @Required
   public void setUrlPathFormattingHelper(UrlPathFormattingHelper urlPathFormattingHelper) {
     this.urlPathFormattingHelper = urlPathFormattingHelper;
   }
+
+  @PostConstruct
+  protected void initialize() {
+    if (cache == null) {
+      throw new IllegalStateException("Required property not set: cache");
+    }
+    if (contentBeanFactory == null) {
+      throw new IllegalStateException("Required property not set: contentBeanFactory");
+    }
+    if (sitesService == null) {
+      throw new IllegalStateException("Required property not set: sitesService");
+    }
+    if (urlPathFormattingHelper == null) {
+      throw new IllegalStateException("Required property not set: urlPathFormattingHelper");
+    }
+  }
+
 }

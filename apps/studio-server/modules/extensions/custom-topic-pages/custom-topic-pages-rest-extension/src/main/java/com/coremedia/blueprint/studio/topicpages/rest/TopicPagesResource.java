@@ -2,6 +2,7 @@ package com.coremedia.blueprint.studio.topicpages.rest;
 
 import com.coremedia.blueprint.base.config.ConfigurationService;
 import com.coremedia.blueprint.base.config.StructConfiguration;
+import com.coremedia.blueprint.base.taxonomies.TaxonomyLocalizationStrategy;
 import com.coremedia.blueprint.taxonomies.Taxonomy;
 import com.coremedia.blueprint.taxonomies.TaxonomyNode;
 import com.coremedia.blueprint.taxonomies.TaxonomyResolver;
@@ -76,6 +77,7 @@ public class TopicPagesResource {
   private final CapConnection capConnection;
   private final ConfigurationService configurationService;
   private final TaxonomyResolver strategyResolver;
+  private final TaxonomyLocalizationStrategy taxonomyLocalizationStrategy;
   private final SitesService sitesService;
   private final String siteConfigPath;
   private final String globalConfigPath;
@@ -87,12 +89,14 @@ public class TopicPagesResource {
   public TopicPagesResource(CapConnection capConnection,
                             ConfigurationService configurationService,
                             TaxonomyResolver strategyResolver,
+                            TaxonomyLocalizationStrategy taxonomyLocalizationStrategy,
                             SitesService sitesService,
                             String siteConfigPath,
                             String globalConfigPath) {
     this.capConnection = capConnection;
     this.configurationService = configurationService;
     this.strategyResolver = strategyResolver;
+    this.taxonomyLocalizationStrategy = taxonomyLocalizationStrategy;
     this.sitesService = sitesService;
     this.siteConfigPath = siteConfigPath;
     this.globalConfigPath = globalConfigPath;
@@ -194,7 +198,7 @@ public class TopicPagesResource {
       String contentId = TaxonomyUtil.asContentId(node.getRef());
       Content topic = capConnection.getContentRepository().getContent(contentId);
       if (topic.isInProduction()) {
-        TopicRepresentation topicRepresentation = new TopicRepresentation(topic);
+        TopicRepresentation topicRepresentation = new TopicRepresentation(topic, getName(topic));
         topicRepresentation.setPage(getContextForTopic(topic, siteId));
         result.getItems().add(topicRepresentation);
       }
@@ -309,7 +313,7 @@ public class TopicPagesResource {
     Content topicPagesFolder = getSettings(site).getFolder();
     Content context = getContextForTopic(topic, topicSiteId);
     Content siteChannel = settings.getTopicPageChannel();
-    TopicRepresentation rep = new TopicRepresentation(topic, context, siteChannel, topicPagesFolder);
+    TopicRepresentation rep = new TopicRepresentation(topic, getName(topic), context, siteChannel, topicPagesFolder);
 
     if (!topic.isCheckedOut()) {
       topic.checkOut();
@@ -362,6 +366,19 @@ public class TopicPagesResource {
       }
       rep.setPage(null);
     }
+  }
+
+  private String getName(Content content) {
+    String name = content.getName();
+    if(taxonomyLocalizationStrategy == null) {
+      if(!Strings.isNullOrEmpty(content.getString("value"))) {
+        name = content.getString("value");
+      }
+    }
+    else {
+      name = taxonomyLocalizationStrategy.getDisplayName(content, null);
+    }
+    return name;
   }
 
   /**

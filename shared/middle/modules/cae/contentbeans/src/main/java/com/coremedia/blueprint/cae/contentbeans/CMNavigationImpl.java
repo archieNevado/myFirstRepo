@@ -11,7 +11,6 @@ import com.coremedia.cap.multisite.Site;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,14 +31,23 @@ public abstract class CMNavigationImpl extends CMNavigationBase {
 
   // --- construction -----------------------------------------------
 
-  @Required
   public void setTreeRelation(TreeRelation<Linkable> treeRelation) {
     this.treeRelation = treeRelation;
   }
 
-  @Required
   public void setCodeResourcesTreeRelation(TreeRelation<Content> codeResourcesTreeRelation) {
     this.codeResourcesTreeRelation = codeResourcesTreeRelation;
+  }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (codeResourcesTreeRelation == null) {
+      throw new IllegalStateException("Required property not set: codeResourcesTreeRelation");
+    }
+    if (treeRelation == null) {
+      throw new IllegalStateException("Required property not set: treeRelation");
+    }
   }
 
   // --- CMNavigation -----------------------------------------------

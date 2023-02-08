@@ -1,7 +1,6 @@
 package com.coremedia.blueprint.assets.cae;
 
 import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 

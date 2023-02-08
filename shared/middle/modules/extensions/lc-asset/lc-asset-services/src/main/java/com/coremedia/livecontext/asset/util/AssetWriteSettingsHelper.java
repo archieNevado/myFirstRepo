@@ -3,9 +3,10 @@ package com.coremedia.livecontext.asset.util;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.struct.StructBuilder;
-import org.springframework.beans.factory.annotation.Required;
-
+import com.coremedia.springframework.beans.RequiredPropertyNotSetException;
 import edu.umd.cs.findbugs.annotations.NonNull;
+
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 
@@ -58,13 +59,17 @@ public class AssetWriteSettingsHelper {
     structBuilder.up();
   }
 
-  @Required
   public void setAssetReadSettingsHelper(AssetReadSettingsHelper assetReadSettingsHelper) {
     this.assetReadSettingsHelper = assetReadSettingsHelper;
   }
 
-  @Required
   public void setContentRepository(ContentRepository contentRepository) {
     this.contentRepository = contentRepository;
+  }
+
+  @PostConstruct
+  void initialize() {
+    RequiredPropertyNotSetException.ifNull("contentRepository", contentRepository);
+    RequiredPropertyNotSetException.ifNull("assetReadSettingsHelper", assetReadSettingsHelper);
   }
 }

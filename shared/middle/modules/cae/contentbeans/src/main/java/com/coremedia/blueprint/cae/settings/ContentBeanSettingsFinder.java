@@ -12,8 +12,8 @@ import com.coremedia.objectserver.beans.ContentIdRewriter;
 import com.coremedia.objectserver.dataviews.DataViewCollections;
 import com.coremedia.objectserver.dataviews.DataViewHelper;
 import com.coremedia.xml.Markup;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,16 +35,23 @@ public class ContentBeanSettingsFinder implements SettingsFinder {
 
   // --- construct and configure ------------------------------------
 
-  @Required
   public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
     this.contentBeanFactory = contentBeanFactory;
   }
 
-  @Required
   public void setDataViewCollections(DataViewCollections dataViewCollections) {
     this.dataViewCollections = dataViewCollections;
   }
 
+  @PostConstruct
+  void initialize() {
+    if (contentBeanFactory == null) {
+      throw new IllegalStateException("Required property not set: contentBeanFactory");
+    }
+    if (dataViewCollections == null) {
+      throw new IllegalStateException("Required property not set: dataViewCollections");
+    }
+  }
 
   // --- SettingsFinder ---------------------------------------------
 

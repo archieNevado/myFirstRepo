@@ -1,6 +1,8 @@
 package com.coremedia.blueprint.taxonomies.semantic;
 
 import com.coremedia.blueprint.base.settings.SettingsService;
+import com.coremedia.blueprint.base.taxonomies.TaxonomyLocalizationStrategy;
+import com.coremedia.blueprint.localization.configuration.TaxonomyLocalizationStrategyConfiguration;
 import com.coremedia.blueprint.taxonomies.semantic.service.SemanticService;
 import com.coremedia.blueprint.taxonomies.semantic.service.SemanticServiceStrategy;
 import com.coremedia.blueprint.taxonomies.semantic.service.matching.NameMatchingStrategy;
@@ -30,6 +32,7 @@ import java.util.Map;
 @Import({
         CapRepositoriesConfiguration.class,
         CapRestServiceSearchConfiguration.class,
+        TaxonomyLocalizationStrategyConfiguration.class,
 })
 public class SemanticTaxonomyConfiguration {
 
@@ -68,9 +71,10 @@ public class SemanticTaxonomyConfiguration {
 
   //The CM taxonomy node strategy beans working on folders with parent and child properties on the CMTaxonomy content type
   @Bean
-  SemanticStrategy nameMatching(ContentRepository contentRepository) {
+  SemanticStrategy nameMatching(ContentRepository contentRepository, TaxonomyLocalizationStrategy taxonomyLocalizationStrategy) {
     NameMatchingStrategy nameMatchingStrategy = new NameMatchingStrategy();
     nameMatchingStrategy.setServiceId("nameMatching");
+    nameMatchingStrategy.setTaxonomyLocalizationStrategy(taxonomyLocalizationStrategy);
     nameMatchingStrategy.setContentRepository(contentRepository);
     return nameMatchingStrategy;
   }

@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.taxonomies.strategy;
 
+import com.coremedia.blueprint.base.taxonomies.TaxonomyLocalizationStrategy;
 import com.coremedia.blueprint.taxonomies.Taxonomy;
 import com.coremedia.blueprint.taxonomies.TaxonomyResolver;
 import com.coremedia.blueprint.taxonomies.cycleprevention.TaxonomyCycleValidator;
@@ -27,6 +28,7 @@ public class TaxonomyResolverImpl implements TaxonomyResolver {
   private final ContentRepository contentRepository;
   private final SearchService searchService;
   private final TaxonomyCycleValidator taxonomyCycleValidator;
+  private final TaxonomyLocalizationStrategy taxonomyLocalizationStrategy;
   private final Map<String, String> aliasMapping;
   private final SitesService sitesService;
   private final String contentType;
@@ -40,6 +42,7 @@ public class TaxonomyResolverImpl implements TaxonomyResolver {
                               @NonNull ContentRepository contentRepository,
                               @NonNull SearchService searchService,
                               @NonNull TaxonomyCycleValidator taxonomyCycleValidator,
+                              @NonNull TaxonomyLocalizationStrategy taxonomyLocalizationStrategy,
                               @NonNull Map<String, String> aliasMapping,
                               @NonNull String contentType,
                               @NonNull String siteConfigPath,
@@ -50,6 +53,7 @@ public class TaxonomyResolverImpl implements TaxonomyResolver {
     this.contentRepository = contentRepository;
     this.searchService = searchService;
     this.taxonomyCycleValidator = taxonomyCycleValidator;
+    this.taxonomyLocalizationStrategy = taxonomyLocalizationStrategy;
     this.aliasMapping = aliasMapping;
     this.contentType = contentType;
     this.siteConfigPath = siteConfigPath;
@@ -70,6 +74,7 @@ public class TaxonomyResolverImpl implements TaxonomyResolver {
             sitesService,
             searchService,
             taxonomyCycleValidator,
+            taxonomyLocalizationStrategy,
             contentType,
             siteConfigPath,
             globalConfigPath,

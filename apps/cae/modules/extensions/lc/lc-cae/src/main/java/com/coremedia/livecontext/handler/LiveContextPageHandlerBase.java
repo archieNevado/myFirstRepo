@@ -12,12 +12,8 @@ import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
 import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
 import com.coremedia.objectserver.web.links.UriComponentsHelper;
-import com.google.common.annotations.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Required;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.util.UriComponents;
 
 import javax.servlet.ServletRequest;
@@ -49,42 +45,55 @@ public class LiveContextPageHandlerBase extends PageHandlerBase {
   private SettingsService settingsService;
   private ContentRepository contentRepository;
 
-  // --- construct and configure ------------------------------------
-
-  @Required
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
   }
 
-  @Required
   public void setResolveContextStrategy(ResolveContextStrategy resolveContextStrategy) {
     this.resolveContextStrategy = resolveContextStrategy;
   }
 
-  @Required
   public void setContentRepository(ContentRepository contentRepository) {
     this.contentRepository = contentRepository;
   }
 
-  @Required
   public void setLiveContextNavigationFactory(LiveContextNavigationFactory liveContextNavigationFactory) {
     this.liveContextNavigationFactory = liveContextNavigationFactory;
   }
 
-  @Required
   public void setUrlPrefixResolver(UrlPrefixResolver urlPrefixResolver) {
     this.urlPrefixResolver = urlPrefixResolver;
   }
 
-  @Required
   public void setSiteResolver(LiveContextSiteResolver siteResolver) {
     this.siteResolver = siteResolver;
   }
 
-  // --- features ---------------------------------------------------
-
   protected SettingsService getSettingsService() {
     return settingsService;
+  }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (contentRepository == null) {
+      throw new IllegalStateException("Required property not set: contentRepository");
+    }
+    if (liveContextNavigationFactory == null) {
+      throw new IllegalStateException("Required property not set: liveContextNavigationFactory");
+    }
+    if (resolveContextStrategy == null) {
+      throw new IllegalStateException("Required property not set: resolveContextStrategy");
+    }
+    if (settingsService == null) {
+      throw new IllegalStateException("Required property not set: settingsService");
+    }
+    if (siteResolver == null) {
+      throw new IllegalStateException("Required property not set: siteResolver");
+    }
+    if (urlPrefixResolver == null) {
+      throw new IllegalStateException("Required property not set: urlPrefixResolver");
+    }
   }
 
   @NonNull
@@ -150,13 +159,6 @@ public class LiveContextPageHandlerBase extends PageHandlerBase {
   @NonNull
   protected String getSiteSegment(@NonNull Site site) {
     return getContentLinkBuilder().getVanityName(site.getSiteRootDocument());
-  }
-
-  // --- internal ---------------------------------------------------
-
-  @VisibleForTesting
-  SecurityContext getSecurityContext() {
-    return SecurityContextHolder.getContext();
   }
 
   private static boolean isAbsoluteUrlRequested(@NonNull ServletRequest request) {

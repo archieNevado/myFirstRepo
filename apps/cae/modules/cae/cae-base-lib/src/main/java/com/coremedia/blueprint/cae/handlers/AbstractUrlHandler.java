@@ -6,7 +6,9 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.id.IdProvider;
 import com.coremedia.objectserver.beans.ContentBean;
+import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.IdRedirectHandlerBase;
 import com.coremedia.objectserver.web.links.LinkFormatter;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
@@ -29,16 +31,19 @@ public abstract class AbstractUrlHandler extends IdRedirectHandlerBase {
 
   private static final Logger LOG = LoggerFactory.getLogger(AbstractUrlHandler.class);
 
-  private LinkFormatter linkFormatter;
+  private final LinkFormatter linkFormatter;
+  private final SitesService sitesService;
 
-  @Nullable
-  private SitesService sitesService;
-
-  public AbstractUrlHandler(LinkFormatter linkFormatter) {
+  public AbstractUrlHandler(LinkFormatter linkFormatter,
+                            ContentBeanFactory contentBeanFactory,
+                            IdProvider idProvider,
+                            SitesService sitesService) {
     this.linkFormatter = linkFormatter;
+    this.sitesService = sitesService;
+    // set required members of super class (compare with super#initialize)
+    setContentBeanFactory(contentBeanFactory);
+    setIdProvider(idProvider);
   }
-
-// --- Handler ----------------------------------------------------
 
   public ResponseEntity<String> getLink(String id,
                                         String view,
@@ -89,14 +94,11 @@ public abstract class AbstractUrlHandler extends IdRedirectHandlerBase {
    * @param siteId The id of the site
    */
   private Optional<Site> storeSite(HttpServletRequest request, @Nullable String siteId) {
-    if (sitesService == null || siteId == null || StringUtils.isBlank(siteId)) {
+    if (StringUtils.isBlank(siteId)) {
       return Optional.empty();
     }
     Optional<Site> siteOpt = sitesService.findSite(siteId);
-    if (siteOpt.isPresent()) {
-      Site site = siteOpt.get();
-      SiteHelper.setSiteToRequest(site, request);
-    }
+    siteOpt.ifPresent(site -> SiteHelper.setSiteToRequest(site, request));
     return siteOpt;
   }
 
@@ -148,12 +150,4 @@ public abstract class AbstractUrlHandler extends IdRedirectHandlerBase {
     }
   }
 
-
-  public void setSitesService(@Nullable SitesService sitesService) {
-    this.sitesService = sitesService;
-  }
-
-  public void setLinkFormatter(LinkFormatter linkFormatter) {
-    this.linkFormatter = linkFormatter;
-  }
 }

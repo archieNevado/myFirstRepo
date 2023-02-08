@@ -16,9 +16,6 @@ import com.coremedia.objectserver.web.SecureHashCodeGeneratorStrategy;
 import com.coremedia.objectserver.web.links.Link;
 import com.coremedia.transform.TransformedBeanBlob;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,8 +48,6 @@ import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFI
 @RequestMapping
 public class TransformedBlobHandler extends HandlerBase {
 
-  private static final Logger LOG = LoggerFactory.getLogger(TransformedBlobHandler.class);
-
   private static final String URI_PREFIX = "image";
   private static final String TRANSFORMATION_SEGMENT = "transformationName";
   private static final String DIGEST_SEGMENT = "digest";
@@ -60,10 +55,6 @@ public class TransformedBlobHandler extends HandlerBase {
   public static final String WIDTH_SEGMENT = "width";
   public static final String HEIGHT_SEGMENT = "height";
 
-  private ValidationService<ContentBean> validationService = null;
-
-  private SecureHashCodeGeneratorStrategy secureHashCodeGeneratorStrategy;
-  private TransformImageService transformImageService;
   /**
    * URI Pattern for transformed blobs.
    * e.g. /image/4302/landscape_ratio4x3/590/442/969e0a0b2eb79df86df7ffecd1375115/eg/london.jpg
@@ -80,7 +71,10 @@ public class TransformedBlobHandler extends HandlerBase {
                   "/{" + SEGMENT_NAME + "}" +
                   ".{" + SEGMENT_EXTENSION + ":" + PATTERN_EXTENSION + "}";
 
-  // --- spring config -------------------------------------------------------------------------------------------------
+  private ValidationService<ContentBean> validationService;
+
+  private SecureHashCodeGeneratorStrategy secureHashCodeGeneratorStrategy;
+  private TransformImageService transformImageService;
 
   public void setValidationService(ValidationService<ContentBean> validationService) {
     this.validationService = validationService;
@@ -90,12 +84,23 @@ public class TransformedBlobHandler extends HandlerBase {
     this.secureHashCodeGeneratorStrategy = secureHashCodeGeneratorStrategy;
   }
 
-  @Required
   public void setTransformImageService(TransformImageService transformImageService) {
     this.transformImageService = transformImageService;
   }
 
-  // --- Handlers ------------------------------------------------------------------------------------------------------
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (secureHashCodeGeneratorStrategy == null) {
+      throw new IllegalStateException("Required property not set: secureHashCodeGeneratorStrategy");
+    }
+    if (transformImageService == null) {
+      throw new IllegalStateException("Required property not set: transformImageService");
+    }
+    if (validationService == null) {
+      throw new IllegalStateException("Required property not set: validationService");
+    }
+  }
 
   @GetMapping(value = URI_PATTERN)
   public ModelAndView handleRequest(@Nullable @PathVariable(SEGMENT_ID) ContentBean contentBean,
@@ -111,7 +116,7 @@ public class TransformedBlobHandler extends HandlerBase {
     if (!(contentBean instanceof CMMedia)) {
       return HandlerHelper.notFound();
     }
-    if (validationService != null && !validationService.validate(contentBean)) {
+    if (!validationService.validate(contentBean)) {
       return HandlerHelper.notFound("The content item you are trying to preview is invalid and cannot be viewed.");
     }
 

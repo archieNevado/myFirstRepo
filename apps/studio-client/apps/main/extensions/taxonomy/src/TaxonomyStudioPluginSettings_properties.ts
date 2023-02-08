@@ -32,8 +32,11 @@ interface TaxonomyStudioPluginSettings_properties {
  */
   taxonomy_referrer_doctype: string;
   taxonomy_referrer_properties: string;
+/**
+ * l10n properties
+ */
+  taxonomy_l10n_property: string;
 }
-
 /**
  * Singleton for the current user Locale's instance of ResourceBundle "TaxonomyStudioPluginSettings".
  * @see TaxonomyStudioPluginSettings_properties
@@ -46,6 +49,7 @@ const TaxonomyStudioPluginSettings_properties: TaxonomyStudioPluginSettings_prop
   taxonomy_default_name: "new tag",
   taxonomy_referrer_doctype: "CMLinkable",
   taxonomy_referrer_properties: "subjectTaxonomy,locationTaxonomy",
+  taxonomy_l10n_property: "localSettings.translations",
 };
 
 export default TaxonomyStudioPluginSettings_properties;

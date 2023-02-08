@@ -5,12 +5,12 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.wrapper.ContentWrapper;
 import com.coremedia.cap.content.wrapper.TypedCapStructWrapperFactory;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.beans.TypeMismatchException;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.GenericConverter;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
+import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -81,16 +81,25 @@ public class GenericIdToContentWrapperConverter implements GenericConverter {
     throw new UnsupportedOperationException();
   }
 
-  @Required
   public void setTypedCapStructWrapperFactory(TypedCapStructWrapperFactory typedCapStructWrapperFactory) {
     this.typedCapStructWrapperFactory = typedCapStructWrapperFactory;
   }
 
-  @Required
   public void setContentRepository(ContentRepository contentRepository) {
     this.contentRepository = contentRepository;
   }
 
   private TypedCapStructWrapperFactory typedCapStructWrapperFactory;
   private ContentRepository contentRepository;
+
+  @PostConstruct
+  protected void initialize() {
+    if (contentRepository == null) {
+      throw new IllegalStateException("Required property not set: contentRepository");
+    }
+    if (typedCapStructWrapperFactory == null) {
+      throw new IllegalStateException("Required property not set: typedCapStructWrapperFactory");
+    }
+  }
+
 }

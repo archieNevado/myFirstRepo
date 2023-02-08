@@ -6,8 +6,8 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,21 +19,30 @@ public class DelegateStrategyBeanContextFinder implements ContextFinder<ContentB
 
   // --- configure --------------------------------------------------
 
-  @Required
   public void setDelegate(ContextStrategy<Content, Content> delegate) {
     this.delegate = delegate;
   }
 
-  @Required
   public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
     this.contentBeanFactory = contentBeanFactory;
   }
 
-  @Required
   public void setDataViewFactory(DataViewFactory dataViewFactory) {
     this.dataViewFactory = dataViewFactory;
   }
 
+  @PostConstruct
+  void initialize() {
+    if (contentBeanFactory == null) {
+      throw new IllegalStateException("Required property not set: contentBeanFactory");
+    }
+    if (dataViewFactory == null) {
+      throw new IllegalStateException("Required property not set: dataViewFactory");
+    }
+    if (delegate == null) {
+      throw new IllegalStateException("Required property not set: delegate");
+    }
+  }
 
   // --- ContextFinder ----------------------------------------------
 

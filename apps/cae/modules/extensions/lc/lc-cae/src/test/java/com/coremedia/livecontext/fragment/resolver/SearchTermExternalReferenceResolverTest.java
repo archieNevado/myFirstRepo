@@ -8,6 +8,7 @@ import com.coremedia.blueprint.cae.search.SearchResultFactory;
 import com.coremedia.blueprint.cae.search.Value;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
+import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.cache.Cache;
 import com.coremedia.cache.CacheKey;
 import com.coremedia.cache.config.CacheConfigurationProperties;
@@ -19,6 +20,8 @@ import com.coremedia.cap.content.query.QueryService;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.livecontext.fragment.FragmentParametersFactory;
+import com.coremedia.objectserver.beans.ContentBeanFactory;
+import com.coremedia.objectserver.dataviews.DataViewFactory;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.junit.Before;
 import org.junit.Test;
@@ -117,11 +120,14 @@ public class SearchTermExternalReferenceResolverTest {
   private SearchTermExternalReferenceResolver resolver() {
     SearchTermExternalReferenceResolver resolver = new SearchTermExternalReferenceResolver(cacheConfigurationProperties);
     configureResolver(resolver);
-    resolver.afterPropertiesSet();
+    resolver.initialize();
     return resolver;
   }
 
   private void configureResolver(SearchTermExternalReferenceResolver resolver) {
+    resolver.setContentBeanFactory(mock(ContentBeanFactory.class));
+    resolver.setDataViewFactory(mock(DataViewFactory.class));
+    resolver.setContextHelper(mock(ContextHelper.class));
     resolver.setContentRepository(contentRepository);
     resolver.setCache(cache);
     resolver.setNavigationTreeRelation(navigationTreeRelation);
@@ -148,7 +154,7 @@ public class SearchTermExternalReferenceResolverTest {
     SearchTermExternalReferenceResolver resolver = new SearchTermExternalReferenceResolver(cacheConfigurationProperties);
     configureResolver(resolver);
     resolver.setContentType(unknownType);
-    resolver.afterPropertiesSet();
+    resolver.initialize();
   }
 
   @Test(expected = IllegalStateException.class)
@@ -216,7 +222,7 @@ public class SearchTermExternalReferenceResolverTest {
     SearchTermExternalReferenceResolver resolver = new SearchTermExternalReferenceResolver(cacheConfigurationProperties);
     configureResolver(resolver);
     resolver.setSegmentPath("");
-    resolver.afterPropertiesSet();
+    resolver.initialize();
 
     Content result = mock(Content.class);
     mockSearchResult(result);
@@ -241,7 +247,7 @@ public class SearchTermExternalReferenceResolverTest {
     SearchTermExternalReferenceResolver resolver = new SearchTermExternalReferenceResolver(cacheConfigurationProperties);
     configureResolver(resolver);
     resolver.setSegmentPath(SEGMENT_PATH + "/foo/bar");
-    resolver.afterPropertiesSet();
+    resolver.initialize();
 
     Content result = mock(Content.class);
     mockSearchResult(result);
@@ -267,7 +273,7 @@ public class SearchTermExternalReferenceResolverTest {
   public void testResolveNotFoundFallback() {
     SearchTermExternalReferenceResolver resolver = spy(new SearchTermExternalReferenceResolver(cacheConfigurationProperties));
     configureResolver(resolver);
-    resolver.afterPropertiesSet();
+    resolver.initialize();
     mockSearchResult();
 
     FragmentParameters params = parametersFor(PREFIX + SEARCH_TERM);

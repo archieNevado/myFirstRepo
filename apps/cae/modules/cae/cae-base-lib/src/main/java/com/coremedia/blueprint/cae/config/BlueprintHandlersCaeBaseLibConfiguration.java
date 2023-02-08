@@ -84,8 +84,10 @@ import java.util.Map;
 @ImportResource(value = {
         "classpath:/com/coremedia/cae/webflow/webflow-services.xml",
         "classpath:/framework/spring/blueprint-services.xml",
+        "classpath:/framework/spring/blueprint-webflow.xml",
 }, reader = ResourceAwareXmlBeanDefinitionReader.class)
 @Import({
+        BlueprintI18nCaeBaseLibConfiguration.class,
         BlueprintLinksPostprocessorsConfiguration.class,
         BlueprintMultisiteConfiguration.class,
         BlueprintSearchCaeBaseLibConfiguration.class,

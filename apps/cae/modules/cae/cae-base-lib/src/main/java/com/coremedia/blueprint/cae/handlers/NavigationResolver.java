@@ -1,18 +1,18 @@
 package com.coremedia.blueprint.cae.handlers;
 
 import com.coremedia.blueprint.base.links.UrlPathFormattingHelper;
+import com.coremedia.blueprint.base.navigation.context.finder.TopicpageContextFinder;
 import com.coremedia.blueprint.cae.constants.RequestAttributeConstants;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.CMTaxonomy;
 import com.coremedia.blueprint.common.navigation.Navigation;
-import com.coremedia.blueprint.base.navigation.context.finder.TopicpageContextFinder;
 import com.coremedia.blueprint.common.services.context.ContextHelper;
 import com.coremedia.cap.content.Content;
 import com.google.common.annotations.VisibleForTesting;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 import static org.springframework.util.CollectionUtils.isEmpty;
@@ -24,30 +24,37 @@ public class NavigationResolver {
   private ContextHelper contextHelper;
   private TopicpageContextFinder topicPageContextFinder;
 
-
-  // --- configuration ----------------------------------------------
-
-  @Required
   public void setNavigationSegmentsUriHelper(NavigationSegmentsUriHelper navigationSegmentsUriHelper) {
     this.navigationSegmentsUriHelper = navigationSegmentsUriHelper;
   }
 
-  @Required
   public void setContextHelper(ContextHelper contextHelper) {
     this.contextHelper = contextHelper;
   }
 
-  @Required
   public void setTopicPageContextFinder(TopicpageContextFinder topicPageContextFinder) {
     this.topicPageContextFinder = topicPageContextFinder;
   }
 
-  @Required
   public void setUrlPathFormattingHelper(UrlPathFormattingHelper urlPathFormattingHelper) {
     this.urlPathFormattingHelper = urlPathFormattingHelper;
   }
 
-  // --- features ---------------------------------------------------
+  @PostConstruct
+  protected void initialize() {
+    if (contextHelper == null) {
+      throw new IllegalStateException("Required property not set: contextHelper");
+    }
+    if (navigationSegmentsUriHelper == null) {
+      throw new IllegalStateException("Required property not set: navigationSegmentsUriHelper");
+    }
+    if (topicPageContextFinder == null) {
+      throw new IllegalStateException("Required property not set: topicPageContextFinder");
+    }
+    if (urlPathFormattingHelper == null) {
+      throw new IllegalStateException("Required property not set: urlPathFormattingHelper");
+    }
+  }
 
   /**
    * Returns the navigation of the given navigationPath (a list of segment values).

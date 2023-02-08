@@ -25,6 +25,14 @@
     </dependency>
 
     <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>content-services</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.coremedia.blueprint.base</groupId>
+      <artifactId>bpbase-content-services</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.coremedia.blueprint.base</groupId>
       <artifactId>bpbase-studio-rest</artifactId>
     </dependency>
@@ -72,6 +80,11 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-autoconfigure</artifactId>
     </dependency>
 
     <dependency>

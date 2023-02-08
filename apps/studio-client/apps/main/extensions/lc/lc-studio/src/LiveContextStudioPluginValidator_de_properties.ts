@@ -43,4 +43,6 @@ ResourceBundleUtil.override(LiveContextStudioPluginValidator_properties, {
   Validator_CMChannel_FallbackSegmentReservedCharsFound_text: "Das Segment erbt vom Titel und wird \"{1}\" sein. Aber es darf die Zeichenfolge \"{0}\" nicht enthalten. Sie wird als interner Trenner benutzt.",
   Validator_CMChannel_FallbackSegmentReservedPrefix_text: "Das Segment erbt vom Titel und wird \"{1}\" sein. Aber es darf nicht mit \"{0}\" anfangen.",
   Validator_CMChannel_FallbackSegmentReservedSuffix_text: "Das Segment erbt vom Titel und wird \"{1}\" sein. Aber es darf nicht mit \"{0}\" enden.",
+  Validator_possibly_missing_master_reference_from_master_augmentation_text: "In der abgeleiteten Site {0} existiert ein augmentierender Content, der eventuell auf diesen Content als sein Master verlinken sollte: {1} (ID: {2}).",
+  Validator_possibly_missing_master_reference_from_derived_augmentation_text: "In der Master-Site {0} existiert ein augmentierender Content, der wahrscheinlich als Master verlinkt sein sollte: {1} (ID: {2}). Die Master-Version sollte entsprechend gesetzt werden, vermutlich auf die aktuelle Version des Masters.",
 });

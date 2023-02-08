@@ -13,9 +13,8 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
-import java.util.Objects;
+import javax.annotation.PostConstruct;
 
 /**
  * An abstract {@link com.coremedia.livecontext.fragment.resolver.ExternalReferenceResolver} which is responsible
@@ -27,10 +26,10 @@ public abstract class ExternalReferenceResolverBase implements ExternalReference
 
   private final String supportedReferencePrefix;
 
-  protected ContextHelper contextHelper;
-  protected ContentBeanFactory contentBeanFactory;
-  protected DataViewFactory dataViewFactory;
-  protected ContentRepository contentRepository;
+  private ContextHelper contextHelper;
+  private ContentBeanFactory contentBeanFactory;
+  private DataViewFactory dataViewFactory;
+  private ContentRepository contentRepository;
 
   /**
    * @param supportedReferencePrefix the prefix of supported external reference values or the empty string to support
@@ -49,25 +48,52 @@ public abstract class ExternalReferenceResolverBase implements ExternalReference
     return referenceInfo != null && include(fragmentParameters, referenceInfo);
   }
 
-  @Required
+  protected ContentBeanFactory getContentBeanFactory() {
+    return contentBeanFactory;
+  }
+
   public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
     this.contentBeanFactory = contentBeanFactory;
   }
 
-  @Required
+  protected DataViewFactory getDataViewFactory() {
+    return dataViewFactory;
+  }
+
   public void setDataViewFactory(DataViewFactory dataViewFactory) {
     this.dataViewFactory = dataViewFactory;
   }
 
-  @Required
+  protected ContextHelper getContextHelper() {
+    return contextHelper;
+  }
+
   public void setContextHelper(ContextHelper contextHelper) {
     this.contextHelper = contextHelper;
   }
 
-  @Required
+  protected ContentRepository getContentRepository() {
+    return contentRepository;
+  }
+
   public void setContentRepository(@NonNull ContentRepository contentRepository) {
-    Objects.requireNonNull(contentRepository);
     this.contentRepository = contentRepository;
+  }
+
+  @PostConstruct
+  protected void initialize() {
+    if (contentBeanFactory == null) {
+      throw new IllegalStateException("Required property not set: contentBeanFactory");
+    }
+    if (contentRepository == null) {
+      throw new IllegalStateException("Required property not set: contentRepository");
+    }
+    if (contextHelper == null) {
+      throw new IllegalStateException("Required property not set: contextHelper");
+    }
+    if (dataViewFactory == null) {
+      throw new IllegalStateException("Required property not set: dataViewFactory");
+    }
   }
 
   /**

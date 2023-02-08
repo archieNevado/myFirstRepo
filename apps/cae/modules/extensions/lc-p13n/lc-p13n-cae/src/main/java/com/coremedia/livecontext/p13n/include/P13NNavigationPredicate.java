@@ -4,7 +4,8 @@ import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.layout.DynamicContainerStrategy;
 import com.coremedia.blueprint.personalization.include.AbstractP13nContainerPredicate;
-import org.springframework.beans.factory.annotation.Required;
+
+import javax.annotation.PostConstruct;
 
 public class P13NNavigationPredicate extends AbstractP13nContainerPredicate {
 
@@ -12,9 +13,15 @@ public class P13NNavigationPredicate extends AbstractP13nContainerPredicate {
 
   private DynamicContainerStrategy dynamicContainerStrategy;
 
-  @Required
   public void setDynamicContainerStrategy(DynamicContainerStrategy dynamicContainerStrategy) {
     this.dynamicContainerStrategy = dynamicContainerStrategy;
+  }
+
+  @PostConstruct
+  void initialize() {
+    if (dynamicContainerStrategy == null) {
+      throw new IllegalStateException("Required property not set: dynamicContainerStrategy");
+    }
   }
 
   @Override

@@ -1,14 +1,21 @@
 import BlueprintTabs_properties from "@coremedia-blueprint/studio-client.main.blueprint-forms/BlueprintTabs_properties";
-import MetaDataInformationForm from "@coremedia-blueprint/studio-client.main.blueprint-forms/forms/containers/MetaDataInformationForm";
-import SinglePictureDocumentForm from "@coremedia-blueprint/studio-client.main.blueprint-forms/forms/containers/SinglePictureDocumentForm";
+import MetaDataInformationForm
+  from "@coremedia-blueprint/studio-client.main.blueprint-forms/forms/containers/MetaDataInformationForm";
+import SinglePictureDocumentForm
+  from "@coremedia-blueprint/studio-client.main.blueprint-forms/forms/containers/SinglePictureDocumentForm";
 import DocumentForm from "@coremedia/studio-client.main.editor-components/sdk/premular/DocumentForm";
 import DocumentTabPanel from "@coremedia/studio-client.main.editor-components/sdk/premular/DocumentTabPanel";
 import PropertyFieldGroup from "@coremedia/studio-client.main.editor-components/sdk/premular/PropertyFieldGroup";
-import StringPropertyField from "@coremedia/studio-client.main.editor-components/sdk/premular/fields/StringPropertyField";
+import StringPropertyField
+  from "@coremedia/studio-client.main.editor-components/sdk/premular/fields/StringPropertyField";
 import Config from "@jangaroo/runtime/Config";
 import ConfigUtils from "@jangaroo/runtime/ConfigUtils";
 import AMDocumentTypes_properties from "../AMDocumentTypes_properties";
 import AMStudioPluginBase from "../AMStudioPluginBase";
+import TaxonomyTranslationFields
+  from "@coremedia-blueprint/studio-client.main.taxonomy-studio/taxonomy/l10n/TaxonomyTranslationFields";
+import TaxonomyChangePlugin
+  from "@coremedia-blueprint/studio-client.main.taxonomy-studio/taxonomy/forms/TaxonomyChangePlugin";
 
 interface AMTaxonomyFormConfig extends Config<DocumentTabPanel> {
 }
@@ -41,6 +48,8 @@ class AMTaxonomyForm extends DocumentTabPanel {
                 }),
               ],
             }),
+            Config(TaxonomyTranslationFields),
+
             /* Asset preview */
             /* quick create uses AMPictureAsset and not AMDocumentAsset for now */
             Config(SinglePictureDocumentForm, {
@@ -54,7 +63,13 @@ class AMTaxonomyForm extends DocumentTabPanel {
         }),
         Config(MetaDataInformationForm),
       ],
-
+      ...ConfigUtils.append({
+        plugins: [
+          Config(TaxonomyChangePlugin, {
+            properties: "value,localSettings.translations",
+          }),
+        ],
+      }),
     }), config));
   }
 }

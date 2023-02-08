@@ -12,6 +12,15 @@
 <StringProperty Name="tenantId">salesforcecaas</StringProperty>
 <StringProperty Name="siteId">sfra</StringProperty>
 <StringProperty Name="shopNow">disabled</StringProperty>
+<StructProperty Name="teaserOverlay">
+<Struct>
+<LinkProperty Name="style" LinkType="coremedia:///cap/contenttype/Content_" xlink:href="coremedia:///cap/resources/../Options/Settings/Teaser%20Styles/Light.xml" cmexport:path="/Sites/SFRA/United%20States/English/Options/Settings/Teaser%20Styles/Light"/>
+<BooleanProperty Name="enabled">true</BooleanProperty>
+<IntProperty Name="positionX">36</IntProperty>
+<IntProperty Name="width">37</IntProperty>
+</Struct>
+</StructProperty>
+<StringProperty Name="callToActionCustomText">Home</StringProperty>
 </Struct>
 </localSettings>
 <linkedSettings>
@@ -36,8 +45,10 @@
 </locationTaxonomy>
 <contexts>
 </contexts>
-<teaserTitle></teaserTitle>
+<teaserTitle>Homepage</teaserTitle>
+<teaserText grammarName="coremedia-richtext-1.0"><div xmlns="http://www.coremedia.com/2003/richtext-1.0" xmlns:xlink="http://www.w3.org/1999/xlink"><p class="align--center p--heading-1">Homepage</p><p class="align--center">Go to the SFRA Homepage</p></div></teaserText>
 <pictures>
+<link href="../Editorial/Pictures/Lilly%20and%20Janina%20with%20clouds%20background.xml" path="/Sites/SFRA/United%20States/English/Editorial/Pictures/Lilly%20and%20Janina%20with%20clouds%20background"/>
 </pictures>
 <related>
 </related>

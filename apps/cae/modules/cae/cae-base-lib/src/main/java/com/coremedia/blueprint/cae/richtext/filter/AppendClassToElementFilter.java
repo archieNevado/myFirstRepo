@@ -2,7 +2,6 @@ package com.coremedia.blueprint.cae.richtext.filter;
 
 import com.coremedia.xml.Filter;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Required;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -69,7 +68,6 @@ public class AppendClassToElementFilter extends Filter implements FilterFactory 
     return elementList;
   }
 
-  @Required
   public void setElementList(Map<String, String> elementList) {
     this.elementList = elementList;
   }

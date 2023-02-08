@@ -8,7 +8,8 @@ import com.coremedia.personalization.search.SearchFunctionUnknownException;
 import org.owasp.esapi.ESAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
+
+import javax.annotation.PostConstruct;
 
 public class SolrContextualSearchPreprocessor implements SearchPreprocessor {
 
@@ -23,7 +24,6 @@ public class SolrContextualSearchPreprocessor implements SearchPreprocessor {
    *
    * @param searchPreprocessor the preprocessor to be used
    */
-  @Required
   public void setSearchPreprocessor(final SearchFunctionPreprocessor searchPreprocessor) {
     if (searchPreprocessor == null) {
       throw new IllegalArgumentException("supplied searchPreprocessor must not be null");
@@ -37,12 +37,21 @@ public class SolrContextualSearchPreprocessor implements SearchPreprocessor {
    *
    * @param contextCollection the ContextCollection to be used to retrieve context objects
    */
-  @Required
   public void setContextCollection(final ContextCollection contextCollection) {
     if (contextCollection == null) {
       throw new IllegalArgumentException("supplied contextCollection must not be null");
     }
     this.contextCollection = contextCollection;
+  }
+
+  @PostConstruct
+  protected void initialize() {
+    if (contextCollection == null) {
+      throw new IllegalStateException("Required property not set: contextCollection");
+    }
+    if (searchPreprocessor == null) {
+      throw new IllegalStateException("Required property not set: searchPreprocessor");
+    }
   }
 
   @Override

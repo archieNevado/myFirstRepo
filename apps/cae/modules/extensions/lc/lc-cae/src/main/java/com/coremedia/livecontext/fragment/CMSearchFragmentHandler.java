@@ -15,7 +15,6 @@ import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -86,19 +85,27 @@ public class CMSearchFragmentHandler extends FragmentHandler {
     return (externalRef != null && externalRef.equals(EXTERNAL_REF_FOR_SEARCH_RESULTS_FRAGMENT));
   }
 
-  // ------------ Config --------------------------------------------
-  @Required
   public void setSearchService(SearchService searchService) {
     this.searchService = searchService;
   }
 
-  @Required
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
   }
 
   public void setMinimalSearchQueryLength(int minimalSearchQueryLength) {
     this.minimalSearchQueryLength = minimalSearchQueryLength;
+  }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (searchService == null) {
+      throw new IllegalStateException("Required property not set: searchService");
+    }
+    if (settingsService == null) {
+      throw new IllegalStateException("Required property not set: settingsService");
+    }
   }
 
 }

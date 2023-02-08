@@ -5,7 +5,6 @@ import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.robots.RobotsBean;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.objectserver.web.HandlerHelper;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,24 +36,31 @@ public class RobotsHandler extends HandlerBase {
   private SettingsService settingsService;
   private SitesService sitesService;
 
-  // --- spring config -------------------------------------------------------------------------------------------------
-
-  @Required
   public void setNavigationSegmentsUriHelper(NavigationSegmentsUriHelper navigationSegmentsUriHelper) {
     this.navigationSegmentsUriHelper = navigationSegmentsUriHelper;
   }
 
-  @Required
   public void setSettingsService(SettingsService settingsService) {
     this.settingsService = settingsService;
   }
 
-  @Required
   public void setSitesService(SitesService sitesService) {
     this.sitesService = sitesService;
   }
 
-  // --- Handlers ------------------------------------------------------------------------------------------------------
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (navigationSegmentsUriHelper == null) {
+      throw new IllegalStateException("Required property not set: navigationSegmentsUriHelper");
+    }
+    if (settingsService == null) {
+      throw new IllegalStateException("Required property not set: settingsService");
+    }
+    if (sitesService == null) {
+      throw new IllegalStateException("Required property not set: sitesService");
+    }
+  }
 
   /**
    * Handles a request for the robots.txt to this web presence

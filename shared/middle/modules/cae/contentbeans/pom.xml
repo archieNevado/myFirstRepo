@@ -271,13 +271,10 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot</artifactId>
     </dependency>
-    <!-- begin java-11-dependencies -->
     <dependency>
       <groupId>jakarta.annotation</groupId>
       <artifactId>jakarta.annotation-api</artifactId>
-      <scope>test</scope>
     </dependency>
-    <!-- end java-11-dependencies -->
   </dependencies>
 
 </project>

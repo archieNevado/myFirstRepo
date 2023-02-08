@@ -11,11 +11,11 @@ import com.coremedia.xml.Filter;
 import com.coremedia.xml.Xlink;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,21 +28,23 @@ public class ImgCompletionFilter extends Filter implements FilterFactory {
   private IdProvider idProvider;
   private ContentBeanFactory contentBeanFactory;
 
-
-  // --- configuration ----------------------------------------------
-
-  @Required
   public void setIdProvider(IdProvider idProvider) {
     this.idProvider = idProvider;
   }
 
-  @Required
   public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
     this.contentBeanFactory = contentBeanFactory;
   }
 
-
-  // --- FilterFactory ----------------------------------------------
+  @PostConstruct
+  protected void initialize() {
+    if (contentBeanFactory == null) {
+      throw new IllegalStateException("Required property not set: contentBeanFactory");
+    }
+    if (idProvider == null) {
+      throw new IllegalStateException("Required property not set: idProvider");
+    }
+  }
 
   @Override
   public Filter getInstance(HttpServletRequest request, HttpServletResponse response) {
@@ -52,9 +54,6 @@ public class ImgCompletionFilter extends Filter implements FilterFactory {
     return instance;
   }
 
-
-  // --- Filter -----------------------------------------------------
-
   @Override
   public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
     if (isA(uri, localName, qName, IMG_TAG)) {
@@ -62,9 +61,6 @@ public class ImgCompletionFilter extends Filter implements FilterFactory {
     }
     super.startElement(uri, localName, qName, atts);
   }
-
-
-  // --- internal ---------------------------------------------------
 
   /**
    * Add missing alt attribute.

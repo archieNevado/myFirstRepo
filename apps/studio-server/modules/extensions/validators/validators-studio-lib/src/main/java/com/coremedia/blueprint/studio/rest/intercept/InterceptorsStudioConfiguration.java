@@ -22,14 +22,14 @@ import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import com.coremedia.transform.BlobTransformer;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
 import java.util.List;
 
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @ImportResource(
         value = {
                 "classpath:/com/coremedia/blueprint/base/links/bpbase-links-services.xml",

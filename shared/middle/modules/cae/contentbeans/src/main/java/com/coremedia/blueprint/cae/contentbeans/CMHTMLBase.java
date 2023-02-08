@@ -2,7 +2,6 @@ package com.coremedia.blueprint.cae.contentbeans;
 
 import com.coremedia.blueprint.common.contentbeans.CMHTML;
 import com.coremedia.cae.aspect.Aspect;
-
 import com.coremedia.xml.Markup;
 
 import java.util.Collection;

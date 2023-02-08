@@ -692,7 +692,7 @@
       <str name="httpReadTimeout">10000</str>
 
       <!-- If HTTP Basic authentication is enabled on the leader, then the follower
-           can be configured with the following -->
+           can be configured with the following
       <str name="httpBasicAuthUser">username</str>
       <str name="httpBasicAuthPassword">password</str>
       -->

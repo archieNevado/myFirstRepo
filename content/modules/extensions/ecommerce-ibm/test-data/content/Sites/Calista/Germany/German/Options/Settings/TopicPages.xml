@@ -8,11 +8,6 @@
 <settings>
 <Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
 <LinkProperty Name="TopicPagePage" LinkType="coremedia:///cap/contenttype/CMChannel" xlink:href="coremedia:///cap/resources/../../Navigation/Topic%20Pages/Topicpage.xml" cmexport:path="/Sites/Calista/Germany/German/Navigation/Topic%20Pages/Topicpage"/>
-<StringListProperty Name="administrationGroups">
-<String>manager-calista-de-DE</String>
-<String>global-site-manager-calista</String>
-<String>developer</String>
-</StringListProperty>
 <StringProperty Name="folder">Navigation/Topic Pages</StringProperty>
 </Struct>
 </settings>

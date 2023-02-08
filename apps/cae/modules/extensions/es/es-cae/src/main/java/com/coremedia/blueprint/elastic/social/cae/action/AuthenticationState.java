@@ -5,8 +5,8 @@ import com.coremedia.blueprint.cae.action.webflow.WebflowActionState;
 import com.coremedia.blueprint.common.contentbeans.CMAction;
 import com.coremedia.blueprint.elastic.social.cae.user.UserContext;
 import com.coremedia.elastic.social.api.users.CommunityUser;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
+
 import java.util.Map;
 
 /**

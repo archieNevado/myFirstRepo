@@ -13,7 +13,6 @@ import com.coremedia.objectserver.web.HandlerHelper;
 import com.coremedia.objectserver.web.UserVariantHelper;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -108,9 +107,6 @@ public class ExternalPageFragmentHandler extends FragmentHandler {
     return isNotCatalogPage && (externalRef == null || !externalRef.startsWith("cm-"));
   }
 
-  // ------------ Config --------------------------------------------
-
-  @Required
   public void setContextStrategy(ContextStrategy<String, Navigation> contextStrategy) {
     this.contextStrategy = contextStrategy;
   }
@@ -138,7 +134,13 @@ public class ExternalPageFragmentHandler extends FragmentHandler {
     this.navigationViewName = navigationViewName;
   }
 
-  // --- internal ---------------------------------------------------
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (contextStrategy == null) {
+      throw new IllegalStateException("Required property not set: contextStrategy");
+    }
+  }
 
   /**
    * Checks whether the navigation represents the external page of the given id.

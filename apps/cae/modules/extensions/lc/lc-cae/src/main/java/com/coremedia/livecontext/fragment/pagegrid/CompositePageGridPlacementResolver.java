@@ -5,8 +5,8 @@ import com.coremedia.blueprint.common.layout.PageGridPlacement;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
@@ -17,14 +17,22 @@ public class CompositePageGridPlacementResolver implements PageGridPlacementReso
   private DataViewFactory dataViewFactory;
   private List<PageGridPlacementResolver> resolvers;
 
-  @Required
   public void setDataViewFactory(DataViewFactory dataViewFactory) {
     this.dataViewFactory = dataViewFactory;
   }
 
-  @Required
   public void setResolvers(List<PageGridPlacementResolver> resolvers) {
     this.resolvers = resolvers;
+  }
+
+  @PostConstruct
+  protected void initialize() {
+    if (dataViewFactory == null) {
+      throw new IllegalStateException("Required property not set: dataViewFactory");
+    }
+    if (resolvers == null) {
+      throw new IllegalStateException("Required property not set: resolvers");
+    }
   }
 
   @Nullable

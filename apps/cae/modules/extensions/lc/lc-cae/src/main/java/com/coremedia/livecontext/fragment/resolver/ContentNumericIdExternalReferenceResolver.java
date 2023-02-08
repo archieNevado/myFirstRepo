@@ -4,7 +4,6 @@ import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.fragment.FragmentParameters;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
@@ -35,7 +34,7 @@ public class ContentNumericIdExternalReferenceResolver extends ExternalReference
   protected LinkableAndNavigation resolveExternalRef(@NonNull FragmentParameters fragmentParameters,
                                                      @NonNull String referenceInfo,
                                                      @NonNull Site site) {
-    Content linkable = contentRepository.getContent(IdHelper.formatContentId(referenceInfo));
+    Content linkable = getContentRepository().getContent(IdHelper.formatContentId(referenceInfo));
     Content navigation = null;
     if (linkable != null) {
       // Determine context of linkable and set it as navigation

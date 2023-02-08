@@ -4,8 +4,8 @@ package com.coremedia.blueprint.cae.contentbeans;
 import com.coremedia.blueprint.common.contentbeans.CMCSS;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.content.Content;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;

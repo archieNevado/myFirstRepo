@@ -8,10 +8,10 @@ import com.coremedia.personalization.context.ContextCollection;
 import com.coremedia.personalization.context.PropertyProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ import java.util.Map;
  * <p>This interceptor assumes that segments are stored in a context of type {@link PropertyProvider}, and that
  * a segment is represented by a CAP content id (representing the segment).</p>
  */
-public final class P13nAlxInterceptor extends HandlerInterceptorAdapter {
+public final class P13nAlxInterceptor implements HandlerInterceptor {
   private static final Logger LOG = LoggerFactory.getLogger(P13nAlxInterceptor.class);
 
   private static final String DEFAULT_SEGMENT_CONTEXT_NAME = "segment";
@@ -58,7 +58,6 @@ public final class P13nAlxInterceptor extends HandlerInterceptorAdapter {
    *
    * @param contextCollection the personalization context-collection
    */
-  @Required
   public void setContextCollection(final ContextCollection contextCollection) {
     if (contextCollection == null) {
       throw new IllegalArgumentException("supplied contextCollection must not be null");
@@ -80,7 +79,6 @@ public final class P13nAlxInterceptor extends HandlerInterceptorAdapter {
    *
    * @param contentRepository the content repository to be used
    */
-  @Required
   public void setContentRepository(ContentRepository contentRepository) {
     if (contentRepository == null) {
       throw new IllegalArgumentException("property contentRepository must not be null");
@@ -98,6 +96,16 @@ public final class P13nAlxInterceptor extends HandlerInterceptorAdapter {
       throw new IllegalArgumentException("supplied segmentContextName must not be null");
     }
     this.segmentContextName = segmentContextName;
+  }
+
+  @PostConstruct
+  void initialize() {
+    if (contentRepository == null) {
+      throw new IllegalStateException("Required property not set: contentRepository");
+    }
+    if (contextCollection == null) {
+      throw new IllegalStateException("Required property not set: contextCollection");
+    }
   }
 
   @Override

@@ -17,7 +17,7 @@ import com.google.common.base.MoreObjects;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,17 +128,17 @@ public class LiveContextExternalChannelImpl extends CMExternalChannelBase implem
     return pdpPageGridService.getContentBackedPageGrid(this);
   }
 
-  @Required
+  @Autowired
   public void setLiveContextNavigationFactory(LiveContextNavigationFactory liveContextNavigationFactory) {
     this.liveContextNavigationFactory = liveContextNavigationFactory;
   }
 
-  @Required
+  @Autowired
   public void setPdpPageGridService(PageGridService pdpPageGridService) {
     this.pdpPageGridService = pdpPageGridService;
   }
 
-  @Required
+  @Autowired
   public void setCommerceConnectionSupplier(CommerceConnectionSupplier commerceConnectionSupplier) {
     this.commerceConnectionSupplier = commerceConnectionSupplier;
   }

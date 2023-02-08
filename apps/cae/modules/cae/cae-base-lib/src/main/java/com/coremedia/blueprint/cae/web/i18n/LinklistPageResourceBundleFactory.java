@@ -15,10 +15,8 @@ import com.coremedia.cap.util.PairCacheKey;
 import com.coremedia.cap.util.StructUtil;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +28,6 @@ import java.util.ResourceBundle;
  * resource bundles of the page's navigation and its theme.
  */
 public class LinklistPageResourceBundleFactory implements PageResourceBundleFactory {
-  private static final Logger LOG = LoggerFactory.getLogger(LinklistPageResourceBundleFactory.class);
 
   private static final String LINKABLE_RESOURCEBUNDLES = "resourceBundles2";  // CMLinkable#resourceBundles
   private static final String THEME_RESOURCEBUNDLES = "resourceBundles";  // CMTheme#resourceBundles
@@ -43,8 +40,6 @@ public class LinklistPageResourceBundleFactory implements PageResourceBundleFact
   private LocalizationService localizationService;
   private ThemeService themeService;
 
-
-  // --- configure --------------------------------------------------
 
   /**
    * Usage of a cache is strongly recommended for production use.
@@ -63,23 +58,30 @@ public class LinklistPageResourceBundleFactory implements PageResourceBundleFact
     this.useLocalresources = useLocalresources;
   }
 
-  @Required
   public void setSitesService(SitesService sitesService) {
     this.sitesService = sitesService;
   }
 
-  @Required
   public void setLocalizationService(LocalizationService localizationService) {
     this.localizationService = localizationService;
   }
 
-  @Required
   public void setThemeService(ThemeService themeService) {
     this.themeService = themeService;
   }
 
-
-  // --- PageResourceBundleFactory ----------------------------------
+  @PostConstruct
+  protected void initialize() {
+    if (localizationService == null) {
+      throw new IllegalStateException("Required property not set: localizationService");
+    }
+    if (sitesService == null) {
+      throw new IllegalStateException("Required property not set: sitesService");
+    }
+    if (themeService == null) {
+      throw new IllegalStateException("Required property not set: themeService");
+    }
+  }
 
   @Override
   public ResourceBundle resourceBundle(Page page, User developer) {
@@ -98,9 +100,6 @@ public class LinklistPageResourceBundleFactory implements PageResourceBundleFact
       return cache.get(new NavigationCacheKey(navigation, developer));
     }
   }
-
-
-  // --- internal ---------------------------------------------------
 
   /**
    * Returns the navigation's resource bundle.
@@ -173,9 +172,6 @@ public class LinklistPageResourceBundleFactory implements PageResourceBundleFact
     }
     return StructUtil.mergeStructList(structs);
   }
-
-
-  // --- caching ----------------------------------------------------
 
   private class NavigationCacheKey extends PairCacheKey<Navigation, User, ResourceBundle> {
     NavigationCacheKey(@NonNull Navigation navigation, User user) {

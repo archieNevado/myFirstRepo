@@ -1,6 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.coremedia.blueprint.boot.autoconfigure.DefaultPropertiesAutoConfiguration,\
-  com.coremedia.blueprint.boot.autoconfigure.DevPropertiesAutoConfiguration,\
-  com.coremedia.blueprint.boot.autoconfigure.HealthIndicatorAutoConfiguration,\
-  com.coremedia.blueprint.boot.autoconfigure.DevelopmentResourcesAutoConfiguration,\
-  com.coremedia.blueprint.boot.autoconfigure.DevelopmentStartupAutoConfiguration

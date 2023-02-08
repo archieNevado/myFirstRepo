@@ -1,9 +1,11 @@
 package com.coremedia.blueprint.taxonomies.strategy;
 
+import com.coremedia.blueprint.localization.TaxonomyLocalizationStrategyImpl;
 import com.coremedia.blueprint.taxonomies.Taxonomy;
 import com.coremedia.blueprint.taxonomies.TaxonomyNode;
 import com.coremedia.blueprint.taxonomies.TaxonomyResolver;
 import com.coremedia.blueprint.taxonomies.cycleprevention.TaxonomyCycleValidator;
+import com.coremedia.cache.Cache;
 import com.coremedia.cap.common.IdHelper;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
@@ -51,6 +53,7 @@ class TaxonomyResolverImplTest {
   private final SitesService sitesService;
   private final ContentRepository contentRepository;
   private final TaxonomyCreator taxonomyCreator;
+  private final Cache cache;
 
   private TaxonomyResolver resolver;
   private Content content;
@@ -63,11 +66,13 @@ class TaxonomyResolverImplTest {
   TaxonomyResolverImplTest(
           @Autowired SitesService sitesService,
           @Autowired ContentRepository contentRepository,
-          @Autowired TaxonomyCreator taxonomyCreator
+          @Autowired TaxonomyCreator taxonomyCreator,
+          @Autowired Cache cache
   ) {
     this.sitesService = sitesService;
     this.contentRepository = contentRepository;
     this.taxonomyCreator = taxonomyCreator;
+    this.cache = cache;
   }
 
   @BeforeEach
@@ -110,6 +115,7 @@ class TaxonomyResolverImplTest {
       SearchServiceResult result = Mockito.mock(SearchServiceResult.class);
       content = Mockito.mock(Content.class);
       when(content.getId()).thenReturn(IdHelper.formatContentId(123));
+      when(content.getStruct(any(String.class))).thenReturn(null);
       when(result.getHits()).thenReturn(Collections.singletonList(content));
 
       when(searchService.search(any(), anyInt(),
@@ -295,12 +301,13 @@ class TaxonomyResolverImplTest {
   }
 
   private TaxonomyResolver createResolver(Map<String, String> aliasMapping) {
-
+    TaxonomyLocalizationStrategyImpl strategy = new TaxonomyLocalizationStrategyImpl(contentRepository, sitesService, cache, "localSettings");
     return new TaxonomyResolverImpl(
             sitesService,
             contentRepository,
             searchService,
             Mockito.mock(TaxonomyCycleValidator.class),
+            strategy,
             aliasMapping,
             CM_TAXONOMY,
             SITE_CONFIG_PATH,
@@ -309,5 +316,4 @@ class TaxonomyResolverImplTest {
             null
     );
   }
-
 }

@@ -5,8 +5,8 @@ import com.coremedia.blueprint.common.contentbeans.CMImageMap;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.objectserver.beans.ContentBean;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,8 +38,15 @@ public class ValidityImageMapAreaFilter implements ImageMapAreaFilterable {
     }).collect(Collectors.toList());
   }
 
-  @Required
   public void setValidationService(ValidationService validationService) {
     this.validationService = validationService;
   }
+
+  @PostConstruct
+  void initialize() {
+    if (validationService == null) {
+      throw new IllegalStateException("Required property not set: validationService");
+    }
+  }
+
 }

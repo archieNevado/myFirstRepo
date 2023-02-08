@@ -1,6 +1,3 @@
-
-version: "3.4"
-
 services:
   sfcc-proxy:
       image: ${REPOSITORY_PREFIX:-coremedia}/sfcc-proxy

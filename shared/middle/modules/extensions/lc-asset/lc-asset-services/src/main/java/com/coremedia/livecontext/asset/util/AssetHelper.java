@@ -4,10 +4,11 @@ import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.cap.struct.StructBuilder;
-import org.springframework.beans.factory.annotation.Required;
-
+import com.coremedia.springframework.beans.RequiredPropertyNotSetException;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+
+import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -189,13 +190,18 @@ public class AssetHelper {
     return contentRepository.getConnection().getStructService().createStructBuilder().build();
   }
 
-  @Required
   public void setContentRepository(ContentRepository contentRepository) {
     this.contentRepository = contentRepository;
   }
 
-  @Required
   public void setAssetReadSettingsHelper(AssetReadSettingsHelper assetReadSettingsHelper) {
     this.assetReadSettingsHelper = assetReadSettingsHelper;
   }
+
+  @PostConstruct
+  void initialize() {
+    RequiredPropertyNotSetException.ifNull("contentRepository", contentRepository);
+    RequiredPropertyNotSetException.ifNull("assetReadSettingsHelper", assetReadSettingsHelper);
+  }
+
 }

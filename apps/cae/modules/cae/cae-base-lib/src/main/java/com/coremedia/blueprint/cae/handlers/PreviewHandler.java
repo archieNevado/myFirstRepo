@@ -9,7 +9,6 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -72,9 +71,16 @@ public class PreviewHandler extends IdRedirectHandlerBase {
     return modelAndView;
   }
 
-  @Required
   public void setLinkFormatter(LinkFormatter linkFormatter) {
     this.linkFormatter = linkFormatter;
+  }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (linkFormatter == null) {
+      throw new IllegalStateException("Required property not set: linkFormatter");
+    }
   }
 
   public static boolean isStudioPreviewRequest(@NonNull HttpServletRequest request) {

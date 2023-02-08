@@ -19,7 +19,6 @@ import com.coremedia.livecontext.fragment.pagegrid.PageGridPlacementResolver;
 import com.coremedia.objectserver.web.HandlerHelper;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -170,9 +169,6 @@ public abstract class FragmentHandler extends PageHandlerBase implements Predica
     return view;
   }
 
-  //-------------- Config --------------------
-
-  @Required
   public void setPageGridPlacementResolver(PageGridPlacementResolver pageGridPlacementResolver) {
     this.pageGridPlacementResolver = pageGridPlacementResolver;
   }
@@ -181,8 +177,19 @@ public abstract class FragmentHandler extends PageHandlerBase implements Predica
     return validationService;
   }
 
-  @Required
   public void setValidationService(ValidationService<Linkable> validationService) {
     this.validationService = validationService;
   }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (pageGridPlacementResolver == null) {
+      throw new IllegalStateException("Required property not set: pageGridPlacementResolver");
+    }
+    if (validationService == null) {
+      throw new IllegalStateException("Required property not set: validationService");
+    }
+  }
+
 }

@@ -30,11 +30,10 @@
   <#if (self.content.localizations)?has_content>
     <#assign localizations=self.content.localizations![] />
     <#list localizations as localization>
-      <#if localization.locale != self.content.locale>
+        <#-- list all localized variants including self-->
         <#assign variantLink=cm.getLink(localization) />
-        <#if variantLink?has_content>
-          <link rel="alternate" hreflang="${bp.getPageLanguageTag(localization)}" href="${variantLink}">
-        </#if>
+      <#if variantLink?has_content>
+        <link rel="alternate" hreflang="${bp.getPageLanguageTag(localization)}" href="${variantLink}">
       </#if>
     </#list>
   </#if>

@@ -35,6 +35,9 @@ import TaxonomyEditor from "./TaxonomyEditor";
 import TaxonomyExplorerColumn from "./TaxonomyExplorerColumn";
 import TaxonomyExplorerPanel from "./TaxonomyExplorerPanel";
 import TaxonomyStandAloneDocumentView from "./TaxonomyStandAloneDocumentView";
+import TaxonomyL10nUtil from "../l10n/TaxonomyL10nUtil";
+import joo from "@jangaroo/runtime/joo";
+import sitesService from "@coremedia/studio-client.multi-site-models/global/sitesService";
 
 interface TaxonomyExplorerPanelBaseConfig extends Config<Panel> {
 }
@@ -62,6 +65,8 @@ class TaxonomyExplorerPanelBase extends Panel {
   #clipboardValueExpression: ValueExpression = null;
 
   #nodeNameDirtyExpression: ValueExpression<boolean>;
+
+  #currentNodeChangeExpr: ValueExpression;
 
   constructor(config: Config<TaxonomyExplorerPanel> = null) {
     super(config);
@@ -375,6 +380,8 @@ class TaxonomyExplorerPanelBase extends Panel {
     this.setBusy(true);
     this.getDisplayedTaxonomyNodeExpression().setValue(node);
 
+    this.#currentNodeChangeExpr && this.#currentNodeChangeExpr.removeChangeListener(bind(this, this.#selectedTaxonomyNameChanged));
+
     const dfd = as(this.queryById("documentFormDispatcher"), Container);
     if (node && !node.isRoot()) {
       const content = session._.getConnection().getContentRepository().getContent(node.getRef());
@@ -382,17 +389,19 @@ class TaxonomyExplorerPanelBase extends Panel {
         editorContext._.getApplicationContext().set("taxonomy_node_level", node.getLevel());
         content.invalidate((): void => {
           Ext.suspendLayouts();
-          const propertyName = "properties." + TaxonomyStudioPluginSettings_properties.taxonomy_display_property;
-          ValueExpressionFactory.create(propertyName, content).addChangeListener(bind(this, this.#selectedTaxonomyNameChanged));
-          this.getDisplayedTaxonomyContentExpression().setValue(content);
-          dfd.show();
-          this.setBusy(false);
+          this.#createNodePathExpression(content).loadValue(propertyPath => {
+            this.#currentNodeChangeExpr = ValueExpressionFactory.create(propertyPath, content);
+            this.#currentNodeChangeExpr.addChangeListener(bind(this, this.#selectedTaxonomyNameChanged));
+            this.getDisplayedTaxonomyContentExpression().setValue(content);
+            dfd.show();
+            this.setBusy(false);
 
-          this.#ensureExpandState(content);
-          if (titleFocus) {
-            this.#focusTitle();
-          }
-          Ext.resumeLayouts(true);
+            this.#ensureExpandState(content);
+            if (titleFocus) {
+              this.#focusTitle();
+            }
+            Ext.resumeLayouts(true);
+          });
         });
       } else {
         dfd.hide();
@@ -403,6 +412,34 @@ class TaxonomyExplorerPanelBase extends Panel {
       dfd.hide();
       this.setBusy(false);
     }
+  }
+
+  /**
+   * Calculates the name change property that is responsible for updating the name of the selected
+   * taxonomy in the visible explorer column.
+   * Depending on the l10n settings, the actual value has to be calculated.
+   *
+   * @param content the content to calculate the name path for
+   */
+  #createNodePathExpression(content: Content): ValueExpression<string> {
+    return ValueExpressionFactory.createFromFunction(() => {
+      const l10nEnabled = TaxonomyL10nUtil.isL10NEnabledExpression().getValue();
+      if (l10nEnabled === undefined) {
+        return undefined;
+      }
+
+      const studioLocale = joo.localeSupport.getLocale();
+      const defaultLanguage = TaxonomyL10nUtil.getDefaultLanguageExpression().getValue();
+      const site = sitesService._.getSiteFor(content);
+      let propertyName = "properties." + TaxonomyStudioPluginSettings_properties.taxonomy_display_property;
+
+      //l10n must be enabled AND the taxonomy node must be global AND the display value is located inside the struct
+      //if the studioLocale matches the defaultValue, we will display the "value" property which is the default.
+      if (l10nEnabled && !site && studioLocale !== defaultLanguage) {
+        propertyName = "properties." + TaxonomyStudioPluginSettings_properties.taxonomy_l10n_property + "." + studioLocale;
+      }
+      return propertyName;
+    });
   }
 
   #ensureExpandState(content: Content): void {
@@ -453,7 +490,7 @@ class TaxonomyExplorerPanelBase extends Panel {
   /**
    * Commits the changes on a node and refreshes the UI afterwards.
    */
-  #commitTaxonomyNodeForm(callback:() => void): void {
+  #commitTaxonomyNodeForm(callback: () => void): void {
     const node = as(this.getDisplayedTaxonomyNodeExpression().getValue(), TaxonomyNode);
     const content = as(this.getDisplayedTaxonomyContentExpression().getValue(), Content);
 
@@ -464,13 +501,12 @@ class TaxonomyExplorerPanelBase extends Panel {
           this.#refreshNode(node);
           if (this.#getNodeNameDirtyExpression().getValue()) {
             this.#getNodeNameDirtyExpression().setValue(false);
-            nodeColumn && nodeColumn.parentNode.loadChildren(true, ()=>{});
+            nodeColumn && nodeColumn.parentNode.loadChildren(true, () => {});
           }
           callback();
         }),
       );
-    }
-    else {
+    } else {
       callback();
     }
   }

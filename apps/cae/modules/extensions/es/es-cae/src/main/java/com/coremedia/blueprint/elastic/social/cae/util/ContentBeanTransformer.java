@@ -7,9 +7,9 @@ import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.elastic.core.cms.ContentWithSite;
 import com.coremedia.objectserver.beans.ContentBean;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 

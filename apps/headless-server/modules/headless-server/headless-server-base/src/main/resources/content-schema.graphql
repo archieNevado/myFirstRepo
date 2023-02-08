@@ -115,7 +115,25 @@ type ContentRoot {
   """
   Get taxonomy by id, type match for subtypes
   """
-  taxonomy(id:String): CMTaxonomy @fetch(from: "getContent(#id, 'CMTaxonomy')")
+  taxonomy(
+    """
+    The content id as `integer` or formatted as *coremedia:///cap/content/<id>*  or its UUID.
+    """
+    id:String!): CMTaxonomy @fetch(from: "getContent(#id, 'CMTaxonomy')")
+
+  """
+  Returns the list of supported taxonomy locales, configured in the global settings document `TaxonomySettings`.
+  """
+  supportedTaxonomyLocales: JSON @fetch(from: "@taxonomyAdapter.to().getSupportedLocales()")
+
+  """
+  Get the localized taxonomy by id
+  """
+  localizedTaxonomy(
+    """
+    The content id as `integer` or formatted as *coremedia:///cap/content/<id>*  or its UUID.
+    """
+    id:String!, locale:String): LocalizedTaxonomy @fetch(from: "@taxonomyAdapter.to().getLocalizedTaxonomy(#id, #locale)")
 
   """
   Get taxonomy by path segments
@@ -789,6 +807,11 @@ type CollectionItemPaginationResult {
 type ContentPaginationResult {
   totalCount: Long
   result: [Content_]
+}
+
+type LocalizedTaxonomy {
+  id: ID!
+  value: String,
 }
 
 # Page Grid

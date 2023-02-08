@@ -2,13 +2,12 @@ package com.coremedia.blueprint.analytics.settings;
 
 import com.coremedia.rest.cap.CapRestServiceConfiguration;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
-@SuppressWarnings("UtilityClassWithoutPrivateConstructor")
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @ComponentScan(basePackages = "com.coremedia.blueprint.analytics.settings")
 @Import({CapRestServiceConfiguration.class})
 @ImportResource(value = {

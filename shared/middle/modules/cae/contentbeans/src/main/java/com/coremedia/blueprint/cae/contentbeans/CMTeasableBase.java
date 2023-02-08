@@ -1,7 +1,6 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
 
-import com.coremedia.blueprint.cae.search.SearchResultFactory;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMMedia;
 import com.coremedia.blueprint.common.contentbeans.CMPerson;
@@ -9,7 +8,6 @@ import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.content.Content;
 import com.coremedia.xml.Markup;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.Collection;
 import java.util.List;
@@ -22,17 +20,6 @@ import java.util.Map;
  * Should not be changed.
  */
 public abstract class CMTeasableBase extends CMHasContextsImpl implements CMTeasable {
-
-  private SearchResultFactory resultFactory;
-
-  public SearchResultFactory getResultFactory() {
-    return resultFactory;
-  }
-
-  @Required
-  public void setResultFactory(SearchResultFactory resultFactory) {
-    this.resultFactory = resultFactory;
-  }
 
   /**
    * Returns the value of the document property {@link #MASTER}.

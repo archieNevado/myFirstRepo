@@ -1,15 +1,15 @@
 package com.coremedia.blueprint.cae.web;
 
-import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.blueprint.cae.constants.RequestAttributeConstants;
 import com.coremedia.blueprint.cae.web.links.NavigationLinkSupport;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.content.Content;
+import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  * the navigation as a request attribute. Requires the current page to be already exposed as request
  * attribute RequestAttributeConstants#ATTR_NAME_PAGE.
  */
-public class ExposeCurrentNavigationInterceptor extends HandlerInterceptorAdapter {
+public class ExposeCurrentNavigationInterceptor implements HandlerInterceptor {
 
   private ContentBeanFactory contentBeanFactory;
 

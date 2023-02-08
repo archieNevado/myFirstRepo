@@ -4,16 +4,15 @@ import com.coremedia.blueprint.cae.richtext.filter.ScriptFilter;
 import com.coremedia.blueprint.cae.richtext.filter.ScriptSerializer;
 import com.coremedia.blueprint.common.contentbeans.CMAbstractCode;
 import com.coremedia.blueprint.common.contentbeans.MergeableResources;
-import com.coremedia.cache.Cache;
 import com.coremedia.objectserver.view.ServletView;
 import com.coremedia.objectserver.view.XmlFilterFactory;
 import com.coremedia.xml.Markup;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 import org.xml.sax.XMLFilter;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -31,7 +30,6 @@ public class MergeableResourcesView implements ServletView {
   private static final Logger LOG = LoggerFactory.getLogger(MergeableResourcesView.class);
 
   private XmlFilterFactory xmlFilterFactory;
-  private Cache cache;
   private String contentType;
 
   /**
@@ -39,21 +37,22 @@ public class MergeableResourcesView implements ServletView {
    *
    * @param xmlFilterFactory the filter factory
    */
-  @Required
   public void setXmlFilterFactory(XmlFilterFactory xmlFilterFactory) {
     this.xmlFilterFactory = xmlFilterFactory;
   }
 
-  /**
-   * If you set a cache, merged scripts will be cached.
-   */
-  public void setCache(Cache cache) {
-    this.cache = cache;
-  }
-
-  @Required
   public void setContentType(String contentType) {
     this.contentType = contentType;
+  }
+
+  @PostConstruct
+  protected void initialize() {
+    if (contentType == null || contentType.isBlank()) {
+      throw new IllegalStateException("Required property not set: contentType");
+    }
+    if (xmlFilterFactory == null) {
+      throw new IllegalStateException("Required property not set: xmlFilterFactory");
+    }
   }
 
   /**

@@ -8,9 +8,9 @@ import com.coremedia.xml.Xlink;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 import org.xml.sax.Attributes;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
@@ -43,9 +43,6 @@ public class LinkEmbedFilter extends EmbeddingFilter {
    */
   private Map<String, String> mappings;
 
-
-  // --- EmbeddingFilter ---------------------------------------
-
   @Override
   protected boolean mustEmbed(String tag, Attributes atts) {
     return A_ELEMENT_NAME.equalsIgnoreCase(tag) && mustEmbedLink(atts);
@@ -64,9 +61,6 @@ public class LinkEmbedFilter extends EmbeddingFilter {
     removeTempraryRequestAttribute(LINK_EMBED_ROLE, role);
     removeTempraryRequestAttribute(LINK_EMBED_CLASS_NAMES, classNames);
   }
-
-
-  // --- Factory ----------------------------------------------------
 
   /**
    * Factory Method
@@ -91,15 +85,10 @@ public class LinkEmbedFilter extends EmbeddingFilter {
     return lef;
   }
 
-
-  // --- Configuration ----------------------------------------------
-
-  @Required
   public void setIdProvider(IdProvider idProvider) {
     this.idProvider = idProvider;
   }
 
-  @Required
   public void setDataViewFactory(DataViewFactory dataViewFactory) {
     this.dataViewFactory = dataViewFactory;
   }
@@ -120,8 +109,15 @@ public class LinkEmbedFilter extends EmbeddingFilter {
     this.mappings = mappings;
   }
 
-
-  // --- internal ---------------------------------------------------
+  @PostConstruct
+  protected void initialize() {
+    if (dataViewFactory == null) {
+      throw new IllegalStateException("Required property not set: dataViewFactory");
+    }
+    if (idProvider == null) {
+      throw new IllegalStateException("Required property not set: idProvider");
+    }
+  }
 
   private void setTemporaryRequestAttribute(String key, String value) {
     if (!StringUtils.isBlank(value)) {

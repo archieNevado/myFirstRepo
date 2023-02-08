@@ -19,7 +19,6 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -66,8 +65,6 @@ public class FragmentPageHandler extends PageHandlerBase {
   public void setDeliveryConfigurationProperties(DeliveryConfigurationProperties deliveryConfigurationProperties) {
     this.deliveryConfigurationProperties = deliveryConfigurationProperties;
   }
-
-  // --- interface --------------------------------------------------
 
   /**
    * This is the central request mapping for all fragment request.
@@ -131,19 +128,24 @@ public class FragmentPageHandler extends PageHandlerBase {
     return modelAndView;
   }
 
-  //-------------- Config --------------------
-
-  @Required
   public void setFragmentHandlers(@NonNull List<FragmentHandler> fragmentHandlers) {
     this.fragmentHandlers = List.copyOf(fragmentHandlers);
   }
 
-  @Required
   public void setCatalogAliasTranslationService(CatalogAliasTranslationService catalogAliasTranslationService) {
     this.catalogAliasTranslationService = catalogAliasTranslationService;
   }
 
-  // --- internal ---------------------------------------------------
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (catalogAliasTranslationService == null) {
+      throw new IllegalStateException("Required property not set: catalogAliasTranslationService");
+    }
+    if (fragmentHandlers == null) {
+      throw new IllegalStateException("Required property not set: fragmentHandlers");
+    }
+  }
 
   /**
    * search for a FragmentHandler that feels responsible for the request,

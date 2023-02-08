@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
-import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.blueprint.common.contentbeans.CMCollection;
+import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.cae.aspect.Aspect;
 import com.coremedia.cap.content.Content;
 import com.coremedia.objectserver.beans.ContentBean;

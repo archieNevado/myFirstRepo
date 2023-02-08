@@ -8,7 +8,6 @@ import com.coremedia.cap.common.CapBlobRef;
 import com.coremedia.cms.delivery.configuration.DeliveryConfigurationProperties;
 import com.coremedia.objectserver.web.links.Link;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.List;
@@ -66,9 +66,15 @@ public class AssetRenditionBlobHandler {
     this.deliveryConfigurationProperties = deliveryConfigurationProperties;
   }
 
-  @Required
   public void setCapBlobHandler(CapBlobHandler capBlobHandler) {
     this.capBlobHandler = capBlobHandler;
+  }
+
+  @PostConstruct
+  void initialize() {
+    if (capBlobHandler == null) {
+      throw new IllegalStateException("Required property not set: capBlobHandler");
+    }
   }
 
   @GetMapping(value = ASSET_URI_PATTERN)

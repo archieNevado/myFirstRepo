@@ -126,14 +126,10 @@ public class BlueprintViewsCaeBaseLibConfiguration {
    * A view for merging the JavaScript of a page into one file.
    */
   @Bean
-  public MergeableResourcesView mergedJavaScriptResourcesView(XmlFilterFactory cmRichtextToHtmlFilterFactory,
-                                                              Cache cache) {
+  public MergeableResourcesView mergedJavaScriptResourcesView(XmlFilterFactory cmRichtextToHtmlFilterFactory) {
     MergeableResourcesView mergeableResourcesView = new MergeableResourcesView();
 
-    configureMergedCodeResourcesViewBase(mergeableResourcesView,
-            cmRichtextToHtmlFilterFactory,
-            cache);
-
+    mergeableResourcesView.setXmlFilterFactory(cmRichtextToHtmlFilterFactory);
     mergeableResourcesView.setContentType("text/javascript");
 
     return mergeableResourcesView;
@@ -143,24 +139,13 @@ public class BlueprintViewsCaeBaseLibConfiguration {
    * A view for merging the CSS of a page into one file.
    */
   @Bean
-  public MergeableResourcesView mergedCssResourcesView(XmlFilterFactory cmRichtextToHtmlFilterFactory,
-                                                       Cache cache) {
+  public MergeableResourcesView mergedCssResourcesView(XmlFilterFactory cmRichtextToHtmlFilterFactory) {
     MergeableResourcesView mergeableResourcesView = new MergeableResourcesView();
 
-    configureMergedCodeResourcesViewBase(mergeableResourcesView,
-            cmRichtextToHtmlFilterFactory,
-            cache);
-
+    mergeableResourcesView.setXmlFilterFactory(cmRichtextToHtmlFilterFactory);
     mergeableResourcesView.setContentType("text/css");
 
     return mergeableResourcesView;
-  }
-
-  private void configureMergedCodeResourcesViewBase(MergeableResourcesView mergeableResourcesView,
-                                                    XmlFilterFactory cmRichtextToHtmlFilterFactory,
-                                                    Cache cache) {
-    mergeableResourcesView.setCache(cache);
-    mergeableResourcesView.setXmlFilterFactory(cmRichtextToHtmlFilterFactory);
   }
 
   /**

@@ -7,6 +7,7 @@ import ConfigUtils from "@jangaroo/runtime/ConfigUtils";
 import BlueprintTabs_properties from "../BlueprintTabs_properties";
 import CustomLabels_properties from "../CustomLabels_properties";
 import MetaDataWithoutSearchableForm from "./containers/MetaDataWithoutSearchableForm";
+import BlueprintDocumentTypes_properties from "../BlueprintDocumentTypes_properties";
 
 interface CMTaxonomyFormConfig extends Config<DocumentTabPanel> {
 }
@@ -28,13 +29,20 @@ class CMTaxonomyForm extends DocumentTabPanel {
             Config(PropertyFieldGroup, {
               itemId: "taxonomy",
               title: CustomLabels_properties.PropertyGroup_tags_label,
-              propertyNames: ["value", "externalReference"],
+              propertyNames: ["value"],
               items: [
                 Config(StringPropertyField, {
                   bindTo: config.bindTo,
                   propertyName: "value",
                   itemId: "value",
                 }),
+              ],
+            }),
+            Config(PropertyFieldGroup, {
+              itemId: "externalReference",
+              title: BlueprintDocumentTypes_properties.CMTaxonomy_externalReference_text,
+              propertyNames: ["externalReference"],
+              items: [
                 Config(StringPropertyField, {
                   bindTo: config.bindTo,
                   propertyName: "externalReference",

@@ -1,8 +1,8 @@
 package com.coremedia.blueprint.common.contentbeans;
 
-import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.blueprint.common.datevalidation.ValidityPeriod;
 import com.coremedia.blueprint.common.layout.PageGrid;
+import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cae.aspect.Aspect;
 
 import java.util.Locale;

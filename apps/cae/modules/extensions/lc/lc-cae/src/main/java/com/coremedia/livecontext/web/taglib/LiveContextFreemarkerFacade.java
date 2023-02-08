@@ -26,8 +26,8 @@ import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.dataviews.DataViewFactory;
 import com.coremedia.objectserver.web.taglib.MetadataTagSupport;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.Currency;
 import java.util.HashMap;
@@ -197,7 +197,6 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
     return super.isMetadataEnabled();
   }
 
-  @Required
   public void setLiveContextNavigationFactory(@NonNull LiveContextNavigationFactory liveContextNavigationFactory) {
     this.liveContextNavigationFactory = liveContextNavigationFactory;
   }
@@ -209,6 +208,29 @@ public class LiveContextFreemarkerFacade extends MetadataTagSupport {
   public void setDataViewFactory(DataViewFactory dataViewFactory) {
     this.dataViewFactory = dataViewFactory;
   }
+
+  @PostConstruct
+  protected void initialize() {
+    if (categoryAugmentationService == null) {
+      throw new IllegalStateException("Required property not set: categoryAugmentationService");
+    }
+    if (contentBeanFactory == null) {
+      throw new IllegalStateException("Required property not set: contentBeanFactory");
+    }
+    if (dataViewFactory == null) {
+      throw new IllegalStateException("Required property not set: dataViewFactory");
+    }
+    if (liveContextNavigationFactory == null) {
+      throw new IllegalStateException("Required property not set: liveContextNavigationFactory");
+    }
+    if (productAugmentationService == null) {
+      throw new IllegalStateException("Required property not set: productAugmentationService");
+    }
+    if (sitesService == null) {
+      throw new IllegalStateException("Required property not set: sitesService");
+    }
+  }
+
 
   public ContentBean createBeanFor(Content content) {
     return dataViewFactory.loadCached(contentBeanFactory.createBeanFor(content, ContentBean.class), null);

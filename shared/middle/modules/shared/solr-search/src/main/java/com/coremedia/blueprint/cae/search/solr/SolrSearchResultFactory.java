@@ -26,7 +26,6 @@ import org.apache.solr.common.SolrDocumentList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -361,21 +360,29 @@ public class SolrSearchResultFactory implements SearchResultFactory, Initializin
 
   @Override
   public void afterPropertiesSet() {
+    if (contentRepository == null) {
+      throw new IllegalStateException("Required property not set: contentRepository");
+    }
+    if (queryBuilder == null) {
+      throw new IllegalStateException("Required property not set: queryBuilder");
+    }
+    if (representationMapper == null) {
+      throw new IllegalStateException("Required property not set: representationMapper");
+    }
     if (solrClient == null) {
       throw new IllegalStateException("Required property not set: solrClient");
     }
     if (collection == null) {
       throw new IllegalStateException("Required property not set: collection");
     }
+
     LOG.info("Configured to search in collection {} of {}", collection, solrClient);
   }
 
-  @Required
   public void setQueryBuilder(SolrQueryBuilder queryBuilder) {
     this.queryBuilder = queryBuilder;
   }
 
-  @Required
   public void setContentRepository(ContentRepository contentRepository) {
     this.contentRepository = contentRepository;
   }
@@ -445,7 +452,6 @@ public class SolrSearchResultFactory implements SearchResultFactory, Initializin
     }
   }
 
-  @Required
   public void setRepresentationMapper(Representation<Object> representationMapper) {
     this.representationMapper = representationMapper;
   }

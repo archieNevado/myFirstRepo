@@ -11,8 +11,8 @@ import com.coremedia.personalization.search.SearchFunctionUnknownException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,7 +42,6 @@ public final class SolrContextualSearchChecker {
   private SearchFunctionPreprocessor searchPreprocessor;
   private ContextCollection contextCollection;
 
-  @Required
   public void setSearchPreprocessor(SearchFunctionPreprocessor searchPreprocessor) {
     if(searchPreprocessor == null) {
       throw new IllegalArgumentException("searchPreprocessor must not be null");
@@ -50,7 +49,6 @@ public final class SolrContextualSearchChecker {
     this.searchPreprocessor = searchPreprocessor;
   }
 
-  @Required
   public void setContextCollection(ContextCollection contextCollection) {
     if(contextCollection == null) {
       throw new IllegalArgumentException("contextCollection must not be null");
@@ -58,6 +56,15 @@ public final class SolrContextualSearchChecker {
     this.contextCollection = contextCollection;
   }
 
+  @PostConstruct
+  void initialize() {
+    if (contextCollection == null) {
+      throw new IllegalStateException("Required property not set: contextCollection");
+    }
+    if (searchPreprocessor == null) {
+      throw new IllegalStateException("Required property not set: searchPreprocessor");
+    }
+  }
 
   /**
    * Preprocess search functions and return errors as JSON string (if any)

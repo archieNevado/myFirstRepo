@@ -8,7 +8,6 @@ import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.blueprint.common.navigation.Navigation;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
-import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.link.StorefrontRef;
@@ -19,7 +18,6 @@ import com.coremedia.objectserver.web.links.LinkFormatter;
 import com.coremedia.objectserver.web.links.LinkTransformer;
 import com.google.common.annotations.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,7 +63,6 @@ public class CommerceSearchHandler extends PageHandlerBase {
   public static final String SEARCH_TERM_KEY = "searchTerm";
   private LinkFormatter linkFormatter;
 
-  private SitesService sitesService;
   private CommerceConnectionSupplier commerceConnectionSupplier;
 
   @Substitution(ACTION_ID)
@@ -133,7 +130,7 @@ public class CommerceSearchHandler extends PageHandlerBase {
     UriComponentsBuilder builder = addLinkParametersAsQueryParameters(uri, linkParameters);
 
     Content content = state.getAction().getContent();
-    Optional<Site> site = sitesService.getContentSiteAspect(content).findSite();
+    Optional<Site> site = getSitesService().getContentSiteAspect(content).findSite();
     if (!site.isPresent()) {
       return null;
     }
@@ -144,19 +141,23 @@ public class CommerceSearchHandler extends PageHandlerBase {
     return builder.buildAndExpand(Map.of(SEGMENT_ROOT, firstPathSegment));
   }
 
-  @Override
-  @Required
-  public void setSitesService(SitesService sitesService) {
-    this.sitesService = sitesService;
-  }
-
-  @Required
   public void setCommerceConnectionSupplier(CommerceConnectionSupplier commerceConnectionSupplier) {
     this.commerceConnectionSupplier = commerceConnectionSupplier;
   }
 
-  @Required
   public void setLinkFormatter(LinkFormatter linkFormatter) {
     this.linkFormatter = linkFormatter;
   }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (commerceConnectionSupplier == null) {
+      throw new IllegalStateException("Required property not set: commerceConnectionSupplier");
+    }
+    if (linkFormatter == null) {
+      throw new IllegalStateException("Required property not set: linkFormatter");
+    }
+  }
+
 }

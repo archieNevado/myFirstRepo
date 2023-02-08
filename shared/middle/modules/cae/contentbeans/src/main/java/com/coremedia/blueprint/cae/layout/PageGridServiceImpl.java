@@ -8,9 +8,9 @@ import com.coremedia.blueprint.common.layout.PageGridService;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.services.validation.ValidationService;
 import com.coremedia.blueprint.viewtype.ViewtypeService;
-import org.springframework.beans.factory.annotation.Required;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
+
+import javax.annotation.PostConstruct;
 
 public class PageGridServiceImpl implements PageGridService {
 
@@ -19,24 +19,36 @@ public class PageGridServiceImpl implements PageGridService {
   private ValidityPeriodValidator visibilityValidator;
   private ViewtypeService viewtypeService;
 
-  @Required
   public void setContentBackedPageGridService(ContentBackedPageGridService contentBackedPageGridService) {
     this.contentBackedPageGridService = contentBackedPageGridService;
   }
 
-  @Required
   public void setValidationService(ValidationService<Linkable> validationService) {
     this.validationService = validationService;
   }
 
-  @Required
   public void setViewtypeService(ViewtypeService viewtypeService) {
     this.viewtypeService = viewtypeService;
   }
 
-  @Required
   public void setVisibilityValidator(ValidityPeriodValidator visibilityValidator) {
     this.visibilityValidator = visibilityValidator;
+  }
+
+  @PostConstruct
+  void initialize() {
+    if (contentBackedPageGridService == null) {
+      throw new IllegalStateException("Required property not set: contentBackedPageGridService");
+    }
+    if (validationService == null) {
+      throw new IllegalStateException("Required property not set: validationService");
+    }
+    if (viewtypeService == null) {
+      throw new IllegalStateException("Required property not set: viewtypeService");
+    }
+    if (visibilityValidator == null) {
+      throw new IllegalStateException("Required property not set: visibilityValidator");
+    }
   }
 
   @NonNull

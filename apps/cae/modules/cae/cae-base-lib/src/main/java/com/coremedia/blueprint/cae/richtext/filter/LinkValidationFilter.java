@@ -7,10 +7,10 @@ import com.coremedia.xml.Filter;
 import com.coremedia.xml.Xlink;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,15 +33,10 @@ public class LinkValidationFilter extends Filter implements FilterFactory {
 
   private boolean omittingA;
 
-
-  // --- configure --------------------------------------------------
-
-  @Required
   public void setIdProvider(IdProvider idProvider) {
     this.idProvider = idProvider;
   }
 
-  @Required
   public void setValidationService(ValidationService<Object> validationService) {
     this.validationService = validationService;
   }
@@ -74,7 +69,15 @@ public class LinkValidationFilter extends Filter implements FilterFactory {
     return dataViewFactory;
   }
 
-  // --- FilterFactory ----------------------------------------------
+  @PostConstruct
+  protected void initialize() {
+    if (idProvider == null) {
+      throw new IllegalStateException("Required property not set: idProvider");
+    }
+    if (validationService == null) {
+      throw new IllegalStateException("Required property not set: validationService");
+    }
+  }
 
   @Override
   public Filter getInstance(HttpServletRequest request, HttpServletResponse response) {
@@ -85,9 +88,6 @@ public class LinkValidationFilter extends Filter implements FilterFactory {
     instance.setRenderLinkText(renderLinkText);
     return instance;
   }
-
-
-  // --- Filter -----------------------------------------------------
 
   @Override
   public void startDocument() throws SAXException {
@@ -146,8 +146,6 @@ public class LinkValidationFilter extends Filter implements FilterFactory {
       super.characters(ch, start, length);
     }
   }
-
-  // --- internal ---------------------------------------------------
 
   protected boolean isValid(Attributes atts) {
     Object bean = fetchBean(atts);

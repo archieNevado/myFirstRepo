@@ -2,11 +2,11 @@ package com.coremedia.livecontext.fragment.links.context.accessors;
 
 import com.coremedia.livecontext.fragment.links.context.Context;
 import com.coremedia.livecontext.fragment.links.context.LiveContextContextHelper;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 

@@ -5,8 +5,6 @@ import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.SitesService;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -25,6 +23,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -130,11 +129,12 @@ public class ElasticWebtrendsServiceProvider implements AnalyticsServiceProvider
   }
 
   private List<String> processResponse(String sortByMeasureName, HttpResponse response) throws IOException {
-    final JsonElement jsonElement = new JsonParser().parse(new InputStreamReader(response.getEntity().getContent()));
+    InputStreamReader reader = new InputStreamReader(response.getEntity().getContent(), Charset.defaultCharset());
+    final JsonElement jsonElement = JsonParser.parseReader(reader);
     LOG.trace("report data JSON is {}", jsonElement);
 
     final JsonArray data = jsonElement.getAsJsonObject().getAsJsonArray("data");
-    if (data != null && data.size() > 0) {
+    if (data != null && !data.isEmpty()) {
       return processReport(sortByMeasureName, data.get(0).getAsJsonObject());
     }
     return emptyList();

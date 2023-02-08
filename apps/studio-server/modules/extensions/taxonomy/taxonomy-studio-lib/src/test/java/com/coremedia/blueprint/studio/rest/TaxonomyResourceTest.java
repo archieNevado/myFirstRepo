@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.studio.rest;
 
+import com.coremedia.blueprint.localization.TaxonomyLocalizationStrategyImpl;
 import com.coremedia.blueprint.studio.rest.taxonomies.TaxonomyResource;
 import com.coremedia.blueprint.taxonomies.TaxonomyConfiguration;
 import com.coremedia.blueprint.taxonomies.TaxonomyNode;
@@ -33,6 +34,9 @@ import java.util.Map;
 public class TaxonomyResourceTest {
   @Inject
   private TaxonomyResource taxonomyResource;
+
+  @Inject
+  private Cache cache;
 
   @Test
   public void testTaxonomyResource() {
@@ -80,10 +84,13 @@ public class TaxonomyResourceTest {
                                           SolrSearchService solrSearchService,
                                           TaxonomyCycleValidator taxonomyCycleValidator,
                                           Cache cache) {
+      TaxonomyLocalizationStrategyImpl strategy = new TaxonomyLocalizationStrategyImpl(contentRepository, sitesService, cache, "localSettings");
+
       return new TaxonomyResolverImpl(sitesService,
               contentRepository,
               solrSearchService,
               taxonomyCycleValidator,
+              strategy,
               Map.of("Query", "Subject", "QueryLocation", "Location"),
               "CMTaxonomy",
               "Settings/Options",

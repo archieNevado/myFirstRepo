@@ -3,5 +3,7 @@ src   = "hero.html.tmpl"
 dest  = "/usr/share/nginx/html/assets/hero.html"
 keys  = [
          "/environment/fqdn",
-         "/cms/version"
+         "/cms/version",
+         "/campaign/enabled",
+         "/headless/client/enabled"
 ]

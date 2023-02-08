@@ -1,14 +1,16 @@
 package com.coremedia.blueprint.cae.contentbeans;
 
 import com.coremedia.blueprint.base.settings.SettingsService;
+import com.coremedia.blueprint.cae.contentbeans.testing.ContentBeanTestBase;
 import com.coremedia.blueprint.common.contentbeans.CMCSS;
 import com.coremedia.blueprint.common.contentbeans.CMChannel;
 import com.coremedia.blueprint.common.contentbeans.CMContext;
 import com.coremedia.blueprint.common.contentbeans.CMJavaScript;
+import com.coremedia.blueprint.common.contentbeans.CMLinkable;
+import com.coremedia.blueprint.common.contentbeans.CMObject;
 import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.blueprint.common.feeds.FeedFormat;
 import com.coremedia.blueprint.common.navigation.Linkable;
-import com.coremedia.blueprint.cae.contentbeans.testing.ContentBeanTestBase;
 import com.coremedia.cap.struct.Struct;
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,8 +20,11 @@ import org.springframework.test.context.TestPropertySource;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.coremedia.blueprint.common.datevalidation.ValidityPeriodValidator.REQUEST_ATTRIBUTE_PREVIEW_DATE;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Unit test for {@link com.coremedia.blueprint.cae.contentbeans.CMChannelImpl}.
@@ -204,6 +209,14 @@ public class CMChannelImplTest extends ContentBeanTestBase {
     List<? extends CMContext> contexts = father.getContexts();
     Assert.assertTrue(contexts.contains(father));
     Assert.assertEquals(1, contexts.size());
+  }
+
+  @Test
+  public void testGetFeedItems() {
+    List<? extends CMLinkable> feedItems = grandfather.getFeedItems();
+    assertEquals(2, feedItems.size());
+    assertEquals(Set.of(42, 44),
+            feedItems.stream().map(CMObject::getContentId).collect(Collectors.toSet()));
   }
 
   private SettingsService getSettingsService() {

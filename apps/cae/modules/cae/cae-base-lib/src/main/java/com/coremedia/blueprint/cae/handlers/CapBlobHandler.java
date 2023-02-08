@@ -19,7 +19,6 @@ import com.coremedia.objectserver.web.links.Link;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -93,26 +92,31 @@ public class CapBlobHandler extends HandlerBase {
   private ThemeService themeService;
   private ContentBeanFactory contentBeanFactory;
 
-
-  // --- configure --------------------------------------------------
-
-  @Required
   public void setValidationService(ValidationService<ContentBean> validationService) {
     this.validationService = validationService;
   }
 
-  @Required
   public void setThemeService(ThemeService themeService) {
     this.themeService = themeService;
   }
 
-  @Required
   public void setContentBeanFactory(ContentBeanFactory contentBeanFactory) {
     this.contentBeanFactory = contentBeanFactory;
   }
 
-
-  // --- Handlers ------------------------------------------------------------------------------------------------------
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (contentBeanFactory == null) {
+      throw new IllegalStateException("Required property not set: contentBeanFactory");
+    }
+    if (themeService == null) {
+      throw new IllegalStateException("Required property not set: themeService");
+    }
+    if (validationService == null) {
+      throw new IllegalStateException("Required property not set: validationService");
+    }
+  }
 
   @GetMapping(value = CODERESOURCEBLOB_URI_PATTERN)
   public ModelAndView handleCodeResourceBlobRequest(@org.springframework.lang.Nullable @PathVariable(SEGMENT_ID) ContentBean contentBean,

@@ -1,7 +1,6 @@
 package com.coremedia.livecontext.preview;
 
 import com.coremedia.blueprint.base.links.UriConstants;
-import com.coremedia.blueprint.cae.handlers.HandlerBase;
 import com.coremedia.blueprint.common.contentbeans.CMLinkable;
 import com.coremedia.blueprint.common.contentbeans.CMNavigation;
 import com.coremedia.blueprint.common.services.context.ContextHelper;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.support.WebContentGenerator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Produces;
@@ -20,7 +20,7 @@ import javax.ws.rs.core.MediaType;
 
 @RequestMapping
 @DefaultAnnotation(NonNull.class)
-public class SeoSegmentBuilderHandler extends HandlerBase {
+public class SeoSegmentBuilderHandler extends WebContentGenerator {
 
   private static final String URI_PREFIX = "seoSegment";
   private static final String ID_VARIABLE = "id";

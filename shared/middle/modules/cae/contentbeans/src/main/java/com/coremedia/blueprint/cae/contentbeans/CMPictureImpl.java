@@ -2,9 +2,8 @@ package com.coremedia.blueprint.cae.contentbeans;
 
 import com.coremedia.blueprint.common.cta.CallToActionButtonSettings;
 import com.coremedia.blueprint.common.teaser.TeaserSettings;
-import com.coremedia.cap.transform.Transformation;
 import com.coremedia.cap.transform.TransformImageService;
-import org.springframework.beans.factory.annotation.Required;
+import com.coremedia.cap.transform.Transformation;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,9 +19,16 @@ public class CMPictureImpl extends CMPictureBase {
    * Add additional methods here.
    * Add them to the interface {@link com.coremedia.blueprint.common.contentbeans.CMPicture} to make them public.
    */
-  @Required
   public void setTransformImageService(TransformImageService transformImageService) {
     this.transformImageService = transformImageService;
+  }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (transformImageService == null) {
+      throw new IllegalStateException("Required property not set: transformImageService");
+    }
   }
 
   /**

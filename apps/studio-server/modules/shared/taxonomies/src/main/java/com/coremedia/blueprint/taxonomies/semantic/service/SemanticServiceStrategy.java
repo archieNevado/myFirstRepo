@@ -13,12 +13,15 @@ import com.coremedia.cap.content.ContentType;
 import com.coremedia.rest.cap.content.search.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
 
 /**
  * The semantic service strategy using on of the semantic plugins.
@@ -34,34 +37,50 @@ public class SemanticServiceStrategy implements SemanticStrategy {
   private String referencePropertyName;
   private String nameMatchingPropertyName;
 
-  @Required
   public void setServiceId(String serviceId) {
     this.serviceId = serviceId;
   }
 
-  @Required
   public void setContentRepository(ContentRepository contentRepository) {
     this.contentRepository = contentRepository;
   }
 
-  @Required
   public void setSearchService(SearchService searchService) {
     this.searchService = searchService;
   }
 
-  @Required
   public void setSemanticService(SemanticService semanticService) {
     this.semanticService = semanticService;
   }
 
-  @Required
   public void setReferencePropertyName(String property) {
     this.referencePropertyName = property;
   }
 
-  @Required
   public void setNameMatchingPropertyName(String nameMatchingPropertyName) {
     this.nameMatchingPropertyName = nameMatchingPropertyName;
+  }
+
+  @PostConstruct
+  void initialize() {
+    if (contentRepository == null) {
+      throw new IllegalStateException("Required property not set: contentRepository");
+    }
+    if (searchService == null) {
+      throw new IllegalStateException("Required property not set: searchService");
+    }
+    if (semanticService == null) {
+      throw new IllegalStateException("Required property not set: semanticService");
+    }
+    if (isEmpty(nameMatchingPropertyName)) {
+      throw new IllegalStateException("Required property not set: nameMatchingPropertyName");
+    }
+    if (isEmpty(referencePropertyName)) {
+      throw new IllegalStateException("Required property not set: referencePropertyName");
+    }
+    if (isEmpty(serviceId)) {
+      throw new IllegalStateException("Required property not set: serviceId");
+    }
   }
 
   @Override

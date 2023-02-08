@@ -1,16 +1,15 @@
 package com.coremedia.blueprint.cae.filter;
 
-import com.coremedia.cap.multisite.SiteHelper;
 import com.coremedia.blueprint.base.multisite.cae.SiteResolver;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SiteHelper;
 import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -25,14 +24,15 @@ public class SiteFilter implements Filter {
 
   private SiteResolver siteResolver;
 
-  @Required
   public void setSiteResolver(SiteResolver siteResolver) {
     this.siteResolver = siteResolver;
   }
 
-  @Override
-  public void init(FilterConfig filterConfig) throws ServletException {
-    // nothing to do here
+  @PostConstruct
+  protected void initialize() {
+    if (siteResolver == null) {
+      throw new IllegalStateException("Required property not set: siteResolver");
+    }
   }
 
   @Override
@@ -54,8 +54,4 @@ public class SiteFilter implements Filter {
     chain.doFilter(request, response);
   }
 
-  @Override
-  public void destroy() {
-    // nothing to do here
-  }
 }

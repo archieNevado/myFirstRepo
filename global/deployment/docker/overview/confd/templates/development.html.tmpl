@@ -17,14 +17,14 @@
 <div id="headless">
   <h2>Headless Server</h2>
   <ul class="box">
-    <li>Headless Server <code>https://headless-server-preview.{{ getv "/environment/fqdn" }}/graphql</code></li>
-    <li><a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/graphiql" target="_blank" data-cm-test="">Headless Server (graphiql)</a> <code>https://headless-server-preview.{{ getv "/environment/fqdn" }}/graphiql</code></li>
+    <li>Headless Server Preview <code>https://headless-server-preview.{{ getv "/environment/fqdn" }}/graphql</code></li>
+    <li><a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/graphiql" target="_blank" data-cm-test="">Headless Server Preview (graphiql)</a></li>
     {{ if eq (getv "/headless/client/enabled" "true") "true" }}
     <li>Headless Commerce Server <code>https://headless-server-commerce.{{ getv "/environment/fqdn" }}/graphql</code></li>
-    <li><a href="https://headless-server-commerce.{{ getv "/environment/fqdn" }}/graphiql" target="_blank" data-cm-test="">Headless Commerce Server (graphiql)</a><code>https://headless-server-commerce.{{ getv "/environment/fqdn" }}/graphiql</code></li>
-    <li>Headless Stitching Server <code>https://headless-server-stitching-preview.{{ getv "/environment/fqdn" }}/graphql</code></li>
-    <li><a href="https://headless-server-stitching-preview.{{ getv "/environment/fqdn" }}/graphiql" target="_blank" data-cm-test="">Headless Stitching Server (graphiql)</a><code>https://headless-server-stitching-preview.{{ getv "/environment/fqdn" }}/graphiql</code></li>
+    <li><a href="https://headless-server-commerce.{{ getv "/environment/fqdn" }}/graphiql" target="_blank" data-cm-test="">Headless Commerce Server (graphiql)</a></li>
+    <li>Headless Stitching Server Preview <code>https://headless-server-stitching-preview.{{ getv "/environment/fqdn" }}/graphql</code></li>
+    <li><a href="https://headless-server-stitching-preview.{{ getv "/environment/fqdn" }}/graphiql" target="_blank" data-cm-test="">Headless Stitching Server Preview (graphiql)</a></li>
     {{end}}
-    <li><a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/swagger-ui/index.html" target="_blank" data-cm-test="">Headless Server Swagger UI</a></li>
+    <li><a href="https://headless-server-preview.{{ getv "/environment/fqdn" }}/swagger-ui/index.html" target="_blank" data-cm-test="">Headless Server Preview Swagger UI</a></li>
   </ul>
 </div>
