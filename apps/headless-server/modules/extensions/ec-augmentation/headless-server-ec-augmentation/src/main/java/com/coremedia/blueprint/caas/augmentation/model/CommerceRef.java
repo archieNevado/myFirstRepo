@@ -1,13 +1,12 @@
 package com.coremedia.blueprint.caas.augmentation.model;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanType;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.List;
-import java.util.Locale;
-
-import static com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService.DEFAULT_CATALOG_ALIAS;
 
 @DefaultAnnotation(NonNull.class)
 public class CommerceRef {
@@ -20,9 +19,10 @@ public class CommerceRef {
   private final String siteId;
   private final String internalLink;
   private final List<String> breadcrumb;
-  private final String catalogAlias;
+  private final CatalogAlias catalogAlias;
 
-  CommerceRef(String externalId, CommerceBeanType type, String catalogId, String storeId, String locale, String siteId, String internalLink, List<String> breadcrumb, String catalogAlias) {
+  CommerceRef(String externalId, CommerceBeanType type, String catalogId, String storeId, String locale, String siteId, String internalLink, List<String> breadcrumb, CatalogAlias catalogAlias) {
+    validateExternalId(externalId);
     this.externalId = externalId;
     this.type = type;
     this.catalogId = catalogId;
@@ -34,12 +34,11 @@ public class CommerceRef {
     this.catalogAlias = catalogAlias;
   }
 
-  public CommerceRef(String externalId, String type, String storeId, Locale locale, String siteId, List<String> breadcrumb) {
-    this(externalId, CommerceBeanType.of(type), "catalog", storeId, locale.toLanguageTag(), siteId, "dummy", breadcrumb, DEFAULT_CATALOG_ALIAS.value());
-  }
-
-  public CommerceRef(String externalId, String type, String storeId, Locale locale, String siteId) {
-    this(externalId, CommerceBeanType.of(type), "catalog", storeId, locale.toLanguageTag(), siteId, "dummy", List.of(), DEFAULT_CATALOG_ALIAS.value());
+  private static void validateExternalId(String externalId) {
+    if (CommerceIdParserHelper.parseCommerceId(externalId).isPresent()) {
+      // only accept real externalIds - reject commerce IDs.
+      throw new IllegalArgumentException("The given externalId must not be a fully formatted commerce ID: " + externalId);
+    }
   }
 
   public String getExternalId() {
@@ -78,7 +77,7 @@ public class CommerceRef {
     return breadcrumb;
   }
 
-  public String getCatalogAlias() {
+  public CatalogAlias getCatalogAlias() {
     return catalogAlias;
   }
 }

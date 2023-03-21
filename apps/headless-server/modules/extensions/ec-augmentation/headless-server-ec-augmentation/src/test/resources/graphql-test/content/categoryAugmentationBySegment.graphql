@@ -1,0 +1,27 @@
+# test commerce-augmentation-schema-ext.graphql
+query getCategoryAugmentationBySegment($externalId: String, $breadcrumb: [String]!, $catalogAlias: String, $rootSegment: String!) {
+  content {
+    categoryAugmentationBySegment(externalId: $externalId, breadcrumb: $breadcrumb, catalogAlias: $catalogAlias, rootSegment: $rootSegment) {
+      id
+      grid {
+        name
+        placements {
+          id
+          column
+          items {
+            id
+            name
+          }
+        }
+        rows {
+          id
+          rowId
+        }
+      }
+      commerceRef {
+        id
+        externalId
+      }
+    }
+  }
+}

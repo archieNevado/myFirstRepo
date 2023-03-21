@@ -1,0 +1,22 @@
+<Struct xmlns="http://www.coremedia.com/2008/struct">
+  <IntProperty Name="testInt">5</IntProperty>
+  <StructProperty Name="commerce">
+    <Struct>
+      <!-- satisfy CmsOnlyCommerceConnection -->
+      <StringProperty Name="vendor">mock</StringProperty>
+      <!-- support lookup by catalog ID -->
+      <StructProperty Name="catalogConfig">
+        <Struct>
+          <!-- catalog ID lookup not supported by CmsOnlyCommerceConnection -->
+          <StringProperty Name="id">catalog</StringProperty>
+        </Struct>
+      </StructProperty>
+      <!-- support lookup by store ID -->
+      <StructProperty Name="storeConfig">
+        <Struct>
+          <StringProperty Name="id">store</StringProperty>
+        </Struct>
+      </StructProperty>
+    </Struct>
+  </StructProperty>
+</Struct>

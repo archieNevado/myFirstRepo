@@ -14,6 +14,7 @@
   <packaging>pom</packaging>
 
   <properties>
+    <owasp-dependency-check-maven-plugin.version>8.1.2</owasp-dependency-check-maven-plugin.version>
     <nvdFeedsMirror>https://nvd.nist.gov/feeds</nvdFeedsMirror>
   </properties>
 
@@ -83,7 +84,7 @@
           <plugin>
             <groupId>org.owasp</groupId>
             <artifactId>dependency-check-maven</artifactId>
-            <version>7.4.4</version>
+            <version>${owasp-dependency-check-maven-plugin.version}</version>
             <configuration>
               <skipArtifactType>pom|coremedia-application</skipArtifactType>
               <skipProvidedScope>true</skipProvidedScope>

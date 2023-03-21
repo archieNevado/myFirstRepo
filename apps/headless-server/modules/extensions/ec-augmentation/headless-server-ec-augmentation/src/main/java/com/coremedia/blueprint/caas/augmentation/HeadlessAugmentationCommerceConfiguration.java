@@ -34,26 +34,24 @@ import static com.coremedia.blueprint.caas.augmentation.adapter.AugmentationPage
 public class HeadlessAugmentationCommerceConfiguration {
 
   @Bean
-  public AssetFacade assetFacade(AssetService assetService,
-                                 CommerceRefHelper commerceEntityHelper) {
-    return new AssetFacade(assetService, commerceEntityHelper);
+  public AssetFacade assetFacade(AssetService assetService, CommerceRefHelper commerceRefHelper) {
+    return new AssetFacade(assetService, commerceRefHelper);
   }
 
   @Bean
   public AugmentationFacade augmentationFacade(AugmentationService categoryAugmentationService,
                                                AugmentationService productAugmentationService,
                                                SitesService sitesService,
-                                               CommerceEntityHelper commerceEntityHelper,
+                                               CommerceConnectionHelper commerceConnectionHelper,
                                                CatalogAliasTranslationService catalogAliasTranslationService,
                                                CommerceSiteFinder commerceSiteFinder) {
     return new AugmentationFacade(categoryAugmentationService, productAugmentationService, sitesService,
-            commerceEntityHelper, catalogAliasTranslationService, commerceSiteFinder);
+            commerceConnectionHelper, catalogAliasTranslationService, commerceSiteFinder);
   }
 
   @Bean
-  public CommerceEntityHelper commerceEntityHelper(SitesService siteService,
-                                                   CommerceConnectionSupplier CommerceConnectionSupplier) {
-    return new CommerceEntityHelper(siteService, CommerceConnectionSupplier);
+  public CommerceConnectionHelper commerceConnectionHelper(CommerceConnectionSupplier CommerceConnectionSupplier) {
+    return new CommerceConnectionHelper(CommerceConnectionSupplier);
   }
 
   @Bean
@@ -61,13 +59,13 @@ public class HeadlessAugmentationCommerceConfiguration {
           AugmentationService categoryAugmentationService,
           ExternalChannelContentTreeRelation externalChannelContentTreeRelation,
           ContentBackedPageGridService categoryContentBackedPageGridService,
-          SitesService sitesService, CommerceEntityHelper commerceEntityHelper) {
+          SitesService sitesService, CommerceConnectionHelper commerceConnectionHelper) {
     return new AugmentationPageGridAdapterFactory(
             PAGE_GRID_STRUCT_PROPERTY,
             categoryAugmentationService,
             externalChannelContentTreeRelation,
             categoryContentBackedPageGridService,
-            sitesService, commerceEntityHelper);
+            sitesService, commerceConnectionHelper);
   }
 
   @Bean
@@ -75,13 +73,13 @@ public class HeadlessAugmentationCommerceConfiguration {
           AugmentationService productAugmentationService,
           ExternalChannelContentTreeRelation externalChannelContentTreeRelation,
           ContentBackedPageGridService productContentBackedPageGridService,
-          SitesService sitesService, CommerceEntityHelper commerceEntityHelper) {
+          SitesService sitesService, CommerceConnectionHelper commerceConnectionHelper) {
     return new AugmentationPageGridAdapterFactory(
             PDP_PAGEGRID_PROPERTY_NAME,
             productAugmentationService,
             externalChannelContentTreeRelation,
             productContentBackedPageGridService,
-            sitesService, commerceEntityHelper);
+            sitesService, commerceConnectionHelper);
   }
 
   @Bean
@@ -131,7 +129,7 @@ public class HeadlessAugmentationCommerceConfiguration {
   }
 
   @Bean
-  public CommerceRefAdapter commerceRefAdapterDelegate(SitesService sitesService, CommerceEntityHelper commerceEntityHelper, CatalogAliasTranslationService catalogAliasTranslationService){
-    return new CommerceRefAdapter(sitesService, commerceEntityHelper, catalogAliasTranslationService);
+  public CommerceRefAdapter commerceRefAdapterDelegate(SitesService sitesService, CommerceConnectionHelper commerceConnectionHelper, CatalogAliasTranslationService catalogAliasTranslationService){
+    return new CommerceRefAdapter(sitesService, commerceConnectionHelper, catalogAliasTranslationService);
   }
 }

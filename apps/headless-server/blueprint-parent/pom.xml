@@ -76,11 +76,11 @@
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
     <tomcat.version>9.0.71</tomcat.version>
-    <cm.headless-server.core.version>2301.1</cm.headless-server.core.version>
+    <cm.headless-server.core.version>2301.2</cm.headless-server.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
     <cm.middle.bp.version>1-SNAPSHOT</cm.middle.bp.version>
-    <cm.common.core.version>2301.1</cm.common.core.version>
-    <cm.middle.core.version>2301.1</cm.middle.core.version>
+    <cm.common.core.version>2301.2</cm.common.core.version>
+    <cm.middle.core.version>2301.2</cm.middle.core.version>
 
     <!-- headless-server-base -->
     <caffeine.version>2.9.3</caffeine.version>

@@ -1,6 +1,8 @@
-import TeaserOverlayContainer from "@coremedia/studio-client.main.teaser-overlay-components/TeaserOverlayContainer";
 import StringPropertyField from "@coremedia/studio-client.main.editor-components/sdk/premular/fields/StringPropertyField";
+import StringPropertyFieldDelegatePlugin
+  from "@coremedia/studio-client.main.editor-components/sdk/premular/fields/plugins/StringPropertyFieldDelegatePlugin";
 import ShowIssuesPlugin from "@coremedia/studio-client.main.editor-components/sdk/validation/ShowIssuesPlugin";
+import TeaserOverlayContainer from "@coremedia/studio-client.main.teaser-overlay-components/TeaserOverlayContainer";
 import Config from "@jangaroo/runtime/Config";
 import ConfigUtils from "@jangaroo/runtime/ConfigUtils";
 import CustomLabels_properties from "../../CustomLabels_properties";
@@ -28,6 +30,11 @@ class TeaserDocumentForm extends TeaserDocumentFormBase {
         Config(StringPropertyField, {
           itemId: "teaserTitle",
           propertyName: "teaserTitle",
+          ...ConfigUtils.append({
+            plugins: [
+              Config(StringPropertyFieldDelegatePlugin, { delegatePropertyName: "title" }),
+            ],
+          }),
         }),
         Config(TeaserOverlayContainer, {
           propertyName: "teaserText",

@@ -11,7 +11,6 @@ import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
-import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
@@ -24,8 +23,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import static java.util.Objects.requireNonNull;
+import java.util.function.BiFunction;
 
 /**
  * The live context tree relation resolves content of type CMExternalChannel
@@ -64,36 +62,10 @@ public class ExternalChannelContentTreeRelation implements TreeRelation<Content>
       return null;
     }
 
-    return findCategoryFor(child)
-            .map(childCategory -> getParentOf(childCategory, child, site))
-            .orElse(null);
-  }
-
-  @Nullable
-  private Content getParentOf(@NonNull Category childCategory, @NonNull Content child, @NonNull Site site) {
-    Category parentCategory = commerceTreeRelation.getParentOf(childCategory);
-    if (parentCategory != null) {
-      return getParentContent(parentCategory, site);
-    }
-
-    if (childCategory.isRoot()) {
-      // avoid infinite loop when called with site root document
-      Content siteRoot = site.getSiteRootDocument();
-      if (!child.equals(siteRoot)) {
-        return siteRoot;
-      }
-    }
-
-    return null;
-  }
-
-  @Nullable
-  private Content getParentContent(@NonNull Category parentCategory, @NonNull Site site) {
-    Content parentContent = getNearestContentForCategory(parentCategory, site);
-    if (parentContent == null) {
-      return site.getSiteRootDocument();
-    }
-    return parentContent;
+    return findCategoryFor(child, this::createCategoryFor)
+            .map(commerceTreeRelation::getParentOf)
+            .map(parent -> getNearestContentForCategory(parent, site))
+            .orElseGet(site::getSiteRootDocument);
   }
 
   @Nullable
@@ -112,11 +84,7 @@ public class ExternalChannelContentTreeRelation implements TreeRelation<Content>
     }
 
     Category parentCategory = commerceTreeRelation.getParentOf(category);
-    if (null != parentCategory) {
-      return getNearestContentForCategory(parentCategory, site);
-    }
-
-    return null;
+    return getNearestContentForCategory(parentCategory, site);
   }
 
   @Override
@@ -137,13 +105,18 @@ public class ExternalChannelContentTreeRelation implements TreeRelation<Content>
     return path;
   }
 
+  /**
+   * A content is applicable if it is a subtype of CMExternalChannel and links to a category which can be loaded.
+   * @param item The item to check the tree relation for.
+   * @return if the content is an instance of CMExternalChannel and links to a category which can be loaded
+   */
   @Override
   public boolean isApplicable(Content item) {
-    return item != null && item.getType().isSubtypeOf(CM_EXTERNAL_CHANNEL) && isLinkedCategoryValid(item);
+    return item != null && item.isInstanceOf(CM_EXTERNAL_CHANNEL) && isLinkedCategoryValid(item);
   }
 
   private boolean isLinkedCategoryValid(@NonNull Content item) {
-    return findCategoryFor(item).isPresent();
+    return findCategoryFor(item, this::findLoadableCategoryFor).isPresent();
   }
 
   @NonNull
@@ -153,24 +126,32 @@ public class ExternalChannelContentTreeRelation implements TreeRelation<Content>
   }
 
   @NonNull
-  private Optional<Category> findCategoryFor(@NonNull Content content) {
+  private Optional<Category> findCategoryFor(@NonNull Content content,
+                                             @NonNull BiFunction<CommerceConnection, CommerceId, Category> factory) {
     return getCommerceIdFrom(content)
-            .flatMap(commerceId -> findCategoryFor(content, commerceId));
+            .flatMap(commerceId -> findCategoryFor(content, commerceId, factory));
   }
 
   @NonNull
-  private Optional<Category> findCategoryFor(@NonNull Content content, @NonNull CommerceId commerceId) {
+  private Optional<Category> findCategoryFor(@NonNull Content content, @NonNull CommerceId commerceId,
+                                             @NonNull BiFunction<CommerceConnection, CommerceId, Category> factory) {
     return sitesService.getContentSiteAspect(content).findSite()
-            .flatMap(site -> commerceConnectionSupplier.findConnection(site))
-            .flatMap(connection -> findCategoryFor(connection, commerceId));
+            .flatMap(commerceConnectionSupplier::findConnection)
+            .map(connection -> factory.apply(connection, commerceId));
+  }
+
+  @Nullable
+  private Category findLoadableCategoryFor(@NonNull CommerceConnection connection, @NonNull CommerceId commerceId) {
+    var storeContext = connection.getInitialStoreContext();
+    CommerceBeanFactory commerceBeanFactory = connection.getCommerceBeanFactory();
+    return (Category) commerceBeanFactory.loadBeanFor(commerceId, storeContext);
   }
 
   @NonNull
-  private Optional<Category> findCategoryFor(@NonNull CommerceConnection connection, @NonNull CommerceId commerceId) {
-    StoreContext storeContext = requireNonNull(connection.getInitialStoreContext(), "store context not available");
+  private Category createCategoryFor(@NonNull CommerceConnection connection, @NonNull CommerceId commerceId) {
+    var storeContext = connection.getInitialStoreContext();
     CommerceBeanFactory commerceBeanFactory = connection.getCommerceBeanFactory();
-
-    return Optional.ofNullable((Category) commerceBeanFactory.loadBeanFor(commerceId, storeContext));
+    return (Category) commerceBeanFactory.createBeanFor(commerceId, storeContext);
   }
 
   @Autowired(required = false)

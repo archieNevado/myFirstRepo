@@ -3,7 +3,7 @@ ARG NODE_IMAGE="node:${NODE_TAG}"
 FROM ${NODE_IMAGE} as npm-tooling-base
 LABEL NODE_TAG="${NODE_TAG}"
 
-ARG MAINTAINER='CoreMedia AG <support@coremedia.com>'
+ARG MAINTAINER='CoreMedia GmbH <support@coremedia.com>'
 LABEL maintainer="${MAINTAINER}"
 
 RUN apt update -y && \

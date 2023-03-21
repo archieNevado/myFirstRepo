@@ -23,7 +23,6 @@ class PersonDetailsDocumentForm extends PropertyFieldGroup {
       itemId: "personDetailsDocumentForm",
       propertyNames: ["firstName", "lastName", "displayName", "organization", "jobTitle", "email", "detailText", "teaserText"],
       expandOnValues: "firstName,lastName,displayName,organization,jobTitle,email,detailText,teaserText",
-      manageHeight: false,
 
       items: [
         Config(StringPropertyField, {

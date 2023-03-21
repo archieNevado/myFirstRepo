@@ -7,15 +7,17 @@ import com.coremedia.blueprint.base.pagegrid.internal.PageGridConfiguration;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.caas.augmentation.adapter.AugmentationPageGridAdapterFactoryCmsOnly;
 import com.coremedia.blueprint.caas.augmentation.adapter.CommerceRefAdapterCmsOnly;
+import com.coremedia.blueprint.caas.augmentation.connection.CmsOnlyCommerceConnectionFinder;
 import com.coremedia.blueprint.caas.augmentation.model.AugmentationContext;
 import com.coremedia.blueprint.caas.augmentation.model.AugmentationFacadeCmsOnly;
-import com.coremedia.blueprint.caas.augmentation.pagegrid.ContentAugmentedProductPageGridServiceCmsOnly;
-import com.coremedia.blueprint.caas.augmentation.tree.ExternalBreadcrumbContentTreeRelation;
+import com.coremedia.blueprint.caas.augmentation.tree.ExternalBreadcrumbContentTreeRelationFactory;
+import com.coremedia.blueprint.caas.augmentation.tree.ExternalBreadcrumbContentTreeRelationUtil;
 import com.coremedia.blueprint.caas.augmentation.tree.ExternalBreadcrumbTreeRelation;
 import com.coremedia.cache.Cache;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.pagegrid.ContentAugmentedPageGridServiceImpl;
+import com.coremedia.livecontext.pagegrid.ContentAugmentedProductPageGridServiceImpl;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -39,11 +41,10 @@ public class HeadlessAugmentationCmsOnlyConfiguration {
   public AugmentationFacadeCmsOnly augmentationFacadeCmsOnly(AugmentationService categoryAugmentationService,
                                                              AugmentationService productAugmentationService,
                                                              SitesService sitesService,
-                                                             ObjectProvider<ExternalBreadcrumbTreeRelation> externalBreadcrumbTreeRelationProvider,
                                                              CommerceSettingsHelper commerceSettingsHelper,
                                                              ByPathAdapterFactory byPathAdapterFactory,
                                                              ObjectProvider<AugmentationContext> augmentationContextProvider, CatalogAliasMappingProvider catalogAliasMappingProvider) {
-    return new AugmentationFacadeCmsOnly(categoryAugmentationService, productAugmentationService, sitesService, externalBreadcrumbTreeRelationProvider, commerceSettingsHelper, byPathAdapterFactory, augmentationContextProvider, catalogAliasMappingProvider);
+    return new AugmentationFacadeCmsOnly(categoryAugmentationService, productAugmentationService, sitesService, commerceSettingsHelper, byPathAdapterFactory, augmentationContextProvider, catalogAliasMappingProvider);
   }
 
   @Bean
@@ -53,10 +54,9 @@ public class HeadlessAugmentationCmsOnlyConfiguration {
   }
 
   @Bean
-  ExternalBreadcrumbContentTreeRelation externalBreadcrumbContentTreeRelation(AugmentationService categoryAugmentationService,
-                                                                              ObjectProvider<ExternalBreadcrumbTreeRelation> breadcrumbTreeRelationProvider,
-                                                                              SitesService sitesService) {
-    return new ExternalBreadcrumbContentTreeRelation(categoryAugmentationService, breadcrumbTreeRelationProvider, sitesService);
+  ExternalBreadcrumbContentTreeRelationFactory externalBreadcrumbContentTreeRelationFactory(AugmentationService categoryAugmentationService,
+                                                                                            SitesService sitesService) {
+    return new ExternalBreadcrumbContentTreeRelationFactory(categoryAugmentationService, sitesService);
   }
 
   @Bean
@@ -64,16 +64,14 @@ public class HeadlessAugmentationCmsOnlyConfiguration {
           AugmentationService categoryAugmentationService,
           ContentBackedPageGridService categoryContentBackedPageGridServiceCmsOnly,
           SitesService sitesService,
-          CommerceEntityHelper commerceEntityHelper,
-          ExternalBreadcrumbContentTreeRelation externalBreadcrumbContentTreeRelation,
+          ExternalBreadcrumbContentTreeRelationFactory externalBreadcrumbContentTreeRelationFactory,
           CommerceSettingsHelper commerceSettingsHelper) {
     return new AugmentationPageGridAdapterFactoryCmsOnly(
             PAGE_GRID_STRUCT_PROPERTY,
             categoryAugmentationService,
             categoryContentBackedPageGridServiceCmsOnly,
             sitesService,
-            externalBreadcrumbContentTreeRelation,
-            commerceEntityHelper,
+            externalBreadcrumbContentTreeRelationFactory,
             commerceSettingsHelper);
   }
 
@@ -82,63 +80,65 @@ public class HeadlessAugmentationCmsOnlyConfiguration {
           AugmentationService productAugmentationService,
           ContentBackedPageGridService pdpContentBackedPageGridServiceCmsOnly,
           SitesService sitesService,
-          CommerceEntityHelper commerceEntityHelper,
-          ExternalBreadcrumbContentTreeRelation externalBreadcrumbContentTreeRelation,
+          ExternalBreadcrumbContentTreeRelationFactory externalBreadcrumbContentTreeRelationFactory,
           CommerceSettingsHelper commerceSettingsHelper) {
     return new AugmentationPageGridAdapterFactoryCmsOnly(
             PDP_PAGEGRID_PROPERTY_NAME,
             productAugmentationService,
             pdpContentBackedPageGridServiceCmsOnly,
             sitesService,
-            externalBreadcrumbContentTreeRelation,
-            commerceEntityHelper,
+            externalBreadcrumbContentTreeRelationFactory,
             commerceSettingsHelper);
   }
 
   @Bean
-  public ContentAugmentedPageGridServiceImpl categoryContentBackedPageGridServiceCmsOnly(
+  public ContentBackedPageGridService categoryContentBackedPageGridServiceCmsOnly(
           Cache cache,
           SitesService sitesService,
-          PageGridConfiguration pageGridConfiguration,
-          ExternalBreadcrumbContentTreeRelation externalBreadcrumbContentTreeRelation) {
+          PageGridConfiguration pageGridConfiguration) {
     ContentAugmentedPageGridServiceImpl pageGridService = new ContentAugmentedPageGridServiceImpl();
     pageGridService.setCache(cache);
     pageGridService.setSitesService(sitesService);
     pageGridService.setConfiguration(pageGridConfiguration);
-    pageGridService.setTreeRelation(externalBreadcrumbContentTreeRelation);
+    pageGridService.setFallbackStructPropertyName(PAGE_GRID_STRUCT_PROPERTY);
+    pageGridService.setRootCategoryContentSupplier(ExternalBreadcrumbContentTreeRelationUtil::getContentForRootCategory);
     return pageGridService;
   }
 
   @Bean
-  public ContentAugmentedProductPageGridServiceCmsOnly pdpContentBackedPageGridServiceCmsOnly(
+  public ContentBackedPageGridService pdpContentBackedPageGridServiceCmsOnly(
           Cache cache,
           SitesService sitesService,
-          PageGridConfiguration pageGridConfiguration,
-          ExternalBreadcrumbContentTreeRelation externalBreadcrumbContentTreeRelation) {
-
-    ContentAugmentedProductPageGridServiceCmsOnly pageGridService = new ContentAugmentedProductPageGridServiceCmsOnly();
+          PageGridConfiguration pageGridConfiguration) {
+    ContentAugmentedProductPageGridServiceImpl pageGridService = new ContentAugmentedProductPageGridServiceImpl();
     pageGridService.setStructPropertyName(PDP_PAGEGRID_PROPERTY_NAME);
     pageGridService.setCache(cache);
     pageGridService.setSitesService(sitesService);
     pageGridService.setConfiguration(pageGridConfiguration);
-    pageGridService.setTreeRelation(externalBreadcrumbContentTreeRelation);
     pageGridService.setFallbackStructPropertyName(PAGE_GRID_STRUCT_PROPERTY);
+    pageGridService.setNearestCategoryContentSupplier(ExternalBreadcrumbContentTreeRelationUtil::getNearestContentForLeafCategory);
     return pageGridService;
   }
 
   @Bean
-  public CommerceSettingsHelper liveContextSettingsHelper(SitesService sitesService, SettingsService settingsService){
-    return new CommerceSettingsHelper(sitesService, settingsService);
+  public CommerceSettingsHelper liveContextSettingsHelper(SettingsService settingsService) {
+    return new CommerceSettingsHelper(settingsService);
   }
 
   @Bean
-  public CommerceRefHelper commerceRefHelper(SitesService siteService, CommerceSettingsHelper commerceSettingsHelpder){
+  public CommerceRefHelper commerceRefHelper(SitesService siteService, CommerceSettingsHelper commerceSettingsHelpder) {
     return new CommerceRefHelper(siteService, commerceSettingsHelpder);
   }
 
   @Bean
-  public CommerceRefAdapterCmsOnly commerceRefAdapterDelegateCmsOnly(SitesService sitesService, CommerceSettingsHelper commerceSettingsHelper){
+  public CommerceRefAdapterCmsOnly commerceRefAdapterDelegateCmsOnly(SitesService sitesService, CommerceSettingsHelper commerceSettingsHelper) {
     return new CommerceRefAdapterCmsOnly(sitesService, commerceSettingsHelper);
+  }
+
+  @Bean
+  public CmsOnlyCommerceConnectionFinder cmsOnlyCommerceConnectionFinder(CommerceSettingsHelper commerceSettingsHelper) {
+    // fallback: look for connection after generic commerce connection
+    return new CmsOnlyCommerceConnectionFinder(commerceSettingsHelper);
   }
 
 }

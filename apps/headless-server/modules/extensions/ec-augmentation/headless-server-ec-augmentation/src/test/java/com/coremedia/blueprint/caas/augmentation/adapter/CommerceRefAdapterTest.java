@@ -1,7 +1,7 @@
 package com.coremedia.blueprint.caas.augmentation.adapter;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
-import com.coremedia.blueprint.caas.augmentation.CommerceEntityHelper;
+import com.coremedia.blueprint.caas.augmentation.CommerceConnectionHelper;
 import com.coremedia.blueprint.caas.augmentation.model.CommerceRef;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
@@ -46,7 +46,7 @@ class CommerceRefAdapterTest {
   private Site aSite;
 
   @Mock
-  private CommerceEntityHelper commerceEntityHelper;
+  private CommerceConnectionHelper commerceConnectionHelper;
 
   @Mock
   private CommerceConnection aConnection;
@@ -60,19 +60,15 @@ class CommerceRefAdapterTest {
   @InjectMocks
   private CommerceRefAdapter testling;
 
-  private void initSite() {
-    when(sitesService.getSite(SITE_ID)).thenReturn(aSite);
-    when(aSite.getId()).thenReturn(SITE_ID);
-  }
-
   @Test
   void getCommerceRef() {
     //init site
-    initSite();
+    when(sitesService.getSite(SITE_ID)).thenReturn(aSite);
     when(aSite.getLocale()).thenReturn(US);
+    when(aSite.getId()).thenReturn(SITE_ID);
 
     //init commerce connection
-    when(commerceEntityHelper.getCommerceConnection(SITE_ID)).thenReturn(aConnection);
+    when(commerceConnectionHelper.getCommerceConnection(aSite)).thenReturn(aConnection);
     when(aConnection.getInitialStoreContext()).thenReturn(aStoreContext);
     when(aStoreContext.getStoreId()).thenReturn(STORE_ID);
 
@@ -102,19 +98,6 @@ class CommerceRefAdapterTest {
     Content content = mock(Content.class);
     when(content.getString(PROPERTY_NAME)).thenReturn(PRODUCT_ID);
     when(sitesService.getContentSiteAspect(content).getSite()).thenReturn(null);
-
-    CommerceRef commerceRef = testling.getCommerceRef(content, PROPERTY_NAME);
-
-    assertThat(commerceRef).isNull();
-  }
-
-  @Test
-  void getCommerceRefForContentWithNoCommerceConnection(){
-    initSite();
-    Content content = mock(Content.class);
-    when(content.getString(PROPERTY_NAME)).thenReturn(PRODUCT_ID);
-    when(sitesService.getContentSiteAspect(content).getSite()).thenReturn(aSite);
-    when(commerceEntityHelper.getCommerceConnection(SITE_ID)).thenReturn(null);
 
     CommerceRef commerceRef = testling.getCommerceRef(content, PROPERTY_NAME);
 

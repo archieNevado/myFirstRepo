@@ -141,8 +141,8 @@ public class HeadlessAugmentationConfiguration {
   }
 
   @Bean
-  public CommerceSearchFacade commerceSearchHelper(CommerceEntityHelper commerceEntityHelper) {
-    return new CommerceSearchFacade(commerceEntityHelper);
+  public CommerceSearchFacade commerceSearchHelper(CommerceConnectionHelper commerceConnectionHelper) {
+    return new CommerceSearchFacade(commerceConnectionHelper);
   }
 
   @Bean
@@ -175,9 +175,9 @@ public class HeadlessAugmentationConfiguration {
   public ProductListAdapterFactory productListAdapter(@Qualifier("settingsService") SettingsService settingsService,
                                                       @Qualifier("sitesService") SitesService sitesService,
                                                       @Qualifier("collectionExtendedItemsAdapter") ExtendedLinkListAdapterFactory extendedLinkListAdapterFactory,
-                                                      CommerceEntityHelper commerceEntityHelper,
+                                                      CommerceConnectionHelper commerceConnectionHelper,
                                                       CommerceSearchFacade commerceSearchFacade) {
-    return new ProductListAdapterFactory(settingsService, sitesService, extendedLinkListAdapterFactory, commerceEntityHelper, commerceSearchFacade);
+    return new ProductListAdapterFactory(settingsService, sitesService, extendedLinkListAdapterFactory, commerceConnectionHelper, commerceSearchFacade);
   }
 
   @Bean

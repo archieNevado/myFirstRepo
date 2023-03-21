@@ -1,243 +1,212 @@
 package com.coremedia.livecontext.tree;
 
+import com.coremedia.blueprint.base.livecontext.augmentation.AugmentationAutoConfiguration;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceConnection;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceIdProvider;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextBuilderImpl;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.StoreContextImpl;
+import com.coremedia.blueprint.base.multisite.BlueprintMultisiteConfiguration;
+import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.cap.content.Content;
-import com.coremedia.cap.content.ContentType;
-import com.coremedia.cap.multisite.ContentSiteAspect;
+import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.cap.test.xmlrepo.XmlRepoConfiguration;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanFactory;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
+import com.coremedia.livecontext.ecommerce.common.CommerceIdProvider;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
+import com.coremedia.livecontext.ecommerce.common.Vendor;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
+import org.springframework.context.annotation.Bean;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestConstructor;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.List;
+import java.util.Arrays;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
+@ExtendWith({SpringExtension.class, MockitoExtension.class})
+@ContextConfiguration(classes = {
+        XmlRepoConfiguration.class,
+        BlueprintMultisiteConfiguration.class,
+        AugmentationAutoConfiguration.class,
+        ExternalChannelContentTreeRelationTest.LocalConfig.class,
+})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@TestPropertySource(properties = {
+        "repository.factoryClassName=com.coremedia.cap.xmlrepo.XmlCapConnectionFactory",
+        "repository.params.contentxml=classpath:/contentrepository.xml",
+        "repository.params.userxml=classpath:/com/coremedia/cap/common/xml/users-default.xml",
+})
+@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 class ExternalChannelContentTreeRelationTest {
 
+  private static final CommerceIdProvider ID_PROVIDER = new BaseCommerceIdProvider(Vendor.of("vendor"));
   private static final String EXTERNAL_ID_ROOT_CATEGORY = "ROOT_CATEGORY_ID";
-  private static final String REFERENCE_PREFIX = "ibm:///catalog/category/";
 
-  @Mock
-  private CommerceTreeRelation commerceTreeRelation;
+  private final ExternalChannelContentTreeRelation testling;
+  private final ContentRepository contentRepository;
+  private final SitesService sitesService;
+  private final CommerceConnectionSupplier commerceConnectionSupplier;
 
-  @Mock
-  private SitesService sitesService;
-
-  @Mock
-  private AugmentationService augmentationService;
-
-  @Mock
   private Site site;
 
-  @Mock
-  private Content siteRootChannel;
-
-  @Mock
-  private Category rootCategory;
-
-  @Mock
-  private Content catalogRootContent;
-
-  @Mock
-  private Category topCategory; //no content assigned
-
-  @Mock
-  private Category childCategory;
-
-  @Mock
-  private Content childContent;
-
-  @Mock
-  private Category leafCategory;
-
-  @Mock
-  private Content leafContent;
-
-  @Mock
-  private CommerceConnectionSupplier commerceConnectionSupplier;
-
-  @Mock
   private CommerceBeanFactory commerceBeanFactory;
+  private StoreContextImpl storeContext;
 
-  @InjectMocks
-  private ExternalChannelContentTreeRelation testling;
+  ExternalChannelContentTreeRelationTest(ContentRepository contentRepository,
+                                         SitesService sitesService,
+                                         ExternalChannelContentTreeRelation testling,
+                                         CommerceConnectionSupplier commerceConnectionSupplier,
+                                         TreeRelation<Category> commerceTreeRelation) {
+    this.contentRepository = contentRepository;
+    this.sitesService = sitesService;
+    this.testling = testling;
+    this.commerceConnectionSupplier = commerceConnectionSupplier;
+  }
 
   @BeforeEach
   public void setup() {
+    site = sitesService.getSites().stream().findAny().orElseThrow(() -> new IllegalStateException("No sites available"));
+
+    var rootCategoryId = ID_PROVIDER.formatCategoryId(null, EXTERNAL_ID_ROOT_CATEGORY);
+    var topCategoryId = ID_PROVIDER.formatCategoryId(null, "topCategory");
+    var childCategoryId = ID_PROVIDER.formatCategoryId(null, "childCategory");
+    var leafCategoryId = ID_PROVIDER.formatCategoryId(null, "leafCategory");
+
+    commerceBeanFactory = mock();
     BaseCommerceConnection commerceConnection = new BaseCommerceConnection();
-
-    StoreContextImpl storeContext = StoreContextBuilderImpl.from(commerceConnection, "any-site-id").build();
-
     commerceConnection.setCommerceBeanFactory(commerceBeanFactory);
+    storeContext = StoreContextBuilderImpl.from(commerceConnection, "the-site-id").build();
     commerceConnection.setInitialStoreContext(storeContext);
 
     when(commerceConnectionSupplier.findConnection(site)).thenReturn(Optional.of(commerceConnection));
 
-    initContentMock();
-    initCategoryTreeMock();
+    Category rootCategory = create(rootCategoryId, null, storeContext, commerceBeanFactory);
+    lenient().when(rootCategory.isRoot()).thenReturn(true);
+    Category topCategory = create(topCategoryId, rootCategory, storeContext, commerceBeanFactory);
+    Category childCategory = create(childCategoryId, topCategory, storeContext, commerceBeanFactory);
+    create(leafCategoryId, childCategory, storeContext, commerceBeanFactory);
   }
 
-  @Test
-  void testGetParentOf() {
-    // direct parent
-    assertThat(testling.getParentOf(leafContent)).isEqualTo(childContent);
-
-    // direct parent missing
-    assertThat(testling.getParentOf(childContent)).isEqualTo(catalogRootContent);
-
-    // fallback for root category
-    assertThat(testling.getParentOf(catalogRootContent)).isEqualTo(siteRootChannel);
+  Category create(CommerceId commerceId, Category parent, StoreContext storeContext, CommerceBeanFactory commerceBeanFactory) {
+    Category result = mock();
+    lenient().when(result.getParent()).thenReturn(parent);
+    lenient().when(result.getReference()).thenReturn(commerceId);
+    lenient().when(result.getContext()).thenReturn(storeContext);
+    lenient().doReturn(result).when(commerceBeanFactory).loadBeanFor(commerceId, storeContext);
+    lenient().doReturn(result).when(commerceBeanFactory).createBeanFor(commerceId, storeContext);
+    return result;
   }
 
-  @Test
-  void testPathToRoot() {
-    List<Content> path = testling.pathToRoot(leafContent);
-    assertThat(path).hasSize(4);
-    assertThat(path.get(0)).isEqualTo(siteRootChannel);
-    assertThat(path.get(1)).isEqualTo(catalogRootContent);
-    assertThat(path.get(2)).isEqualTo(childContent);
-    assertThat(path.get(3)).isEqualTo(leafContent);
-
-    List<Content> catalogRootPath = testling.pathToRoot(catalogRootContent);
-    assertThat(catalogRootPath).hasSize(2);
-    assertThat(catalogRootPath.get(0)).isEqualTo(siteRootChannel);
-    assertThat(catalogRootPath.get(1)).isEqualTo(catalogRootContent);
-
-    List<Content> siteRootPath = testling.pathToRoot(siteRootChannel);
-    assertThat(siteRootPath).hasSize(1);
-    assertThat(catalogRootPath.get(0)).isEqualTo(siteRootChannel);
+  @ParameterizedTest
+  @CsvSource(value = {
+          "contentId   | parentId",
+          "4           | NIL",
+          "6           | 4",
+          "8           | 6",
+          "10          | 8",
+          "12          | NIL",
+          "14          | NIL",
+          "16          | NIL",
+  }, useHeadersInDisplayName = true, delimiter = '|', nullValues = "NIL")
+  void testGetParentOf(String contentId, String expectedParentId) {
+    var content = contentRepository.getContent(contentId);
+    if (expectedParentId == null) {
+      assertThat(testling.getParentOf(content)).isNull();
+    } else {
+      var parent = contentRepository.getContent(expectedParentId);
+      assertThat(testling.getParentOf(content)).isEqualTo(parent);
+    }
   }
 
-  @Test
-  void testGetNearestContentForCategory() {
-    assertThat(testling.getNearestContentForCategory(childCategory, site)).isEqualTo(childContent);
-    assertThat(testling.getNearestContentForCategory(topCategory, site)).isEqualTo(catalogRootContent);
+  @ParameterizedTest
+  @CsvSource(value = {
+          "contentId   | pathIds",
+          "4           | 4",
+          "6           | 4,6",
+          "8           | 4,6,8",
+          "10          | 4,6,8,10",
+  }, useHeadersInDisplayName = true, delimiter = '|')
+  void testPathToRoot(String contentId, String pathIds) {
+    var content = contentRepository.getContent(contentId);
+    var expected = Arrays.stream(pathIds.split(","))
+            .map(contentRepository::getContent)
+            .collect(Collectors.toList());
 
-    Category category = mock(Category.class);
-    assertThat(testling.getNearestContentForCategory(category, site)).isNull();
+    assertThat(testling.pathToRoot(content)).isEqualTo(expected);
   }
 
-  @Test
-  void testIsApplicable() {
-    //test valid external channel contents
-    assertThat(testling.isApplicable(leafContent)).isTrue();
-    assertThat(testling.isApplicable(siteRootChannel)).isFalse();
-
-    //test broken category link (e.g. category is in workspace only)
-    Content contentWithBrokenCategoryLink = mock(Content.class);
-
-    ContentType typeExternalChannel = mock(ContentType.class);
-    when(typeExternalChannel.isSubtypeOf(CMExternalChannel.NAME)).thenReturn(true);
-    when(contentWithBrokenCategoryLink.getType()).thenReturn(typeExternalChannel);
-
-    when(contentWithBrokenCategoryLink.getString(CMExternalChannel.EXTERNAL_ID)).thenReturn(REFERENCE_PREFIX + "does_not_exsist");
-    doReturn(null).when(getCommerceBeanFactory()).loadBeanFor(endsWith("does_not_exsist"), any(StoreContext.class));
-
-    assertThat(testling.isApplicable(contentWithBrokenCategoryLink)).isFalse();
-
-    //test external channel with empty category reference
-    Content contentWithEmptyCategoryLink = mock(Content.class);
-    when(contentWithEmptyCategoryLink.getType()).thenReturn(typeExternalChannel);
-    when(contentWithEmptyCategoryLink.getString(CMExternalChannel.EXTERNAL_ID)).thenReturn(null);
-
-    assertThat(testling.isApplicable(contentWithEmptyCategoryLink)).isFalse();
+  @ParameterizedTest
+  @CsvSource(value = {
+          "categoryId              | contentName",
+          "childCategory           | childCategory",
+          "topCategory             | augmentedCatalogRoot",
+          "doesNotExist            | NIL",
+  }, useHeadersInDisplayName = true, delimiter = '|', nullValues = "NIL")
+  void testGetNearestContentForCategory(String externalId, String name) {
+    var commerceId = ID_PROVIDER.formatCategoryId(null, externalId);
+    var category = (Category)commerceBeanFactory.createBeanFor(commerceId, storeContext);
+    if (name == null) {
+      assertThat(testling.getNearestContentForCategory(category, site)).isNull();
+    } else {
+      assertThat(testling.getNearestContentForCategory(category, site)).extracting(Content::getName).isEqualTo(name);
+    }
   }
 
-  private void initCategoryTreeMock() {
-    when(rootCategory.isRoot()).thenReturn(true);
-    String idPrefix = "test:///s/category/";
-    doReturn(rootCategory).when(getCommerceBeanFactory()).loadBeanFor(endsWith(EXTERNAL_ID_ROOT_CATEGORY), any(StoreContext.class));
-
-    when(commerceTreeRelation.getParentOf(topCategory)).thenReturn(rootCategory);
-
-    when(commerceTreeRelation.getParentOf(childCategory)).thenReturn(topCategory);
-    doReturn(childCategory).when(getCommerceBeanFactory()).loadBeanFor(endsWith("childCategory"), any(StoreContext.class));
-
-    when(commerceTreeRelation.getParentOf(leafCategory)).thenReturn(childCategory);
-    doReturn(leafCategory).when(getCommerceBeanFactory()).loadBeanFor(endsWith("leafCategory"), any(StoreContext.class));
-
-    // augmentation is not defined for topCategory
-    when(augmentationService.getContent(eq(rootCategory))).thenReturn(catalogRootContent);
-    when(augmentationService.getContent(eq(topCategory))).thenReturn(null);
-    when(augmentationService.getContent(eq(childCategory))).thenReturn(childContent);
+  @ParameterizedTest
+  @CsvSource(value = {
+          "contentId   | applicable?",
+          "4           | false",
+          "10          | true",
+          "12          | false",
+          "14          | false",
+          "16          | false",
+  }, useHeadersInDisplayName = true, delimiter = '|')
+  void testIsApplicable(String contentId, boolean applicable) {
+    var content = contentRepository.getContent(contentId);
+    assertThat(testling.isApplicable(content)).isEqualTo(applicable);
   }
 
-  private void initContentMock() {
-    ContentType typeExternalChannel = mock(ContentType.class);
-    when(typeExternalChannel.isSubtypeOf(CMExternalChannel.NAME)).thenReturn(true);
+  static class LocalConfig {
 
-    ContentSiteAspect contentSiteAspect = mock(ContentSiteAspect.class);
-    when(sitesService.getContentSiteAspect(any(Content.class))).thenReturn(contentSiteAspect);
-    when(contentSiteAspect.getSite()).thenReturn(site);
-    when(contentSiteAspect.findSite()).thenReturn(Optional.of(site));
+    @Bean
+    CommerceTreeRelation commerceTreeRelation() {
+      return new CommerceTreeRelation();
+    }
 
-    // siteRootChannel
-    ContentType typeAugmentedPage = mock(ContentType.class);
-    when(typeAugmentedPage.isSubtypeOf(CMExternalChannel.NAME)).thenReturn(false);
+    @Bean
+    CommerceConnectionSupplier commerceConnectionSupplier() {
+      return mock();
+    }
 
-    when(site.getSiteRootDocument()).thenReturn(siteRootChannel);
-    when(siteRootChannel.getType()).thenReturn(typeAugmentedPage);
-
-    // catalogRootContent
-    when(catalogRootContent.getString(CMExternalChannel.EXTERNAL_ID)).thenReturn(REFERENCE_PREFIX + EXTERNAL_ID_ROOT_CATEGORY);
-    when(catalogRootContent.getType()).thenReturn(typeExternalChannel);
-
-    // childContent
-    when(childContent.getType()).thenReturn(typeExternalChannel);
-    when(childContent.getString(CMExternalChannel.EXTERNAL_ID)).thenReturn(REFERENCE_PREFIX + "childCategory");
-
-    // leafContent
-    when(leafContent.getType()).thenReturn(typeExternalChannel);
-    when(leafContent.getString(CMExternalChannel.EXTERNAL_ID)).thenReturn(REFERENCE_PREFIX + "leafCategory");
-  }
-
-  private CommerceId endsWith(String suffix) {
-    return argThat(commerceId -> commerceId
-            .getExternalId()
-            .map(e -> e.equals(suffix))
-            .orElse(false));
-  }
-
-  private CommerceBeanFactory getCommerceBeanFactory() {
-    return commerceBeanFactory;
-  }
-
-  public interface CMExternalChannel {
-
-    /**
-     * {@link com.coremedia.cap.content.ContentType#getName() Name of the ContentType} 'CMExternalChannel'.
-     */
-    String NAME = "CMExternalChannel";
-
-    /**
-     * Name of the document property 'externalId'.
-     *
-     * <p>Useful for queries and content level code.
-     */
-    String EXTERNAL_ID = "externalId";
+    @Bean
+    ExternalChannelContentTreeRelation externalChannelContentTreeRelation(SitesService sitesService,
+                                                                          CommerceTreeRelation commerceTreeRelation,
+                                                                          AugmentationService categoryAugmentationService,
+                                                                          CommerceConnectionSupplier commerceConnectionSupplier) {
+      var treeRelation = new ExternalChannelContentTreeRelation();
+      treeRelation.setAugmentationService(categoryAugmentationService);
+      treeRelation.setCommerceTreeRelation(commerceTreeRelation);
+      treeRelation.setSitesService(sitesService);
+      treeRelation.setCommerceConnectionSupplier(commerceConnectionSupplier);
+      return treeRelation;
+    }
   }
 }

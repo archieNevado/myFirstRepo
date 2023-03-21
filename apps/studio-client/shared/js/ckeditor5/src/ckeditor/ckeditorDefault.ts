@@ -31,8 +31,9 @@ import ContentImagePlugin from "@coremedia/ckeditor5-coremedia-images/ContentIma
 import ContentLinks from "@coremedia/ckeditor5-coremedia-link/contentlink/ContentLinks";
 import Differencing from "@coremedia/ckeditor5-coremedia-differencing/Differencing";
 import LinkTarget from "@coremedia/ckeditor5-coremedia-link/linktarget/LinkTarget";
-import CoreMediaStudioEssentials, { Strictness } from "@coremedia/ckeditor5-coremedia-studio-essentials/CoreMediaStudioEssentials";
+import CoreMediaStudioEssentials from "@coremedia/ckeditor5-coremedia-studio-essentials/CoreMediaStudioEssentials";
 import CoreMediaFontMapper from '@coremedia/ckeditor5-font-mapper/FontMapper';
+import { LinkAttributes } from "@coremedia/ckeditor5-link-common/LinkAttributes";
 import Autoformat from '@ckeditor/ckeditor5-autoformat/src/autoformat';
 import FindAndReplace from '@ckeditor/ckeditor5-find-and-replace/src/findandreplace';
 import CodeBlock from '@ckeditor/ckeditor5-code-block/src/codeblock';
@@ -47,6 +48,8 @@ import '../theme/custom.css';
 import { PasteFromOffice } from "@ckeditor/ckeditor5-paste-from-office";
 import { SourceEditing } from "@ckeditor/ckeditor5-source-editing";
 import CKEditorFeatureFlags from "@coremedia/studio-client.ckeditor-common/CKEditorFeatureFlags";
+import { COREMEDIA_LINK_CONFIG_KEY } from "@coremedia/ckeditor5-coremedia-link/contentlink/LinkBalloonConfig";
+import { linkAttributesConfig } from "./linkAttributesConfig";
 
 const {
   //@ts-expect-error
@@ -157,6 +160,7 @@ export const createDefaultCKEditor: CreateCKEditorFunction = (domElement:(string
       Indent,
       Italic,
       Link,
+      LinkAttributes,
       LinkImage,
       LinkTarget,
       DocumentList,
@@ -183,7 +187,8 @@ export const createDefaultCKEditor: CreateCKEditorFunction = (domElement:(string
       ],
     },
     link: {
-      defaultProtocol: 'https://'
+      defaultProtocol: 'https://',
+      ...linkAttributesConfig,
     },
     alignment: {
       options: [
@@ -204,6 +209,17 @@ export const createDefaultCKEditor: CreateCKEditorFunction = (domElement:(string
           className: "align--justify",
         },
       ],
+    },
+    [COREMEDIA_LINK_CONFIG_KEY]: {
+      linkBalloon: {
+        // Clicking these elements will not trigger closing the link balloon:
+        keepOpen: {
+          // library, quick-search (+buttons in header toolbar)
+          ids: ["collection-view-container", "side-panel-window_collection-view-container", "quickSearchDialog", "libraryButton", "QuickSearchButtonId", "controlRoomButtonId"],
+            // input field menus in the library:
+            classes: ["x-boundlist"],
+        },
+      },
     },
     image: {
       styles: {

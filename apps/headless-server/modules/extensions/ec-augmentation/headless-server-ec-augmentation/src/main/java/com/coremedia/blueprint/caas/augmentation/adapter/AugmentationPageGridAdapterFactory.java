@@ -3,7 +3,8 @@ package com.coremedia.blueprint.caas.augmentation.adapter;
 import com.coremedia.blueprint.base.caas.model.adapter.PageGridAdapter;
 import com.coremedia.blueprint.base.caas.model.adapter.PageGridAdapterFactory;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridService;
-import com.coremedia.blueprint.caas.augmentation.CommerceEntityHelper;
+import com.coremedia.blueprint.caas.augmentation.CommerceConnectionHelper;
+import com.coremedia.blueprint.caas.augmentation.CommerceRefHelper;
 import com.coremedia.blueprint.caas.augmentation.model.Augmentation;
 import com.coremedia.blueprint.caas.augmentation.model.CommerceRef;
 import com.coremedia.cap.content.Content;
@@ -14,6 +15,8 @@ import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.livecontext.ecommerce.catalog.ProductVariant;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
+import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.tree.ExternalChannelContentTreeRelation;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -33,20 +36,20 @@ public class AugmentationPageGridAdapterFactory extends PageGridAdapterFactory {
   private final SitesService sitesService;
   private final String propertyName;
   private final AugmentationService augmentationService;
-  private final CommerceEntityHelper commerceEntityHelper;
+  private final CommerceConnectionHelper commerceConnectionHelper;
 
   public AugmentationPageGridAdapterFactory(String propertyName,
                                             AugmentationService augmentationService,
                                             ExternalChannelContentTreeRelation externalChannelContentTreeRelation,
                                             ContentBackedPageGridService contentBackedPageGridService,
                                             SitesService sitesService,
-                                            CommerceEntityHelper commerceEntityHelper) {
+                                            CommerceConnectionHelper commerceConnectionHelper) {
     super(contentBackedPageGridService);
     this.propertyName = propertyName;
     this.augmentationService = augmentationService;
     this.externalChannelContentTreeRelation = externalChannelContentTreeRelation;
     this.sitesService = sitesService;
-    this.commerceEntityHelper = commerceEntityHelper;
+    this.commerceConnectionHelper = commerceConnectionHelper;
   }
 
   /**
@@ -67,12 +70,17 @@ public class AugmentationPageGridAdapterFactory extends PageGridAdapterFactory {
     return to(getContent(getCommerceBean(commerceRef)), propertyName, dataFetchingEnvironment);
   }
 
-  private CommerceBean getCommerceBean(CommerceRef commerceRef){
+  private CommerceBean getCommerceBean(CommerceRef commerceRef) {
+    return sitesService.findSite(commerceRef.getSiteId())
+            .map(commerceConnectionHelper::getCommerceConnection)
+            .map(connection -> toCommerceBean(commerceRef, connection))
+            .orElse(null);
+  }
 
-    return commerceEntityHelper.createCommerceBean(
-            commerceEntityHelper.getCommerceId(commerceRef),
-            commerceRef.getSiteId(),
-            CommerceBean.class);
+  private static CommerceBean toCommerceBean(CommerceRef commerceRef, CommerceConnection connection) {
+    var commerceId = CommerceRefHelper.toCommerceId(commerceRef, connection.getVendor());
+    StoreContext storeContext = connection.getInitialStoreContext();
+    return connection.getCommerceBeanFactory().createBeanFor(commerceId, storeContext);
   }
 
   private static String getSiteId(CommerceBean commerceBean) {

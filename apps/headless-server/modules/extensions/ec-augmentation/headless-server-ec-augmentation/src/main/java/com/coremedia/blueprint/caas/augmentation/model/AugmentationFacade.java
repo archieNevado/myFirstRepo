@@ -2,10 +2,12 @@ package com.coremedia.blueprint.caas.augmentation.model;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceSiteFinder;
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdBuilder;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
-import com.coremedia.blueprint.caas.augmentation.CommerceEntityHelper;
+import com.coremedia.blueprint.caas.augmentation.CommerceConnectionHelper;
 import com.coremedia.blueprint.caas.augmentation.error.CommerceConnectionUnavailable;
 import com.coremedia.blueprint.caas.augmentation.error.InvalidCommerceId;
+import com.coremedia.blueprint.caas.augmentation.error.InvalidSiteId;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
@@ -31,7 +33,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
-import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -48,7 +49,7 @@ public class AugmentationFacade {
   private final AugmentationService categoryAugmentationService;
   private final AugmentationService productAugmentationService;
   private final SitesService sitesService;
-  private final CommerceEntityHelper commerceEntityHelper;
+  private final CommerceConnectionHelper commerceConnectionHelper;
   private final CatalogAliasTranslationService catalogAliasTranslationService;
   private final CommerceSiteFinder commerceSiteFinder;
 
@@ -56,22 +57,21 @@ public class AugmentationFacade {
           AugmentationService categoryAugmentationService,
           AugmentationService productAugmentationService,
           SitesService sitesService,
-          CommerceEntityHelper commerceEntityHelper,
-          CatalogAliasTranslationService catalogAliasTranslationService, CommerceSiteFinder commerceSiteFinder) {
+          CommerceConnectionHelper commerceConnectionHelper,
+          CatalogAliasTranslationService catalogAliasTranslationService,
+          CommerceSiteFinder commerceSiteFinder) {
     this.categoryAugmentationService = categoryAugmentationService;
     this.productAugmentationService = productAugmentationService;
     this.sitesService = sitesService;
-    this.commerceEntityHelper = commerceEntityHelper;
+    this.commerceConnectionHelper = commerceConnectionHelper;
     this.catalogAliasTranslationService = catalogAliasTranslationService;
     this.commerceSiteFinder = commerceSiteFinder;
   }
 
   @SuppressWarnings("unused")
   public DataFetcherResult<ProductAugmentation> getProductAugmentationByStore(String externalId, @Nullable String catalogId, String storeId, String locale) {
-
     return commerceSiteFinder.findSiteFor(storeId, Locale.forLanguageTag(locale))
-            .map(Site::getId)
-            .map(siteId -> getProductAugmentationBySite(externalId, catalogId, siteId))
+            .map(site -> doGetProductAugmentationBySite(externalId, catalogId, site))
             .orElseGet(() -> {
               DataFetcherResult.Builder<ProductAugmentation> builder = DataFetcherResult.newResult();
               return builder.error(CommerceConnectionUnavailable.getInstance()).build();
@@ -79,32 +79,37 @@ public class AugmentationFacade {
   }
 
   public DataFetcherResult<ProductAugmentation> getProductAugmentationBySite(String externalId, @Nullable String catalogId, String siteId) {
-    DataFetcherResult.Builder<ProductAugmentation> builder = DataFetcherResult.newResult();
-    var connection = commerceEntityHelper.getCommerceConnection(siteId);
-    if (connection == null) {
-      return builder.error(CommerceConnectionUnavailable.getInstance()).build();
+    var site = sitesService.getSite(siteId);
+    if (site == null) {
+      return DataFetcherResult.<ProductAugmentation>newResult().error(InvalidSiteId.getInstance()).build();
     }
+    return doGetProductAugmentationBySite(externalId, catalogId, site);
+  }
 
+  private DataFetcherResult<ProductAugmentation> doGetProductAugmentationBySite(String externalId, String catalogId, Site site) {
+    DataFetcherResult.Builder<ProductAugmentation> builder = DataFetcherResult.newResult();
+    var connection = commerceConnectionHelper.getCommerceConnection(site);
     var storeContext = connection.getInitialStoreContext();
     if (catalogId != null) {
       storeContext = cloneStoreContextForCatalogId(catalogId, connection);
     }
 
-    CommerceId productId = CommerceEntityHelper.getProductId(externalId, storeContext.getCatalogAlias(), connection);
+    var catalogAlias = storeContext.getCatalogAlias();
+    var productId = parseOrBuild(externalId, connection, catalogAlias, PRODUCT);
+    var commerceRef = CommerceRefFactory.from(productId, storeContext)
+            .orElse(null);
+    if (commerceRef == null) {
+      return builder.error(InvalidCommerceId.getInstance()).build();
+    }
 
-    var content = productAugmentationService.getContentByExternalId(format(productId), sitesService.getSite(siteId));
-    var commerceRef = CommerceRefFactory.from(externalId, PRODUCT, storeContext);
-
+    var content = productAugmentationService.getContentByExternalId(format(productId), site);
     return builder.data(new ProductAugmentation(commerceRef, content)).build();
   }
 
-
   @SuppressWarnings("unused")
   public DataFetcherResult<CategoryAugmentation> getCategoryAugmentationByStore(String externalId, @Nullable String catalogId, String storeId, String locale) {
-
     return commerceSiteFinder.findSiteFor(storeId, Locale.forLanguageTag(locale))
-            .map(Site::getId)
-            .map(siteId -> getCategoryAugmentationBySite(externalId, catalogId, siteId))
+            .map(site -> doGetCategoryAugmentationBySite(externalId, catalogId, site))
             .orElseGet(() -> {
               DataFetcherResult.Builder<CategoryAugmentation> builder = DataFetcherResult.newResult();
               return builder.error(CommerceConnectionUnavailable.getInstance()).build();
@@ -114,23 +119,30 @@ public class AugmentationFacade {
   @Nullable
   @SuppressWarnings("unused")
   public DataFetcherResult<CategoryAugmentation> getCategoryAugmentationBySite(String externalId, @Nullable String catalogId, String siteId) {
-    DataFetcherResult.Builder<CategoryAugmentation> builder = DataFetcherResult.newResult();
-    var connection = commerceEntityHelper.getCommerceConnection(siteId);
-    if (connection == null) {
-      return builder.error(CommerceConnectionUnavailable.getInstance()).build();
+    var site = sitesService.getSite(siteId);
+    if (site == null) {
+      return DataFetcherResult.<CategoryAugmentation>newResult().error(InvalidSiteId.getInstance()).build();
     }
+    return doGetCategoryAugmentationBySite(externalId, catalogId, site);
+  }
 
+  private DataFetcherResult<CategoryAugmentation> doGetCategoryAugmentationBySite(String externalId, String catalogId, Site site) {
+    var builder = DataFetcherResult.<CategoryAugmentation>newResult();
+    var connection = commerceConnectionHelper.getCommerceConnection(site);
     var storeContext = connection.getInitialStoreContext();
     if (catalogId != null) {
       storeContext = cloneStoreContextForCatalogId(catalogId, connection);
     }
 
-    CommerceId categoryId = CommerceEntityHelper.getCategoryId(externalId, storeContext.getCatalogAlias(), connection);
+    var catalogAlias = storeContext.getCatalogAlias();
+    var categoryId = parseOrBuild(externalId, connection, catalogAlias, CATEGORY);
+    var commerceRef = CommerceRefFactory.from(categoryId, storeContext)
+            .orElse(null);
+    if (commerceRef == null) {
+      return builder.error(InvalidCommerceId.getInstance()).build();
+    }
 
-    var content = categoryAugmentationService.getContentByExternalId(format(categoryId),
-            sitesService.getSite(siteId));
-    var commerceRef = CommerceRefFactory.from(externalId, CATEGORY, storeContext);
-
+    var content = categoryAugmentationService.getContentByExternalId(format(categoryId), site);
     return builder.data(new CategoryAugmentation(commerceRef, content)).build();
   }
 
@@ -143,20 +155,17 @@ public class AugmentationFacade {
       return builder.error(InvalidCommerceId.getInstance()).build();
     }
 
-    CommerceConnection connection = commerceEntityHelper.getCommerceConnection(siteId);
-    if (connection == null) {
-      return builder.error(CommerceConnectionUnavailable.getInstance()).build();
+    var site = sitesService.getSite(siteId);
+    if (site == null) {
+      return DataFetcherResult.<ProductAugmentation>newResult().error(InvalidSiteId.getInstance()).build();
     }
-
-    return commerceIdOptional.map(commerceId -> getDataForCommerceId(commerceId, connection, siteId, builder))
+    CommerceConnection connection = commerceConnectionHelper.getCommerceConnection(site);
+    return commerceIdOptional.map(commerceId -> getDataForCommerceId(commerceId, connection, site, builder))
             .orElse(null);
   }
 
-  private DataFetcherResult<? extends Augmentation> getDataForCommerceId(CommerceId commerceId, CommerceConnection connection, String siteId, DataFetcherResult.Builder<Augmentation> builder) {
+  private DataFetcherResult<? extends Augmentation> getDataForCommerceId(CommerceId commerceId, CommerceConnection connection, Site site, DataFetcherResult.Builder<Augmentation> builder) {
     StoreContext initialStoreContext = connection.getInitialStoreContext();
-    String externalId = commerceId.getExternalId()
-            .orElseGet(() -> connection.getCommerceBeanFactory().createBeanFor(commerceId, initialStoreContext).getExternalId()
-            );
     CatalogAlias catalogAlias = commerceId.getCatalogAlias();
     Optional<CatalogId> catalogId = catalogAliasTranslationService.getCatalogIdForAlias(catalogAlias, initialStoreContext);
     CommerceBeanType commerceBeanType = commerceId.getCommerceBeanType();
@@ -165,17 +174,19 @@ public class AugmentationFacade {
     catalogId.ifPresent(storeContextBuilder::withCatalogId);
     StoreContext storeContext = storeContextBuilder.build();
 
+    var commerceRef = getCommerceRef(commerceId, initialStoreContext);
     if (commerceBeanType.equals(PRODUCT)) {
-      return getProductAugmentationData(commerceId, siteId, externalId, PRODUCT, builder, storeContext);
+      Content content = productAugmentationService.getContentByExternalId(format(commerceId), site);
+      return builder.data(new ProductAugmentation(commerceRef, content)).build();
     } else if (commerceBeanType.equals(CATEGORY)) {
-      Content content = categoryAugmentationService.getContentByExternalId(format(commerceId), sitesService.getSite(siteId));
-      var commerceRef = CommerceRefFactory.from(externalId, CATEGORY, storeContext);
+      Content content = categoryAugmentationService.getContentByExternalId(format(commerceId), site);
       return builder.data(new CategoryAugmentation(commerceRef, content)).build();
     } else if (commerceBeanType.equals(SKU)){
       CommerceBean commerceBean = connection.getCommerceBeanFactory().createBeanFor(commerceId, storeContext);
       Product parent = ((ProductVariant) commerceBean).getParent();
       if (parent != null){
-        return getProductAugmentationData(parent.getId(), siteId, externalId, SKU, builder, storeContext);
+        Content content = productAugmentationService.getContentByExternalId(format(parent.getId()), site);
+        return builder.data(new ProductAugmentation(commerceRef, content)).build();
       }
     }
 
@@ -188,16 +199,13 @@ public class AugmentationFacade {
     return DataFetcherResult.<Augmentation>newResult().error(error).build();
   }
 
-  private DataFetcherResult<? extends Augmentation> getProductAugmentationData(CommerceId commerceId,
-                                                                               String siteId,
-                                                                               String externalId,
-                                                                               CommerceBeanType productBeanType,
-                                                                               DataFetcherResult.Builder<Augmentation> builder,
-                                                                               StoreContext storeContextForCommerceId) {
-    Content content = productAugmentationService.getContentByExternalId(format(commerceId), sitesService.getSite(siteId));
-    var commerceRef = CommerceRefFactory.from(externalId, productBeanType, storeContextForCommerceId);
-
-    return builder.data(new ProductAugmentation(commerceRef, content)).build();
+  private static CommerceRef getCommerceRef(CommerceId commerceId, StoreContext storeContext) {
+    return CommerceRefFactory.from(commerceId, storeContext)
+            .orElseGet(() -> {
+              var commerceBeanFactory = storeContext.getConnection().getCommerceBeanFactory();
+              var commerceBean = commerceBeanFactory.createBeanFor(commerceId, storeContext);
+              return CommerceRefFactory.from(commerceBean);
+            });
   }
 
   private StoreContext cloneStoreContextForCatalogId(String catalogId, CommerceConnection connection) {
@@ -214,42 +222,21 @@ public class AugmentationFacade {
     return storeContext;
   }
 
-  @Nullable
-  public CommerceBean getCommerceBean(CommerceId commerceId, String siteId) {
-    CommerceConnection connection = commerceEntityHelper.getCommerceConnection(siteId);
-    if (connection == null) {
-      return null;
-    }
-    return connection.getCommerceBeanFactory().createBeanFor(commerceId, connection.getInitialStoreContext());
-  }
-
-  @Nullable
-  public CommerceRef getCommerceRef(Content content, String externalReferencePropertyName){
-    String commerceIdStr = content.getString(externalReferencePropertyName);
-
-    CommerceId commerceId = CommerceIdParserHelper.parseCommerceId(commerceIdStr).orElse(null);
-    if (commerceId == null || commerceId.getExternalId().isEmpty()){
-      LOG.debug("externalId is null for {}", content.getId());
-      return null;
-    }
-
-    Site site = sitesService.getContentSiteAspect(content).getSite();
-    if (site == null) {
-      LOG.debug("no site for {} {}", content.getId(), commerceIdStr);
-      return null;
-    }
-
-    CommerceConnection commerceConnection = commerceEntityHelper.getCommerceConnection(site.getId());
-    if (commerceConnection == null){
-      LOG.debug("commerceConnection is null for {} {}", content.getId(), commerceIdStr);
-      return null;
-    }
-
-    StoreContext storeContext = commerceConnection.getInitialStoreContext();
-    CatalogId catalogId = catalogAliasTranslationService.getCatalogIdForAlias(commerceId.getCatalogAlias(), storeContext)
-            .orElse(null);
-
-    return CommerceRefFactory.from(commerceId, catalogId, storeContext.getStoreId(), site, List.of())
-            .orElse(null);
+  /**
+   * Trys to parse the given ID into a commerce ID. Builds a commerce id using the given ID as external ID part
+   * if parsing fails.
+   * @param id                either a commerce ID or an external ID
+   * @param connection        a commerce connection
+   * @param catalogAlias      the catalog alias to use if a commerce ID is created
+   * @param commerceBeanType  the commerce bean type to use if a commerce ID is created
+   * @return a commerce id
+   */
+  private static CommerceId parseOrBuild(String id, CommerceConnection connection, CatalogAlias catalogAlias,
+                                         CommerceBeanType commerceBeanType) {
+    return CommerceIdParserHelper.parseCommerceId(id)
+            .orElseGet(() ->
+                    CommerceIdBuilder.buildCopyOf(connection.getIdProvider().format(commerceBeanType, catalogAlias, id))
+                            // make sure that this is not a techID commerceID
+                            .withExternalId(id).build());
   }
 }

@@ -20,88 +20,44 @@ public class CommerceRefFactory {
   private static final String INTERNAL_LINK_DEFAULT = "#";
   public static final String CATALOG = "catalog";
 
-  private final String externalId;
-  private final CommerceBeanType type;
-  private final String catalogId;
-  private final String storeId;
-  private final String locale;
-  private final String siteId;
-  private final String internalLink;
-  private final List<String> breadcrumb;
-  private final String catalogAlias;
-
-  private CommerceRefFactory(String externalId, CommerceBeanType type, String catalogId, String catalogAlias, String storeId, String locale, String siteId, @Nullable String internalLink, List<String> breadcrumb) {
-    this.externalId = externalId;
-    this.type = type;
-    this.catalogId = catalogId;
-    this.storeId = storeId;
-    this.locale = locale;
-    this.siteId = siteId;
-    this.internalLink = internalLink != null ? internalLink : INTERNAL_LINK_DEFAULT;
-    this.breadcrumb = breadcrumb;
-    this.catalogAlias = catalogAlias;
-  }
-
-  public static CommerceRef from(String externalId, CommerceBeanType commerceBeanType, StoreContext storeContext) {
-    return new CommerceRefFactory(
-            externalId,
-            commerceBeanType,
-            storeContext.getCatalogId().map(CatalogId::value).orElse(CATALOG),
-            storeContext.getCatalogAlias().value(),
-            storeContext.getStoreId(),
-            storeContext.getLocale().toLanguageTag(),
-            storeContext.getSiteId(),
-            INTERNAL_LINK_DEFAULT,
-            List.of()
-    ).build();
+  private static CommerceRef from(String externalId, CommerceBeanType commerceBeanType, StoreContext storeContext) {
+    var catalogId = storeContext.getCatalogId().map(CatalogId::value).orElse(CATALOG);
+    var storeId = storeContext.getStoreId();
+    var locale = storeContext.getLocale().toLanguageTag();
+    var siteId = storeContext.getSiteId();
+    return new CommerceRef(externalId, commerceBeanType, catalogId, storeId, locale, siteId, INTERNAL_LINK_DEFAULT,
+            List.of(), storeContext.getCatalogAlias());
   }
 
   public static CommerceRef from(CommerceId commerceId,
                                  CatalogId catalogId, String storeId, Locale locale, String siteId, List<String> breadcrumb){
-    return new CommerceRefFactory(
-            commerceId.getExternalId().orElseThrow(),
-            commerceId.getCommerceBeanType(),
-            catalogId.value(),
-            commerceId.getCatalogAlias().value(),
-            storeId,
-            locale.toLanguageTag(),
-            siteId,
-            INTERNAL_LINK_DEFAULT,
-            breadcrumb
-    ).build();
+    var externalId = commerceId.getExternalId().orElseThrow();
+    return new CommerceRef(externalId, commerceId.getCommerceBeanType(), catalogId.value(), storeId, locale.toLanguageTag(),
+            siteId, INTERNAL_LINK_DEFAULT, breadcrumb, commerceId.getCatalogAlias());
   }
 
-  public static CommerceRef from(CommerceId commerceId, CatalogId catalogId, String storeId, Locale locale, String siteId) {
-    return from(commerceId, catalogId, storeId, locale, siteId, List.of());
+  public static Optional<CommerceRef> from(CommerceId commerceId, @Nullable CatalogId catalogId, @Nullable String storeId,
+                                           Site site, List<String> breadcrumb) {
+    return commerceId.getExternalId().map(externalId -> {
+      var commerceBeanType = commerceId.getCommerceBeanType();
+      var locale = site.getLocale().toLanguageTag();
+      var siteId = site.getId();
+      var catalogIdValue = catalogId != null ? catalogId.value() : "";
+      var storeIdNonNull = storeId != null ? storeId : "";
+      return new CommerceRef(externalId, commerceBeanType, catalogIdValue, storeIdNonNull, locale, siteId,
+              INTERNAL_LINK_DEFAULT, breadcrumb, commerceId.getCatalogAlias());
+    });
   }
 
-  public static Optional<CommerceRef> from(CommerceId commerceId, CatalogId catalogId, String storeId, Site site, List<String> breadcrumb) {
-    Optional<String> externalId = commerceId.getExternalId();
-    if (externalId.isEmpty()) {
-      return Optional.empty();
-    }
-
-    return Optional.of(
-            new CommerceRefFactory(
-                    externalId.get(),
-                    commerceId.getCommerceBeanType(),
-                    catalogId.value(),
-                    commerceId.getCatalogAlias().value(),
-                    storeId,
-                    site.getLocale().toLanguageTag(),
-                    site.getId(),
-                    INTERNAL_LINK_DEFAULT,
-                    breadcrumb
-            ).build());
+  public static Optional<CommerceRef> from(CommerceId commerceId, StoreContext storeContext) {
+    return commerceId.getExternalId().map(externalId -> {
+      var commerceBeanType = commerceId.getCommerceBeanType();
+      return from(externalId, commerceBeanType, storeContext);
+    });
   }
 
-  public static Optional<CommerceRef> from(CommerceBean commerceBean, Site site) {
-    StoreContext context = commerceBean.getContext();
-    CatalogId catalogId = context.getCatalogId().orElse(CatalogId.of("catalog"));
-    return from(commerceBean.getId(), catalogId, context.getStoreId(), site, List.of());
+  public static CommerceRef from(CommerceBean commerceBean) {
+    return from(commerceBean.getExternalId(), commerceBean.getId().getCommerceBeanType(), commerceBean.getContext());
   }
 
-  private CommerceRef build(){
-    return new CommerceRef(externalId, type, catalogId, storeId, locale, siteId, internalLink, breadcrumb, catalogAlias);
-  }
 }

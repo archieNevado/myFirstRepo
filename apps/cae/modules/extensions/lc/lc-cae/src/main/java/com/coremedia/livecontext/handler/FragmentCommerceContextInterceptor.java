@@ -185,7 +185,7 @@ public class FragmentCommerceContextInterceptor extends AbstractCommerceContextI
         String timestampText = request.getParameter(REQUEST_PARAM_TIMESTAMP);
         String timezoneText = request.getParameter(REQUEST_PARAM_TIMEZONE);
         if (timestampText != null && timezoneText != null) {
-          ZoneId zoneId = parseTimeZone(timestampText);
+          ZoneId zoneId = parseTimeZone(timezoneText);
           newPreviewDate = parsePreviewDate(timestampText, zoneId).orElse(null);
         }
       }

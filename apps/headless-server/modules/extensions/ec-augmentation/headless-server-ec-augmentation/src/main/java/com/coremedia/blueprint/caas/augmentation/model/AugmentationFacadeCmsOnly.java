@@ -3,15 +3,11 @@ package com.coremedia.blueprint.caas.augmentation.model;
 import com.coremedia.blueprint.base.caas.model.adapter.ByPathAdapter;
 import com.coremedia.blueprint.base.caas.model.adapter.ByPathAdapterFactory;
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasMappingProvider;
-import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdBuilder;
-import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
-import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
+import com.coremedia.blueprint.caas.augmentation.CommerceIdUtils;
 import com.coremedia.blueprint.caas.augmentation.CommerceSettingsHelper;
-import com.coremedia.blueprint.caas.augmentation.adapter.AugmentationPageGridAdapterFactoryCmsOnly;
 import com.coremedia.blueprint.caas.augmentation.error.InvalidCommerceId;
 import com.coremedia.blueprint.caas.augmentation.error.InvalidSiteId;
 import com.coremedia.blueprint.caas.augmentation.error.InvalidSiteRootSegment;
-import com.coremedia.blueprint.caas.augmentation.tree.ExternalBreadcrumbTreeRelation;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
@@ -20,7 +16,6 @@ import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
-import com.coremedia.livecontext.ecommerce.common.Vendor;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -32,13 +27,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper.format;
+import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper.parseCommerceId;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CATEGORY;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
 import static java.lang.invoke.MethodHandles.lookup;
@@ -47,13 +40,11 @@ import static java.lang.invoke.MethodHandles.lookup;
 public class AugmentationFacadeCmsOnly {
 
   private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
-  public static final String CATALOG = "catalog";
-  public static final String BREADCRUMB_SEPARATOR = "/";
+  private static final String BREADCRUMB_SEPARATOR = "/";
 
   private final AugmentationService categoryAugmentationService;
   private final AugmentationService productAugmentationService;
   private final SitesService sitesService;
-  private final ObjectProvider<ExternalBreadcrumbTreeRelation> externalBreadcrumbTreeRelationProvider;
   private final CommerceSettingsHelper commerceSettingsHelper;
   private final ByPathAdapter byPathAdapter;
   private final ObjectProvider<AugmentationContext> augmentationContextProvider;
@@ -63,22 +54,24 @@ public class AugmentationFacadeCmsOnly {
           AugmentationService categoryAugmentationService,
           AugmentationService productAugmentationService,
           SitesService sitesService,
-          ObjectProvider<ExternalBreadcrumbTreeRelation> externalBreadcrumbTreeRelationProvider,
           CommerceSettingsHelper commerceSettingsHelper,
           ByPathAdapterFactory byPathAdapterFactory,
-          ObjectProvider<AugmentationContext> augmentationContextProvider, CatalogAliasMappingProvider catalogAliasMappingProvider) {
+          ObjectProvider<AugmentationContext> augmentationContextProvider,
+          CatalogAliasMappingProvider catalogAliasMappingProvider) {
     this.categoryAugmentationService = categoryAugmentationService;
     this.productAugmentationService = productAugmentationService;
     this.sitesService = sitesService;
-    this.externalBreadcrumbTreeRelationProvider = externalBreadcrumbTreeRelationProvider;
     this.commerceSettingsHelper = commerceSettingsHelper;
     this.byPathAdapter = byPathAdapterFactory.to();
     this.augmentationContextProvider = augmentationContextProvider;
     this.catalogAliasMappingProvider = catalogAliasMappingProvider;
   }
 
-  @SuppressWarnings("unused")
-  public DataFetcherResult<ProductAugmentationCmsOnly> getProductAugmentationBySite(String externalId, String[] breadcrumb, @Nullable String catalogAlias, String siteId) {
+  @SuppressWarnings("unused") // called from ContentRoot#productAugmentationBySite
+  public DataFetcherResult<ProductAugmentationCmsOnly> getProductAugmentationBySite(String externalId,
+                                                                                    String[] breadcrumbParam,
+                                                                                    @Nullable String catalogAlias,
+                                                                                    String siteId) {
     DataFetcherResult.Builder<ProductAugmentationCmsOnly> builder = DataFetcherResult.newResult();
     Site site = sitesService.getSite(siteId);
     if (site == null) {
@@ -87,7 +80,9 @@ public class AugmentationFacadeCmsOnly {
 
     augmentationContextProvider.getObject().setCmsOnly(true);
 
-    return getProductAugmentationForSiteInternal(externalId, breadcrumb, catalogAlias, site);
+    var commerceId = parseOrBuild(externalId, site, PRODUCT, catalogAlias);
+    var breadcrumb = splitBreadcrumbParameter(breadcrumbParam);
+    return getProductAugmentationForSiteInternal(commerceId, breadcrumb, site);
   }
 
   /**
@@ -96,149 +91,97 @@ public class AugmentationFacadeCmsOnly {
    *
    * @param breadcrumbElements the parameter as is. May contain a single element with separators or multiple elements.
    *                           Array with multiple elements stay untouched.
-   * @return seperate breadcrumb elements or the original elements if nothing to do
+   * @return separate breadcrumb elements or the original elements if nothing to do
    */
-  static String[] splitBreadcrumbParameter(String[] breadcrumbElements) {
+  static List<String> splitBreadcrumbParameter(String[] breadcrumbElements) {
     if (breadcrumbElements.length == 1 && breadcrumbElements[0].contains(BREADCRUMB_SEPARATOR)) {
-      return breadcrumbElements[0].split(BREADCRUMB_SEPARATOR);
+      return List.of(breadcrumbElements[0].split(BREADCRUMB_SEPARATOR));
     }
-    return breadcrumbElements;
+    return List.of(breadcrumbElements);
   }
 
-  @SuppressWarnings("unused")
-  public DataFetcherResult<ProductAugmentationCmsOnly> getProductAugmentationBySegment(String externalId, String[] breadcrumb, @Nullable String catalogAlias, String rootSegment) {
-    DataFetcherResult.Builder<ProductAugmentationCmsOnly> builder = DataFetcherResult.newResult();
-    Site site = resolveSite(rootSegment);
+  @SuppressWarnings("unused") // called from ContentRoot#productAugmentationBySegment
+  public DataFetcherResult<ProductAugmentationCmsOnly> getProductAugmentationBySegment(String externalId,
+                                                                                       String[] breadcrumbParam,
+                                                                                       @Nullable String catalogAlias,
+                                                                                       String rootSegment) {
+    Site site = byPathAdapter.getSite(null, rootSegment).getData();
     if (site == null) {
+      var builder = DataFetcherResult.<ProductAugmentationCmsOnly>newResult();
       return builder.error(InvalidSiteRootSegment.getInstance()).build();
     }
 
-    return getProductAugmentationForSiteInternal(externalId, breadcrumb, catalogAlias, site);
+    var commerceId = parseOrBuild(externalId, site, PRODUCT, catalogAlias);
+    var breadcrumb = splitBreadcrumbParameter(breadcrumbParam);
+    return getProductAugmentationForSiteInternal(commerceId, breadcrumb, site);
   }
 
-  private DataFetcherResult<ProductAugmentationCmsOnly> getProductAugmentationForSiteInternal(String externalId, String[] breadcrumbParam, @Nullable String catalogAlias, Site site) {
-    String[] breadcrumb = splitBreadcrumbParameter(breadcrumbParam);
+  private DataFetcherResult<ProductAugmentationCmsOnly> getProductAugmentationForSiteInternal(CommerceId productId,
+                                                                                              List<String> breadcrumb,
+                                                                                              Site site) {
     DataFetcherResult.Builder<ProductAugmentationCmsOnly> builder = DataFetcherResult.newResult();
-    CommerceIdBuilder idBuilder = CommerceIdBuilder.builder(Vendor.of(commerceSettingsHelper.getVendor(site)), CATALOG, PRODUCT)
-            .withExternalId(externalId);
-
-    //update catalogAlias if given
-    if (catalogAlias != null) {
-      idBuilder.withCatalogAlias(CatalogAlias.of(catalogAlias));
-    }
-
-    CommerceId productId = idBuilder.build();
     Content content = productAugmentationService.getContentByExternalId(format(productId), site);
 
-    //initialize tree relation
-    initializeBreadcrumbTreeRelation(breadcrumb, Vendor.of(commerceSettingsHelper.getVendor(site)), catalogAlias != null ? CatalogAlias.of(catalogAlias) : null);
+    var catalogAlias = productId.getCatalogAlias();
+    var catalogId = catalogAliasMappingProvider.findCatalogIdForAlias(catalogAlias, site.getId())
+            .orElse(null);
 
-    //intialize catalog id
-    Optional<CatalogId> catalogIdForAlias = catalogAlias != null ? catalogAliasMappingProvider.findCatalogIdForAlias(CatalogAlias.of(catalogAlias), site.getId()) : Optional.empty();
-
-    CommerceRef commerceRef = getCommerceRef(productId, Arrays.asList(breadcrumb), catalogIdForAlias.orElse(null), site);
-
+    CommerceRef commerceRef = getCommerceRef(productId, breadcrumb, catalogId, site);
     return builder.data(new ProductAugmentationCmsOnly(commerceRef, content)).build();
   }
 
-  @SuppressWarnings("unused")
-  public DataFetcherResult<CategoryAugmentationCmsOnly> getCategoryAugmentationBySite(@Nullable  String externalId, String[] breadcrumb, @Nullable String catalogAlias, String siteId) {
+  @SuppressWarnings("unused") // called from ContentRoot#categoryAugmentationBySegment
+  public DataFetcherResult<CategoryAugmentationCmsOnly> getCategoryAugmentationBySite(@Nullable String externalIdParam,
+                                                                                      String[] breadcrumbParam,
+                                                                                      @Nullable String catalogAlias,
+                                                                                      String siteId) {
     DataFetcherResult.Builder<CategoryAugmentationCmsOnly> builder = DataFetcherResult.newResult();
     Site site = sitesService.getSite(siteId);
     if (site == null) {
       return builder.error(InvalidSiteId.getInstance()).build();
     }
 
-    return getCategoryAugmentationForSiteInternal(externalId, breadcrumb, catalogAlias, site);
+    return getCategoryAugmentationForSiteInternal(externalIdParam, breadcrumbParam, catalogAlias, builder, site);
   }
 
-  @SuppressWarnings("unused")
-  public DataFetcherResult<CategoryAugmentationCmsOnly> getCategoryAugmentationBySegment(@Nullable String externalId, String[] breadcrumb, @Nullable String catalogAlias, String rootSegment) {
-    DataFetcherResult.Builder<CategoryAugmentationCmsOnly> builder = DataFetcherResult.newResult();
-    Site site = resolveSite(rootSegment);
+  @SuppressWarnings("unused") // called from ContentRoot#categoryAugmentationBySegment
+  public DataFetcherResult<CategoryAugmentationCmsOnly> getCategoryAugmentationBySegment(@Nullable String externalIdParam,
+                                                                                         String[] breadcrumbParam,
+                                                                                         @Nullable String catalogAlias,
+                                                                                         String rootSegment) {
+    var builder = DataFetcherResult.<CategoryAugmentationCmsOnly>newResult();
+    var site = byPathAdapter.getSite(null, rootSegment).getData();
     if (site == null) {
       return builder.error(InvalidSiteRootSegment.getInstance()).build();
     }
 
-    return getCategoryAugmentationForSiteInternal(externalId, breadcrumb, catalogAlias, site);
+    return getCategoryAugmentationForSiteInternal(externalIdParam, breadcrumbParam, catalogAlias, builder, site);
   }
 
-  private DataFetcherResult<CategoryAugmentationCmsOnly> getCategoryAugmentationForSiteInternal(@Nullable String externalIdParam, String[] breadcrumbParam, @Nullable String catalogAlias, Site site) {
-    String[] breadcrumb = splitBreadcrumbParameter(breadcrumbParam);
-    String externalId = externalIdParam;
+  private DataFetcherResult<CategoryAugmentationCmsOnly> getCategoryAugmentationForSiteInternal(@Nullable String externalIdParam,
+                                                                                                String[] breadcrumbParam,
+                                                                                                String catalogAlias,
+                                                                                                DataFetcherResult.Builder<CategoryAugmentationCmsOnly> builder,
+                                                                                                Site site) {
+    var breadcrumb = splitBreadcrumbParameter(breadcrumbParam);
+    var externalId = externalIdParam;
+    if (externalId == null && !breadcrumb.isEmpty()) {
+      externalId = breadcrumb.get(breadcrumb.size() - 1);
+    }
     if (externalId == null) {
-      externalId = breadcrumb[breadcrumb.length - 1];
+      return builder.error(InvalidCommerceId.getInstance()).build();
     }
-
-    DataFetcherResult.Builder<CategoryAugmentationCmsOnly> builder = DataFetcherResult.newResult();
-    Vendor vendor = Vendor.of(commerceSettingsHelper.getVendor(site));
-    CommerceIdBuilder idBuilder = CommerceIdBuilder.builder(vendor, CATALOG, CATEGORY)
-            .withExternalId(externalId);
-
-    //update catalogAlias if given
-    if (catalogAlias != null) {
-      idBuilder.withCatalogAlias(CatalogAlias.of(catalogAlias));
-    }
-
-    CommerceId categoryId = idBuilder.build();
-
-    Content content = categoryAugmentationService.getContentByExternalId(format(categoryId), site);
-
-    initializeBreadcrumbTreeRelation(breadcrumb, vendor, externalId, catalogAlias != null ? CatalogAlias.of(catalogAlias) : null);
-
-    CommerceRef commerceRef = getCommerceRef(categoryId, Arrays.asList(breadcrumb), null, site);
-
-    return builder.data(new CategoryAugmentationCmsOnly(commerceRef, content)).build();
+    var commerceId = parseOrBuild(externalId, site, CATEGORY, catalogAlias);
+    Content content = categoryAugmentationService.getContentByExternalId(format(commerceId), site);
+    CommerceRef commerceRef = getCommerceRef(commerceId, breadcrumb, null, site);
+    return DataFetcherResult.<CategoryAugmentationCmsOnly>newResult()
+            .data(new CategoryAugmentationCmsOnly(commerceRef, content)).build();
   }
 
-  @Nullable
-  private Site resolveSite(String rootSegment){
-    Content homepage = byPathAdapter.getPageByPath("", rootSegment);
-    return (homepage != null) ? sitesService.getContentSiteAspect(homepage).getSite() : null;
-  }
-
-  /**
-   * Initializes an {@link ExternalBreadcrumbTreeRelation} in request scope.
-   * This instance is used later on to resolve inherited page grids. This is done in
-   * {@link AugmentationPageGridAdapterFactoryCmsOnly}.
-   *
-   * @param breadcrumb array of external ids
-   * @param vendor commerce vendor for the current site
-   */
-  void initializeBreadcrumbTreeRelation(String[] breadcrumb, Vendor vendor, @Nullable String categoryLeafId, @Nullable CatalogAlias catalogAlias) {
-    //set breadcrumb in treerelation, which is a request scoped bean
-    if (breadcrumb.length > 0) {
-      List<String> extendedBreadcrumb = new ArrayList();
-      extendedBreadcrumb.addAll(Arrays.asList(breadcrumb));
-      //add categoryLeafId to breadcrumb, if not already part of the breadcrumb
-      if (categoryLeafId != null && !breadcrumb[breadcrumb.length - 1].equals(categoryLeafId)) {
-        extendedBreadcrumb.add(categoryLeafId);
-        LOG.debug("Automatically extended breadcrumb parameter with {}.", categoryLeafId);
-      }
-
-      CommerceIdBuilder categoryIdBuilder = CommerceIdBuilder.builder(vendor, CATALOG, CATEGORY);
-      if (catalogAlias != null){
-        categoryIdBuilder.withCatalogAlias(catalogAlias);
-      }
-      List<String> listOfCommerceIdStrings = extendedBreadcrumb.stream()
-              .map(bc -> categoryIdBuilder.withExternalId(bc).build())
-              .map(CommerceIdFormatterHelper::format)
-              .collect(Collectors.toList());
-
-      ExternalBreadcrumbTreeRelation breadcrumbTreeRelation = externalBreadcrumbTreeRelationProvider.getObject();
-      breadcrumbTreeRelation.setBreadcrumb(listOfCommerceIdStrings);
-      LOG.debug("Breadcrumb initialized with {}.", listOfCommerceIdStrings);
-    }
-  }
-
-  private void initializeBreadcrumbTreeRelation(String[] breadcrumb, Vendor vendor, @Nullable CatalogAlias catalogAlias){
-    initializeBreadcrumbTreeRelation(breadcrumb, vendor, null, catalogAlias);
-  }
-
-  @SuppressWarnings("unused")
-  public DataFetcherResult<? extends Augmentation> getAugmentationBySite(String commerceIdStr, String[] breadcrumb, String siteId) {
+  @SuppressWarnings("unused") // called from CommerceRootRoot#augmentationForCommerceIdBySite
+  public DataFetcherResult<? extends Augmentation> getAugmentationBySite(String commerceIdStr, String[] breadcrumbParam, String siteId) {
     DataFetcherResult.Builder<Augmentation> builder = DataFetcherResult.newResult();
-    Optional<CommerceId> commerceIdOptional = CommerceIdParserHelper.parseCommerceId(commerceIdStr);
+    Optional<CommerceId> commerceIdOptional = parseCommerceId(commerceIdStr);
     if (commerceIdOptional.isEmpty()) {
       return builder.error(InvalidCommerceId.getInstance()).build();
     }
@@ -248,12 +191,12 @@ public class AugmentationFacadeCmsOnly {
       return builder.error(InvalidSiteId.getInstance()).build();
     }
 
+    var breadcrumb = splitBreadcrumbParameter(breadcrumbParam);
     return commerceIdOptional.map(commerceId -> getDataForCommerceId(commerceId, breadcrumb, site))
             .orElse(null);
   }
 
-  private DataFetcherResult<? extends Augmentation> getDataForCommerceId(CommerceId commerceId, String[] breadcrumbParam, Site site) {
-    String[] breadcrumb = splitBreadcrumbParameter(breadcrumbParam);
+  private DataFetcherResult<? extends Augmentation> getDataForCommerceId(CommerceId commerceId, List<String> breadcrumb, Site site) {
     DataFetcherResult.Builder<Augmentation> builder = DataFetcherResult.newResult();
 
     Optional<String> externalId = commerceId.getExternalId();
@@ -263,9 +206,12 @@ public class AugmentationFacadeCmsOnly {
 
     CommerceBeanType commerceBeanType = commerceId.getCommerceBeanType();
     if (commerceBeanType.equals(PRODUCT)) {
-      return getProductAugmentationForSiteInternal(externalId.get(), breadcrumb, commerceId.getCatalogAlias().value(), site);
+      return getProductAugmentationForSiteInternal(commerceId, breadcrumb, site);
     } else if (commerceBeanType.equals(CATEGORY)) {
-      return getCategoryAugmentationForSiteInternal(externalId.get(), breadcrumb, commerceId.getCatalogAlias().value(), site);
+      Content content = categoryAugmentationService.getContentByExternalId(format(commerceId), site);
+      CommerceRef commerceRef = getCommerceRef(commerceId, breadcrumb, null, site);
+      return DataFetcherResult.<CategoryAugmentationCmsOnly>newResult()
+              .data(new CategoryAugmentationCmsOnly(commerceRef, content)).build();
     }
     //in contrast to AugmentationFacade#getDataForCommerceId SKUs are not supported without underlying commerce connection
 
@@ -278,10 +224,20 @@ public class AugmentationFacadeCmsOnly {
     return builder.error(error).build();
   }
 
+  CommerceId parseOrBuild(String string, Site site, CommerceBeanType type, @Nullable String catalogAlias) {
+    return parseCommerceId(string).orElseGet(() -> buildCommerceId(string, site, type, catalogAlias));
+  }
+
+  private CommerceId buildCommerceId(String string, Site site, CommerceBeanType type, String catalogAlias) {
+    var vendor = commerceSettingsHelper.getVendor(site);
+    var alias = catalogAlias != null ? CatalogAlias.of(catalogAlias) : null;
+    return CommerceIdUtils.buildCommerceId(string, type, vendor, alias);
+  }
+
   CommerceRef getCommerceRef(CommerceId commerceId, List<String> breadcrumb, @Nullable CatalogId catalogId, Site site) {
     return CommerceRefFactory.from(
             commerceId,
-            catalogId != null ? catalogId : CatalogId.of(commerceSettingsHelper.getCatalogId(site)),
+            catalogId != null ? catalogId : commerceSettingsHelper.getCatalogId(site),
             commerceSettingsHelper.getStoreId(site),
             commerceSettingsHelper.getLocale(site),
             site.getId(),

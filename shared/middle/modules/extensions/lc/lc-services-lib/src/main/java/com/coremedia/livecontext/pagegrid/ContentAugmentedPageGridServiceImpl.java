@@ -4,6 +4,7 @@ import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnect
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridPlacement;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedStyleGrid;
 import com.coremedia.blueprint.base.pagegrid.impl.ContentBackedPageGridServiceImpl;
+import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
@@ -16,61 +17,59 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.util.Collection;
 import java.util.Map;
+import java.util.function.BiFunction;
+
+import static java.lang.invoke.MethodHandles.lookup;
 
 /**
  * PageGridService merges content backed pageGrids along an external category hierarchy.
  */
-public class ContentAugmentedPageGridServiceImpl extends ContentBackedPageGridServiceImpl<Content> {
+public class ContentAugmentedPageGridServiceImpl extends ContentBackedPageGridServiceImpl {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ContentAugmentedPageGridServiceImpl.class);
+  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
 
   static final String CM_EXTERNAL_CHANNEL = "CMExternalChannel";
 
   private AugmentationService augmentationService;
   private CommerceConnectionSupplier commerceConnectionSupplier;
-
-  @NonNull
-  @Override
-  protected Map<String, ContentBackedPageGridPlacement> getMergedPageGridPlacements(
-          @NonNull Content navigation, @NonNull String pageGridName,
-          @NonNull ContentBackedStyleGrid styleGrid) {
-    return getMergedHierarchicalPageGridPlacements(navigation, pageGridName, styleGrid);
-  }
+  private BiFunction<Content, TreeRelation<Content>, Content> rootCategoryContentSupplier =
+          (content, treeRelation) -> this.getRootCategoryContent(content);
 
   /**
    * Make #getMergedHierarchicalPageGridPlacements available for
    * {@link ContentAugmentedProductPageGridServiceImpl#getMergedPageGridPlacements}
    */
   @NonNull
-  Map<String, ContentBackedPageGridPlacement> getMergedHierarchicalPageGridPlacements(
-          @NonNull Content navigation, @NonNull String pageGridName,
-          @NonNull ContentBackedStyleGrid styleGrid) {
-    return super.getMergedPageGridPlacements(navigation, pageGridName, styleGrid);
+  @Override
+  protected Map<String, ContentBackedPageGridPlacement> getMergedPageGridPlacements(
+          @NonNull Content navigation,
+          @NonNull String pageGridName,
+          @NonNull ContentBackedStyleGrid styleGrid,
+          @NonNull TreeRelation<Content> treeRelation) {
+    return super.getMergedPageGridPlacements(navigation, pageGridName, styleGrid, treeRelation);
   }
 
   @Nullable
   @Override
-  protected Content getParentOf(@Nullable Content content) {
+  protected Content getParentOf(@Nullable Content content, TreeRelation<Content> treeRelation) {
     if (content == null || !content.getType().isSubtypeOf(CM_EXTERNAL_CHANNEL)) {
       return null;
     }
 
-    return getTreeRelation().getParentOf(content);
+    return treeRelation.getParentOf(content);
   }
 
   @Nullable
   @Override
-  public Content getLayout(@NonNull Content content, @NonNull String pageGridName) {
+  public Content getLayout(@NonNull Content content, @NonNull String pageGridName, @NonNull TreeRelation<Content> treeRelation) {
     Content style = styleSettingsDocument(content, pageGridName);
     if (style == null) {
-      Content rootCategoryContent = getRootCategoryContent(content);
+      Content rootCategoryContent = rootCategoryContentSupplier.apply(content, treeRelation);
       if (rootCategoryContent != null) {
         style = styleSettingsDocument(rootCategoryContent, pageGridName);
       }
     }
-
     return style != null ? style : getDefaultLayout(content);
   }
 
@@ -105,4 +104,7 @@ public class ContentAugmentedPageGridServiceImpl extends ContentBackedPageGridSe
     this.commerceConnectionSupplier = commerceConnectionSupplier;
   }
 
+  public void setRootCategoryContentSupplier(BiFunction<Content, TreeRelation<Content>, Content> rootCategoryContentSupplier) {
+    this.rootCategoryContentSupplier = rootCategoryContentSupplier;
+  }
 }

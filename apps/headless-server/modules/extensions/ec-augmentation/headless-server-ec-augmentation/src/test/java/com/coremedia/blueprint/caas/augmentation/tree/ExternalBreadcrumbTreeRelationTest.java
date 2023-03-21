@@ -1,26 +1,40 @@
 package com.coremedia.blueprint.caas.augmentation.tree;
 
+import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
+import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class ExternalBreadcrumbTreeRelationTest {
 
-
+  private static final String CATEGORY_ID_PREFIX = "test:///catalog/category/";
   ExternalBreadcrumbTreeRelation testling;
 
   @BeforeEach
   void setup(){
-    testling = new ExternalBreadcrumbTreeRelation(List.of("a", "b", "c", "d"));
+    var breadcrumb = Stream.of("a", "b", "c", "d")
+            .map(ExternalBreadcrumbTreeRelationTest::toCategoryId)
+            .collect(Collectors.toList());
+    testling = new ExternalBreadcrumbTreeRelation(breadcrumb);
+  }
+
+  static String toFormattedCategoryId(String s) {
+    return CATEGORY_ID_PREFIX + s;
+  }
+
+  static CommerceId toCategoryId(String s) {
+    return CommerceIdParserHelper.parseCommerceIdOrThrow(toFormattedCategoryId(s));
   }
 
   @SuppressWarnings("unused")
@@ -35,7 +49,10 @@ class ExternalBreadcrumbTreeRelationTest {
   @ParameterizedTest
   @MethodSource
   void getChildrenOf(String parent, List<String> expectedChildList) {
-    Collection<String> childrenOf = testling.getChildrenOf(parent);
+    Collection<String> childrenOf = testling.getChildrenOf(toCategoryId(parent)).stream()
+            .map(CommerceId::getExternalId)
+            .flatMap(Optional::stream)
+            .collect(Collectors.toList());
     assertThat(childrenOf).asList().isEqualTo(expectedChildList);
   }
 
@@ -51,8 +68,13 @@ class ExternalBreadcrumbTreeRelationTest {
   @ParameterizedTest
   @MethodSource
   void getParentOf(String child, String expectedParent) {
-    String parentOf = testling.getParentOf(child);
-    assertThat(parentOf).isEqualTo(expectedParent);
+    var commerceId = testling.getParentOf(toCategoryId(child));
+    if (expectedParent == null) {
+      assertThat(commerceId).isNull();
+    } else {
+      var parentOf = commerceId.getExternalId();
+      assertThat(parentOf).contains(expectedParent);
+    }
   }
 
   @SuppressWarnings("unused")
@@ -68,28 +90,24 @@ class ExternalBreadcrumbTreeRelationTest {
   @ParameterizedTest
   @MethodSource
   void pathToRoot(String child, List<String> expectedPathToRoot) {
-    List<String> pathToRoot = testling.pathToRoot(child);
+    List<String> pathToRoot = testling.pathToRoot(toCategoryId(child)).stream()
+            .map(CommerceId::getExternalId)
+            .flatMap(Optional::stream)
+            .collect(Collectors.toList());
     assertThat(pathToRoot).isEqualTo(expectedPathToRoot);
   }
 
   @Test
   void isRoot() {
-    assertThat(testling.isRoot("a")).isTrue();
-    assertThat(testling.isRoot("b")).isFalse();
-    assertThat(testling.isRoot("y")).isFalse();
+    assertThat(testling.isRoot(toCategoryId("a"))).isTrue();
+    assertThat(testling.isRoot(toCategoryId("b"))).isFalse();
+    assertThat(testling.isRoot(toCategoryId("y"))).isFalse();
   }
 
   @Test
   void isApplicable() {
-    assertThat(testling.isApplicable("a")).isTrue();
-    assertThat(testling.isApplicable("y")).isFalse();
-  }
-
-  @Test
-  void unorderedTest() {
-    ExternalBreadcrumbTreeRelation treeRelation = new ExternalBreadcrumbTreeRelation(List.of("z", "y", "x"));
-
-    assertThat(new ArrayList(treeRelation.getBreadcrumb())).isEqualTo(List.of("z", "y", "x"));
+    assertThat(testling.isApplicable(toCategoryId("a"))).isTrue();
+    assertThat(testling.isApplicable(toCategoryId("y"))).isFalse();
   }
 
 }

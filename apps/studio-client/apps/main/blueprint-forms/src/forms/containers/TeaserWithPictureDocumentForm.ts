@@ -3,11 +3,13 @@ import StatusColumn from "@coremedia/studio-client.ext.cap-base-components/colum
 import TypeIconColumn from "@coremedia/studio-client.ext.cap-base-components/columns/TypeIconColumn";
 import LinkListThumbnailColumn from "@coremedia/studio-client.ext.content-link-list-components/columns/LinkListThumbnailColumn";
 import DataField from "@coremedia/studio-client.ext.ui-components/store/DataField";
-import TeaserOverlayContainer from "@coremedia/studio-client.main.teaser-overlay-components/TeaserOverlayContainer";
 import PropertyFieldGroup from "@coremedia/studio-client.main.editor-components/sdk/premular/PropertyFieldGroup";
 import LinkListPropertyField from "@coremedia/studio-client.main.editor-components/sdk/premular/fields/LinkListPropertyField";
 import StringPropertyField from "@coremedia/studio-client.main.editor-components/sdk/premular/fields/StringPropertyField";
+import StringPropertyFieldDelegatePlugin
+  from "@coremedia/studio-client.main.editor-components/sdk/premular/fields/plugins/StringPropertyFieldDelegatePlugin";
 import QuickCreateToolbarButton from "@coremedia/studio-client.main.editor-components/sdk/quickcreate/QuickCreateToolbarButton";
+import TeaserOverlayContainer from "@coremedia/studio-client.main.teaser-overlay-components/TeaserOverlayContainer";
 import Separator from "@jangaroo/ext-ts/toolbar/Separator";
 import Config from "@jangaroo/runtime/Config";
 import ConfigUtils from "@jangaroo/runtime/ConfigUtils";
@@ -41,6 +43,11 @@ class TeaserWithPictureDocumentForm extends PropertyFieldGroup {
         Config(StringPropertyField, {
           itemId: "teaserTitle",
           propertyName: "teaserTitle",
+          ...ConfigUtils.append({
+            plugins: [
+              Config(StringPropertyFieldDelegatePlugin, { delegatePropertyName: "title" }),
+            ],
+          }),
         }),
         Config(TeaserOverlayContainer, {
           propertyName: "teaserText",

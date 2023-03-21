@@ -4,15 +4,17 @@ import com.coremedia.blueprint.base.caas.model.adapter.AbstractDynamicListAdapte
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.base.querylist.PaginationHelper;
 import com.coremedia.blueprint.base.settings.SettingsService;
-import com.coremedia.blueprint.caas.augmentation.CommerceEntityHelper;
+import com.coremedia.blueprint.caas.augmentation.CommerceConnectionHelper;
 import com.coremedia.blueprint.caas.augmentation.model.CommerceRef;
 import com.coremedia.caas.model.adapter.ExtendedLinkListAdapterFactory;
 import com.coremedia.cap.common.NoSuchPropertyDescriptorException;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
 import com.coremedia.livecontext.ecommerce.common.CommerceBean;
+import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.google.common.annotations.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -50,7 +52,8 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
   static final String ALL_QUERY = "*";
 
   private final SettingsService settingsService;
-  private final CommerceEntityHelper commerceEntityHelper;
+  private final SitesService sitesService;
+  private final CommerceConnectionHelper commerceConnectionHelper;
   private final CommerceSearchFacade commerceSearchFacade;
   private final Site site;
   private final Integer offset;
@@ -58,13 +61,15 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
   public ProductListAdapter(ExtendedLinkListAdapterFactory extendedLinkListAdapterFactory,
                             Content content,
                             SettingsService settingsService,
-                            CommerceEntityHelper commerceEntityHelper,
+                            SitesService sitesService,
+                            CommerceConnectionHelper commerceConnectionHelper,
                             CommerceSearchFacade commerceSearchFacade,
                             Site site,
                             Integer offset) {
     super(extendedLinkListAdapterFactory, content);
     this.settingsService = settingsService;
-    this.commerceEntityHelper = commerceEntityHelper;
+    this.sitesService = sitesService;
+    this.commerceConnectionHelper = commerceConnectionHelper;
     this.commerceSearchFacade = commerceSearchFacade;
     this.site = site;
     this.offset = offset;
@@ -122,7 +127,13 @@ public class ProductListAdapter extends AbstractDynamicListAdapter<Object> {
     CommerceIdParserHelper.parseCommerceId(commerceIdStr)
             .ifPresent(commerceId -> {
               params.put(SEARCH_PARAM_CATALOG_ALIAS, commerceId.getCatalogAlias().value());
-              CommerceBean categoryBean = commerceEntityHelper.getCommerceBean(commerceId, siteId);
+              var site = sitesService.getSite(siteId);
+              if (site == null) {
+                return;
+              }
+              CommerceConnection connection = commerceConnectionHelper.getCommerceConnection(site);
+              var storeContext = connection.getInitialStoreContext();
+              CommerceBean categoryBean = connection.getCommerceBeanFactory().createBeanFor(commerceId, storeContext);
               if (categoryBean instanceof Category && !((Category)categoryBean).isRoot()) {
                 var techId = categoryBean.getExternalTechId();
                 if (!isNullOrEmpty(techId)) {
