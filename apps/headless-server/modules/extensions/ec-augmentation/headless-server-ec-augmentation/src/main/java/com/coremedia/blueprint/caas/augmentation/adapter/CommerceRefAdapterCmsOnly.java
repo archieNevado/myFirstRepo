@@ -58,8 +58,9 @@ public class CommerceRefAdapterCmsOnly {
       throw new IllegalStateException(message);
     }
 
-    return getCommerceRef(commerceId, List.of(), site,
-            commerceSettingsHelper.getStoreId(site), CatalogId.of(commerceSettingsHelper.getCatalogId(site)));
+    var storeId = commerceSettingsHelper.getStoreId(site);
+    var catalogId = commerceSettingsHelper.getCatalogId(site);
+    return getCommerceRef(commerceId, List.of(), site, storeId, catalogId);
   }
 
   private CommerceRef getCommerceRef(CommerceId commerceId, List<String> breadcrumb, Site site, String storeId, CatalogId catalogId) {

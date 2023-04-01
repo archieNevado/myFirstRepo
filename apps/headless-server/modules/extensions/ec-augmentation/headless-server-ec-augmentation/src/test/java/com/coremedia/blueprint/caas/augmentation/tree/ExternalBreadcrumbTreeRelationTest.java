@@ -6,7 +6,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
@@ -14,7 +13,6 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class ExternalBreadcrumbTreeRelationTest {
-
 
   ExternalBreadcrumbTreeRelation testling;
 
@@ -89,7 +87,7 @@ class ExternalBreadcrumbTreeRelationTest {
   void unorderedTest() {
     ExternalBreadcrumbTreeRelation treeRelation = new ExternalBreadcrumbTreeRelation(List.of("z", "y", "x"));
 
-    assertThat(new ArrayList(treeRelation.getBreadcrumb())).isEqualTo(List.of("z", "y", "x"));
+    assertThat(treeRelation.getBreadcrumb()).asList().contains("z", "y", "x");
   }
 
 }

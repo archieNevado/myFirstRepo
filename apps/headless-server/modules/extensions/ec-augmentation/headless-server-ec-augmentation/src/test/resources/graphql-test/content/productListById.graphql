@@ -1,0 +1,17 @@
+# test commerce-reference-schema-ext.graphql
+query getProductListById($id: String!) {
+  content {
+    productList(id: $id) {
+      externalId
+      orderBy
+      start
+      limit
+      categoryRef {
+        externalId
+      }
+      productItems {
+        externalId
+      }
+    }
+  }
+}

@@ -20,7 +20,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -94,8 +93,6 @@ public class CategoryAugmentationHelperTest {
 
   @Before
   public void setUp() {
-    MockitoAnnotations.initMocks(this);
-
     testling.setAugmentationService(augmentationService);
     testling.setMappedCatalogsProvider(mappedCatalogsProvider);
     testling.setPageGridService(pageGridService);
@@ -159,6 +156,21 @@ public class CategoryAugmentationHelperTest {
     Content productLayout = (Content) productPlacements2Struct.get(PageGridContentKeywords.LAYOUT_PROPERTY_NAME);
     assertThat(productLayout).isNotNull();
     assertThat(productLayout.getName()).isEqualTo("ProductLayoutSettings");
+  }
+
+  @Test
+  public void testAugmentationWithPropertyTooLong() {
+    //length of string is 90 characters
+    String propertyValueTooLong = "this-dispaly-name-is-too-long-this-dispaly-name-is-too-long-this-dispaly-name-is-too-long";
+    when(leafCategory.getDisplayName()).thenReturn(propertyValueTooLong);
+    testling.augment(leafCategory);
+
+    Content externalChannel = contentRepository.getChild("/Sites/Content Test/" + DEFAULT_BASE_FOLDER_NAME + "/"
+            + ROOT + "/" + TOP + "/" + propertyValueTooLong + "/" + propertyValueTooLong + " (" + CATEGORY_EXTERNALID + ")");
+    assertThat(externalChannel).isNotNull();
+
+    //the segment property is limited to 64 characters by default
+    assertThat(externalChannel.getString(SEGMENT)).isEqualTo(propertyValueTooLong.substring(0, 63));
   }
 
   @Test

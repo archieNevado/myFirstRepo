@@ -116,7 +116,9 @@ class EsAnalyticsChartWidgetBase extends Container {
           rsm.request(null,
             (response: RemoteServiceMethodResponse): void => {
               const tenantInfo = response.getResponseJSON();
-              this.#tenantVE.setValue(tenantInfo["tenant"]);
+              window.setTimeout(() => {
+                this.#tenantVE.setValue(tenantInfo["tenant"]);
+              }, 1000);
             },
           );
         });

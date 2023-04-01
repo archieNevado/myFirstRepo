@@ -5,11 +5,11 @@ import Container from "@jangaroo/ext-ts/container/Container";
 import Label from "@jangaroo/ext-ts/form/Label";
 import HBoxLayout from "@jangaroo/ext-ts/layout/container/HBox";
 import VBoxLayout from "@jangaroo/ext-ts/layout/container/VBox";
-import Panel from "@jangaroo/ext-ts/panel/Panel";
 import Config from "@jangaroo/runtime/Config";
 import ConfigUtils from "@jangaroo/runtime/ConfigUtils";
 import EsAnalyticsStudioPlugin_properties from "./EsAnalyticsStudioPlugin_properties";
 import EsChartBase from "./EsChartBase";
+import Component from "@jangaroo/ext-ts/Component";
 
 interface EsChartConfig extends Config<EsChartBase>, Partial<Pick<EsChart,
   "timeStampValueExpression" |
@@ -24,7 +24,7 @@ class EsChart extends EsChartBase {
 
   static readonly NO_DATA_FIELD_ITEM_ID: string = "noDataLabelItemId";
 
-  static readonly CHART_PANEL_ITEM_ID: string = "chartContainerItemId";
+  static readonly CHART_BOX_ITEM_ID: string = "chartBoxItemId";
 
   static readonly ES_CHART_SWITCHER_ITEM_ID: string = "esChartSwitcher";
 
@@ -52,8 +52,8 @@ class EsChart extends EsChartBase {
               text: EsAnalyticsStudioPlugin_properties.chart_data_unavailable,
             }),
             /* this chart panel is only visible when there is valid analytics data */
-            Config(Panel, {
-              itemId: EsChart.CHART_PANEL_ITEM_ID,
+            Config(Component, {
+              itemId: EsChart.CHART_BOX_ITEM_ID,
               height: config.chartHeight,
             }),
           ],

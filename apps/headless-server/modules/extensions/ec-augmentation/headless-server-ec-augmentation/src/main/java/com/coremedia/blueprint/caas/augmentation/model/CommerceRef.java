@@ -1,5 +1,6 @@
 package com.coremedia.blueprint.caas.augmentation.model;
 
+import com.coremedia.livecontext.ecommerce.catalog.CatalogAlias;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanType;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -20,9 +21,9 @@ public class CommerceRef {
   private final String siteId;
   private final String internalLink;
   private final List<String> breadcrumb;
-  private final String catalogAlias;
+  private final CatalogAlias catalogAlias;
 
-  CommerceRef(String externalId, CommerceBeanType type, String catalogId, String storeId, String locale, String siteId, String internalLink, List<String> breadcrumb, String catalogAlias) {
+  CommerceRef(String externalId, CommerceBeanType type, String catalogId, String storeId, String locale, String siteId, String internalLink, List<String> breadcrumb, CatalogAlias catalogAlias) {
     this.externalId = externalId;
     this.type = type;
     this.catalogId = catalogId;
@@ -35,11 +36,11 @@ public class CommerceRef {
   }
 
   public CommerceRef(String externalId, String type, String storeId, Locale locale, String siteId, List<String> breadcrumb) {
-    this(externalId, CommerceBeanType.of(type), "catalog", storeId, locale.toLanguageTag(), siteId, "dummy", breadcrumb, DEFAULT_CATALOG_ALIAS.value());
+    this(externalId, CommerceBeanType.of(type), "catalog", storeId, locale.toLanguageTag(), siteId, "dummy", breadcrumb, DEFAULT_CATALOG_ALIAS);
   }
 
   public CommerceRef(String externalId, String type, String storeId, Locale locale, String siteId) {
-    this(externalId, CommerceBeanType.of(type), "catalog", storeId, locale.toLanguageTag(), siteId, "dummy", List.of(), DEFAULT_CATALOG_ALIAS.value());
+    this(externalId, CommerceBeanType.of(type), "catalog", storeId, locale.toLanguageTag(), siteId, "dummy", List.of(), DEFAULT_CATALOG_ALIAS);
   }
 
   public String getExternalId() {
@@ -78,7 +79,7 @@ public class CommerceRef {
     return breadcrumb;
   }
 
-  public String getCatalogAlias() {
+  public CatalogAlias getCatalogAlias() {
     return catalogAlias;
   }
 }

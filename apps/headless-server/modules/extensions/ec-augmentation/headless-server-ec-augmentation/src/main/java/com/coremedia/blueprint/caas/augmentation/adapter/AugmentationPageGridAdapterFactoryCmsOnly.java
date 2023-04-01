@@ -5,7 +5,7 @@ import com.coremedia.blueprint.base.caas.model.adapter.PageGridAdapterFactory;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdBuilder;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper;
 import com.coremedia.blueprint.base.pagegrid.ContentBackedPageGridService;
-import com.coremedia.blueprint.caas.augmentation.CommerceEntityHelper;
+import com.coremedia.blueprint.caas.augmentation.CommerceRefHelper;
 import com.coremedia.blueprint.caas.augmentation.CommerceSettingsHelper;
 import com.coremedia.blueprint.caas.augmentation.model.CommerceRef;
 import com.coremedia.blueprint.caas.augmentation.tree.ExternalBreadcrumbContentTreeRelation;
@@ -15,7 +15,6 @@ import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
-import com.coremedia.livecontext.ecommerce.common.Vendor;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import graphql.schema.DataFetchingEnvironment;
@@ -38,7 +37,6 @@ public class AugmentationPageGridAdapterFactoryCmsOnly extends PageGridAdapterFa
   private final String propertyName;
   private final AugmentationService augmentationService;
   private final ExternalBreadcrumbContentTreeRelation externalBreadcrumbContentTreeRelation;
-  private final CommerceEntityHelper commerceEntityHelper;
   private final CommerceSettingsHelper commerceSettingsHelper;
 
   public AugmentationPageGridAdapterFactoryCmsOnly(String propertyName,
@@ -46,14 +44,12 @@ public class AugmentationPageGridAdapterFactoryCmsOnly extends PageGridAdapterFa
                                                    ContentBackedPageGridService contentBackedPageGridService,
                                                    SitesService sitesService,
                                                    ExternalBreadcrumbContentTreeRelation externalBreadcrumbContentTreeRelation,
-                                                   CommerceEntityHelper commerceEntityHelper,
                                                    CommerceSettingsHelper commerceSettingsHelper) {
     super(contentBackedPageGridService);
     this.propertyName = propertyName;
     this.augmentationService = augmentationService;
     this.sitesService = sitesService;
     this.externalBreadcrumbContentTreeRelation = externalBreadcrumbContentTreeRelation;
-    this.commerceEntityHelper = commerceEntityHelper;
     this.commerceSettingsHelper = commerceSettingsHelper;
   }
 
@@ -62,13 +58,10 @@ public class AugmentationPageGridAdapterFactoryCmsOnly extends PageGridAdapterFa
             propertyName, dataFetchingEnvironment);
   }
 
-  private CommerceId getCommerceId(CommerceRef commerceRef) {
-    return commerceEntityHelper.getCommerceId(commerceRef);
-  }
-
   @SuppressWarnings("OverlyComplexMethod")
   private Content getContent(CommerceRef commerceRef, Site site) {
-    CommerceId id = getCommerceId(commerceRef);
+    var vendor = commerceSettingsHelper.getVendor(site);
+    CommerceId id = CommerceRefHelper.toCommerceId(commerceRef, vendor);
     Content content = augmentationService.getContentByExternalId(CommerceIdFormatterHelper.format(id), site);
     if (content != null) {
       return content;
@@ -85,12 +78,10 @@ public class AugmentationPageGridAdapterFactoryCmsOnly extends PageGridAdapterFa
       List<String> breadcrumb = commerceRef.getBreadcrumb();
       if (!breadcrumb.isEmpty()) {
         String lastCategoryExternalId = breadcrumb.get(breadcrumb.size() - 1);
-        CommerceId categoryId = CommerceIdBuilder.builder(Vendor.of(commerceSettingsHelper.getVendor(site)), CATALOG, CATEGORY)
+        id = CommerceIdBuilder.builder(vendor, CATALOG, CATEGORY)
                 .withExternalId(lastCategoryExternalId)
                 .withCatalogAlias(id.getCatalogAlias())
                 .build();
-
-        id = categoryId;
       }
     }
 

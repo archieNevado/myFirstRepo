@@ -7,6 +7,7 @@ import com.coremedia.blueprint.base.pagegrid.internal.PageGridConfiguration;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.caas.augmentation.adapter.AugmentationPageGridAdapterFactoryCmsOnly;
 import com.coremedia.blueprint.caas.augmentation.adapter.CommerceRefAdapterCmsOnly;
+import com.coremedia.blueprint.caas.augmentation.connection.CmsOnlyCommerceConnectionFinder;
 import com.coremedia.blueprint.caas.augmentation.model.AugmentationContext;
 import com.coremedia.blueprint.caas.augmentation.model.AugmentationFacadeCmsOnly;
 import com.coremedia.blueprint.caas.augmentation.pagegrid.ContentAugmentedProductPageGridServiceCmsOnly;
@@ -64,7 +65,6 @@ public class HeadlessAugmentationCmsOnlyConfiguration {
           AugmentationService categoryAugmentationService,
           ContentBackedPageGridService categoryContentBackedPageGridServiceCmsOnly,
           SitesService sitesService,
-          CommerceEntityHelper commerceEntityHelper,
           ExternalBreadcrumbContentTreeRelation externalBreadcrumbContentTreeRelation,
           CommerceSettingsHelper commerceSettingsHelper) {
     return new AugmentationPageGridAdapterFactoryCmsOnly(
@@ -73,7 +73,6 @@ public class HeadlessAugmentationCmsOnlyConfiguration {
             categoryContentBackedPageGridServiceCmsOnly,
             sitesService,
             externalBreadcrumbContentTreeRelation,
-            commerceEntityHelper,
             commerceSettingsHelper);
   }
 
@@ -82,7 +81,6 @@ public class HeadlessAugmentationCmsOnlyConfiguration {
           AugmentationService productAugmentationService,
           ContentBackedPageGridService pdpContentBackedPageGridServiceCmsOnly,
           SitesService sitesService,
-          CommerceEntityHelper commerceEntityHelper,
           ExternalBreadcrumbContentTreeRelation externalBreadcrumbContentTreeRelation,
           CommerceSettingsHelper commerceSettingsHelper) {
     return new AugmentationPageGridAdapterFactoryCmsOnly(
@@ -91,7 +89,6 @@ public class HeadlessAugmentationCmsOnlyConfiguration {
             pdpContentBackedPageGridServiceCmsOnly,
             sitesService,
             externalBreadcrumbContentTreeRelation,
-            commerceEntityHelper,
             commerceSettingsHelper);
   }
 
@@ -127,8 +124,8 @@ public class HeadlessAugmentationCmsOnlyConfiguration {
   }
 
   @Bean
-  public CommerceSettingsHelper liveContextSettingsHelper(SitesService sitesService, SettingsService settingsService){
-    return new CommerceSettingsHelper(sitesService, settingsService);
+  public CommerceSettingsHelper liveContextSettingsHelper(SettingsService settingsService){
+    return new CommerceSettingsHelper(settingsService);
   }
 
   @Bean
@@ -139,6 +136,12 @@ public class HeadlessAugmentationCmsOnlyConfiguration {
   @Bean
   public CommerceRefAdapterCmsOnly commerceRefAdapterDelegateCmsOnly(SitesService sitesService, CommerceSettingsHelper commerceSettingsHelper){
     return new CommerceRefAdapterCmsOnly(sitesService, commerceSettingsHelper);
+  }
+
+  @Bean
+  public CmsOnlyCommerceConnectionFinder cmsOnlyCommerceConnectionFinder(CommerceSettingsHelper commerceSettingsHelper) {
+    // fallback: look for connection after generic commerce connection
+    return new CmsOnlyCommerceConnectionFinder(commerceSettingsHelper);
   }
 
 }

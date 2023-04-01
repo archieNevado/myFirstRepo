@@ -48,7 +48,7 @@ class EsAnalyticsChartWidgetEditor extends EsAnalyticsChartWidgetEditorBase {
                   Config(com_coremedia_ui_store_DataField, {
                     name: "value",
                     mapping: "name",
-                    encode: false,
+                    encode: true,
                   }),
                 ],
               }),

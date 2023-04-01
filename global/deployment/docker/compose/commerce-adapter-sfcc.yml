@@ -1,5 +1,3 @@
-version: "3.4"
-
 # default environment variables
 x-default-boot-envs:
   &default-boot-envs
@@ -49,6 +47,9 @@ services:
       - 44165:6565
       - 44181:8081
       - 44105:5005
+    read_only: true
+    cap_drop:
+      - ALL
     environment:
       <<: *default-boot-envs
       <<: *development-boot-envs
@@ -64,6 +65,10 @@ services:
       MANAGEMENT_HEALTH_CATALOGS_ENABLED: ${MANAGEMENT_HEALTH_CATALOGS_ENABLED:-true}
       MANAGEMENT_HEALTH_STORES_ENABLED: ${MANAGEMENT_HEALTH_STORES_ENABLED:-true}
     healthcheck: *default-boot-healthcheck
+    volumes:
+      - /coremedia/cache
+      - /coremedia/log
+      - /var/tmp
 
   studio-server:
     environment:

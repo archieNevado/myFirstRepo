@@ -2,14 +2,13 @@ package com.coremedia.blueprint.caas.augmentation.adapter;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.CatalogAliasTranslationService;
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
-import com.coremedia.blueprint.caas.augmentation.CommerceEntityHelper;
+import com.coremedia.blueprint.caas.augmentation.CommerceConnectionHelper;
 import com.coremedia.blueprint.caas.augmentation.model.CommerceRef;
 import com.coremedia.blueprint.caas.augmentation.model.CommerceRefFactory;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
-import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
@@ -27,12 +26,12 @@ public class CommerceRefAdapter {
   private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
 
   private final SitesService sitesService;
-  private final CommerceEntityHelper commerceEntityHelper;
+  private final CommerceConnectionHelper commerceConnectionHelper;
   private final CatalogAliasTranslationService catalogAliasTranslationService;
 
-  public CommerceRefAdapter(SitesService sitesService, CommerceEntityHelper commerceEntityHelper, CatalogAliasTranslationService catalogAliasTranslationService) {
+  public CommerceRefAdapter(SitesService sitesService, CommerceConnectionHelper commerceConnectionHelper, CatalogAliasTranslationService catalogAliasTranslationService) {
     this.sitesService = sitesService;
-    this.commerceEntityHelper = commerceEntityHelper;
+    this.commerceConnectionHelper = commerceConnectionHelper;
     this.catalogAliasTranslationService = catalogAliasTranslationService;
   }
 
@@ -55,13 +54,7 @@ public class CommerceRefAdapter {
       return null;
     }
 
-    CommerceConnection commerceConnection = commerceEntityHelper.getCommerceConnection(site.getId());
-    if (commerceConnection == null){
-      LOG.debug("commerceConnection is null for {} {}", content.getId(), commerceIdStr);
-      return null;
-    }
-
-    StoreContext storeContext = commerceConnection.getInitialStoreContext();
+    StoreContext storeContext = commerceConnectionHelper.getCommerceConnection(site).getInitialStoreContext();
     CatalogId catalogId = catalogAliasTranslationService.getCatalogIdForAlias(commerceId.getCatalogAlias(), storeContext)
             .orElse(null);
 

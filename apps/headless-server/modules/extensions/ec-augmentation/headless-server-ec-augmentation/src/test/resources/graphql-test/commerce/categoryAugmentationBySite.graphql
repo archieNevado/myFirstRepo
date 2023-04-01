@@ -1,0 +1,27 @@
+# test commerce-augmentation-schema-ext.graphql
+query getCategoryAugmentationBySite($externalId: String!, $catalogId: String, $siteId: String!) {
+  commerce {
+    categoryAugmentationBySite(externalId: $externalId, catalogId: $catalogId, siteId: $siteId) {
+      id
+      grid {
+        name
+        placements {
+          id
+          column
+          items {
+            id
+            name
+          }
+        }
+        rows {
+          id
+          rowId
+        }
+      }
+      commerceRef {
+        id
+        externalId
+      }
+    }
+  }
+}

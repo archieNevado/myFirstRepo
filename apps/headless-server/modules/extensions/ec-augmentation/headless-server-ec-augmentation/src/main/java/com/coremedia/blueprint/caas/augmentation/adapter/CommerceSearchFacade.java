@@ -1,13 +1,12 @@
 package com.coremedia.blueprint.caas.augmentation.adapter;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdUtils;
-import com.coremedia.blueprint.caas.augmentation.CommerceEntityHelper;
+import com.coremedia.blueprint.caas.augmentation.CommerceConnectionHelper;
 import com.coremedia.blueprint.caas.augmentation.model.CommerceRef;
 import com.coremedia.blueprint.caas.augmentation.model.CommerceRefFactory;
 import com.coremedia.cap.multisite.Site;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogService;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
-import com.coremedia.livecontext.ecommerce.common.CommerceBean;
 import com.coremedia.livecontext.ecommerce.common.CommerceBeanType;
 import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceException;
@@ -18,7 +17,6 @@ import com.coremedia.livecontext.ecommerce.search.SearchQueryBuilder;
 import com.coremedia.livecontext.ecommerce.search.SearchQueryFacet;
 import com.coremedia.livecontext.ecommerce.search.SearchResult;
 import com.google.common.base.Strings;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +24,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
@@ -50,17 +48,14 @@ public class CommerceSearchFacade {
   public static final String SEARCH_PARAM_CATALOG_ALIAS = "catalogAlias";
   static final String FACETS_DELIMITER = ",";
 
-  private final CommerceEntityHelper commerceEntityHelper;
+  private final CommerceConnectionHelper commerceConnectionHelper;
 
-  public CommerceSearchFacade(CommerceEntityHelper commerceEntityHelper) {
-    this.commerceEntityHelper = commerceEntityHelper;
+  public CommerceSearchFacade(CommerceConnectionHelper commerceConnectionHelper) {
+    this.commerceConnectionHelper = commerceConnectionHelper;
   }
 
   List<CommerceRef> searchProducts(String searchTerm, Map<String, String> searchParams, Site site) {
-    CommerceConnection connection = commerceEntityHelper.getCommerceConnection(site.getId());
-    if (connection == null) {
-      return Collections.emptyList();
-    }
+    CommerceConnection connection = commerceConnectionHelper.getCommerceConnection(site);
     StoreContext storeContext = connection.getInitialStoreContext();
     try {
       CatalogService catalogService = connection.getCatalogService();
@@ -68,20 +63,14 @@ public class CommerceSearchFacade {
       SearchResult<Product> productSearchResult = catalogService.search(searchQuery, storeContext);
 
       return productSearchResult.getItems().stream()
-              .map(product -> createCommerceRef(product, site))
-              .filter(Objects::nonNull)
+              .map(product -> CommerceRefFactory.from(product, site))
+              .flatMap(Optional::stream)
               .collect(Collectors.toList());
 
     } catch (CommerceException e) {
       LOG.warn("Could not search products with searchTerm {}", searchTerm, e);
       return Collections.emptyList();
     }
-  }
-
-  @Nullable
-  private static CommerceRef createCommerceRef(CommerceBean commerceBean, Site site) {
-    return CommerceRefFactory.from(commerceBean, site)
-            .orElse(null);
   }
 
   @SuppressWarnings("OverlyComplexMethod")

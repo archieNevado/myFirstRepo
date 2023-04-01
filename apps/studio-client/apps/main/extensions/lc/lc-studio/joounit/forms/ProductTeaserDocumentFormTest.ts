@@ -1,15 +1,21 @@
+import { createDefaultCKEditor } from "@coremedia-blueprint/studio-client.ckeditor5/";
 import AbstractCatalogTest from "@coremedia-blueprint/studio-client.main.ec-studio-test-helper/AbstractCatalogTest";
 import AbstractProductTeaserComponentsTest
   from "@coremedia-blueprint/studio-client.main.lc-studio-test-helper/AbstractProductTeaserComponentsTest";
+import CKEditorTypes from "@coremedia/studio-client.ckeditor-common/CKEditorTypes";
+import RichTextAreaConstants from "@coremedia/studio-client.ckeditor-common/RichTextAreaConstants";
 import Step from "@coremedia/studio-client.client-core-test-helper/Step";
+import CKEditor5RichTextArea from "@coremedia/studio-client.ext.ckeditor5-components/CKEditor5RichTextArea";
+import richTextAreaRegistry
+  from "@coremedia/studio-client.ext.richtext-components-toolkit/richtextArea/richTextAreaRegistry";
 import Viewport from "@jangaroo/ext-ts/container/Viewport";
 import TextField from "@jangaroo/ext-ts/form/field/Text";
 import TextArea from "@jangaroo/ext-ts/form/field/TextArea";
 import QuickTipManager from "@jangaroo/ext-ts/tip/QuickTipManager";
 import { as, bind } from "@jangaroo/runtime";
 import Config from "@jangaroo/runtime/Config";
-import ProductTeaserDocumentFormTestView from "./ProductTeaserDocumentFormTestView";
 import IgnoreForCKEditor5Step from "./IgnoreForCKEditor5Step";
+import ProductTeaserDocumentFormTestView from "./ProductTeaserDocumentFormTestView";
 
 class ProductTeaserDocumentFormTest extends AbstractProductTeaserComponentsTest {
   #viewPort: Viewport = null;
@@ -76,9 +82,18 @@ class ProductTeaserDocumentFormTest extends AbstractProductTeaserComponentsTest 
   #createTestling(): void {
     const config = Config(ProductTeaserDocumentFormTestView);
     config.bindTo = this.getBindTo();
+    this.#initCKEditor5();
     this.#viewPort = new ProductTeaserDocumentFormTestView(config);
     this.#productTeaserTitleField = as(this.#viewPort.queryById("stringPropertyField"), TextField);
     this.#productTeaserTextArea = as(this.#viewPort.queryById("textAreaPropertyField"), TextArea);
+  }
+
+  #initCKEditor5(): void {
+    richTextAreaRegistry.registerRichTextArea(RichTextAreaConstants.CKE5_EDITOR, Config(CKEditor5RichTextArea, {
+      editorTypeMap: new Map([
+        [CKEditorTypes.DEFAULT_EDITOR_TYPE, createDefaultCKEditor],
+      ]),
+    }));
   }
 }
 

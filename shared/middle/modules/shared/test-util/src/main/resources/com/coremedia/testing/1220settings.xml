@@ -1,0 +1,24 @@
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <IntProperty  Name="colCount">2</IntProperty>
+  <IntProperty  Name="rowCount">1</IntProperty>
+  <StructListProperty  Name="items">
+    <Struct>
+      <!-- main placement -->
+      <LinkProperty Name="section" xlink:href="coremedia:///cap/content/28" LinkType="coremedia:///cap/contenttype/CMSymbol"/>
+      <IntProperty Name="row">1</IntProperty>
+      <IntProperty Name="col">1</IntProperty>
+      <IntProperty Name="colspan">1</IntProperty>
+      <IntProperty Name="height">100</IntProperty>
+      <IntProperty Name="width">75</IntProperty>
+    </Struct>
+    <Struct>
+      <!-- sidebar placement -->
+      <LinkProperty Name="section" xlink:href="coremedia:///cap/content/30" LinkType="coremedia:///cap/contenttype/CMSymbol"/>
+      <IntProperty Name="row">1</IntProperty>
+      <IntProperty Name="col">2</IntProperty>
+      <IntProperty Name="colspan">1</IntProperty>
+      <IntProperty Name="height">100</IntProperty>
+      <IntProperty Name="width">25</IntProperty>
+    </Struct>
+  </StructListProperty>
+</Struct>

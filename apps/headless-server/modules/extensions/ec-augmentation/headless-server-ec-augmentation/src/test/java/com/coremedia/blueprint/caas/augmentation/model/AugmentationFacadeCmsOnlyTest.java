@@ -111,9 +111,9 @@ class AugmentationFacadeCmsOnlyTest {
   }
 
   private void initCommerceSettingsHelper() {
-    lenient().when(commerceSettingsHelper.getCatalogId(aSite)).thenReturn(CATALOG.value());
+    lenient().when(commerceSettingsHelper.getCatalogId(aSite)).thenReturn(CATALOG);
     when(commerceSettingsHelper.getStoreId(aSite)).thenReturn(STORE_ID);
-    lenient().when(commerceSettingsHelper.getVendor(aSite)).thenReturn("vendor");
+    lenient().when(commerceSettingsHelper.getVendor(aSite)).thenReturn(Vendor.of("vendor"));
     when(commerceSettingsHelper.getLocale(aSite)).thenReturn(US);
   }
 
@@ -207,7 +207,7 @@ class AugmentationFacadeCmsOnlyTest {
             .returns(CATALOG.value(), CommerceRef::getCatalogId)
             .returns(STORE_ID, CommerceRef::getStoreId)
             .returns(BaseCommerceBeanType.CATEGORY, CommerceRef::getType)
-            .returns("catalog", CommerceRef::getCatalogAlias);
+            .returns(CatalogAlias.of("catalog"), CommerceRef::getCatalogAlias);
     assertThat(commerceRef.getBreadcrumb()).containsExactly(BREADCRUMB);
   }
 
@@ -231,11 +231,11 @@ class AugmentationFacadeCmsOnlyTest {
   @Test
   void getAugmentationWithMultiCatalog() {
     initCommerceSettingsHelper();
-    String catalogAlias = "myCatalogAlias";
+    CatalogAlias catalogAlias = CatalogAlias.of("myCatalogAlias");
     String catalogId = "myCatalogId";
-    lenient().when(catalogAliasMappingProvider.findCatalogIdForAlias(eq(CatalogAlias.of(catalogAlias)), eq(SITE_ID))).thenReturn(Optional.of(CatalogId.of(catalogId)));
+    lenient().when(catalogAliasMappingProvider.findCatalogIdForAlias(eq(catalogAlias), eq(SITE_ID))).thenReturn(Optional.of(CatalogId.of(catalogId)));
 
-    String commerceIdWithCatalogAlias = "acme:///catalog/product/" + "catalog:" + catalogAlias + ";" + EXTERNAL_PRODUCT_ID;
+    String commerceIdWithCatalogAlias = "acme:///catalog/product/" + "catalog:" + catalogAlias.value() + ";" + EXTERNAL_PRODUCT_ID;
 
     DataFetcherResult<? extends Augmentation> productAugmentation = testling.getAugmentationBySite(commerceIdWithCatalogAlias, BREADCRUMB, SITE_ID);
 

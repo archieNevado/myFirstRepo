@@ -2,7 +2,7 @@ package com.coremedia.blueprint.caas.augmentation.adapter;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper;
 import com.coremedia.blueprint.base.settings.SettingsService;
-import com.coremedia.blueprint.caas.augmentation.CommerceEntityHelper;
+import com.coremedia.blueprint.caas.augmentation.CommerceConnectionHelper;
 import com.coremedia.blueprint.caas.augmentation.model.CommerceRef;
 import com.coremedia.blueprint.caas.augmentation.model.CommerceRefFactory;
 import com.coremedia.caas.model.adapter.ExtendedLinkListAdapter;
@@ -11,6 +11,7 @@ import com.coremedia.cap.common.CapPropertyDescriptor;
 import com.coremedia.cap.common.CapType;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.cap.struct.Struct;
 import com.coremedia.livecontext.ecommerce.catalog.CatalogId;
 import com.coremedia.livecontext.ecommerce.catalog.Category;
@@ -68,7 +69,10 @@ class ProductListAdapterTest {
   private SettingsService settingsService;
 
   @Mock
-  private CommerceEntityHelper commerceEntityHelper;
+  private SitesService sitesService;
+
+  @Mock
+  private CommerceConnectionHelper commerceConnectionHelper;
 
   @Mock
   private CommerceSearchFacade commerceSearchFacade;
@@ -147,11 +151,10 @@ class ProductListAdapterTest {
     lenient().when(site.getId()).thenReturn("sideId");
     lenient().when(graphQLContext.get(CONTEXT_PARAMETER_NAME_PREVIEW_DATE)).thenReturn(ZonedDateTime.now());
 
-    productListAdapter = new ProductListAdapter(extendedLinkListAdapterFactory, productList, settingsService, commerceEntityHelper, commerceSearchFacade, site, 0);
+    productListAdapter = new ProductListAdapter(extendedLinkListAdapterFactory, productList, settingsService, sitesService, commerceConnectionHelper, commerceSearchFacade, site, 0);
     when(settingsService.setting(STRUCT_KEY_PRODUCTLIST, Struct.class, productList)).thenReturn(struct);
     when(struct.toNestedMaps()).thenReturn(PRODUCT_LIST_STRUCT_DEFAULTS);
     lenient().when(productListAdapter.getContent().getString(ProductListAdapter.STRUCT_KEY_EXTERNAL_ID)).thenReturn(EXTERNAL_ID_PROPERTY_VALUE);
-    lenient().when(commerceEntityHelper.getCommerceBean(CommerceIdParserHelper.parseCommerceId(EXTERNAL_ID_PROPERTY_VALUE).orElseThrow(), "sideId")).thenReturn(category);
   }
 
   private static Map<String, Object> getFixedItemMap(Content target, int index) {
@@ -256,10 +259,6 @@ class ProductListAdapterTest {
 
   @Test
   void get_itemsStructMatchingDIGITS() {
-    List<Map<String, Object>> fixedItems = new ArrayList<>();
-    fixedItems.add(getFixedItemMap(fixedTarget1, 1));
-    fixedItems.add(getFixedItemMap(fixedTarget2, 3));
-    fixedItems.add(getFixedItemMap(fixedTarget3, 5));
     Map<String, Object> structMap = getDefaultStructMap();
     when(struct.toNestedMaps()).thenReturn(structMap);
 
@@ -267,24 +266,17 @@ class ProductListAdapterTest {
     Map<String, String> searchParams = getSearchParamsMap();
 
     when(commerceSearchFacade.searchProducts(eq(ProductListAdapter.ALL_QUERY), eq(searchParams), eq(site))).thenReturn(productSearchResult);
-    when(category.getExternalTechId()).thenReturn(searchParams.get("categoryId"));
     // expect the facet to be: 12TestSomethingf4cet
     // expect the overrideCategoryId to be: ""
 
     List<CommerceRef> productRefs = productListAdapter.getProductRefs();
     assertThat(productRefs).isNotNull();
 
-    //    verify(augmentationFacade, times(1)).getCategory(eq(EXTERNAL_ID), eq(SITE_ID));
     verify(commerceSearchFacade, times(1)).searchProducts(eq(ProductListAdapter.ALL_QUERY), eq(searchParams), eq(site));
   }
 
   @Test
   void get_itemsStructMatchingFacet() {
-    List<Map<String, Object>> fixedItems = new ArrayList<>();
-    fixedItems.add(getFixedItemMap(fixedTarget1, 1));
-    fixedItems.add(getFixedItemMap(fixedTarget2, 3));
-    fixedItems.add(getFixedItemMap(fixedTarget3, 5));
-
     Map<String, Object> structMap = getDefaultStructMap();
     when(struct.toNestedMaps()).thenReturn(structMap);
 
@@ -346,7 +338,7 @@ class ProductListAdapterTest {
 
   @Test
   void useTotalOffset() {
-    productListAdapter = new ProductListAdapter(extendedLinkListAdapterFactory, productList, settingsService, commerceEntityHelper, commerceSearchFacade, site, 2);
+    productListAdapter = new ProductListAdapter(extendedLinkListAdapterFactory, productList, settingsService, sitesService, commerceConnectionHelper, commerceSearchFacade, site, 2);
     List<Map<String, Object>> fixedItems = new ArrayList<>();
     fixedItems.add(getFixedItemMap(fixedTarget1, 1));
     fixedItems.add(getFixedItemMap(fixedTarget2, 3));

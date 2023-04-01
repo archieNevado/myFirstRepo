@@ -34,6 +34,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
 
@@ -249,10 +250,14 @@ public class CMChannelImpl extends CMChannelBase {
     return result;
   }
 
-  @SuppressWarnings("unchecked")
   private List<? extends CMLinkable> getItems() {
-    //TODO broaden to implements FeedSource<Object>
-    return (List<? extends CMLinkable>) getPageGrid().getMainItems();
+    List<?> items = getPageGrid().getMainItems();
+    return items.stream()
+            .filter(Content.class::isInstance)
+            .map(Content.class::cast)
+            .filter(item -> item.getType().isSubtypeOf(CMLinkable.NAME))
+            .map(item -> createBeanFor(item, CMLinkable.class))
+            .collect(Collectors.toList());
   }
 
   /**

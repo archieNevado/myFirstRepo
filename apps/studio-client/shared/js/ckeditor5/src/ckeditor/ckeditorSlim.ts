@@ -4,7 +4,7 @@ import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
 //@ts-expect-error
 import DocumentList from '@ckeditor/ckeditor5-list/src/documentlist';
 import Differencing from "@coremedia/ckeditor5-coremedia-differencing/Differencing";
-import CoreMediaStudioEssentials, {Strictness} from "@coremedia/ckeditor5-coremedia-studio-essentials/CoreMediaStudioEssentials";
+import CoreMediaStudioEssentials from "@coremedia/ckeditor5-coremedia-studio-essentials/CoreMediaStudioEssentials";
 import CoreMediaFontMapper from '@coremedia/ckeditor5-font-mapper/FontMapper';
 
 import { localization, localize } from "../lang/LocalizationUtils";
@@ -58,9 +58,6 @@ export const createSlimCKEditor: CreateCKEditorFunction = (domElement:(string | 
     autosave: {
       save: pluginConfig.autosave.save,
       waitingTime: 1000,
-    },
-    "coremedia:richtext": {
-      strictness: Strictness.LOOSE,
-    },
+    }
   });
 }

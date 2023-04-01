@@ -1,10 +1,13 @@
 package com.coremedia.blueprint.caas.augmentation.tree;
 
 import com.coremedia.blueprint.base.tree.TreeRelation;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.Collection;
 import java.util.List;
 
+@DefaultAnnotation(NonNull.class)
 public class ExternalBreadcrumbTreeRelation implements TreeRelation<String> {
 
   private List<String> breadcrumb;
@@ -16,22 +19,20 @@ public class ExternalBreadcrumbTreeRelation implements TreeRelation<String> {
   @Override
   public Collection<String> getChildrenOf(String parent) {
     List<String> breadcrumb = getBreadcrumb();
-    if (!breadcrumb.contains(parent)) {
+    int indexOfParent = breadcrumb.indexOf(parent);
+    if (indexOfParent < 0) {
       throw new IllegalArgumentException(String.format("Could not find %s in %s", parent, String.join(" / ", breadcrumb)));
     }
-
-    int indexOfParent = breadcrumb.indexOf(parent);
     return indexOfParent + 1 < breadcrumb.size() ? List.of(breadcrumb.get(indexOfParent + 1)) : List.of();
   }
 
   @Override
   public String getParentOf(String child) {
     List<String> breadcrumb = getBreadcrumb();
-    if (!breadcrumb.contains(child)) {
+    int indexOfChild = breadcrumb.indexOf(child);
+    if (indexOfChild < 0) {
       throw new IllegalArgumentException(String.format("Could not find %s in %s", child, String.join(" / ", breadcrumb)));
     }
-
-    int indexOfChild = breadcrumb.indexOf(child);
     return indexOfChild > 0 ? breadcrumb.get(indexOfChild - 1) : null;
   }
 
@@ -43,11 +44,10 @@ public class ExternalBreadcrumbTreeRelation implements TreeRelation<String> {
   @Override
   public List<String> pathToRoot(String child) {
     List<String> breadcrumb = getBreadcrumb();
-    if (!breadcrumb.contains(child)) {
+    int indexOfChild = breadcrumb.indexOf(child);
+    if (indexOfChild < 0) {
       return List.of();
     }
-
-    int indexOfChild = breadcrumb.indexOf(child);
     return breadcrumb.subList(0, indexOfChild + 1);
   }
 

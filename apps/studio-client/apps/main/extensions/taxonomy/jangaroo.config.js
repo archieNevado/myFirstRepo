@@ -25,6 +25,7 @@ module.exports = jangarooConfig({
           name: "Tags",
           url: "",
           cmAdministrative: true,
+          cmGroups: ["global-manager", "taxonomy-manager", "developer"],
           cmService: {
             name: "launchSubAppService",
             method: "launchSubApp",

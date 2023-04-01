@@ -13,17 +13,23 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.solr.SolrHealthIndicator;
 import org.springframework.boot.actuate.system.DiskSpaceHealthIndicator;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.util.unit.DataSize;
 
 import javax.inject.Named;
 import java.io.File;
 
 @Configuration(proxyBeanMethods = false)
+// let configuration be evaluated very late to make sure that beans (like CapConnection) whose health is
+// supposed to be reflected are picked by Spring Boot before - otherwise, bean instantiations may fail on
+// @ConditionalOnBean annotations (see CMS-22659).
+@AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE)
 public class HealthIndicatorAutoConfiguration {
 
   // by using the @Named annotation we can prevent spring from prefixing the json key in the health servlet with the
@@ -79,7 +85,6 @@ public class HealthIndicatorAutoConfiguration {
 
     @Override
     public Health health() {
-      Health connectionHealth;
       if (!connection.isContentRepositoryAvailable()) {
         return Health.down().withDetail("content repository", "offline").build();
       } else if (connection.isContentRepositoryToBeUnavailable()) {
@@ -112,7 +117,6 @@ public class HealthIndicatorAutoConfiguration {
       try {
         client = new MongoClient(mongoDbSettings.getMongoClientURI());
         health = Health.up().withDetail("mongo", "OK").build();
-        ;
       } catch (MongoException ignored) {
       } finally {
         if (client != null) {

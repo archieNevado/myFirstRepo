@@ -119,7 +119,7 @@ public class AugmentationFacadeCmsOnly {
   private DataFetcherResult<ProductAugmentationCmsOnly> getProductAugmentationForSiteInternal(String externalId, String[] breadcrumbParam, @Nullable String catalogAlias, Site site) {
     String[] breadcrumb = splitBreadcrumbParameter(breadcrumbParam);
     DataFetcherResult.Builder<ProductAugmentationCmsOnly> builder = DataFetcherResult.newResult();
-    CommerceIdBuilder idBuilder = CommerceIdBuilder.builder(Vendor.of(commerceSettingsHelper.getVendor(site)), CATALOG, PRODUCT)
+    CommerceIdBuilder idBuilder = CommerceIdBuilder.builder(commerceSettingsHelper.getVendor(site), CATALOG, PRODUCT)
             .withExternalId(externalId);
 
     //update catalogAlias if given
@@ -131,7 +131,7 @@ public class AugmentationFacadeCmsOnly {
     Content content = productAugmentationService.getContentByExternalId(format(productId), site);
 
     //initialize tree relation
-    initializeBreadcrumbTreeRelation(breadcrumb, Vendor.of(commerceSettingsHelper.getVendor(site)), catalogAlias != null ? CatalogAlias.of(catalogAlias) : null);
+    initializeBreadcrumbTreeRelation(breadcrumb, commerceSettingsHelper.getVendor(site), catalogAlias != null ? CatalogAlias.of(catalogAlias) : null);
 
     //intialize catalog id
     Optional<CatalogId> catalogIdForAlias = catalogAlias != null ? catalogAliasMappingProvider.findCatalogIdForAlias(CatalogAlias.of(catalogAlias), site.getId()) : Optional.empty();
@@ -171,7 +171,7 @@ public class AugmentationFacadeCmsOnly {
     }
 
     DataFetcherResult.Builder<CategoryAugmentationCmsOnly> builder = DataFetcherResult.newResult();
-    Vendor vendor = Vendor.of(commerceSettingsHelper.getVendor(site));
+    Vendor vendor = commerceSettingsHelper.getVendor(site);
     CommerceIdBuilder idBuilder = CommerceIdBuilder.builder(vendor, CATALOG, CATEGORY)
             .withExternalId(externalId);
 
@@ -208,8 +208,7 @@ public class AugmentationFacadeCmsOnly {
   void initializeBreadcrumbTreeRelation(String[] breadcrumb, Vendor vendor, @Nullable String categoryLeafId, @Nullable CatalogAlias catalogAlias) {
     //set breadcrumb in treerelation, which is a request scoped bean
     if (breadcrumb.length > 0) {
-      List<String> extendedBreadcrumb = new ArrayList();
-      extendedBreadcrumb.addAll(Arrays.asList(breadcrumb));
+      List<String> extendedBreadcrumb = new ArrayList<>(Arrays.asList(breadcrumb));
       //add categoryLeafId to breadcrumb, if not already part of the breadcrumb
       if (categoryLeafId != null && !breadcrumb[breadcrumb.length - 1].equals(categoryLeafId)) {
         extendedBreadcrumb.add(categoryLeafId);
@@ -281,7 +280,7 @@ public class AugmentationFacadeCmsOnly {
   CommerceRef getCommerceRef(CommerceId commerceId, List<String> breadcrumb, @Nullable CatalogId catalogId, Site site) {
     return CommerceRefFactory.from(
             commerceId,
-            catalogId != null ? catalogId : CatalogId.of(commerceSettingsHelper.getCatalogId(site)),
+            catalogId != null ? catalogId : commerceSettingsHelper.getCatalogId(site),
             commerceSettingsHelper.getStoreId(site),
             commerceSettingsHelper.getLocale(site),
             site.getId(),

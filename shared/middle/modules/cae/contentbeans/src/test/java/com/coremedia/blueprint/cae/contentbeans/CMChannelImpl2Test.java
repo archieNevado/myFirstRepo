@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CMChannelImplTest2 {
+public class CMChannelImpl2Test {
   @Mock
   private PageGridService pageGridService;
 

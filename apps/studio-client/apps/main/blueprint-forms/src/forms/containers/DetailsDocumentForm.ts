@@ -27,7 +27,6 @@ class DetailsDocumentForm extends PropertyFieldGroup {
       itemId: "detailsDocumentForm",
       propertyNames: ["title", "detailText"],
       expandOnValues: "title,detailText",
-      manageHeight: false,
 
       items: [
         Config(StringPropertyField, {

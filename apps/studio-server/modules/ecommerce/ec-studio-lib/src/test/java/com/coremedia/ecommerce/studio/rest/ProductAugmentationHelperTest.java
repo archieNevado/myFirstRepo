@@ -19,7 +19,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
@@ -82,8 +81,6 @@ public class ProductAugmentationHelperTest {
 
   @Before
   public void setUp() {
-    MockitoAnnotations.initMocks(this);
-
     testling.setAugmentationService(productAugmentationService);
     testling.setCategoryAugmentationService(categoryAugmentationService);
 

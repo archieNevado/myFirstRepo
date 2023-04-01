@@ -530,6 +530,11 @@
           <markupProperty name="settings" url="122settings.xml" grammar="coremedia-struct-2008"/>
         </version>
       </document>
+      <document name="PagegridNavigation2" id="1220" type="CMSettings">
+        <version number="1">
+          <markupProperty name="settings" url="1220settings.xml" grammar="coremedia-struct-2008"/>
+        </version>
+      </document>
       <document name="aChannelsLinkedSetting" id="124" type="CMSettings">
         <version number="1">
           <markupProperty name="settings" url="124settings.xml" grammar="coremedia-struct-2008"/>

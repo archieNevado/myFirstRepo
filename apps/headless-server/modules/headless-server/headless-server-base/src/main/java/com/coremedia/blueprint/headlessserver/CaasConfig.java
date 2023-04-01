@@ -206,6 +206,7 @@ import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -870,7 +871,7 @@ public class CaasConfig implements WebMvcConfigurer {
     StringBuilder stringBuilder = new StringBuilder();
     Resource[] resources = loader.getResources("classpath*:*-schema.graphql");
 
-    List<Resource> allResources = new ArrayList<>(Arrays.asList(resources));
+    Collection<Resource> allResources = new LinkedHashSet<>(Arrays.asList(resources));
 
     searchSchemaResourceProvider.ifAvailable(allResources::addAll);
 

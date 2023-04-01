@@ -9,6 +9,7 @@ import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.livecontext.ecommerce.augmentation.AugmentationService;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.google.common.collect.Iterables;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
@@ -23,6 +24,7 @@ import java.util.Optional;
 
 import static java.lang.invoke.MethodHandles.lookup;
 
+@DefaultAnnotation(NonNull.class)
 public class ExternalBreadcrumbContentTreeRelation implements TreeRelation<Content> {
   private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
 
@@ -60,12 +62,7 @@ public class ExternalBreadcrumbContentTreeRelation implements TreeRelation<Conte
       return null;
     }
 
-    Optional<CommerceId> childCommerceId = getCommerceIdFrom(child);
-    if (childCommerceId.isEmpty()) {
-      return null;
-    }
-
-    return getParentOf(childCommerceId.get(), child, site);
+    return getCommerceIdFrom(child).map(id -> getParentOf(id, child, site)).orElse(null);
   }
 
   @Nullable
@@ -93,10 +90,7 @@ public class ExternalBreadcrumbContentTreeRelation implements TreeRelation<Conte
       return null;
     }
 
-    Content augmentingContent = null;
-    if (augmentationService != null) {
-      augmentingContent = augmentationService.getContentByExternalId(CommerceIdFormatterHelper.format(categoryId), site);
-    }
+    Content augmentingContent = augmentationService.getContentByExternalId(CommerceIdFormatterHelper.format(categoryId), site);
 
     if (null != augmentingContent) {
       return augmentingContent;

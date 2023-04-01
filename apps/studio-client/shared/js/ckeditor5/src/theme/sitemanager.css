@@ -1,0 +1,97 @@
+/* Styles for SiteManager Compatability */
+
+.ck-editor__editable  [lang="en"],
+.ck-editor__editable .language--en-gb { background-color: #9090AE; }
+.ck-editor__editable .language--en-us { background-color: #7070AE; }
+.ck-editor__editable  [lang="de"],
+.ck-editor__editable .language--de    { background-color: #FEDE01; }
+.ck-editor__editable  [lang="fr"],
+.ck-editor__editable .language--fr    { background-color: #8080B5; }
+.ck-editor__editable  [lang="es"],
+.ck-editor__editable .language--es    { background-color: #FFFF00; }
+.ck-editor__editable  [lang="ja"],
+.ck-editor__editable .language--ja    { background-color: #FF8080; }
+
+.ck-editor__editable p.language--en-gb { border-width: 0 0 0 2px; border-style: solid; border-color: #9090AE; }
+.ck-editor__editable p.language--en-us { border-width: 0 0 0 2px; border-style: solid; border-color: #7070AE; }
+.ck-editor__editable p.language--de    { border-width: 0 0 0 2px; border-style: solid; border-color: #FEDE01; }
+.ck-editor__editable p.language--fr    { border-width: 0 0 0 2px; border-style: solid; border-color: #8080B5; }
+.ck-editor__editable p.language--es    { border-width: 0 0 0 2px; border-style: solid; border-color: #FFFF00; }
+.ck-editor__editable p.language--ja    { border-width: 0 0 0 2px; border-style: solid; border-color: #FF8080; }
+
+.ck-editor__editable .font-name--arial                { font-family:Arial; }
+.ck-editor__editable .font-name--arial-black          { font-family:Arial Black; }
+.ck-editor__editable .font-name--arial-narrow         { font-family:Arial Narrow; }
+.ck-editor__editable .font-name--century              { font-family:Century; }
+.ck-editor__editable .font-name--courier              { font-family:Courier; }
+.ck-editor__editable .font-name--lucida-console       { font-family:Lucida Console; }
+.ck-editor__editable .font-name--lucida-sans-unicode  { font-family:Lucida Sans Unicode; }
+.ck-editor__editable .font-name--times-new-roman      { font-family:Times New Roman; }
+.ck-editor__editable .font-name--verdana              { font-family:Verdana; }
+
+.ck-editor__editable .font-size--8  { font-size:8pt; }
+.ck-editor__editable .font-size--9  { font-size:9pt; }
+.ck-editor__editable .font-size--10 { font-size:10pt; }
+.ck-editor__editable .font-size--11 { font-size:11pt; }
+.ck-editor__editable .font-size--12 { font-size:12pt; }
+.ck-editor__editable .font-size--14 { font-size:14pt; }
+.ck-editor__editable .font-size--16 { font-size:16pt; }
+.ck-editor__editable .font-size--18 { font-size:18pt; }
+.ck-editor__editable .font-size--20 { font-size:20pt; }
+.ck-editor__editable .font-size--24 { font-size:24pt; }
+.ck-editor__editable .font-size--26 { font-size:26pt; }
+.ck-editor__editable .font-size--28 { font-size:28pt; }
+.ck-editor__editable .font-size--36 { font-size:36pt; }
+.ck-editor__editable .font-size--48 { font-size:48pt; }
+.ck-editor__editable .font-size--72 { font-size:72pt; }
+
+.ck-editor__editable .color--black    { color: black; }
+.ck-editor__editable .color--green    { color: green; }
+.ck-editor__editable .color--silver   { color: silver; }
+.ck-editor__editable .color--lime     { color: lime; }
+.ck-editor__editable .color--gray     { color: gray; }
+.ck-editor__editable .color--olive    { color: olive; }
+.ck-editor__editable .color--white    { color: white; }
+.ck-editor__editable .color--yellow   { color: yellow; }
+.ck-editor__editable .color--maroon   { color: maroon; }
+.ck-editor__editable .color--navy     { color: navy; }
+.ck-editor__editable .color--red      { color: red; }
+.ck-editor__editable .color--blue     { color: blue; }
+.ck-editor__editable .color--purple   { color: purple; }
+.ck-editor__editable .color--teal     { color: teal; }
+.ck-editor__editable .color--fuchsia  { color: fuchsia; }
+.ck-editor__editable .color--aqua     { color: aqua; }
+
+.ck-editor__editable .background-color--black   { background-color: black; }
+.ck-editor__editable .background-color--green   { background-color: green; }
+.ck-editor__editable .background-color--silver  { background-color: silver; }
+.ck-editor__editable .background-color--lime    { background-color: lime; }
+.ck-editor__editable .background-color--gray    { background-color: gray; }
+.ck-editor__editable .background-color--olive   { background-color: olive; }
+.ck-editor__editable .background-color--white   { background-color: white; }
+.ck-editor__editable .background-color--yellow  { background-color: yellow; }
+.ck-editor__editable .background-color--maroon  { background-color: maroon; }
+.ck-editor__editable .background-color--navy    { background-color: navy; }
+.ck-editor__editable .background-color--red     { background-color: red; }
+.ck-editor__editable .background-color--blue    { background-color: blue; }
+.ck-editor__editable .background-color--purple  { background-color: purple; }
+.ck-editor__editable .background-color--teal    { background-color: teal; }
+.ck-editor__editable .background-color--fuchsia { background-color: fuchsia; }
+.ck-editor__editable .background-color--aqua    { background-color: aqua; }
+
+.ck-editor__editable .list-item--coremedia 	{ color: blue; display: list-item; }
+.ck-editor__editable .list-item--none           { list-style-type: none; }
+.ck-editor__editable .list-item--square         { list-style-type: square; }
+.ck-editor__editable .list-item--circle         { list-style-type: circle; }
+.ck-editor__editable .list-item--disc           { list-style-type: disc; }
+
+/* Replace the following example entries by your favorite bullet icons. */
+
+/*.list-item--coremedia-logo 		{ list-style: url("/editor/icons/hox/corem/editor/icons-16x16/cm-16x16.ico"); }*/
+/*.list-item--coremedia-arrow-blue  	{ list-style: url("/editor/icons/hox/corem/editor/icons-16x16/arrow-cm-blue.gif"); }*/
+/*.list-item--coremedia-arrow-black  	{ list-style: url("/editor/icons/hox/corem/editor/icons-16x16/arrow-cm-black.gif"); }*/
+/*.list-item--arrow-whiteonblue		{ list-style: url("/editor/icons/hox/corem/editor/icons-16x16/arrow-whiteonblue.gif"); }*/
+/*.list-item--hand-pointing    		{ list-style: url("/editor/icons/hox/corem/editor/icons-16x16/hand-pointing.gif"); }*/
+/*.list-item--hand-stop   		{ list-style: url("/editor/icons/hox/corem/editor/icons-16x16/hand-stop.gif"); }*/
+/*.list-item--checkmark    		{ list-style: url("/editor/icons/hox/corem/editor/icons-16x16/checkmark-green.gif"); }*/
+/*.list-item--coffecup    		{ list-style: url("/editor/icons/hox/corem/editor/icons-16x16/coffecup.gif"); }*/

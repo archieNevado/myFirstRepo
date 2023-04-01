@@ -9,6 +9,7 @@ import { as, bind, mixin } from "@jangaroo/runtime";
 import Config from "@jangaroo/runtime/Config";
 import EsAnalyticsStudioPlugin_properties from "./EsAnalyticsStudioPlugin_properties";
 import EsChart from "./EsChart";
+import Component from "@jangaroo/ext-ts/Component";
 
 interface EsChartBaseConfig extends Config<FieldContainer>, Config<HidableMixin>, Partial<Pick<EsChartBase,
   "bindTo" |
@@ -31,7 +32,7 @@ class EsChartBase extends FieldContainer {
 
   #lineChartData: Array<any> = null;
 
-  #chartPanel: Panel = null;
+  #chartBox: Component = null;
 
   #switchContainer: SwitchingContainer = null;
 
@@ -53,7 +54,7 @@ class EsChartBase extends FieldContainer {
   }
 
   protected static getActiveItemId(data: Array<any>): string {
-    return ((data && data.length > 0) ? EsChart.CHART_PANEL_ITEM_ID : EsChart.NO_DATA_FIELD_ITEM_ID);
+    return ((data && data.length > 0) ? EsChart.CHART_BOX_ITEM_ID : EsChart.NO_DATA_FIELD_ITEM_ID);
   }
 
   /**
@@ -79,7 +80,7 @@ class EsChartBase extends FieldContainer {
   }
 
   initChartWhenAvailable(): void {
-    const currentChartPanel = this.#getChartPanel();
+    const currentChartPanel = this.#getChartBox();
     if (currentChartPanel && currentChartPanel.getEl()) {
       this.#initChart();
     } else if (currentChartPanel) {
@@ -97,11 +98,11 @@ class EsChartBase extends FieldContainer {
     if (this.#lineChartData) {
       // unfortunately, we need to reset this container on every resize and re-init the chart
       // but at least the data is not fetched again from the server (is accessible via getData())
-      Ext.get(this.#getElementId()).dom.innerHTML = "";
+      Ext.get(this.#getChartBoxId()).dom.innerHTML = "";
 
       // a list of possible config options: http://www.oesmith.co.uk/morris.js/lines.html
       const lineChartConfig: Record<string, any> = {
-        element: this.#getElementId(), // the ID of the element that this chart should be insert to
+        element: this.#getChartBoxId(), // the ID of the element that this chart should be insert to
         xkey: this.#CHART_X_AXIS_PROPERTY_NAME, // the name of the x-axis key
         ykeys: this.#CHART_VALUE_NAMES, // the names of the value properties
         labels: [this.chartLabelName ? this.chartLabelName : this.#CHART_LABEL_NAMES], // the labels that map the value properties
@@ -120,15 +121,15 @@ class EsChartBase extends FieldContainer {
   /**
    * @return the Element ID of the panel that the chart should be rendered to
    */
-  #getElementId(): string {
-    return this.#getChartPanel().getEl().first().first().getAttribute("id");
+  #getChartBoxId(): string {
+    return this.#getChartBox().getEl().getId();
   }
 
-  #getChartPanel(): Panel {
-    if (!this.#chartPanel) {
-      this.#chartPanel = as(this.queryById(EsChart.CHART_PANEL_ITEM_ID), Panel);
+  #getChartBox(): Component {
+    if (!this.#chartBox) {
+      this.#chartBox = as(this.queryById(EsChart.CHART_BOX_ITEM_ID), Component);
     }
-    return this.#chartPanel;
+    return this.#chartBox;
   }
 
   #getSwitchContainer(): SwitchingContainer {

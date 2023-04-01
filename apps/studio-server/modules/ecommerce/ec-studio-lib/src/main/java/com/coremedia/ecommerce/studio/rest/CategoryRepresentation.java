@@ -51,7 +51,6 @@ public class CategoryRepresentation extends CommerceBeanRepresentation {
     this.shortDescription = shortDescription;
   }
 
-  @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
   public String getThumbnailUrl(){
     return thumbnailUrl;
   }

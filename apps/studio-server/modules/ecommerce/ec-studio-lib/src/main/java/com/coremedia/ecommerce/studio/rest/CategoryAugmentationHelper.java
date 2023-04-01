@@ -25,6 +25,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdFormatterHelper.format;
+import static java.lang.invoke.MethodHandles.lookup;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -32,13 +33,10 @@ import static java.util.Objects.requireNonNull;
  */
 @Named
 public class CategoryAugmentationHelper extends AugmentationHelperBase<Category> {
-  private static final Logger LOGGER = LoggerFactory.getLogger(CategoryAugmentationHelper.class);
-
-  private static final String CM_EXTERNAL_CHANNEL = "CMExternalChannel";
-
-  static final String CATEGORY_PAGEGRID_STRUCT_PROPERTY = PageGridContentKeywords.PAGE_GRID_STRUCT_PROPERTY;
+  private static final Logger LOGGER = LoggerFactory.getLogger(lookup().lookupClass());
   public static final String CATEGORY_PRODUCT_PAGEGRID_STRUCT_PROPERTY = "pdpPagegrid";
-
+  private static final String CM_EXTERNAL_CHANNEL = "CMExternalChannel";
+  static final String CATEGORY_PAGEGRID_STRUCT_PROPERTY = PageGridContentKeywords.PAGE_GRID_STRUCT_PROPERTY;
   static final String TITLE = "title";
   static final String SEGMENT = "segment";
 
@@ -54,7 +52,7 @@ public class CategoryAugmentationHelper extends AugmentationHelperBase<Category>
 
     // create folder hierarchy for category
     Content categoryFolder = contentRepository.createSubfolders(computerFolderPath(category, site, getBaseFolderName(),
-            (CommerceBean bean) -> this.getCatalog(category)));
+            (CommerceBean bean) -> getCatalog(category)));
 
     if (categoryFolder == null) {
       return null;
@@ -72,7 +70,7 @@ public class CategoryAugmentationHelper extends AugmentationHelperBase<Category>
 
   @NonNull
   public static String computeDocumentName(@NonNull Category category) {
-    return (getEscapedDisplayName(category) + " (" + category.getExternalId() + ")")
+    return shortenContentNameIfNeeded(getEscapedDisplayName(category) + " (" + category.getExternalId() + ")")
             .replace('/', '_');
   }
 
@@ -179,7 +177,7 @@ public class CategoryAugmentationHelper extends AugmentationHelperBase<Category>
   /**
    * Builds properties for an <code>CMExternalChannel</code> document.
    */
-  private Map<String, Object> buildCategoryContentDocumentProperties(@NonNull Category category) {
+  private static Map<String, Object> buildCategoryContentDocumentProperties(@NonNull Category category) {
     Map<String, Object> properties = new HashMap<>();
 
     properties.put(EXTERNAL_ID, format(category.getId()));

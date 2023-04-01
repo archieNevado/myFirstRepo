@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.Page" -->
+<#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.layout.Container" -->
 
 <#--
     Template Description:

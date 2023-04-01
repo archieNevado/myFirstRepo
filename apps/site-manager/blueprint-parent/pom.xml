@@ -72,11 +72,11 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.70</tomcat.embed.version>
-    <cm.site-manager.core.version>2210.2</cm.site-manager.core.version>
-    <cm.common.core.version>2210.2</cm.common.core.version>
+    <tomcat.embed.version>9.0.73</tomcat.embed.version>
+    <cm.site-manager.core.version>2210.3</cm.site-manager.core.version>
+    <cm.common.core.version>2210.3</cm.common.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
-    <cm.middle.core.version>2210.2</cm.middle.core.version>
+    <cm.middle.core.version>2210.3</cm.middle.core.version>
     <cm.middle.bp.version>1-SNAPSHOT</cm.middle.bp.version>
     <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
 
