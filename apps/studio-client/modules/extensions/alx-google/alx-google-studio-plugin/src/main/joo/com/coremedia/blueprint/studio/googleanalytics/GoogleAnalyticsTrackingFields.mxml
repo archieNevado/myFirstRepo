@@ -24,13 +24,12 @@
   <editor:items>
     <editor:BooleanPropertyField dontTransformToInteger="true"
                                  propertyName="localSettings.googleAnalytics.disabled"/>
-    <editor:StringPropertyField propertyName="localSettings.googleAnalytics.webPropertyId">
+    <editor:StringPropertyField propertyName="localSettings.googleAnalytics.measurementId">
       <editor:listeners>
         <fx:Object
-                afterrender="{function(c:Container):void {TextField(c.down('textfield')).vtype = GoogleAnalyticsWebPropertyIdValidator.WEB_PROPERTY_ID_KEY;}}"/>
+                afterrender="{function(c:Container):void {TextField(c.down('textfield')).vtype = GoogleAnalyticsMeasurementIdValidator.MEASUREMENT_ID_KEY;}}"/>
       </editor:listeners>
     </editor:StringPropertyField>
-    <editor:StringPropertyField propertyName="localSettings.googleAnalytics.domainName"/>
     <editor:BooleanPropertyField dontTransformToInteger="true"
                                  propertyName="localSettings.googleAnalytics.disableAdvertisingFeaturesPlugin"/>
   </editor:items>

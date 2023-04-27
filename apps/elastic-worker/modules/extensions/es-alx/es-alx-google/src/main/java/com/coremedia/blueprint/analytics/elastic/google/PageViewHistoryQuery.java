@@ -1,77 +1,83 @@
 package com.coremedia.blueprint.analytics.elastic.google;
 
-import com.google.api.services.analytics.Analytics;
-import com.google.api.services.analytics.model.GaData;
+import com.google.analytics.data.v1beta.Dimension;
+import com.google.analytics.data.v1beta.DimensionHeader;
+import com.google.analytics.data.v1beta.MetricHeader;
+import com.google.analytics.data.v1beta.OrderBy;
+import com.google.analytics.data.v1beta.Row;
+import com.google.analytics.data.v1beta.RunReportRequest;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static org.apache.commons.lang3.StringUtils.join;
-
 /**
  * The @PageViewHistoryQuery encapsulates queries to
- * Google's number of different unique pages within a session from given custom variables.
+ * Google's number of different pages within a session from given custom variables.
  */
-public final class PageViewHistoryQuery extends GoogleAnalyticsQuery {
+@DefaultAnnotation(NonNull.class)
+public final class PageViewHistoryQuery extends GoogleAnalyticsMapResultQuery {
 
-  private static final String SORT_CRITERION = "-" + DIMENSION_CONTENT_ID;
-  private static final String DIMENSIONS = join(new Object[]{TRACKING_DATE, DIMENSION_CONTENT_ID, DIMENSION_CONTENT_TYPE}, ',');
-
-  PageViewHistoryQuery(int profileId,
+  PageViewHistoryQuery(int propertyId,
                        int timeRange,
                        int limit) {
-    super(profileId, timeRange, limit);
+    super(propertyId, timeRange, limit);
   }
 
   public PageViewHistoryQuery(GoogleAnalyticsSettings googleAnalyticsSettings) {
-    this(googleAnalyticsSettings.getPid(),
+    this(googleAnalyticsSettings.getPropertyId(),
             googleAnalyticsSettings.getTimeRange(),
             googleAnalyticsSettings.getLimit());
   }
 
   @Override
-  protected void customizeQuery(final Analytics.Data.Ga.Get query) {
-    query.setDimensions(DIMENSIONS);
+  protected void customizeQuery(RunReportRequest.Builder query) {
+    query.addDimensions(Dimension.newBuilder().setName(DIMENSION_TRACKING_DATE));
+    query.addDimensions(Dimension.newBuilder().setName(DIMENSION_CONTENT_ID));
 
-    query.setMetrics(METRIC_UNIQUE_PAGEVIEWS);
-    query.setSort(SORT_CRITERION);
+    query.addOrderBys(OrderBy.newBuilder()
+            .setDesc(true)
+            .setDimension(OrderBy.DimensionOrderBy.newBuilder()
+                    .setDimensionName(DIMENSION_CONTENT_ID)
+            )
+    );
   }
 
   @Override
   public String toString() {
-    return String.format("[query: profileId=%s, timeRange=%s]",
-            getProfileId(),
+    return String.format("[query: propertyId=%s, timeRange=%s]",
+            getPropertyId(),
             getTimeRange());
   }
 
   /**
-   * Process the results of the Google's Core Reporting API data response and returns a map of content with their unique page views and related
+   * Process the results of the Google's Core Reporting API data response and returns a map of content with their page views and related
    * visit date.
    */
-  public Map<String, Map<String, Long>> process(List<List<String>> dataEntries, List<GaData.ColumnHeaders> columnHeaders) {
+  public Map<String, Map<String, Long>> process(List<Row> dataEntries, List<DimensionHeader> dimensionHeaders, List<MetricHeader> metricHeaders) {
 
     final Map<String, Map<String, Long>> allContentsWithVisits = new TreeMap<>();
-    int contentIdIndex = getColumnIndex(columnHeaders, DIMENSION_CONTENT_ID);
-    int trackingDateIndex = getColumnIndex(columnHeaders, TRACKING_DATE);
-    int uniquePageViewsIndex = getColumnIndex(columnHeaders, METRIC_UNIQUE_PAGEVIEWS);
+    int contentIdIndex = getDimensionColumnIndex(dimensionHeaders, DIMENSION_CONTENT_ID);
+    int trackingDateIndex = getDimensionColumnIndex(dimensionHeaders, DIMENSION_TRACKING_DATE);
+    int pageViewsIndex = getMetricColumnIndex(metricHeaders, METRIC_PAGEVIEWS);
 
-    for (List<String> list : dataEntries) {
-      String contentId = list.get(contentIdIndex);
-      String strVisitDate = list.get(trackingDateIndex);
-      Long uniquePageViews = Long.valueOf(list.get(uniquePageViewsIndex));
+    for (Row row : dataEntries) {
+      String contentId = row.getDimensionValues(contentIdIndex).getValue();
+      String strVisitDate = row.getDimensionValues(trackingDateIndex).getValue();
+      Long pageViews = Long.valueOf(row.getMetricValues(pageViewsIndex).getValue());
 
-      if (uniquePageViews != null && uniquePageViews > 0) {
+      if (pageViews != null && pageViews > 0) {
         if (allContentsWithVisits.get(contentId) != null) {
-          allContentsWithVisits.get(contentId).put(strVisitDate, uniquePageViews);
+          allContentsWithVisits.get(contentId).put(strVisitDate, pageViews);
         } else {
           Map<String, Long> visitsData = new TreeMap<>();
-          visitsData.put(strVisitDate, uniquePageViews);
+          visitsData.put(strVisitDate, pageViews);
           allContentsWithVisits.put(contentId, visitsData);
         }
       }
     }
     return allContentsWithVisits;
   }
-
 }

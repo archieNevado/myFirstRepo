@@ -1,0 +1,15 @@
+http:
+  routers:
+    studio-packages-proxy:
+      priority: 10
+      entrypoints:
+        - webaccesssecure
+        - webaccessinsecure
+      rule: Host(`studio.{{ env "ENVIRONMENT_FQDN"}}`)
+      service: studio-packages-proxy
+
+  services:
+    studio-packages-proxy:
+      loadBalancer:
+        servers:
+          - url: http://studio-package-proxy:8080

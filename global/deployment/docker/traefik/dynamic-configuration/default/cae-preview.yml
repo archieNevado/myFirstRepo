@@ -1,0 +1,39 @@
+http:
+  routers:
+    cae-preview-sites:
+      entrypoints:
+        - webaccesssecure
+        - webaccessinsecure
+      rule: Host(`preview.{{ env "ENVIRONMENT_FQDN"}}`) && PathPrefix(`/corporate`,`/corporate-de-de`,`/corporate-en-gb`,`/corporate-en-ca`,`/calista`,`/calista-de-de`,`/aurora`)
+      service: cae-preview
+      middlewares:
+        - add-blueprint-servlet@file
+    cae-preview-servlets:
+      entrypoints:
+        - webaccesssecure
+        - webaccessinsecure
+      rule: Host(`preview.{{ env "ENVIRONMENT_FQDN"}}`) && PathPrefix(`/preview`,`/previewurl`,`/assets`,`/service`,`/dynamic`,`/resource`,`/styleguide`,`/catalogimage`)
+      service: cae-preview
+      middlewares:
+        - add-blueprint-servlet@file
+    cae-preview-externalpreview:
+      entrypoints:
+        - webaccesssecure
+      rule: Host(`preview.{{ env "ENVIRONMENT_FQDN" | default "docker.localhost"}}`) && PathPrefix(`/externalpreview`)
+      service: cae-preview
+      middlewares:
+        - add-blueprint@file
+    cae-preview:
+      entrypoints:
+        - webaccesssecure
+        - webaccessinsecure
+      rule: Host(`preview.{{ env "ENVIRONMENT_FQDN"}}`)
+      service: cae-preview
+      middlewares:
+        - block-blueprint-internal-servlet@file
+
+  services:
+    cae-preview:
+      loadBalancer:
+        servers:
+          - url: http://cae-preview:8080

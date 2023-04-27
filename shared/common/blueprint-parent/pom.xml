@@ -26,12 +26,11 @@
     <maven.compiler.release>11</maven.compiler.release>
     <sonar.java.source>${maven.compiler.release}</sonar.java.source>
 
-    <google.api.services.analytics.version>v3-rev99-1.19.0</google.api.services.analytics.version>
     <google.api.services.youtube.version>v3-rev152-1.19.0</google.api.services.youtube.version>
 
     <customer>Blueprint</customer>
 
-    <cm.common.core.version>2107.7</cm.common.core.version>
+    <cm.common.core.version>2107.8</cm.common.core.version>
     <cm.common.bp.version>${project.version}</cm.common.bp.version>
 
     <spring.boot.version>2.3.11.RELEASE</spring.boot.version>
@@ -70,11 +69,11 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.68</tomcat.embed.version>
+    <tomcat.embed.version>9.0.73</tomcat.embed.version>
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.common.core.version>2107.7</cm.common.core.version>
+    <cm.common.core.version>2107.8</cm.common.core.version>
     <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
 
     <showDeprecation>true</showDeprecation>

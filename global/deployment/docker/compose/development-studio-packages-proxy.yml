@@ -1,5 +1,3 @@
-version: "3.4"
-
 # default environment variables for all spring-boot services
 x-development-boot-envs:
   &development-boot-envs
@@ -13,8 +11,6 @@ services:
   studio-client:
     environment:
       PROTOCOL: ""
-    labels:
-      traefik.protocol: http
 
   studio-packages-proxy:
     ports:
@@ -23,11 +19,10 @@ services:
       - 43005:5005
     environment:
       <<: *development-boot-envs
-    labels:
-      # only in a dev system
-      traefik.frontend.headers.SSLRedirect: "false"
-      traefik.actuator.port: '8081'
-      traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/studio-packages-proxy;AddPrefix:/actuator
   overview:
     environment:
       STUDIO_PACKAGES_PROXY_ENABLED: "true"
+
+  traefik:
+    environment:
+      STUDIO_CLIENT_PROTOCOL: "http"

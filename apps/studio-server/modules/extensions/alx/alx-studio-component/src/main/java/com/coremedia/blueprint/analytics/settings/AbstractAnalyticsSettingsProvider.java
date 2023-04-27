@@ -17,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.inject.Inject;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -94,8 +95,13 @@ public abstract class AbstractAnalyticsSettingsProvider implements AnalyticsSett
 
   private String buildReportUrl(Content content, Content navigation, String linkToSelf) {
     final String serviceKey = getServiceKey();
-    Map<String, Object> settings = getInternalSiteSpecificSettings(serviceKey, navigation, sitesService);
-    settings.putAll(settingsService.mergedSettingAsMap(serviceKey, String.class, Object.class, content, navigation));
+
+    Map<String, Object> internalSettings = getInternalSiteSpecificSettings(serviceKey, navigation, sitesService);
+    Map<String, Object> linkedSettings = settingsService.mergedSettingAsMap(serviceKey, String.class, Object.class, content, navigation);
+
+    Map<String, Object> settings = new HashMap<>();
+    settings.putAll(internalSettings);
+    settings.putAll(linkedSettings);
 
     if (!settings.isEmpty()) {
       String reportURL = buildReportUrl(settings, linkToSelf);

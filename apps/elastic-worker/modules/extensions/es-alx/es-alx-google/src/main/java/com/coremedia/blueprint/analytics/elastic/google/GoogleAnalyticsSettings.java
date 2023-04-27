@@ -15,11 +15,11 @@ interface GoogleAnalyticsSettings {
   int getLimit();
 
   /**
-   * The profile to query
+   * The property to query
    *
-   * @see GoogleAnalyticsQuery#KEY_PID
+   * @see GoogleAnalyticsQuery#KEY_PROPERTY_ID
    */
-  int getPid();
+  int getPropertyId();
 
   /**
    * Only relevant for event queries
@@ -37,23 +37,12 @@ interface GoogleAnalyticsSettings {
 
   /**
    *
-   * @see ElasticGoogleAnalyticsServiceProvider#APPLICATION_NAME
-   */
-  String getApplicationName();
-
-  /**
-   *
    * @see com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil#DOCUMENT_PROPERTY_TIME_RANGE
    */
   int getTimeRange();
 
   /**
-   * Returns the google service account Email Address
+   * Returns the authentication file
    */
-  String getServiceAccountEmail();
-
-  /**
-   * Returns the Google Analytics p12 file
-   */
-  Content getP12File();
+  Content getAuthFile();
 }

@@ -57,8 +57,7 @@ public class GoogleAnalyticsTest {
     doReturn(Arrays.asList(cmNavigation)).when(navigation).getNavigationPathList();
     when(cmNavigation.getContentId()).thenReturn(NAV_ID);
     settings = new HashMap<>();
-    settings.put("webPropertyId", "UA-12345-678");
-    settings.put("domainName", "auto");
+    settings.put("measurementId", "G-12345");
     when(settingsService.settingAsMap(GOOGLE_ANALYTICS_SERVICE_KEY, String.class, Object.class, page)).thenReturn(settings);
   }
 
@@ -85,11 +84,6 @@ public class GoogleAnalyticsTest {
   @Test
   public void isConfigValid() {
     assertTrue(googleAnalytics.isConfigValid());
-  }
-
-  @Test
-  public void getDomainName() {
-    assertEquals("auto", googleAnalytics.getDomainName());
   }
 
   @Test

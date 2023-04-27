@@ -19,17 +19,13 @@
     ]]></fx:Script>
 
   <local:items>
-    <editor:StringPropertyField itemId="applicationName"
-                                propertyName="localSettings.googleAnalytics.applicationName"/>
-    <editor:StringPropertyField itemId="serviceAccountEmail"
-                                propertyName="localSettings.googleAnalytics.serviceAccountEmail"/>
-    <editor:SingleLinkEditor itemId="p12file"
+    <editor:SingleLinkEditor itemId="authfile"
                              linkContentType="CMDownload"
-                             bindTo="{getP12FileVE()}"
+                             bindTo="{getAuthFileVE()}"
                              parentContentValueExpression="{config.bindTo}"
-                             linkListLabel="{resourceManager.getString('com.coremedia.blueprint.studio.googleanalytics.GoogleAnalyticsStudioPlugin', 'googleanalytics_p12file')}"/>
-    <editor:IntegerPropertyField itemId="pid"
-                                 propertyName="localSettings.googleAnalytics.pid"/>
+                             linkListLabel="{resourceManager.getString('com.coremedia.blueprint.studio.googleanalytics.GoogleAnalyticsStudioPlugin', 'googleanalytics_authfile')}"/>
+    <editor:IntegerPropertyField itemId="propertyId"
+                                 propertyName="localSettings.googleAnalytics.propertyId"/>
     <editor:IntegerPropertyField itemId="limit"
                                  propertyName="localSettings.googleAnalytics.limit"/>
     <editor:IntegerPropertyField itemId="interval"

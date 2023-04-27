@@ -1,5 +1,3 @@
-version: "3.4"
-
 # default environment variables for all spring-boot services
 x-development-boot-envs:
   &development-boot-envs
@@ -28,8 +26,8 @@ x-logging:
 services:
   commerce-adapter-wcs:
     volumes:
-      - commerce-adapter-wcs-cache:/coremedia/cache
-    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-wcs:${COMMERCE_ADAPTER_WCS_VERSION:-1.7.3}
+      - /coremedia/cache
+    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-wcs:${COMMERCE_ADAPTER_WCS_VERSION:-1.7.5}
     container_name: commerce-adapter-wcs
     restart: always
     logging: *default-logging

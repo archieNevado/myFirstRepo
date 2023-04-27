@@ -26,10 +26,7 @@
         <fx:Object afterrender="{function(c:Container):void {TextField(c.down('textfield')).vtype = 'url';}}"/>
       </editor:listeners>
     </editor:StringPropertyField>
-    <editor:StringPropertyField propertyName="localSettings.googleAnalytics.pageReport"/>
-    <editor:IntegerPropertyField propertyName="localSettings.googleAnalytics.accountId"/>
-    <editor:IntegerPropertyField propertyName="localSettings.googleAnalytics.wpid"/>
-    <editor:IntegerPropertyField propertyName="localSettings.googleAnalytics.pid"/>
+    <editor:IntegerPropertyField propertyName="localSettings.googleAnalytics.propertyId"/>
   </editor:items>
 
 </editor:PropertyFieldGroup>

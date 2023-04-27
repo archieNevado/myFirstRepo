@@ -26,16 +26,17 @@
     <maven.compiler.release>11</maven.compiler.release>
     <sonar.java.source>${maven.compiler.release}</sonar.java.source>
     <spring-boot-maven-plugin.layout>JAR</spring-boot-maven-plugin.layout>
-
-    <google.api.services.analytics.version>v3-rev99-1.19.0</google.api.services.analytics.version>
+    <google.api.services.analytics.version>0.20.0</google.api.services.analytics.version>
+    <google.analytics.data.version>0.20.0</google.analytics.data.version>
+    <google.auth.library.oauth2.http.version>1.14.0</google.auth.library.oauth2.http.version>
+    <google.api.gax.version>2.22.0</google.api.gax.version>
+    <google.grpc.proto.analytics.data.version>0.20.0</google.grpc.proto.analytics.data.version>
     <google.api.services.youtube.version>v3-rev152-1.19.0</google.api.services.youtube.version>
-    <google.api.client.version>1.30.6</google.api.client.version>
-    <google.oauth.client.version>1.33.3</google.oauth.client.version>
-    <google.http.client.version>1.36.0</google.http.client.version>
+    <google.http.client.version>1.42.3</google.http.client.version>
 
     <customer>Blueprint</customer>
 
-    <cm.elastic-worker.core.version>2107.7</cm.elastic-worker.core.version>
+    <cm.elastic-worker.core.version>2107.8</cm.elastic-worker.core.version>
 
     <spring.boot.version>2.3.11.RELEASE</spring.boot.version>
 
@@ -72,14 +73,14 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.embed.version>9.0.68</tomcat.embed.version>
+    <tomcat.embed.version>9.0.73</tomcat.embed.version>
     <blueprint.groupId>com.coremedia.blueprint</blueprint.groupId>
     <!-- keep this version in sync with this poms parent version -->
     <blueprint.version>${project.version}</blueprint.version>
-    <cm.elastic-worker.core.version>2107.7</cm.elastic-worker.core.version>
-    <cm.common.core.version>2107.7</cm.common.core.version>
+    <cm.elastic-worker.core.version>2107.8</cm.elastic-worker.core.version>
+    <cm.common.core.version>2107.8</cm.common.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
-    <cm.middle.core.version>2107.7</cm.middle.core.version>
+    <cm.middle.core.version>2107.8</cm.middle.core.version>
     <cm.middle.bp.version>1-SNAPSHOT</cm.middle.bp.version>
     <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
 
@@ -291,27 +292,33 @@
       </dependency>
 
       <dependency>
-        <groupId>com.google.api-client</groupId>
-        <artifactId>google-api-client</artifactId>
-        <version>${google.api.client.version}</version>
+        <groupId>com.google.analytics</groupId>
+        <artifactId>google-analytics-data</artifactId>
+        <version>${google.analytics.data.version}</version>
         <exclusions>
           <exclusion>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava-jdk5</artifactId>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>com.google.api.grpc</groupId>
+            <artifactId>proto-google-common-protos</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
 
       <dependency>
-        <groupId>com.google.http-client</groupId>
-        <artifactId>google-http-client-jackson2</artifactId>
-        <version>${google.http.client.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.google.http-client</groupId>
-        <artifactId>google-http-client</artifactId>
-        <version>${google.http.client.version}</version>
+        <groupId>com.google.auth</groupId>
+        <artifactId>google-auth-library-oauth2-http</artifactId>
+        <version>${google.auth.library.oauth2.http.version}</version>
         <exclusions>
           <exclusion>
             <groupId>com.google.code.findbugs</groupId>
@@ -321,9 +328,57 @@
       </dependency>
 
       <dependency>
-        <groupId>com.google.oauth-client</groupId>
-        <artifactId>google-oauth-client</artifactId>
-        <version>${google.oauth.client.version}</version>
+        <groupId>com.google.api</groupId>
+        <artifactId>gax</artifactId>
+        <version>${google.api.gax.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.google.api.grpc</groupId>
+            <artifactId>proto-google-common-protos</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>io.opencensus</groupId>
+            <artifactId>opencensus-api</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>com.google.auth</groupId>
+            <artifactId>google-auth-library-oauth2-http</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.threeten</groupId>
+            <artifactId>threetenbp</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>com.google.auth</groupId>
+            <artifactId>google-auth-library-credentials</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>com.google.api.grpc</groupId>
+        <artifactId>proto-google-analytics-data-v1beta</artifactId>
+        <version>${google.grpc.proto.analytics.data.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>com.google.http-client</groupId>
+        <artifactId>google-http-client</artifactId>
+        <version>${google.http.client.version}</version>
         <exclusions>
           <exclusion>
             <groupId>com.google.code.findbugs</groupId>

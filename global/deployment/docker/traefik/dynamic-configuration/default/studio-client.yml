@@ -1,0 +1,20 @@
+http:
+  routers:
+    studio-client:
+      # this priority is required so that the client backend rules are prioritized first
+      priority: 50
+      entrypoints:
+        - webaccesssecure
+        - webaccessinsecure
+      rule: Host(`studio.{{ env "ENVIRONMENT_FQDN"}}`)
+      service: studio-client
+      middlewares:
+        - studio-client-compression@file
+  services:
+    studio-client:
+      loadBalancer:
+        servers:
+          - url: {{ default "h2c" (env "STUDIO_CLIENT_PROTOCOL") }}://studio-client:80
+  middlewares:
+    studio-client-compression:
+      compress: true

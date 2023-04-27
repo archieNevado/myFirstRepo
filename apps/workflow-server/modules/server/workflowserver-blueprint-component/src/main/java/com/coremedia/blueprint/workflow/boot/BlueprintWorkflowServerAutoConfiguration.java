@@ -5,6 +5,7 @@ import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import com.coremedia.translate.TranslatablePredicate;
 import com.coremedia.translate.workflow.AllMergeablePropertiesPredicateFactory;
+import com.coremedia.translate.workflow.AutoMergePredicateFactory;
 import com.coremedia.translate.workflow.CleanInTranslation;
 import com.coremedia.translate.workflow.WorkflowAutoMergeConfigurationProperties;
 import com.coremedia.translate.workflow.synchronization.CopyOver;
@@ -13,6 +14,7 @@ import com.coremedia.translate.workflow.DefaultAutoMergeStructListMapKey;
 import com.coremedia.translate.workflow.DefaultAutoMergeStructListMapKeyFactory;
 import com.coremedia.translate.workflow.DefaultTranslationWorkflowDerivedContentsStrategy;
 import com.coremedia.translate.workflow.TranslationWorkflowDerivedContentsStrategy;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
@@ -67,17 +69,49 @@ class BlueprintWorkflowServerAutoConfiguration {
     return strategy;
   }
 
+  /**
+   * Returns an {@link AutoMergePredicateFactory} that decides which properties of a master version are automatically
+   * merged into a derived content. The returned factory uses the {@link DefaultAutoMergePredicateFactory} under the
+   * hood, and additionally excludes the root channel's segment property from auto-merge.
+   *
+   * <p>This bean is referenced by name and used by the default for translation workflows.
+   * The bean name is the default value of
+   * {@link com.coremedia.translate.workflow.AutoMergeTranslationAction#setAutoMergePredicateFactoryName(String)}.
+   * Translation workflows can specify a different bean in translation workflows with attribute
+   * {@code autoMergePredicateFactory} of action {@code AutoMergeTranslationAction}.
+   *
+   * @param sitesService the {@link SitesService}
+   * @return AutoMergePredicateFactory
+   */
   @Bean
-  DefaultAutoMergePredicateFactory defaultAutoMergePredicateFactory(TranslatablePredicate translatablePredicate,
-                                                                    WorkflowAutoMergeConfigurationProperties autoMerge) {
-    return autoMerge.isTranslatable()
+  AutoMergePredicateFactory defaultAutoMergePredicateFactory(@NonNull TranslatablePredicate translatablePredicate,
+                                                             @NonNull WorkflowAutoMergeConfigurationProperties autoMerge,
+                                                             @NonNull SitesService sitesService) {
+    DefaultAutoMergePredicateFactory factory = autoMerge.isTranslatable()
             ? new DefaultAutoMergePredicateFactory(true)
             : new DefaultAutoMergePredicateFactory(translatablePredicate);
+    return factory
+            .and(new ExcludeRootChannelSegmentAutoMergePredicateFactory(sitesService));
   }
 
+  /**
+   * Returns an {@link AutoMergePredicateFactory} that decides which properties of a master version are automatically
+   * merged into a derived content. This factory is used by default for synchronization workflows, and enables
+   * auto-merge for all properties, except the root channel's segment property and properties declared with attribute
+   * {@code extensions:automerge="false"} in the content type definition.
+   *
+   * <p>Note, that this bean is referenced by name in the default workflow definition for synchronization workflows,
+   * in file 'synchronization.xml' as attribute value
+   * {@link com.coremedia.translate.workflow.synchronization.AutoMergeSyncAction#setAutoMergePredicateFactoryName(String) autoMergePredicateFactoryName}
+   * of the {@link com.coremedia.translate.workflow.synchronization.AutoMergeSyncAction AutoMergeSyncAction} action.
+   *
+   * @param sitesService the {@link SitesService}
+   * @return AutoMergePredicateFactory
+   */
   @Bean
-  AllMergeablePropertiesPredicateFactory allMergeablePropertiesPredicateFactory() {
-    return new AllMergeablePropertiesPredicateFactory();
+  AutoMergePredicateFactory allMergeablePropertiesPredicateFactory(@NonNull SitesService sitesService) {
+    return new AllMergeablePropertiesPredicateFactory()
+            .and(new ExcludeRootChannelSegmentAutoMergePredicateFactory(sitesService));
   }
 
   /**

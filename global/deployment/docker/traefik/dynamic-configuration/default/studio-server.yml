@@ -1,0 +1,30 @@
+http:
+  routers:
+    studio-server:
+      priority: 100
+      entrypoints:
+        - webaccesssecure
+        - webaccessinsecure
+      rule: Host(`studio.{{ env "ENVIRONMENT_FQDN"}}`) && PathPrefix(`/api`,`/login`,`/logout`,`/cspInfo.html`)
+      service: studio-server
+    studio-server-rest:
+      priority: 100
+      entrypoints:
+        - webaccesssecure
+        - webaccessinsecure
+      rule: Host(`studio.{{ env "ENVIRONMENT_FQDN"}}`) && PathPrefix(`/rest`)
+      middlewares:
+        - studio-server-rest-strip-prefix@file
+      service: studio-server
+
+  services:
+    studio-server:
+      loadBalancer:
+        servers:
+          - url: http://studio-server:8080
+
+  middlewares:
+    studio-server-rest-strip-prefix:
+      stripPrefix:
+        prefixes:
+          - "/rest"

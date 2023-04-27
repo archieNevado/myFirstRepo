@@ -1,0 +1,30 @@
+# /etc/traefik/dynamic/redirect-file-provider.yml
+http:
+  middlewares:
+    add-blueprint:
+      addPrefix:
+        prefix: "/blueprint"
+    add-blueprint-servlet:
+      addPrefix:
+        prefix: "/blueprint/servlet"
+    remove-cae-prefixes:
+      stripPrefix:
+        prefixes:
+          - "/blueprint/servlet"
+          - "/blueprint"
+          - "/servlet"
+    add-blueprint-servlet-corporate:
+      addPrefix:
+        prefix: "/blueprint/servlet/corporate"
+    replace-robots-txt:
+      replacePathRegex:
+        regex: "(.*)/robots.txt"
+        replacement: "$1"
+    block-blueprint-internal-servlet:
+      replacePathRegex:
+        regex: "^/blueprint/servlet/internal/(.*)"
+        replacement: "/"
+    block-internal-servlet:
+      replacePathRegex:
+        regex: "^/internal/(.*)"
+        replacement: "/"

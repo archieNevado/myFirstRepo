@@ -87,7 +87,7 @@ PROD_REPLICATION_1_CAP_CLIENT_SERVER_IOR_URL=http://prod-master-live-server:8080
 PROD_REPLICATION_2_CAP_CLIENT_SERVER_IOR_URL=http://prod-master-live-server:8080/ior
 ```
 
-Now you can use the `management-tools` image. Remember these examples do not work in the docker-compose setup unless
+Now you can use the `management-tools` image. Remember these examples do not work in the Docker compose setup unless
 you add `--network compose_backend` to the command-line. 
 
 * Connect against UAT content-management-server
@@ -114,7 +114,7 @@ Using the default entrypoint all default tools can be used, i.e.
 docker run --rm --entrypoint="/coremedia/tools/bin/cm" --user="coremedia" --network="coremedia" <REGISTRY>/management-tools:<VERSION> dump
 ```
 
-Customize the entrypoint chain in docker-compose
+Customize the entrypoint chain in Docker compose
 ------------------------------------------------
 
 Just add entrypoint list to your `management-tools` service, i.e.

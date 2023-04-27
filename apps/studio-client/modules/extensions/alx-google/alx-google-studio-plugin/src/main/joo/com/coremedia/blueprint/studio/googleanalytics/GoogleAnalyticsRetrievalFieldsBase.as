@@ -13,26 +13,26 @@ import com.coremedia.ui.data.beanFactory;
 public class GoogleAnalyticsRetrievalFieldsBase extends PropertyFieldGroup {
 
   private static const GOOGLE_ANALYTICS:String = 'googleAnalytics';
-  private static const P12_FILE:String = 'p12File';
+  private static const AUTH_FILE:String = 'authFile';
   private static const LOCAL_SETTINGS:String = 'localSettings';
   private static const CM_DOWNLOAD:String = "CMDownload";
 
-  private var p12FileVE:ValueExpression;
+  private var authFileVE:ValueExpression;
   private var localSettings:RemoteBean;
 
   public function GoogleAnalyticsRetrievalFieldsBase(config:GoogleAnalyticsRetrievalFields = null) {
     super(config);
-    updateP12FileFromStruct();
-    getP12FileVE().addChangeListener(updateStruct);
-    bindTo.addChangeListener(updateP12FileFromStruct);
+    updateAuthFileFromStruct();
+    getAuthFileVE().addChangeListener(updateStruct);
+    bindTo.addChangeListener(updateAuthFileFromStruct);
   }
 
   private function updateStruct():void {
-    var value:Array = getP12FileVE().getValue();
+    var value:Array = getAuthFileVE().getValue();
     if (value && value.length > 0) {
-      applyToStruct(bindTo.getValue(), CM_DOWNLOAD, P12_FILE, value[0]);
+      applyToStruct(bindTo.getValue(), CM_DOWNLOAD, AUTH_FILE, value[0]);
     } else {
-      removeLinkFromStruct(bindTo.getValue(), P12_FILE);
+      removeLinkFromStruct(bindTo.getValue(), AUTH_FILE);
     }
   }
 
@@ -51,14 +51,14 @@ public class GoogleAnalyticsRetrievalFieldsBase extends PropertyFieldGroup {
   }
 
 
-  protected function getP12FileVE():ValueExpression {
-    if (!p12FileVE) {
-      p12FileVE = ValueExpressionFactory.createFromValue([]);
+  protected function getAuthFileVE():ValueExpression {
+    if (!authFileVE) {
+      authFileVE = ValueExpressionFactory.createFromValue([]);
     }
-    return p12FileVE;
+    return authFileVE;
   }
 
-  private function updateP12FileFromStruct():void {
+  private function updateAuthFileFromStruct():void {
     var c:Content = bindTo.getValue();
     c.load(function ():void {
       var props:ContentProperties = c.getProperties();
@@ -68,22 +68,22 @@ public class GoogleAnalyticsRetrievalFieldsBase extends PropertyFieldGroup {
       }
       localSettings = props.get(LOCAL_SETTINGS) as RemoteBean;
       if (init) {
-        localSettings.addPropertyChangeListener(GOOGLE_ANALYTICS, updateP12FileFromLocalSettings);
+        localSettings.addPropertyChangeListener(GOOGLE_ANALYTICS, updateAuthFileFromLocalSettings);
       }
       localSettings.load(function ():void {
-        updateP12FileFromLocalSettings();
+        updateAuthFileFromLocalSettings();
       });
     });
   }
 
-  private function updateP12FileFromLocalSettings():void {
+  private function updateAuthFileFromLocalSettings():void {
     var googleAnalytics:Struct = getStruct(localSettings as Struct, GOOGLE_ANALYTICS);
     if (googleAnalytics) {
-      var p12File:Struct = googleAnalytics.get(P12_FILE);
-      if (!p12File) {
-        getP12FileVE().setValue([]);
+      var authFile:Struct = googleAnalytics.get(AUTH_FILE);
+      if (!authFile) {
+        getAuthFileVE().setValue([]);
       } else {
-        getP12FileVE().setValue([p12File]);
+        getAuthFileVE().setValue([authFile]);
       }
     }
   }
@@ -106,14 +106,14 @@ public class GoogleAnalyticsRetrievalFieldsBase extends PropertyFieldGroup {
 
     // apply the link again: in case the substruct had to be created previously,
     // we need to notify the component about the missed initialization
-    getP12FileVE().setValue([link]);
+    getAuthFileVE().setValue([link]);
   }
 
   override protected function onDestroy():void {
     super.onDestroy();
-    localSettings.removePropertyChangeListener(GOOGLE_ANALYTICS, updateP12FileFromLocalSettings);
-    getP12FileVE().removeChangeListener(updateStruct);
-    bindTo.removeChangeListener(updateP12FileFromStruct);
+    localSettings.removePropertyChangeListener(GOOGLE_ANALYTICS, updateAuthFileFromLocalSettings);
+    getAuthFileVE().removeChangeListener(updateStruct);
+    bindTo.removeChangeListener(updateAuthFileFromStruct);
   }
 }
 }

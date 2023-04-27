@@ -3,62 +3,95 @@ package com.coremedia.blueprint.analytics.elastic.google;
 import com.coremedia.blueprint.base.analytics.elastic.util.DaysBack;
 import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
 import com.coremedia.blueprint.base.analytics.elastic.util.SettingsUtil;
-import com.google.api.services.analytics.Analytics;
-import com.google.api.services.analytics.model.GaData;
-import com.google.common.collect.ImmutableMap;
+import com.google.analytics.data.v1beta.DateRange;
+import com.google.analytics.data.v1beta.Dimension;
+import com.google.analytics.data.v1beta.DimensionHeader;
+import com.google.analytics.data.v1beta.DimensionValue;
+import com.google.analytics.data.v1beta.Filter;
+import com.google.analytics.data.v1beta.FilterExpression;
+import com.google.analytics.data.v1beta.FilterExpressionList;
+import com.google.analytics.data.v1beta.Metric;
+import com.google.analytics.data.v1beta.OrderBy;
+import com.google.analytics.data.v1beta.Row;
+import com.google.analytics.data.v1beta.RunReportRequest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Answers;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.verify;
+import static com.coremedia.blueprint.analytics.elastic.google.EventQuery.DIMENSION_ACTION;
+import static com.coremedia.blueprint.analytics.elastic.google.EventQuery.DIMENSION_CATEGORY;
+import static com.coremedia.blueprint.analytics.elastic.google.EventQuery.DIMENSION_LABEL;
+import static com.coremedia.blueprint.analytics.elastic.google.EventQuery.EVENT_NAME;
+import static com.coremedia.blueprint.analytics.elastic.google.EventQuery.EVENT_NAME_DEFAULT_VALUE;
+import static com.coremedia.blueprint.analytics.elastic.google.EventQuery.METRIC_TOTAL_EVENTS;
+import static com.coremedia.blueprint.analytics.elastic.google.GoogleAnalyticsQuery.DATE_PATTERN;
+import static com.coremedia.blueprint.analytics.elastic.google.GoogleAnalyticsQuery.METRIC_PAGEVIEWS;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EventQueryTest {
-  static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-  private static final int PROFILE_ID = 46635897;
-
-  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-  private Analytics analytics;
+  private static final int PROPERTY_ID = 46635897;
 
   @Test(expected = IllegalArgumentException.class)
   public void testConstructionIllegalCategory() {
-    //noinspection NullableProblems
     new EventQuery(123456, 10, 10, null, "foo");
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testConstructionIllegalAction() {
-    //noinspection NullableProblems
     new EventQuery( 123456, 10, 10, "foo", null);
   }
 
   @Test
-  public void testVerifyQuerySyntaxTotalEvents() throws Exception {
+  public void testVerifyQuerySyntaxTotalEvents() {
     int timeRange = 10;
     int maxResults = 100;
-    EventQuery defaultQuery = new EventQuery(PROFILE_ID, timeRange, maxResults, "TestCategory", "TestAction");
+    String testCategory = "TestCategory";
+    String testAction = "TestAction";
+    EventQuery defaultQuery = new EventQuery(PROPERTY_ID, timeRange, maxResults, testCategory, testAction);
     final DaysBack daysBack = new DaysBack(timeRange);
-    final Analytics.Data.Ga.Get query = defaultQuery.getDataQuery(analytics);
+    final DateFormat DATE_FORMAT = new SimpleDateFormat(DATE_PATTERN);
+    final RunReportRequest.Builder query = defaultQuery.getDataQuery();
 
-    verify(query).setMaxResults(maxResults);
-    verify(analytics.data().ga()).get("ga:" + PROFILE_ID,
-            SIMPLE_DATE_FORMAT.format(daysBack.getStartDate()),
-            SIMPLE_DATE_FORMAT.format(daysBack.getEndDate()),
-            GoogleAnalyticsQuery.METRIC_UNIQUE_PAGEVIEWS);
-    verify(query).setDimensions("ga:eventCategory,ga:eventAction,ga:eventLabel");
-    verify(query).setMetrics("ga:totalEvents");
-    verify(query).setFilters("ga:eventCategory==TestCategory;ga:eventAction==TestAction");
-    verify(query).setSort("-ga:totalEvents");
+    assertThat(query.getProperty()).isEqualTo("properties/" + PROPERTY_ID);
+    assertThat(query.getLimit()).isEqualTo(maxResults);
+    assertThat(query.getMetricsList()).contains(Metric.newBuilder().setName(METRIC_PAGEVIEWS).build());
+    assertThat(query.getMetricsList()).contains(Metric.newBuilder().setName(METRIC_TOTAL_EVENTS).build());
+    assertThat(query.getDateRangesList()).contains(DateRange.newBuilder().setStartDate(DATE_FORMAT.format(daysBack.getStartDate())).setEndDate(DATE_FORMAT.format(daysBack.getEndDate())).build());
+    assertThat(query.getDimensionsList()).contains(Dimension.newBuilder().setName(DIMENSION_CATEGORY).build());
+    assertThat(query.getDimensionsList()).contains(Dimension.newBuilder().setName(DIMENSION_ACTION).build());
+    assertThat(query.getDimensionsList()).contains(Dimension.newBuilder().setName(DIMENSION_LABEL).build());
+    assertThat(query.getOrderBysList()).contains(OrderBy.newBuilder().setDesc(true).setDimension(OrderBy.DimensionOrderBy.newBuilder().setDimensionName(METRIC_TOTAL_EVENTS)).build());
+    assertThat(query.getDimensionFilter()).isEqualTo(FilterExpression.newBuilder()
+            .setAndGroup(FilterExpressionList.newBuilder()
+                    .addExpressions(FilterExpression.newBuilder()
+                            .setFilter(Filter.newBuilder()
+                                    .setFieldName(DIMENSION_CATEGORY)
+                                    .setStringFilter(Filter.StringFilter.newBuilder()
+                                            .setMatchType(Filter.StringFilter.MatchType.EXACT)
+                                            .setValue(testCategory)
+                                    )))
+                    .addExpressions(FilterExpression.newBuilder().setFilter(
+                            Filter.newBuilder()
+                                    .setFieldName(DIMENSION_ACTION)
+                                    .setStringFilter(Filter.StringFilter.newBuilder()
+                                            .setMatchType(Filter.StringFilter.MatchType.EXACT)
+                                            .setValue(testAction)
+                                    )))
+                    .addExpressions(FilterExpression.newBuilder().setFilter(Filter.newBuilder()
+                            .setFieldName(EVENT_NAME)
+                            .setStringFilter(Filter.StringFilter.newBuilder()
+                                    .setMatchType(Filter.StringFilter.MatchType.EXACT)
+                                    .setValue(EVENT_NAME_DEFAULT_VALUE)
+                            )))
+            )
+            .build());
   }
 
 
@@ -66,44 +99,53 @@ public class EventQueryTest {
   public void testCreateQuery() {
     EventQuery query = createDefaultQuery();
 
-    assertEquals(30, query.getTimeRange());
-    assertEquals(20, query.getMaxResults());
-    assertEquals(1234, query.getProfileId());
+    assertThat(30).isEqualTo(query.getTimeRange());
+    assertThat(20).isEqualTo(query.getMaxResults());
+    assertThat(1234).isEqualTo(query.getPropertyId());
 
-    assertTrue(query.toString().contains("1234"));
+    assertThat(query.toString()).contains("1234");
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testCreateInvalidQuery() {
-    ImmutableMap<String, Object> settings = ImmutableMap.<String, Object>of(
-            RetrievalUtil.DOCUMENT_PROPERTY_TIME_RANGE, 30
-    );
+    Map<String, Object> settings = Map.of(RetrievalUtil.DOCUMENT_PROPERTY_TIME_RANGE, 30);
     EventQuery query = new EventQuery(SettingsUtil.createProxy(GoogleAnalyticsSettings.class, settings));
-    fail(query + " should not exist");
   }
 
   @Test
   public void process() {
     EventQuery query = createDefaultQuery();
-    List<String> row1 = Arrays.asList("xyz", "label1");
-    List<String> row2 = Arrays.asList("abc", "label2");
-    List<List<String>> dataList = new ArrayList<>();
-    dataList.add(row1);
-    dataList.add(row2);
-    List<GaData.ColumnHeaders> columnHeaders = Arrays.asList(new GaData.ColumnHeaders().setName("something"), new GaData.ColumnHeaders().setName(EventQuery.DIMENSION_LABEL));
+    String label1 = "label1";
+    String label2 = "label2";
 
-    List<String> processedList = query.process(dataList, columnHeaders);
-    assertEquals("label1", processedList.get(0));
-    assertEquals("label2", processedList.get(1));
+    // ROW 1: (not set), "label1"
+    Row.Builder row1 = Row.newBuilder();
+    row1.addDimensionValues(DimensionValue.newBuilder().setValue("").build());
+    row1.addDimensionValues(DimensionValue.newBuilder().setValue(label1).build());
+
+    // ROW 2: (not set), "label2"
+    Row.Builder row2 = Row.newBuilder();
+    row2.addDimensionValues(DimensionValue.newBuilder().setValue("").build());
+    row2.addDimensionValues(DimensionValue.newBuilder().setValue(label2).build());
+
+    List<Row> rows = List.of(row1.build(), row2.build());
+
+    List<DimensionHeader> dimensionHeaders = Arrays.asList(
+            DimensionHeader.newBuilder().setName("something").build(),
+            DimensionHeader.newBuilder().setName(EventQuery.DIMENSION_LABEL).build());
+
+    List<String> processedList = query.process(rows, dimensionHeaders, List.of());
+    assertThat(label1).isEqualTo(processedList.get(0));
+    assertThat(label2).isEqualTo(processedList.get(1));
   }
 
-  private EventQuery createDefaultQuery() {
-    ImmutableMap<String, Object> settings = ImmutableMap.<String, Object>of(
+  private static EventQuery createDefaultQuery() {
+    Map<String, Object> settings = Map.of(
             RetrievalUtil.KEY_LIMIT, 20,
             RetrievalUtil.DOCUMENT_PROPERTY_TIME_RANGE, 30,
             RetrievalUtil.DOCUMENT_PROPERTY_ACTION, "myAction",
             RetrievalUtil.DOCUMENT_PROPERTY_CATEGORY, "myCategory",
-            GoogleAnalyticsQuery.KEY_PID, 1234
+            GoogleAnalyticsQuery.KEY_PROPERTY_ID, 1234
     );
     return new EventQuery(SettingsUtil.createProxy(GoogleAnalyticsSettings.class, settings));
   }

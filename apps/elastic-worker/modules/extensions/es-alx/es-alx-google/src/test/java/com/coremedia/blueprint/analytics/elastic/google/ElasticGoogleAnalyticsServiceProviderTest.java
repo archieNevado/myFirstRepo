@@ -1,54 +1,44 @@
 package com.coremedia.blueprint.analytics.elastic.google;
 
-import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.testing.http.MockHttpTransport;
-import com.google.api.client.util.SecurityUtils;
-import com.google.api.client.util.SslUtils;
-import com.google.api.services.analytics.Analytics;
-import com.google.api.services.analytics.model.GaData;
-import com.google.common.collect.Maps;
+import com.coremedia.cap.multisite.ContentSiteAspect;
+import com.coremedia.cap.multisite.SitesService;
+import com.google.analytics.data.v1beta.BetaAnalyticsDataClient;
+import com.google.analytics.data.v1beta.BetaAnalyticsDataSettings;
+import com.google.analytics.data.v1beta.Row;
+import com.google.analytics.data.v1beta.RunReportRequest;
+import com.google.analytics.data.v1beta.RunReportResponse;
+import com.google.api.gax.core.CredentialsProvider;
+import com.google.auth.oauth2.GoogleCredentials;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
 import java.io.IOException;
-import java.io.InputStream;
-import java.security.GeneralSecurityException;
-import java.security.KeyStore;
-import java.security.PrivateKey;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.coremedia.blueprint.analytics.elastic.google.ElasticGoogleAnalyticsServiceProvider.GOOGLE_ANALYTICS_SERVICE_KEY;
-import static com.coremedia.blueprint.analytics.elastic.google.GoogleAnalyticsQuery.KEY_PID;
+import static com.coremedia.blueprint.analytics.elastic.google.GoogleAnalyticsQuery.KEY_PROPERTY_ID;
 import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCUMENT_PROPERTY_ACTION;
 import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCUMENT_PROPERTY_ANALYTICS_PROVIDER;
 import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCUMENT_PROPERTY_CATEGORY;
 import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCUMENT_PROPERTY_MAX_LENGTH;
 import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCUMENT_PROPERTY_TIME_RANGE;
 import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.KEY_LIMIT;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.nullable;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
@@ -56,13 +46,19 @@ import static org.powermock.api.mockito.PowerMockito.whenNew;
 
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({SecurityUtils.class, JacksonFactory.class, NetHttpTransport.class,
-        GoogleNetHttpTransport.class, SslUtils.class,  PageViewQuery.class, PageViewHistoryQuery.class, OverallPerformanceQuery.class,
-        EventQuery.class, GaData.class, ElasticGoogleAnalyticsServiceProvider.class, RetrievalUtil.class})
+@PrepareForTest({BetaAnalyticsDataClient.class, BetaAnalyticsDataSettings.class, GoogleCredentials.class,
+        ElasticGoogleAnalyticsServiceProvider.class, PageViewQuery.class, PageViewHistoryQuery.class, EventQuery.class,
+        OverallPerformanceQuery.class})
 public class ElasticGoogleAnalyticsServiceProviderTest {
 
-  @InjectMocks
-  private final ElasticGoogleAnalyticsServiceProvider provider = new ElasticGoogleAnalyticsServiceProvider();
+  private static final int PROPERTY_ID = 1234;
+  private static final int TIME_RANGE = 30;
+
+  private static final Map<String, Object> SETTINGS_WITH_TIME_RANGE = Map.of(DOCUMENT_PROPERTY_TIME_RANGE, TIME_RANGE);
+  private static final Map<String, Object> SETTINGS_WITH_UNUSED = Map.of("unused", "does not matter");
+  private final Map<String, Object> googleAnalyticsSettings = new HashMap<>();
+
+  private ElasticGoogleAnalyticsServiceProvider provider;
 
   @Mock
   private Content cmAlxBaseList;
@@ -86,13 +82,13 @@ public class ElasticGoogleAnalyticsServiceProviderTest {
   private SettingsService settingsService;
 
   @Mock
-  private Map<String, Object> googleAnalyticsSettings;
+  private SitesService sitesService;
 
   @Mock
   private Content content;
 
   @Mock
-  private Analytics analytics;
+  private ContentSiteAspect contentSiteAspect;
 
   @Mock
   private Content contentBlob;
@@ -101,22 +97,13 @@ public class ElasticGoogleAnalyticsServiceProviderTest {
   private Blob blob;
 
   @Mock
-  private PrivateKey privateKey;
+  private BetaAnalyticsDataClient dataClient;
 
   @Mock
-  private NetHttpTransport netHttpTransport;
+  private BetaAnalyticsDataSettings dataSettings;
 
   @Mock
-  private MockHttpTransport mockHttpTransport;
-
-  @Mock
-  private JacksonFactory jacksonFactory;
-
-  @Mock
-  private NetHttpTransport.Builder builder;
-
-  @Mock
-  private SSLContext sslContext;
+  private BetaAnalyticsDataSettings.Builder builder;
 
   @Mock
   private PageViewQuery pageViewQuery;
@@ -130,107 +117,97 @@ public class ElasticGoogleAnalyticsServiceProviderTest {
   @Mock
   private EventQuery eventQuery;
 
-  @Mock
-  private Analytics.Data.Ga.Get analyticsQuery;
-
-  @Mock
-  private GaData gaData;
-
-
-  private static final int PID = 1234;
-  private static final int TIME_RANGE = 30;
-
-  private static final String TEST_APPLICATION_NAME = "KarHeinzCrop-KarlHeinzSeineKillerApp-42.0";
-
   @Before
-  public void setup() throws Exception {
+  public void setup() throws IOException {
+    provider = new ElasticGoogleAnalyticsServiceProvider(settingsService, sitesService);
     when(cmAlxBaseList.getType()).thenReturn(baseType);
     when(cmAlxPageList.getType()).thenReturn(pageType);
     when(cmAlxEventList.getType()).thenReturn(eventType);
 
-    when(baseType.isSubtypeOf("CMALXBaseList")).thenReturn(true);
+    lenient().when(baseType.isSubtypeOf("CMALXBaseList")).thenReturn(true);
 
-    when(pageType.isSubtypeOf("CMALXBaseList")).thenReturn(true);
-    when(pageType.isSubtypeOf("CMALXPageList")).thenReturn(true);
+    lenient().when(pageType.isSubtypeOf("CMALXBaseList")).thenReturn(true);
+    lenient().when(pageType.isSubtypeOf("CMALXPageList")).thenReturn(true);
 
-    when(eventType.isSubtypeOf("CMALXBaseList")).thenReturn(true);
-    when(eventType.isSubtypeOf("CMALXEventList")).thenReturn(true);
+    lenient().when(eventType.isSubtypeOf("CMALXBaseList")).thenReturn(true);
+    lenient().when(eventType.isSubtypeOf("CMALXEventList")).thenReturn(true);
 
-    when(cmAlxBaseList.getInteger(DOCUMENT_PROPERTY_MAX_LENGTH)).thenReturn(null);
-    when(cmAlxPageList.getInteger(DOCUMENT_PROPERTY_MAX_LENGTH)).thenReturn(null);
-    when(cmAlxEventList.getInteger(DOCUMENT_PROPERTY_MAX_LENGTH)).thenReturn(null);
-    when(cmAlxBaseList.getInteger(DOCUMENT_PROPERTY_TIME_RANGE)).thenReturn(null);
-    when(cmAlxPageList.getInteger(DOCUMENT_PROPERTY_TIME_RANGE)).thenReturn(null);
-    when(cmAlxEventList.getInteger(DOCUMENT_PROPERTY_TIME_RANGE)).thenReturn(null);
+    lenient().when(cmAlxBaseList.getInteger(DOCUMENT_PROPERTY_MAX_LENGTH)).thenReturn(null);
+    lenient().when(cmAlxPageList.getInteger(DOCUMENT_PROPERTY_MAX_LENGTH)).thenReturn(null);
+    lenient().when(cmAlxEventList.getInteger(DOCUMENT_PROPERTY_MAX_LENGTH)).thenReturn(null);
+    lenient().when(cmAlxBaseList.getInteger(DOCUMENT_PROPERTY_TIME_RANGE)).thenReturn(null);
+    lenient().when(cmAlxPageList.getInteger(DOCUMENT_PROPERTY_TIME_RANGE)).thenReturn(null);
+    lenient().when(cmAlxEventList.getInteger(DOCUMENT_PROPERTY_TIME_RANGE)).thenReturn(null);
 
-    when(settingsService.setting(eq(DOCUMENT_PROPERTY_ANALYTICS_PROVIDER), eq(String.class), any(Content.class), any(Content.class))).thenReturn(provider.getServiceKey());
-
-    googleAnalyticsSettings = new HashMap<>();
     when(contentBlob.getBlob("data")).thenReturn(blob);
     when(blob.getSize()).thenReturn(42);
-    mockStatic(SecurityUtils.class);
-    mockStatic(GoogleNetHttpTransport.class);
-    mockStatic(NetHttpTransport.class);
-    mockStatic(JacksonFactory.class);
-    mockStatic(SslUtils.class);
-    when(SecurityUtils.loadPrivateKeyFromKeyStore(nullable(KeyStore.class), nullable(InputStream.class), anyString(), anyString(), anyString())).thenReturn(privateKey);
-    when(GoogleNetHttpTransport.newTrustedTransport()).thenReturn(netHttpTransport);
-    when(SslUtils.initSslContext(any(SSLContext.class), any(KeyStore.class), any(TrustManagerFactory.class))).thenReturn(sslContext);
-    when(JacksonFactory.getDefaultInstance()).thenReturn(jacksonFactory);
+
+    when(settingsService.setting(eq(DOCUMENT_PROPERTY_ANALYTICS_PROVIDER), eq(String.class), any(Content.class), any(Content.class))).thenReturn(provider.getServiceKey());
+    when(sitesService.getContentSiteAspect(any(Content.class))).thenReturn(contentSiteAspect);
+    // no site specific internal settings
+    when(contentSiteAspect.getSite()).thenReturn(null);
+
+    mockStatic(BetaAnalyticsDataClient.class);
+    mockStatic(BetaAnalyticsDataSettings.class);
+    mockStatic(GoogleCredentials.class);
+
+    when(BetaAnalyticsDataClient.create(any(BetaAnalyticsDataSettings.class))).thenReturn(dataClient);
+    when(BetaAnalyticsDataSettings.newBuilder()).thenReturn(builder);
+    when(builder.setCredentialsProvider(any(CredentialsProvider.class))).thenReturn(builder);
+    when(builder.build()).thenReturn(dataSettings);
+
+    RunReportResponse runReportResponse = RunReportResponse.newBuilder().addRows(Row.newBuilder().build()).build();
+    when(dataClient.runReport(any(RunReportRequest.class))).thenReturn(runReportResponse);
   }
 
   @Test
   public void fetchNoDataPageList() {
-    getSettingsWithTimeRange();
-    List<String> reportDataItems = provider.fetchDataFor(cmAlxPageList, googleAnalyticsSettings);
-    assertEquals(0, reportDataItems.size());
+    List<String> reportDataItems = provider.fetchDataFor(cmAlxPageList, SETTINGS_WITH_TIME_RANGE);
+    assertThat(reportDataItems.size()).isEqualTo(0);
   }
 
   @Test
   public void fetchDataPageList() throws Exception {
-    when(settingsService.mergedSettingAsMap(eq(GOOGLE_ANALYTICS_SERVICE_KEY), eq(String.class), eq(Object.class), eq(cmAlxPageList), any(Content.class))).thenReturn(getSettingsWithTimeRange());
+    when(settingsService.mergedSettingAsMap(eq(GOOGLE_ANALYTICS_SERVICE_KEY), eq(String.class), eq(Object.class), eq(cmAlxPageList), any(Content.class))).thenReturn(SETTINGS_WITH_TIME_RANGE);
     Map<String, Object> effectiveSettings = provider.computeEffectiveRetrievalSettings(cmAlxPageList, mock(Content.class));
 
     Map<String, Object> expectedEffectiveSettings = getEmptyEffectiveSettings();
     expectedEffectiveSettings.putAll(googleAnalyticsSettings);
-    assertEquals("maps shoudn't differ: " + Maps.difference(expectedEffectiveSettings, effectiveSettings),
-            expectedEffectiveSettings,
-            effectiveSettings);
+    assertThat(effectiveSettings).isEqualTo(expectedEffectiveSettings);
 
     getChangedDefaultSettings();
+
+    String pageview = "1234";
     whenNew(PageViewQuery.class).withAnyArguments().thenReturn(pageViewQuery);
-    when(pageViewQuery.getDataQuery(any(Analytics.class))).thenReturn(analyticsQuery);
-    when(analyticsQuery.execute()).thenReturn(gaData);
-    when(gaData.getTotalResults()).thenReturn(1);
-    List<String> pageViews = new ArrayList<>();
-    pageViews.add("1234");
-    when(pageViewQuery.process(anyList(), anyList())).thenReturn(pageViews);
+    when(pageViewQuery.getDataQuery()).thenReturn(RunReportRequest.newBuilder());
+    when(pageViewQuery.process(anyList(), anyList(), anyList())).thenReturn(List.of("1234"));
+
     List<String> reportDataItems = provider.fetchDataFor(cmAlxPageList, googleAnalyticsSettings);
 
-    assertEquals(1, reportDataItems.size());
+    assertThat(reportDataItems.size()).isEqualTo(1);
+    assertThat(reportDataItems.get(0)).isEqualTo(pageview);
   }
 
   @Test
   public void fetchDataEventList() throws Exception {
+    String pageview = "1234";
+    List<String> pageViews = List.of(pageview);
     whenNew(EventQuery.class).withAnyArguments().thenReturn(eventQuery);
-    when(eventQuery.getDataQuery(any(Analytics.class))).thenReturn(analyticsQuery);
-    when(analyticsQuery.execute()).thenReturn(gaData);
-    List<String> pageViews = new ArrayList<>();
-    pageViews.add("1234");
-    when(eventQuery.process(anyList(), anyList())).thenReturn(pageViews);
-    when(gaData.getTotalResults()).thenReturn(1);
+    when(eventQuery.getDataQuery()).thenReturn(RunReportRequest.newBuilder());
+    when(eventQuery.process(anyList(), anyList(), anyList())).thenReturn(pageViews);
+
     getChangedDefaultSettings();
     List<String> reportDataItems = provider.fetchDataFor(cmAlxEventList, googleAnalyticsSettings);
 
-    assertEquals(1, reportDataItems.size());
+    assertThat(reportDataItems.size()).isEqualTo(1);
   }
 
   @Test
-  public void emptyListForInvalidContentbean() throws GeneralSecurityException, IOException {
+  public void emptyListForInvalidContentbean() {
     getChangedDefaultSettings();
     List<String> reportDataItems = provider.fetchDataFor(cmAlxBaseList, googleAnalyticsSettings);
 
-    assertEquals("No report data items for invalid contentbean.", 0, reportDataItems.size());
+    assertThat(reportDataItems.size()).withFailMessage("No report data items for invalid contentbean.").isEqualTo(0);
   }
 
   @Test
@@ -239,85 +216,71 @@ public class ElasticGoogleAnalyticsServiceProviderTest {
     String dateString = "20130713";
     long uniqueViews = 42L;
 
-    when(content.getId()).thenReturn(contentId);
-
-    getChangedDefaultSettings();
     whenNew(PageViewHistoryQuery.class).withAnyArguments().thenReturn(pageViewHistoryQuery);
     whenNew(OverallPerformanceQuery.class).withAnyArguments().thenReturn(overallPerformanceQuery);
-    when(pageViewHistoryQuery.getDataQuery(any(Analytics.class))).thenReturn(analyticsQuery);
-    when(overallPerformanceQuery.getDataQuery(any(Analytics.class))).thenReturn(analyticsQuery);
-    when(analyticsQuery.execute()).thenReturn(gaData);
-    HashMap<String, Map<String, Long>> processedResult = new HashMap<>();
-    Map<String, Long> map = new HashMap<>();
-    map.put(dateString, uniqueViews);
-    processedResult.put(contentId, map);
-    when(pageViewHistoryQuery.process(anyList(), anyList())).thenReturn(processedResult);
-    when(gaData.getTotalResults()).thenReturn(1);
+    when(pageViewHistoryQuery.getDataQuery()).thenReturn(RunReportRequest.newBuilder());
+    when(overallPerformanceQuery.getDataQuery()).thenReturn(RunReportRequest.newBuilder());
+    Map<String, Map<String, Long>> processedResult = Map.of(contentId, Map.of(dateString, uniqueViews));
+    when(pageViewHistoryQuery.process(anyList(), anyList(), anyList())).thenReturn(processedResult);
+
+    getChangedDefaultSettings();
     Map<String, Map<String, Long>> result = provider.fetchPageViews(content, googleAnalyticsSettings);
 
-    assertEquals(1, result.size());
-    assertEquals(42L, (Object) result.get(contentId).get(dateString));
+    assertThat(result.size()).isEqualTo(1);
+    assertThat((Object) result.get(contentId).get(dateString)).isEqualTo(42L);
   }
 
   @Test
   public void fetchPageViewsWithInvalidSettings() {
-    when(settingsService.mergedSettingAsMap(eq(GOOGLE_ANALYTICS_SERVICE_KEY), eq(String.class), eq(Object.class), eq(cmAlxBaseList), any(Content.class))).thenReturn(getSettingsWithTimeRange());
+    when(settingsService.mergedSettingAsMap(eq(GOOGLE_ANALYTICS_SERVICE_KEY), eq(String.class), eq(Object.class), eq(cmAlxBaseList), any(Content.class))).thenReturn(SETTINGS_WITH_TIME_RANGE);
     Map<String, Object> effectiveSettings = getEmptyEffectiveSettings();
     effectiveSettings.putAll(googleAnalyticsSettings);
-    assertEquals(effectiveSettings, provider.computeEffectiveRetrievalSettings(cmAlxBaseList, mock(Content.class)));
+    assertThat(provider.computeEffectiveRetrievalSettings(cmAlxBaseList, mock(Content.class))).isEqualTo(effectiveSettings);
     provider.computeEffectiveRetrievalSettings(cmAlxBaseList, mock(Content.class));
 
     Map<String, Map<String, Long>> result = provider.fetchPageViews(content, googleAnalyticsSettings);
 
-    assertEquals(0, result.size());
+    assertThat(result.size()).isEqualTo(0);
   }
 
   @Test
   public void testServiceKey() {
-    assertEquals(GOOGLE_ANALYTICS_SERVICE_KEY, provider.getServiceKey());
+    assertThat(provider.getServiceKey()).isEqualTo(GOOGLE_ANALYTICS_SERVICE_KEY);
   }
 
   @Test
   public void computeEffectiveSettingsWithEmptySettings() {
-    when(settingsService.mergedSettingAsMap(eq(GOOGLE_ANALYTICS_SERVICE_KEY), eq(String.class), eq(Object.class), eq(cmAlxPageList), any(Content.class))).thenReturn(new HashMap<String, Object>());
+    when(settingsService.mergedSettingAsMap(eq(GOOGLE_ANALYTICS_SERVICE_KEY), eq(String.class), eq(Object.class), eq(cmAlxPageList), any(Content.class))).thenReturn(new HashMap<>());
 
     Map<String, Object> effectiveSettings = provider.computeEffectiveRetrievalSettings(cmAlxPageList, mock(Content.class));
 
     // expect empty settings when called with empty map
-    assertEquals("maps shoudn't differ: " + Maps.difference(Collections.EMPTY_MAP, effectiveSettings),
-            Collections.EMPTY_MAP,
-            effectiveSettings);
+    assertThat(effectiveSettings).isEqualTo(Collections.EMPTY_MAP);
   }
 
   @Test
   public void computeEffectiveSettingsWithUnimportantSettings() {
-    when(settingsService.mergedSettingAsMap(eq(GOOGLE_ANALYTICS_SERVICE_KEY), eq(String.class), eq(Object.class), eq(cmAlxPageList), any(Content.class))).thenReturn(getSettingsWithUnused());
+    when(settingsService.mergedSettingAsMap(eq(GOOGLE_ANALYTICS_SERVICE_KEY), eq(String.class), eq(Object.class), eq(cmAlxPageList), any(Content.class))).thenReturn(SETTINGS_WITH_UNUSED);
 
     Map<String, Object> effectiveSettings = provider.computeEffectiveRetrievalSettings(cmAlxPageList, mock(Content.class));
 
     // expect all the retrieval defaults as settings when map contained any data
-    Map<String, Object> expectedEffectiveSettings = new HashMap<>();
-    expectedEffectiveSettings.putAll(getEmptyEffectiveSettings());
+    Map<String, Object> expectedEffectiveSettings = new HashMap<>(getEmptyEffectiveSettings());
 
-    assertEquals("maps shoudn't differ: " + Maps.difference(expectedEffectiveSettings, effectiveSettings),
-            expectedEffectiveSettings,
-            effectiveSettings);
+    assertThat(effectiveSettings).isEqualTo(expectedEffectiveSettings);
   }
 
   @Test
   public void computeEffectiveSettingsWithTimeRangeChanged() {
-    when(settingsService.mergedSettingAsMap(eq(GOOGLE_ANALYTICS_SERVICE_KEY), eq(String.class), eq(Object.class), eq(cmAlxPageList), any(Content.class))).thenReturn(getSettingsWithTimeRange());
+    when(settingsService.mergedSettingAsMap(eq(GOOGLE_ANALYTICS_SERVICE_KEY), eq(String.class), eq(Object.class), eq(cmAlxPageList), any(Content.class))).thenReturn(SETTINGS_WITH_TIME_RANGE);
 
     Map<String, Object> effectiveSettings = provider.computeEffectiveRetrievalSettings(cmAlxPageList, mock(Content.class));
 
     // expect all the retrieval defaults as settings
-    Map<String, Object> expectedEffectiveSettings = new HashMap<>();
-    expectedEffectiveSettings.putAll(getEmptyEffectiveSettings());
+    Map<String, Object> expectedEffectiveSettings = new HashMap<>(getEmptyEffectiveSettings());
     expectedEffectiveSettings.put(DOCUMENT_PROPERTY_TIME_RANGE, TIME_RANGE);
 
-    assertEquals("maps shoudn't differ: " + Maps.difference(expectedEffectiveSettings, effectiveSettings),
-            expectedEffectiveSettings,
-            effectiveSettings);
+    assertThat(effectiveSettings).isEqualTo(expectedEffectiveSettings);
   }
 
   @Test
@@ -331,37 +294,21 @@ public class ElasticGoogleAnalyticsServiceProviderTest {
     expectedEffectiveSettings.putAll(getEmptyEffectiveSettings());
     expectedEffectiveSettings.putAll(googleAnalyticsSettings);
 
-    assertEquals("maps shoudn't differ: " + Maps.difference(expectedEffectiveSettings, effectiveSettings),
-            expectedEffectiveSettings,
-            effectiveSettings);
+    assertThat(effectiveSettings).isEqualTo(expectedEffectiveSettings);
   }
 
   private Map<String, Object> getChangedDefaultSettings() {
     googleAnalyticsSettings.put(DOCUMENT_PROPERTY_TIME_RANGE, TIME_RANGE);
     googleAnalyticsSettings.put(DOCUMENT_PROPERTY_ACTION, "myAction");
     googleAnalyticsSettings.put(DOCUMENT_PROPERTY_CATEGORY, "myCategory");
-    googleAnalyticsSettings.put(KEY_PID, PID);
+    googleAnalyticsSettings.put(KEY_PROPERTY_ID, PROPERTY_ID);
     googleAnalyticsSettings.put(KEY_LIMIT, 20);
-    googleAnalyticsSettings.put(ElasticGoogleAnalyticsServiceProvider.SERVICE_ACCOUNT_EMAIL, "abcd@efgh.com");
-    googleAnalyticsSettings.put(ElasticGoogleAnalyticsServiceProvider.P12_FILE, contentBlob);
-    googleAnalyticsSettings.put(ElasticGoogleAnalyticsServiceProvider.APPLICATION_NAME, TEST_APPLICATION_NAME);
+    googleAnalyticsSettings.put(ElasticGoogleAnalyticsServiceProvider.AUTH_FILE, contentBlob);
 
     return googleAnalyticsSettings;
   }
 
-  private Map<String, Object> getSettingsWithTimeRange() {
-    googleAnalyticsSettings.put(DOCUMENT_PROPERTY_TIME_RANGE, TIME_RANGE);
-    return googleAnalyticsSettings;
-  }
-
-  private Map<String, Object> getSettingsWithUnused() {
-    googleAnalyticsSettings.put("unused", "does not matter");
-    return googleAnalyticsSettings;
-  }
-
-  private Map<String, Object> getEmptyEffectiveSettings() {
-    Map<String, Object> settings = new HashMap<>();
-    settings.putAll(ElasticGoogleAnalyticsServiceProvider.DEFAULT_RETRIEVAL_SETTINGS);
-    return settings;
+  private static Map<String, Object> getEmptyEffectiveSettings() {
+    return new HashMap<>(ElasticGoogleAnalyticsServiceProvider.DEFAULT_RETRIEVAL_SETTINGS);
   }
 }

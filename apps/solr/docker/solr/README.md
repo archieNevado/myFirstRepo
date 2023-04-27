@@ -16,7 +16,7 @@ another solr container service and set some environment variables.
   to be available before creating all found cores and start solr. This is only
   effective if `SOLR_SLAVE_AUTOCREATE_CORES_LIST` is empty.
 
-In the docker-compose setup simply add the following service definition:
+In the Docker compose setup simply add the following service definition:
 
 ```yaml
   solr-slave:
@@ -51,13 +51,13 @@ using environment variables, i.e.:
       SOLR_URL: http://solr-slave:8983/solr
 ```
 
-Scaling the solr slaves in docker-compose
+Scaling the solr slaves in Docker compose
 -----------------------------------------
 
-If you use docker-compose or docker-swarm, there is a poor mans load balancing
-built in by default. Since Docker 1.11, you can define network aliases and
-multiple services can share the same alias. If that is the case there will
-be a round robin dispatching from the alias to one of the containers with that alias.
+If you use Docker compose, there is a load balancing built in by default.
+You can define network aliases and multiple services can share the same alias.
+The load balancing will be a round robin dispatching from the alias
+to one of the containers with that alias.
 To configure this, simply add a network alias in the `solr-slave` service.
 
 In the `solr-slave` definition add the following labels:
@@ -71,4 +71,4 @@ In the `solr-slave` definition add the following labels:
 
 Then you can start up the compose stack with the scale option, i.e.:
 
-`docker-compose up --scale solr-slave=3 -d` to scale three solr-slaves.
+`docker compose up --scale solr-slave=3 -d` to scale three solr-slaves.

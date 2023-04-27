@@ -1,4 +1,3 @@
-version: "3.4"
 # default logging configuration
 x-logging:
   &default-logging
@@ -55,12 +54,13 @@ services:
       HEAP_DUMP_FILENAME: content-management-server-heapdump
       # enables the runlevel endpoint. When enabling it, the management port and actuators should be secured.
       MANAGEMENT_ENDPOINT_RUNLEVEL_ENABLED: "true"
-    labels:
-      traefik.enable: "true"
-      traefik.actuator.port: "8081"
-      traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/content-management-server;AddPrefix:/actuator
     volumes:
       - heapdumps:/coremedia/heapdumps
+    depends_on:
+      mysql:
+        condition: service_healthy
+      solr:
+        condition: service_healthy
 
   master-live-server:
     ports:
@@ -80,12 +80,11 @@ services:
       HEAP_DUMP_FILENAME: master-live-server-heapdump
       # enables the runlevel endpoint. When enabling it, the management port and actuators should be secured.
       MANAGEMENT_ENDPOINT_RUNLEVEL_ENABLED: "true"
-    labels:
-      traefik.enable: "true"
-      traefik.actuator.port: "8081"
-      traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/master-live-server;AddPrefix:/actuator
     volumes:
       - heapdumps:/coremedia/heapdumps
+    depends_on:
+      mysql:
+        condition: service_healthy
 
   workflow-server:
     ports:
@@ -106,12 +105,15 @@ services:
       SQL_STORE_USER: cm_management
       SQL_STORE_PASSWORD: cm_management
       HEAP_DUMP_FILENAME: workflow-server-heapdump
-    labels:
-      traefik.enable: "true"
-      traefik.actuator.port: "8081"
-      traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/workflow-server;AddPrefix:/actuator
     volumes:
       - heapdumps:/coremedia/heapdumps
+    depends_on:
+      mysql:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      content-management-server:
+        condition: service_healthy
 
   content-feeder:
     ports:
@@ -130,11 +132,11 @@ services:
       HEAP_DUMP_FILENAME: content-feeder-heapdump
       COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_CATALOGVERSION: Staged
       COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_ENVIRONMENT: preview
-    labels:
-      traefik.enable: "true"
-      traefik.actuator.port: "8081"
-      traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/content-feeder;AddPrefix:/actuator
-
+    depends_on:
+      content-management-server:
+        condition: service_healthy
+      solr:
+        condition: service_healthy
   cae-feeder-preview:
     ports:
       - 40780:8080
@@ -150,13 +152,15 @@ services:
       JDBC_USER: cm_mcaefeeder
       JDBC_PASSWORD: cm_mcaefeeder
       HEAP_DUMP_FILENAME: cae-feeder-preview-heapdump
-    labels:
-      # these traefik labels are only required for the overview page
-      traefik.enable: "true"
-      traefik.actuator.port: "8081"
-      traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/cae-feeder-preview;AddPrefix:/actuator
     volumes:
       - heapdumps:/coremedia/heapdumps
+    depends_on:
+      mysql:
+        condition: service_healthy
+      solr:
+        condition: service_healthy
+      content-management-server:
+        condition: service_healthy
 
   cae-feeder-live:
     ports:
@@ -175,16 +179,15 @@ services:
       JDBC_USER: cm_caefeeder
       JDBC_PASSWORD: cm_caefeeder
       HEAP_DUMP_FILENAME: cae-feeder-live-heapdump
-    labels:
-      # these traefik labels are only required for the overview page
-      traefik.enable: "true"
-      traefik.actuator.port: "8081"
-      traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/cae-feeder-live;AddPrefix:/actuator
-    command:
-        - wait-for-master-live-server
-        - application
     volumes:
       - heapdumps:/coremedia/heapdumps
+    depends_on:
+      mysql:
+        condition: service_healthy
+      solr:
+        condition: service_healthy
+      master-live-server:
+        condition: service_healthy
 
   user-changes:
     ports:
@@ -195,12 +198,15 @@ services:
       <<: *development-boot-envs
       REPOSITORY_URL: http://content-management-server:8080/ior
       HEAP_DUMP_FILENAME: user-changes-heapdump
-    labels:
-      traefik.enable: "true"
-      traefik.actuator.port: "8081"
-      traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/user-changes;AddPrefix:/actuator
     volumes:
       - heapdumps:/coremedia/heapdumps
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      content-management-server:
+        condition: service_healthy
+      workflow-server:
+        condition: service_healthy
 
   elastic-worker:
     ports:
@@ -213,12 +219,15 @@ services:
       ELASTIC_SOLR_URL: http://solr:8983/solr
       TENANT_DEFAULT: helios
       HEAP_DUMP_FILENAME: elastic-worker-heapdump
-    labels:
-      traefik.enable: "true"
-      traefik.actuator.port: "8081"
-      traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/elastic-worker;AddPrefix:/actuator
     volumes:
       - heapdumps:/coremedia/heapdumps
+    depends_on:
+      content-management-server:
+        condition: service_healthy
+      solr:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
 
   studio-server:
     # we mount this volume here and not in frontend.yml as we can do this only in a local single machine setup
@@ -234,11 +243,17 @@ services:
 
       <<: *development-boot-envs
       HEAP_DUMP_FILENAME: studio-server-heapdump
-    labels:
-      # only in a dev system
-      traefik.frontend.headers.SSLRedirect: "false"
-      traefik.actuator.port: '8081'
-      traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/studio-server;AddPrefix:/actuator
+    depends_on:
+      mysql:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      solr:
+        condition: service_healthy
+      content-management-server:
+        condition: service_healthy
+      workflow-server:
+        condition: service_healthy
 
   cae-preview:
     # we mount this volume here and not in frontend.yml as we can do this only in a local single machine setup
@@ -256,22 +271,23 @@ services:
       # that it will be unavailable soon. Traefik will remove the service from loadbalancing before the connection
       # will be lost and errors may occur
       MANAGEMENT_HEALTH_UAPICONNECTIONREADINESS_ENABLED: "true"
-    labels:
-      # only for the dev system
-      traefik.frontend.headers.SSLRedirect: "false"
-      # FIXME: this rule is required in the tests <FQDN>/corporate should work too
-      traefik.preview-test.frontend.rule: Host:preview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/blueprint/servlet
-      # these traefik labels are only required for the overview page
-      traefik.actuator.port: "8081"
-      traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/cae-preview;AddPrefix:/actuator
+    depends_on:
+      content-management-server:
+        condition: service_healthy
+      solr:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
 
   replication-live-server:
     # in the dev setup we simply override the startup
     entrypoint: /bin/true
     restart: "no"
-    labels:
-      traefik.actuator.port: "8081"
-      traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/replication-live-server;AddPrefix:/actuator
+    depends_on:
+      mysql:
+        condition: service_healthy
+      master-live-server:
+        condition: service_healthy
 
   cae-live:
     # we mount this volume here and not in frontend.yml as we can do this only in a local single machine setup
@@ -294,18 +310,16 @@ services:
       # will be lost and errors may occur
       MANAGEMENT_HEALTH_UAPICONNECTIONREADINESS_ENABLED: "true"
       HEAP_DUMP_FILENAME: cae-live-heapdump
-    labels:
-      # only for the dev system
-      traefik.frontend.headers.SSLRedirect: "false"
-      # FIXME: this rule is required in the tests, <FQDN>/corporate should work too
-      traefik.live-test.frontend.rule: Host:corporate.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/blueprint/servlet
-      # these traefik labels are only required for the overview page
-      traefik.actuator.port: "8081"
-      traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/cae-live;AddPrefix:/actuator
     command:
-      - wait-for-master-live-server
       - enable-sitemap-generation
       - application
+    depends_on:
+      master-live-server:
+        condition: service_healthy
+      solr:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
 
   management-tools:
     image: ${REPOSITORY_PREFIX:-coremedia}/management-tools:${MANAGEMENT_TOOLS_TAG:-latest}
@@ -331,10 +345,7 @@ services:
       THEMES_ARCHIVE_URL: "${THEMES_ARCHIVE_URL:-/coremedia/import/frontend.zip}"
       # configure the tools against the content-management-server
       CONFD_PREFIX: "dev/management"
-    command: ["wait-for-content-management-server",
-              "wait-for-workflow-server",
-              "wait-for-master-live-server",
-              "import-themes",
+    command: ["import-themes",
               "use-remote-content-archive",
               "import-user",
               "import-content",
@@ -345,6 +356,13 @@ services:
     ]
     volumes:
       - heapdumps:/coremedia/heapdumps
+    depends_on:
+      content-management-server:
+        condition: service_healthy
+      master-live-server:
+        condition: service_healthy
+      workflow-server:
+        condition: service_healthy
 
   headless-server-preview:
     ports:
@@ -370,18 +388,14 @@ services:
       # that it will be unavailable soon. Traefik will remove the service from loadbalancing before the connection
       # will be lost and errors may occur
       MANAGEMENT_HEALTH_UAPICONNECTIONREADINESS_ENABLED: "true"
-    labels:
-      traefik.enable: "true"
-      traefik.actuator.port: "8081"
-      # no redirect to https because otherwise clients (JVMs) need to use valid cacerts
-      traefik.frontend.headers.SSLRedirect: "false"
-      traefik.preview-test.frontend.rule: Host:headless-server-preview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/
-      traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/headless-server-preview;AddPrefix:/actuator
-      # one rule fits all for dev environments (overide of rule in default.yml)
-      traefik.caas.frontend.rule: Host:headless-server-preview.${ENVIRONMENT_FQDN:-docker.localhost}
     volumes:
       - heapdumps:/coremedia/heapdumps
       - headless-server-preview-cache:/coremedia/cache
+    depends_on:
+      content-management-server:
+        condition: service_healthy
+      solr:
+        condition: service_healthy
 
   headless-server-live:
     ports:
@@ -405,21 +419,14 @@ services:
       # that it will be unavailable soon. Traefik will remove the service from loadbalancing before the connection
       # will be lost and errors may occur
       MANAGEMENT_HEALTH_UAPICONNECTIONREADINESS_ENABLED: "true"
-    labels:
-      traefik.enable: "true"
-      traefik.actuator.port: "8081"
-      # no redirect to https because otherwise clients (JVMs) need to use valid cacerts
-      traefik.frontend.headers.SSLRedirect: "false"
-      traefik.live-test.frontend.rule: Host:headless-server-live.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/
-      traefik.actuator.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/headless-server-live;AddPrefix:/actuator
-      # one rule fits all for dev environments (overide of rule in default.yml)
-      traefik.caas.frontend.rule: Host:headless-server-live.${ENVIRONMENT_FQDN:-docker.localhost}
-    command:
-      - wait-for-master-live-server
-      - application
     volumes:
       - heapdumps:/coremedia/heapdumps
       - headless-server-live-cache:/coremedia/cache
+    depends_on:
+      master-live-server:
+        condition: service_healthy
+      solr:
+        condition: service_healthy
 
   overview:
     image: ${REPOSITORY_PREFIX:-coremedia}/overview
@@ -433,20 +440,15 @@ services:
     environment:
       ENVIRONMENT_FQDN: ${ENVIRONMENT_FQDN:-docker.localhost}
       CMS_VERSION: ${CMS_VERSION:-unknown}
-    labels:
-      traefik.backend: overview
-      traefik.enable: "true"
-      traefik.port: "80"
-      traefik.protocol: h2c
-      traefik.frontend.entryPoints: http,https
-      traefik.frontend.rule: Host:overview.${ENVIRONMENT_FQDN:-docker.localhost}
 
+  traefik:
+    environment:
+      SSL_REDIRECT: 'false'
+      TRAEFIK_API: "true"
+    volumes:
+      - ../traefik/dynamic-configuration/development/:/etc/traefik/dynamic/development/
 
 volumes:
-  commerce-adapter-commercetools-cache: {}
-  commerce-adapter-hybris-cache: {}
-  commerce-adapter-sfcc-cache: {}
-  commerce-adapter-wcs-cache: {}
   content-feeder-cache: {}
   cae-preview-cache: {}
   cae-live-cache: {}

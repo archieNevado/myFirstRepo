@@ -22,6 +22,8 @@ ENV SOLR_HEAP=512m
 # kill the process on OOM, if you want to use a different OOM handling, set this to false and add it using SOLR_OPTS
 # environmnt variable
 ENV EXIT_ON_OOM=true
+ENV SOLR_LOG_PATTERN_CONSOLE="%maxLen{%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p (%t) [%X{collection} %X{shard} %X{replica} %X{core}] %c{1.} %m%notEmpty{ =>%ex{short}}}{10240}%n"
+ENV SOLR_LOG_PATTERN_FILE="%maxLen{%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p (%t) [%X{collection} %X{shard} %X{replica} %X{core}] %c{1.} %m%notEmpty{ =>%ex{short}}}{10240}%n"
 HEALTHCHECK --start-period=30s --interval=30s --timeout=3s CMD curl -Lf http://localhost:8983/solr || exit 1
 
 # set to true to enable prometheus agent
@@ -33,6 +35,7 @@ USER root
 COPY --chown=solr:solr target/solr-home /opt/solr/server/solr
 COPY --chown=solr:solr src/docker/bin /docker-entrypoint-initdb.d
 COPY --chown=solr:solr src/docker/prometheus /opt/solr/prometheus
+COPY --chown=solr:solr src/docker/log4j2.xml /var/solr/
 RUN apt-get update && \
     apt-get install -y curl jq && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \

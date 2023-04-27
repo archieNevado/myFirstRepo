@@ -1,4 +1,3 @@
-version: "3.4"
 x-logging:
   &default-logging
   options:
@@ -14,6 +13,14 @@ x-default-boot-envs:
   # be able to build images with exploded layout.
   SPRING_BOOT_EXPLODED_APP: "${SPRING_BOOT_EXPLODED_APP:-true}"
 
+x-default-boot-healthcheck:
+  &default-boot-healthcheck
+  test: [ "CMD", "curl", "-Lf", "http://localhost:8081/actuator/health" ]
+  interval: 30s
+  timeout: 10s
+  retries: 3
+  start_period: 40s
+
 services:
   mysql:
     image: ${REPOSITORY_PREFIX:-coremedia}/mysql:${MYSQL_TAG:-latest}
@@ -26,6 +33,12 @@ services:
       - backend
     restart: always
     logging: *default-logging
+    healthcheck:
+      test: out=$$(mysqladmin ping -h localhost -P 3306 -u root --password=$${MYSQL_ROOT_PASSWORD} 2>&1); echo $$out | grep 'mysqld is alive' || { echo $$out; exit 1; }
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
 
   mongodb:
     image: ${REPOSITORY_PREFIX:-coremedia}/mongodb:${MONGODB_TAG:-latest}
@@ -69,6 +82,7 @@ services:
       CAP_SERVER_LICENSE: "${CMS_LICENSE_URL:-/coremedia/licenses/cms-license.zip}"
       COM_COREMEDIA_CORBA_SERVER_HOST: content-management-server
       CAP_SERVER_SEARCH_ENABLE: "true"
+    healthcheck: *default-boot-healthcheck
     command:
       - set-corem-home
       - application
@@ -88,6 +102,7 @@ services:
     command:
       - set-corem-home
       - application
+    healthcheck: *default-boot-healthcheck
 
   replication-live-server:
     image: ${REPOSITORY_PREFIX:-coremedia}/content-server:${REPLICATION_LIVE_SERVER_TAG:-latest}
@@ -105,6 +120,7 @@ services:
     command:
       - set-corem-home
       - application
+    healthcheck: *default-boot-healthcheck
 
   workflow-server:
     image: ${REPOSITORY_PREFIX:-coremedia}/workflow-server:${WORKFLOW_SERVER_TAG:-latest}
@@ -118,9 +134,9 @@ services:
       MONGODB_CLIENTURI: mongodb://coremedia:coremedia@mongodb:27017
     command:
       - set-corem-home
-      - wait-for-content-management-server
       - workflowconverter
       - application
+    healthcheck: *default-boot-healthcheck
 
   content-feeder:
     image: ${REPOSITORY_PREFIX:-coremedia}/content-feeder:${CONTENT_FEEDER_TAG:-latest}
@@ -129,11 +145,9 @@ services:
     logging: *default-logging
     networks:
       - backend
-    command:
-      - wait-for-content-management-server
-      - application
     environment:
       << : *default-boot-envs
+    healthcheck: *default-boot-healthcheck
 
   cae-feeder-preview:
     image: ${REPOSITORY_PREFIX:-coremedia}/cae-feeder:${CAE_FEEDER_PREVIEW_TAG:-latest}
@@ -145,9 +159,7 @@ services:
     environment:
       << : *default-boot-envs
       SPRING_APPLICATION_NAME: 'cae-feeder-preview'
-    command:
-      - wait-for-content-management-server
-      - application
+    healthcheck: *default-boot-healthcheck
 
   cae-feeder-live:
     image: ${REPOSITORY_PREFIX:-coremedia}/cae-feeder:${CAE_FEEDER_LIVE_TAG:-latest}
@@ -159,9 +171,7 @@ services:
     environment:
       << : *default-boot-envs
       SPRING_APPLICATION_NAME: 'cae-feeder-live'
-    command:
-      - wait-for-replication-live-server
-      - application
+    healthcheck: *default-boot-healthcheck
 
   user-changes:
     image: ${REPOSITORY_PREFIX:-coremedia}/user-changes:${USER_CHANGES_TAG:-latest}
@@ -173,10 +183,7 @@ services:
       MONGODB_CLIENTURI: mongodb://coremedia:coremedia@mongodb:27017
     networks:
       - backend
-    command:
-      - wait-for-content-management-server
-      - wait-for-workflow-server
-      - application
+    healthcheck: *default-boot-healthcheck
 
   elastic-worker:
     image: ${REPOSITORY_PREFIX:-coremedia}/elastic-worker:${ELASTIC_WORKER_TAG:-latest}
@@ -189,9 +196,7 @@ services:
       << : *default-boot-envs
       ELASTIC_SOCIAL_MAIL_SMTP_SERVER: ${ELASTIC_SOCIAL_MAIL_SMTP_SERVER:-localhost}
       MONGODB_CLIENTURI: mongodb://coremedia:coremedia@mongodb:27017
-    command:
-      - wait-for-content-management-server
-      - application
+    healthcheck: *default-boot-healthcheck
 
   studio-server:
     image: ${REPOSITORY_PREFIX:-coremedia}/studio-server:${STUDIO_REST_TAG:-latest}
@@ -207,22 +212,7 @@ services:
       SFMC_CREDENTIALS_CLIENTID: ${SFMC_CREDENTIALS_CLIENTID}
       SFMC_CREDENTIALS_CLIENTSECRET: ${SFMC_CREDENTIALS_CLIENTSECRET}
       MONGODB_CLIENTURI: mongodb://coremedia:coremedia@mongodb:27017
-
-    labels:
-      traefik.enable: "true"
-      traefik.port: "8080"
-      traefik.frontend.entryPoints: http,https
-      traefik.frontend.headers.SSLRedirect: "true"
-      # services rules
-      traefik.api.frontend.rule: Host:studio.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/api
-      traefik.login.frontend.rule: Host:studio.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/login
-      traefik.logout.frontend.rule: Host:studio.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/logout
-      traefik.cspInfo.frontend.rule: Host:studio.${ENVIRONMENT_FQDN:-docker.localhost};Path:/cspInfo.html
-      traefik.rest.frontend.rule: Host:studio.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefixStrip:/rest
-    command:
-      - wait-for-content-management-server
-      - wait-for-workflow-server
-      - application
+    healthcheck: *default-boot-healthcheck
 
   studio-client:
     image: ${REPOSITORY_PREFIX:-coremedia}/studio-client:${STUDIO_CLIENT_TAG:-latest}
@@ -231,15 +221,6 @@ services:
     logging: *default-logging
     networks:
       - backend
-    labels:
-      traefik.enable: "true"
-      traefik.port: "80"
-      traefik.frontend.entryPoints: http,https
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.protocol: h2c
-      traefik.studio-client.frontend.rule: Host:studio.${ENVIRONMENT_FQDN:-docker.localhost}
-      # this priority is required so that the client backend rules are prioritized first
-      traefik.priority: "10"
 
   cae-preview:
     image: ${REPOSITORY_PREFIX:-coremedia}/cae-preview:${CAE_PREVIEW_TAG:-latest}
@@ -255,20 +236,7 @@ services:
       SFMC_CREDENTIALS_CLIENTID: ${SFMC_CREDENTIALS_CLIENTID}
       SFMC_CREDENTIALS_CLIENTSECRET: ${SFMC_CREDENTIALS_CLIENTSECRET}
       MONGODB_CLIENTURI: mongodb://coremedia:coremedia@mongodb:27017
-    labels:
-      traefik.enable: "true"
-      traefik.port: "8080"
-      traefik.frontend.entryPoints: http,https
-      traefik.frontend.headers.SSLRedirect: "true"
-      # service rules
-      traefik.preview.frontend.rule: Host:preview.${ENVIRONMENT_FQDN:-docker.localhost};AddPrefix:/blueprint
-      # needed for static resources because of delivery.standalone needs to be true in the preview
-      traefik.preview-static-files.frontend.rule: Host:preview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/blueprint
-      traefik.preview-landing.frontend.rule: Host:preview.${ENVIRONMENT_FQDN:-docker.localhost};Path:/;AddPrefix:/blueprint/servlet/corporate
-      traefik.preview-servlets.frontend.rule: Host:preview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/preview,/previewurl,/assets,/service,/dynamic,/resource,/corporate,/corporate-de-de,/corporate-en-gb,/corporate-en-ca,/styleguide;AddPrefix:/blueprint/servlet
-    command:
-      - wait-for-content-management-server
-      - application
+    healthcheck: *default-boot-healthcheck
 
   cae-live:
     image: ${REPOSITORY_PREFIX:-coremedia}/cae-live:${CAE_LIVE_TAG:-latest}
@@ -284,33 +252,10 @@ services:
       SFMC_CREDENTIALS_CLIENTID: ${SFMC_CREDENTIALS_CLIENTID}
       SFMC_CREDENTIALS_CLIENTSECRET: ${SFMC_CREDENTIALS_CLIENTSECRET}
       MONGODB_CLIENTURI: mongodb://coremedia:coremedia@mongodb:27017
-    labels:
-      traefik.enable: "true"
-      traefik.port: "8080"
-      traefik.frontend.entryPoints: http,https
-      traefik.frontend.headers.SSLRedirect: "true"
-      # service rules
-      traefik.corporate-landing.frontend.rule: Host:corporate.${ENVIRONMENT_FQDN:-docker.localhost};Path:/;AddPrefix:/blueprint/servlet/corporate
-      traefik.corporate-de-landing.frontend.rule: Host:corporate-de.${ENVIRONMENT_FQDN:-docker.localhost};Path:/;AddPrefix:/blueprint/servlet/corporate-de-de
-      traefik.corporate-ca-landing.frontend.rule: Host:corporate-gb.${ENVIRONMENT_FQDN:-docker.localhost};Path:/;AddPrefix:/blueprint/servlet/corporate-en-gb
-      traefik.corporate-gb-landing.frontend.rule: Host:corporate-ca.${ENVIRONMENT_FQDN:-docker.localhost};Path:/;AddPrefix:/blueprint/servlet/corporate-en-ca
-      # needed for elastic social logout (/blueprint/logout)
-      traefik.corporate-es-logout.frontend.rule: HostRegexp:{subdomain:corporate-?[(de|gb|ca)]*}.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/blueprint/logout
-      traefik.corporate-servlets.frontend.rule: HostRegexp:{subdomain:corporate-?[(de|gb|ca)]*}.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/assets,/dynamic,/service,/resource,/corporate,/corporate-de-de,/corporate-en-gb,/corporate-en-ca;AddPrefix:/blueprint/servlet
-      # Corporate sitemap rules
-      # abffe57734feeee is the sitemap id of the corporate site
-      # 1cc6f00b7e1b77a49caf7e72f5fe10c0 is the sitemap id of the corporate-de site
-      # TODO: sitemap routing here should be dynamic, it should not be necessary to define the id's here
-      # to enable sitemap generation set environment variable  GENERATE_SITEMAP to "true"
-      traefik.corporate-robots.frontend.rule: HostRegexp:{subdomain:corporate-?[(de|gb|ca)]*}.${ENVIRONMENT_FQDN:-docker.localhost};PathStrip:/robots.txt;AddPrefix:/blueprint/servlet/service/robots/corporate
-      traefik.corporate-sitemap.frontend.rule: Host:corporate.${ENVIRONMENT_FQDN:-docker.localhost};Path:/sitemap_index.xml,/{file:sitemap(.*).xml.gz};AddPrefix:/blueprint/servlet/service/sitemap/abffe57734feeee
-      traefik.corporate-de-sitemap.frontend.rule: Host:corporate-de.${ENVIRONMENT_FQDN:-docker.localhost};Path:/sitemap_index.xml,/{file:sitemap(.*).xml.gz};AddPrefix:/blueprint/servlet/service/sitemap/1cc6f00b7e1b77a49caf7e72f5fe10c0
-      traefik.corporate-gb-sitemap.frontend.rule: Host:corporate-gb.${ENVIRONMENT_FQDN:-docker.localhost};Path:/sitemap_index.xml,/{file:sitemap(.*).xml.gz};AddPrefix:/blueprint/servlet/service/sitemap/7046b7710b1b23b899097b1f3eeee3fa
-      traefik.corporate-ca-sitemap.frontend.rule: Host:corporate-ca.${ENVIRONMENT_FQDN:-docker.localhost};Path:/sitemap_index.xml,/{file:sitemap(.*).xml.gz};AddPrefix:/blueprint/servlet/service/sitemap/b5becc0a3864a58d7e5c8052a6c5dd22
     command:
-      - wait-for-replication-live-server
       - enable-sitemap-generation
       - application
+    healthcheck: *default-boot-healthcheck
 
   site-manager:
     image: ${REPOSITORY_PREFIX:-coremedia}/site-manager:${SITEMANAGER_WEB_TAG:-latest}
@@ -322,12 +267,6 @@ services:
       WFS_IOR: http://${ENVIRONMENT_FQDN:-docker.localhost}:40380/ior
     networks:
       - backend
-    labels:
-      traefik.enable: "true"
-      traefik.port: "80"
-      traefik.frontend.entryPoints: http,https
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.rule: Host:site-manager.${ENVIRONMENT_FQDN:-docker.localhost}
 
   headless-server-preview:
     image: ${REPOSITORY_PREFIX:-coremedia}/headless-server:${HEADLESS_SERVER_PREVIEW_TAG:-latest}
@@ -350,20 +289,7 @@ services:
       LINK_URLPREFIXTYPE: preview
       PREVIEWCLIENT_URL: https://headless-server-preview.${ENVIRONMENT_FQDN:-docker.localhost}/preview
       COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_CATALOGVERSION: Staged
-    labels:
-      traefik.enable: "true"
-      traefik.port: "8080"
-      traefik.frontend.entryPoints: http,https
-      traefik.frontend.headers.SSLRedirect: "true"
-      # services rules
-      traefik.graphql.frontend.rule: Host:headless-server-preview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/graphql
-      traefik.caas.frontend.rule: Host:headless-server-preview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/caas
-      traefik.previewurl.frontend.rule: Host:headless-server-preview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/previewurl
-      traefik.preview.frontend.rule: Host:headless-server-preview.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/preview
-    command:
-      - wait-for-content-management-server
-      - application
-
+    healthcheck: *default-boot-healthcheck
 
   headless-server-live:
     image: ${REPOSITORY_PREFIX:-coremedia}/headless-server:${HEADLESS_SERVER_LIVE_TAG:-latest}
@@ -381,23 +307,11 @@ services:
       CAAS_SOLR_COLLECTION: live
       CAAS_REMOTE_BASEURL: http://cae-live:8080/blueprint/servlet/internal/service/url
       LINK_URLPREFIXTYPE: live
-    labels:
-      traefik.enable: "true"
-      traefik.port: "8080"
-      traefik.frontend.entryPoints: http,https
-      traefik.frontend.headers.SSLRedirect: "true"
-      # services rules
-      traefik.graphql.frontend.rule: Host:headless-server-live.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/graphql
-      traefik.caas.frontend.rule: Host:headless-server-live.${ENVIRONMENT_FQDN:-docker.localhost};PathPrefix:/caas
-    command:
-      - wait-for-replication-live-server
-      - application
+    healthcheck: *default-boot-healthcheck
 
   traefik:
-    image: ${REPOSITORY_PREFIX:-coremedia}/traefik:${TRAEFIK_TAG:-latest}
+    image: traefik:2.6.3
     container_name: traefik
-    build:
-      context: ../traefik
     restart: always
     logging: *default-logging
     networks:
@@ -408,14 +322,23 @@ services:
       - '443:443'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ../traefik/certificates/:/etc/traefik/certificates/
+      - ../traefik/dynamic-configuration/ssl-redirect.yml:/etc/traefik/dynamic/ssl-redirect.yml
+      - ../traefik/dynamic-configuration/tls.yml:/etc/traefik/dynamic/tls.yml
+      - ../traefik/dynamic-configuration/path-transformations.yml:/etc/traefik/dynamic/path-transformations.yml
+      - ../traefik/dynamic-configuration/default/:/etc/traefik/dynamic/default/
     environment:
       ENVIRONMENT_FQDN: ${ENVIRONMENT_FQDN:-docker.localhost}
-    labels:
-      traefik.enable: "true"
-      traefik.port: "8080"
-      traefik.frontend.entryPoints: http,https
-      traefik.frontend.headers.SSLRedirect: "true"
-      traefik.frontend.rule: Host:monitor.${ENVIRONMENT_FQDN:-docker.localhost}
+      TRAEFIK_PROVIDERS_FILE_DIRECTORY: /etc/traefik/dynamic/
+      TRAEFIK_GLOBAL_CHECKNEWVERSION: "false"
+      TRAEFIK_GLOBAL_SENDANONYMOUSUSAGE: "false"
+      TRAEFIK_ENTRYPOINTS_WEBACCESSINSECURE_ADDRESS: ":80"
+      TRAEFIK_ENTRYPOINTS_WEBACCESSINSECURE_TRANSPORT_RESPONDINGTIMEOUTS_IDLETIMEOUT: 360
+      TRAEFIK_ENTRYPOINTS_WEBACCESSSECURE_ADDRESS: ":443"
+      TRAEFIK_ENTRYPOINTS_WEBACCESSSECURE_HTTP_TLS: "true"
+      TRAEFIK_ENTRYPOINTS_WEBACCESSSECURE_TRANSPORT_RESPONDINGTIMEOUTS_IDLETIMEOUT: 360
+      TRAEFIK_PILOT_DASHBOARD: "false"
+      TRAEFIK_LOG_FORMAT: json
 
 networks:
   backend:

@@ -58,8 +58,7 @@ public class AnalyticsProviderTest {
     when(cmNavigation.getContentId()).thenReturn(NAV_ID);
     when(cmNavigation.getSegment()).thenReturn(SEGMENT);
     Map<String, Object> map = new HashMap<>();
-    map.put("webPropertyId", "UA-12345-678");
-    map.put("domainName", "auto");
+    map.put("measurementId", "G-1234ABCD");
     when(settingsService.settingAsMap(GOOGLE_ANALYTICS, String.class, Object.class, page)).thenReturn(map);
   }
 

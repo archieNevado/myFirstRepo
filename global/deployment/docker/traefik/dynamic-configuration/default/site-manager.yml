@@ -1,0 +1,14 @@
+http:
+  routers:
+    site-manager:
+      entrypoints:
+        - webaccesssecure
+        - webaccessinsecure
+      rule: Host(`site-manager.{{ env "ENVIRONMENT_FQDN"}}`)
+      service: site-manager
+
+  services:
+    site-manager:
+      loadBalancer:
+        servers:
+          - url: http://site-manager:80

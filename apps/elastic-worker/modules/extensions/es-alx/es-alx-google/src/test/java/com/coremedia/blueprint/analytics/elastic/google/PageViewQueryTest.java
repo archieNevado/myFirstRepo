@@ -3,109 +3,122 @@ package com.coremedia.blueprint.analytics.elastic.google;
 import com.coremedia.blueprint.base.analytics.elastic.util.DaysBack;
 import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
 import com.coremedia.blueprint.base.analytics.elastic.util.SettingsUtil;
-import com.google.api.services.analytics.Analytics;
-import com.google.api.services.analytics.model.GaData;
-import com.google.common.collect.ImmutableMap;
+import com.google.analytics.data.v1beta.DateRange;
+import com.google.analytics.data.v1beta.Dimension;
+import com.google.analytics.data.v1beta.DimensionHeader;
+import com.google.analytics.data.v1beta.DimensionValue;
+import com.google.analytics.data.v1beta.Metric;
+import com.google.analytics.data.v1beta.MetricHeader;
+import com.google.analytics.data.v1beta.OrderBy;
+import com.google.analytics.data.v1beta.Row;
+import com.google.analytics.data.v1beta.RunReportRequest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Answers;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.verify;
+import static com.coremedia.blueprint.analytics.elastic.google.GoogleAnalyticsQuery.DATE_PATTERN;
+import static com.coremedia.blueprint.analytics.elastic.google.GoogleAnalyticsQuery.DIMENSION_CONTENT_ID;
+import static com.coremedia.blueprint.analytics.elastic.google.GoogleAnalyticsQuery.METRIC_PAGEVIEWS;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PageViewQueryTest {
-  static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-  private static final int PROFILE_ID = 46635897;
-
-  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-  private Analytics analytics;
+  private static final int PROPERTY_ID = 46635897;
 
   @Test(expected = IllegalArgumentException.class)
   public void testConstructionIllegalProfileId() {
-    //noinspection NullableProblems
     new PageViewQuery(0, 10, 10);
   }
 
   @Test
   public void testDefaultTimeRange() {
-    assertEquals(RetrievalUtil.DEFAULT_TIMERANGE, new PageViewQuery(PROFILE_ID, 0, 10).getTimeRange());
+    assertThat(new PageViewQuery(PROPERTY_ID, 0, 10).getTimeRange()).isEqualTo(RetrievalUtil.DEFAULT_TIMERANGE);
   }
 
   @Test
   public void testDefaultMaxResults() {
-    assertEquals(GoogleAnalyticsQuery.DEFAULT_MAX_RESULTS, new PageViewQuery(PROFILE_ID, 10, 0).getMaxResults());
+    assertThat(new PageViewQuery(PROPERTY_ID, 10, 0).getMaxResults()).isEqualTo(GoogleAnalyticsQuery.DEFAULT_MAX_RESULTS);
   }
 
   @Test
-  public void testGetDataQuery() throws Exception {
+  public void testGetDataQuery() {
     int timeRange = 10;
     int maxResults = 100;
-    final PageViewQuery defaultQuery = new PageViewQuery(PROFILE_ID, timeRange, maxResults);
     final DaysBack daysBack = new DaysBack(timeRange);
-    final Analytics.Data.Ga.Get query = defaultQuery.getDataQuery(analytics);
+    final DateFormat DATE_FORMAT = new SimpleDateFormat(DATE_PATTERN);
+    final PageViewQuery defaultQuery = new PageViewQuery(PROPERTY_ID, timeRange, maxResults);
+    RunReportRequest.Builder query = defaultQuery.getDataQuery();
 
-    verify(query).setMaxResults(maxResults);
-    verify(analytics.data().ga()).get("ga:" + PROFILE_ID,
-            SIMPLE_DATE_FORMAT.format(daysBack.getStartDate()),
-            SIMPLE_DATE_FORMAT.format(daysBack.getEndDate()),
-            GoogleAnalyticsQuery.METRIC_UNIQUE_PAGEVIEWS);
-    verify(query).setDimensions("ga:pageTitle,ga:pagePath,ga:dimension1,ga:dimension2");
-    verify(query).setMetrics("ga:pageviews");
-    verify(query).setSort("-ga:pageviews");
+    assertThat(query.getProperty()).isEqualTo("properties/" + PROPERTY_ID);
+    assertThat(query.getLimit()).isEqualTo(maxResults);
+    assertThat(query.getMetricsList()).contains(Metric.newBuilder().setName(METRIC_PAGEVIEWS).build());
+    assertThat(query.getDateRangesList()).contains(DateRange.newBuilder().setStartDate(DATE_FORMAT.format(daysBack.getStartDate())).setEndDate(DATE_FORMAT.format(daysBack.getEndDate())).build());
+    assertThat(query.getDimensionsList()).contains(Dimension.newBuilder().setName(DIMENSION_CONTENT_ID).build());
+    assertThat(query.getOrderBysList()).contains(OrderBy.newBuilder().setDesc(true).setMetric(OrderBy.MetricOrderBy.newBuilder().setMetricName(METRIC_PAGEVIEWS)).build());
   }
 
   @Test
   public void testCreateQuery() {
     PageViewQuery query = createDefaultQuery();
 
-    assertEquals(30, query.getTimeRange());
-    assertEquals(20, query.getMaxResults());
-    assertEquals(1234, query.getProfileId());
+    assertThat(query.getTimeRange()).isEqualTo(30);
+    assertThat(query.getMaxResults()).isEqualTo(20);
+    assertThat(query.getPropertyId()).isEqualTo(1234);
 
-    assertTrue(query.toString().contains("1234"));
+    assertThat(query.toString()).contains("1234");
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testCreateInvalidQuery() {
-    ImmutableMap<String, Object> settings = ImmutableMap.<String, Object>of(
+    Map<String, Object> settings = Map.of(
             RetrievalUtil.KEY_LIMIT, 20,
             RetrievalUtil.DOCUMENT_PROPERTY_TIME_RANGE, 30
     );
 
-    final PageViewQuery query = new PageViewQuery(SettingsUtil.createProxy(GoogleAnalyticsSettings.class, settings));
-    fail(query + " should be null");
+    new PageViewQuery(SettingsUtil.createProxy(GoogleAnalyticsSettings.class, settings));
   }
 
   @Test
   public void process() {
     PageViewQuery query = createDefaultQuery();
-    List<String> row1 = Arrays.asList("xyz", "contentId1");
-    List<String> row2 = Arrays.asList("abc", "contentId2");
-    List<List<String>> dataList = new ArrayList<>();
-    dataList.add(row1);
-    dataList.add(row2);
-    List<GaData.ColumnHeaders> columnHeaders = Arrays.asList(new GaData.ColumnHeaders().setName("something"), new GaData.ColumnHeaders().setName(GoogleAnalyticsListQuery.DIMENSION_CONTENT_ID));
+    String contentId1 = "1234";
+    String contentId2 = "5678";
 
-    List<String> processedList = query.process(dataList, columnHeaders);
-    assertEquals("contentId1", processedList.get(0));
-    assertEquals("contentId2", processedList.get(1));
+    // ROW 1: (not set), "contentId1"
+    Row.Builder row1 = Row.newBuilder();
+    row1.addDimensionValues(DimensionValue.newBuilder().setValue("").build());
+    row1.addDimensionValues(DimensionValue.newBuilder().setValue(contentId1).build());
+
+    // ROW 2: (not set), "contentId2"
+    Row.Builder row2 = Row.newBuilder();
+    row2.addDimensionValues(DimensionValue.newBuilder().setValue("").build());
+    row2.addDimensionValues(DimensionValue.newBuilder().setValue(contentId2).build());
+
+    List<Row> rows = List.of(row1.build(), row2.build());
+
+    List<DimensionHeader> dimensionHeaders = Arrays.asList(
+            DimensionHeader.newBuilder().setName("something").build(),
+            DimensionHeader.newBuilder().setName(DIMENSION_CONTENT_ID).build());
+    List<MetricHeader> metricHeaders = List.of(MetricHeader.newBuilder().setName(METRIC_PAGEVIEWS).build());
+
+    List<String> processedList = query.process(rows, dimensionHeaders, metricHeaders);
+
+    assertThat(processedList.get(0)).isEqualTo(contentId1);
+    assertThat(processedList.get(1)).isEqualTo(contentId2);
   }
 
-  private PageViewQuery createDefaultQuery() {
-    ImmutableMap<String, Object> settings = ImmutableMap.<String, Object>of(
+  private static PageViewQuery createDefaultQuery() {
+    Map<String, Object> settings = Map.of(
             RetrievalUtil.KEY_LIMIT, 20,
             RetrievalUtil.DOCUMENT_PROPERTY_TIME_RANGE, 30,
-            GoogleAnalyticsQuery.KEY_PID, 1234
+            GoogleAnalyticsQuery.KEY_PROPERTY_ID, 1234
     );
     return new PageViewQuery(SettingsUtil.createProxy(GoogleAnalyticsSettings.class, settings));
-  }}
+  }
+}

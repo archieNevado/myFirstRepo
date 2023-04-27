@@ -4,7 +4,6 @@
 ##   be able to use those mounts in any docker swarm, DooD, K8s setups.   ##
 ##                                                                        ##
 ############################################################################
-version: "3.4"
 services:
 
   content-management-server:

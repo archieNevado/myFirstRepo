@@ -1,13 +1,11 @@
 /**
  * Constructor of an object containing Google Analytics account data.
  *
- * @param webPropertyId the ID of the Google Analytics "web property" (e.g. 'UA-23708492-1') for which the page
+ * @param measurementId the measurementId of the Google Analytics 4 account (e.g. 'G-BW1234ABCD') for which the page
  *    view will be counted
- * @param domainName domainName top level domain of the tracked page view
  */
-function GaAccountData(webPropertyId, domainName) {
-  this.webPropertyId = webPropertyId;
-  this.domainName = domainName;
+function GaAccountData(measurementId) {
+  this.measurementId = measurementId;
 }
 
 /**
@@ -44,7 +42,7 @@ function GaPageviewData(contentId, contentType, navigationPath, pageUrl, queryPa
  * @param category name of the category of the event (e.g. 'Videos')
  * @param action name of the action that has been performed  (e.g 'Play pressed')
  * @param name (optional) additional information used to specify the
- *    tracked event (e.g. 'Video diary: About our company')
+ *    tracked event (e.g. content id)
  * @param value (optional) positive integer value to associate with
  *    the event (e.g. the number of seconds the video took to download)
  */
@@ -60,31 +58,18 @@ function GaEventData(category, action, name, value) {
  *
  * Note that the actual tracking call will only be fired if Google's tracking library ('ga.js') is completely loaded.
  *
- * @param ga the Google Analytics command queue
+ * @param gtag the Google Analytics command queue
  * @param gaAccountData an object containing the Google Analytics account data
  * @param gaPageviewData an object containing the data about the view that is to be tracked
- * @param trackerName (optional) the symbolic name of the Google Analytics tracker to be used
  */
-function gaTrackPageview(ga, gaAccountData, gaPageviewData, trackerName) {
-
-  var t = _gaTrackerPrefix(trackerName);
+function gaTrackPageview(gtag, gaAccountData, gaPageviewData) {
 
   //set Account
-  if (trackerName && trackerName.length > 0) {
-    ga('create', gaAccountData.webPropertyId, gaAccountData.domainName, {'name': trackerName});
-  } else {
-    ga('create', gaAccountData.webPropertyId, gaAccountData.domainName);
-  }
-  ga(t.concat('set'), 'anonymizeIp', true);
-  if (!gaPageviewData.disableAdvertisingFeaturesPlugin) {
-    ga(t.concat('require'), 'displayfeatures');
-  }
+  gtag('config', gaAccountData.measurementId);
 
-  //set custom vars
-  ga(t.concat('set'), 'dimension1', gaPageviewData.contentId);
-  ga(t.concat('set'), 'dimension2', gaPageviewData.contentType);
-  ga(t.concat('set'), 'dimension3', gaPageviewData.navigationPath);
-  ga(t.concat('set'), 'dimension4', gaPageviewData.userSegments);
+  if (!gaPageviewData.disableAdvertisingFeaturesPlugin) {
+    gtag('set', 'allow_google_signals', true);
+  }
 
   // if a search was performed on the website, retain the search query
   var query = "";
@@ -93,7 +78,14 @@ function gaTrackPageview(ga, gaAccountData, gaPageviewData, trackerName) {
   }
 
   //send page view
-  ga(t.concat('send'), 'pageview', gaPageviewData.pageUrl + query);
+  gtag('event', 'page_view', {
+    page_location: gaPageviewData.pageUrl + query,
+    dimension1: gaPageviewData.contentId,
+    dimension2: gaPageviewData.contentType,
+    dimension3: gaPageviewData.navigationPath,
+    dimension4: gaPageviewData.userSegments,
+    pagePathLevel1: getPagePathLevel1(gaPageviewData.pageUrl),
+  })
 }
 
 /**
@@ -103,46 +95,38 @@ function gaTrackPageview(ga, gaAccountData, gaPageviewData, trackerName) {
  * @param gaAccountData an object containing the Google Analytics account data
  * @param gaPageviewData an object containing the data about the view that is to be associated with the event
  * @param gaEventData an object containg the data about the event that is to be tracked
- * @param trackerName (optional) the symbolic name of the Google Analytics tracker to be used
  */
-function gaTrackEvent(ga, gaAccountData, gaPageviewData, gaEventData, trackerName) {
-
-  var t = _gaTrackerPrefix(trackerName);
+function gaTrackEvent(ga, gaAccountData, gaPageviewData, gaEventData) {
 
   //set Account
-  if (trackerName && trackerName.length > 0) {
-    ga('create', gaAccountData.webPropertyId, gaAccountData.domainName, {'name': trackerName});
-  } else {
-    ga('create', gaAccountData.webPropertyId, gaAccountData.domainName);
-  }
-  ga(t.concat('set'), 'anonymizeIp', true);
+  gtag('config', gaAccountData.measurementId);
+
   if (!gaPageviewData.disableAdvertisingFeaturesPlugin) {
-    ga(t.concat('require'), 'displayfeatures');
+    gtag('set', 'allow_google_signals', true);
   }
 
-  //set custom vars
-  ga(t.concat('set'), 'dimension1', gaPageviewData.contentId);
-  ga(t.concat('set'), 'dimension2', gaPageviewData.contentType);
-  ga(t.concat('set'), 'dimension3', gaPageviewData.navigationPath);
-  ga(t.concat('set'), 'dimension4', gaPageviewData.userSegments);
-
-  //sent event
-  ga(t.concat('send'), 'event', gaEventData.category, gaEventData.action, gaEventData.name, gaEventData.value);
+  //send event
+  gtag('event', 'cm_event', {
+    eventCategory: gaEventData.category,
+    eventAction: gaEventData.action,
+    eventLabel: gaEventData.name,
+    eventValue: gaEventData.value,
+    dimension1: gaPageviewData.contentId,
+    dimension2: gaPageviewData.contentType,
+    dimension3: gaPageviewData.navigationPath,
+    dimension4: gaPageviewData.userSegments,
+    pagePathLevel1: getPagePathLevel1(gaPageviewData.pageUrl),
+  })
 }
 
-
-/**
- * Helper function to create a "tracker object" to be used in commands on Google's "ga" object.
- *
- * @param trackerName the symbolic name of the "tracker object" (see link below)
- *
- * @return tracker prefix for succeeding 'ga' commands
- *
- * @see &lt;a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/advanced"&gt;Reference for ga&lt;/a&gt;
- */
-function _gaTrackerPrefix(trackerName) {
-  return (trackerName && trackerName.length > 0)
-      ? trackerName.concat('.')
-      : '';
+function getPagePathLevel1(pagePath) {
+  var pagePathLevel1 = '';
+  var parts = pagePath.split('/')
+  if (parts !== undefined && parts.length > 0) {
+    pagePathLevel1 = '/' + parts[1];
+    if (parts.length > 1) {
+      pagePathLevel1 = pagePathLevel1 + '/';
+    }
+  }
+  return pagePathLevel1;
 }
-
