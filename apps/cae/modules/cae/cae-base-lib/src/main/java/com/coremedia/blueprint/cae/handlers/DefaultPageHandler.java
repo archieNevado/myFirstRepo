@@ -190,7 +190,7 @@ public class DefaultPageHandler extends PageHandlerBase {
     Navigation context = getNavigation(linkable);
 
     if (context == null) {
-      LOG.warn("Linkable {} has no navigation context, cannot build link.", linkable);
+      LOG.info("Linkable {} has no navigation context, cannot build link.", linkable);
       return Optional.empty();
     }
 

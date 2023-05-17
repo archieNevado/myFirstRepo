@@ -21,7 +21,11 @@ import java.util.List;
 
 import static java.lang.invoke.MethodHandles.lookup;
 
+/**
+ * @deprecated use {@link CommerceRefAdapterCmsOnly} instead
+ */
 @DefaultAnnotation(NonNull.class)
+@Deprecated(since = "2304")
 public class CommerceRefAdapter {
   private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
 

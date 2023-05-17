@@ -1,6 +1,5 @@
 import RemoteService from "@coremedia/studio-client.client-core-impl/data/impl/RemoteService";
 import EncodingUtil from "@coremedia/studio-client.client-core/util/EncodingUtil";
-import Editor_properties from "@coremedia/studio-client.main.editor-components/Editor_properties";
 import DateUtil from "@jangaroo/ext-ts/Date";
 import Model from "@jangaroo/ext-ts/data/Model";
 import NodeInterface from "@jangaroo/ext-ts/data/NodeInterface";
@@ -8,6 +7,7 @@ import Format from "@jangaroo/ext-ts/util/Format";
 import TableView from "@jangaroo/ext-ts/view/Table";
 import Config from "@jangaroo/runtime/Config";
 import uint from "@jangaroo/runtime/uint";
+import BaseModels_properties from "@coremedia/studio-client.base-models/BaseModels_properties";
 
 interface ZipFileEntry {
   name: string;
@@ -83,7 +83,7 @@ class BlobMetadataUtil {
 
   static fileDateRenderer(value: any, metaData: any, record: any): string {
     if (record.data.time) {
-      return DateUtil.format(record.data.time, Editor_properties.dateFormat);
+      return DateUtil.format(record.data.time, BaseModels_properties.dateFormat);
     }
 
     return "";

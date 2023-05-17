@@ -14,7 +14,7 @@
   <#-- page -->
   <#local localParams = localParams + { "page": params.page!cmpage } />
   <#-- view -->
-  <#local localParams = localParams + { "view": params.view!searchResultPageView!"asSearchResultPage" } />
+  <#local localParams = localParams + { "view": params.view!searchResultPageView!"asResultPage" } />
 
   <#-- --- optional params --- -->
 

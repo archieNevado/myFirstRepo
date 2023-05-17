@@ -19,7 +19,7 @@ public final class TestRepoConstants {
   public static final Integer ROOT_CHANNEL_ID = 111112;
   public static final String ROOT_CHANNEL_SEGMENT = "root-en";
 
-
+  public static final String CATALOG_ID = "catalog";
   public static final int PRODUCT_LIST_ID = 111116;
   public static final String CATEGORY_EXTERNAL_ID = "cool-stuff";
   public static final String CATEGORY_REFERENCE = "mock:///catalog/category/" + CATEGORY_EXTERNAL_ID;
@@ -29,5 +29,13 @@ public final class TestRepoConstants {
 
   public static final String PRODUCT_EXTERNAL_ID = "cool-product";
   public static final String PRODUCT_REFERENCE = "mock:///catalog/product/" + PRODUCT_EXTERNAL_ID;
+
+  public static final String ARTICLE_ID = "412";
+  public static final String PICTURE_ID = "416";
+  public static final String DOWNLOAD_ID = "418";
+  public static final String VISUAL_ID = "420";
+
+  public static final String GRID_NAME = "Single Column Single Slot Test Layout";
+  public static final String PDPPAGEGRID_CSS_CLASS_NAME = "test-setting";
 
 }

@@ -6,7 +6,7 @@ import Button from "@jangaroo/ext-ts/button/Button";
 import Container from "@jangaroo/ext-ts/container/Container";
 import Item from "@jangaroo/ext-ts/menu/Item";
 import Menu from "@jangaroo/ext-ts/menu/Menu";
-import { as, bind, cast } from "@jangaroo/runtime";
+import { as, bind, cast, is } from "@jangaroo/runtime";
 import Config from "@jangaroo/runtime/Config";
 import AnalyticsStudioPlugin_properties from "./AnalyticsStudioPlugin_properties";
 import OpenAnalyticsDeepLinkUrlButton from "./OpenAnalyticsDeepLinkUrlButton";
@@ -21,6 +21,12 @@ class AnalyticsDeepLinkButtonContainerBase extends Container {
   #onBeforeRender(): void {
     if (this.items && this.items.length > 1) {
       this.#renderButtonMenu();
+    } else if (this.items.length === 1) {
+      //if there is only a single button instead of a menu, show it without text
+      const item = this.items.get(0);
+      if (is(item, Button)) {
+        cast(Button, item).setText("");
+      }
     }
   }
 

@@ -50,7 +50,8 @@ public abstract class AbstractAnalyticsSettingsProvider implements AnalyticsSett
 
   @Override
   public String getReportUrlFor(Content content) {
-    if(content.getType().isSubtypeOf("CMLinkable")) {
+    var contentType = content.getType();
+    if(contentType.isSubtypeOf("CMLinkable")) {
       final Content navigation = contextStrategy.findAndSelectContextFor(content, null);
       if(null != navigation) {
         UriComponentsBuilder uriComponentsBuilder = pageHandler.buildLinkForPage(content, navigation);
@@ -60,19 +61,16 @@ public abstract class AbstractAnalyticsSettingsProvider implements AnalyticsSett
             liveCaeSettings.fillIn(uriComponentsBuilder);
           }
 
-          final String linkToSelf = uriComponentsBuilder.build().toUriString();
-          final String reportURL = buildReportUrl(content, navigation, linkToSelf);
-
-          LOG.info("report URL for content {} and provider {} is: {}", content, getServiceKey(), reportURL);
-          return reportURL;
+          return buildReportUrl(content, navigation, uriComponentsBuilder.build().toUriString());
         } else {
-          LOG.info("cannot generate report URL for content {} with navigation {}", content, navigation);
+          LOG.debug("Cannot generate report URL for content {} with navigation {}, because the responsible " +
+                  "link builder returned 'null'.", content, navigation);
         }
       } else {
-        LOG.info("cannot generate report URL for content {}: unable to find navigation context", content);
+        LOG.debug("Cannot generate report URL for content {}: unable to find navigation context.", content);
       }
-    } else {
-      LOG.debug("cannot generate report URL for non-linkable content {} of type {}", content, content.getType().getName());
+    } else if (LOG.isDebugEnabled()){
+      LOG.debug("Cannot generate report URL for non-linkable content {} of type {}.", content, contentType.getName());
     }
     return null;
   }
@@ -104,12 +102,13 @@ public abstract class AbstractAnalyticsSettingsProvider implements AnalyticsSett
 
     if (!settings.isEmpty()) {
       String reportURL = buildReportUrl(settings, linkToSelf);
-      if(LOG.isInfoEnabled()) {
-        LOG.info("generated report URL {} for content {} with settings {}", reportURL, content, hideSensitiveData(settings));
+      if (LOG.isInfoEnabled()) {
+        LOG.info("Generated report URL {} for content {} and provider '{}' with settings {}.", reportURL, content,
+                serviceKey, hideSensitiveData(settings));
       }
       return reportURL;
     } else {
-      LOG.debug("source content {} has no settings for analytics provider {}", content, serviceKey);
+      LOG.debug("Source content {} has no settings for analytics provider '{}'.", content, serviceKey);
     }
     return null;
   }

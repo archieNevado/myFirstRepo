@@ -149,6 +149,7 @@ import graphql.schema.idl.SchemaDirectiveWiring;
 import graphql.schema.idl.SchemaGenerator;
 import graphql.schema.idl.TypeDefinitionRegistry;
 import graphql.schema.idl.WiringFactory;
+import graphql.schema.visibility.NoIntrospectionGraphqlFieldVisibility;
 import graphql.spring.web.servlet.ExecutionResultHandler;
 import graphql.spring.web.servlet.GraphQLInvocation;
 import org.apache.commons.io.IOUtils;
@@ -926,7 +927,7 @@ public class CaasConfig implements WebMvcConfigurer {
             .wiringFactory(wiringFactory);
     // register the directive implementations taking their bean name as directive name
     directiveWirings.forEach(builder::directive);
-    RuntimeWiring wiring = builder.build();
+    RuntimeWiring wiring = caasGraphqlConfigurationProperties.isIntrospectionEnabled() ? builder.build() : builder.fieldVisibility(NoIntrospectionGraphqlFieldVisibility.NO_INTROSPECTION_FIELD_VISIBILITY).build();
 
     return schemaGeneratorList.stream()
             // Only one schema generator may be active at a time. In case multiple plugins try to register its schema generator,

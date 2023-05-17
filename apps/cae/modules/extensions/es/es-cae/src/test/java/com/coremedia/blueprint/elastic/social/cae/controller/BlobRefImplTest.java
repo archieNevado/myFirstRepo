@@ -1,16 +1,16 @@
 package com.coremedia.blueprint.elastic.social.cae.controller;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class BlobRefImplTest {
+class BlobRefImplTest {
 
   @Test
-  public void test() {
+  void test() {
     String id = "id";
     BlobRefImpl ref = new BlobRefImpl(id);
 
-    assertEquals(id, ref.getId());
+    assertThat(ref.getId()).isEqualTo(id);
   }
 }

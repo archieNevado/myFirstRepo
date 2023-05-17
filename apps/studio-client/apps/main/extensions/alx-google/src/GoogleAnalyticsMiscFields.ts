@@ -31,9 +31,7 @@ class GoogleAnalyticsMiscFields extends PropertyFieldGroup {
           },
         }),
         Config(StringPropertyField, { propertyName: "localSettings.googleAnalytics.pageReport" }),
-        Config(IntegerPropertyField, { propertyName: "localSettings.googleAnalytics.accountId" }),
-        Config(IntegerPropertyField, { propertyName: "localSettings.googleAnalytics.wpid" }),
-        Config(IntegerPropertyField, { propertyName: "localSettings.googleAnalytics.pid" }),
+        Config(IntegerPropertyField, { propertyName: "localSettings.googleAnalytics.propertyId" }),
       ],
 
     }), config));

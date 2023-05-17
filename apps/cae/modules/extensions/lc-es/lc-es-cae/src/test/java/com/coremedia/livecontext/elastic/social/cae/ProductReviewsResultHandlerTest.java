@@ -38,14 +38,15 @@ import com.coremedia.livecontext.fragment.FragmentParameters;
 import com.coremedia.livecontext.fragment.FragmentParametersFactory;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
@@ -59,32 +60,31 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import static com.coremedia.blueprint.base.livecontext.ecommerce.id.CommerceIdParserHelper.parseCommerceIdOrThrow;
 import static com.coremedia.elastic.social.api.ContributionType.ANONYMOUS;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class ProductReviewsResultHandlerTest {
+@ExtendWith(MockitoExtension.class)
+class ProductReviewsResultHandlerTest {
 
-  private String contextId = "5678";
-  private String targetId = "vendor:///catalog/product/1234";
-  private String text = "test test test test test test test";
-  private String title = "title";
-  private int rating = 5;
+  private final String contextId = "5678";
+  private final String targetId = "vendor:///catalog/product/1234";
+  private final String text = "test test test test test test test";
+  private final String title = "title";
+  private final int rating = 5;
 
   @InjectMocks
   private ProductReviewsResultHandler handler;
@@ -101,8 +101,8 @@ public class ProductReviewsResultHandlerTest {
   @Mock
   private PageResourceBundleFactory resourceBundleFactory;
 
-  // @Mock   Möööp... ResourceBundle is all final, cannot be mocked
-  private MockResourceBundle resourceBundle = new MockResourceBundle();
+  @Mock
+  private ResourceBundle resourceBundle;
 
   @Mock
   private CommunityUserService communityUserService;
@@ -157,10 +157,10 @@ public class ProductReviewsResultHandlerTest {
   @Mock
   private CMNavigation cmNavigation;
 
-  @Before
-  public void setup() {
+  @BeforeEach
+  void setup() {
     request = new MockHttpServletRequest();
-    ServletRequestAttributes servletRequestAttributes = new ServletRequestAttributes(request);
+    RequestAttributes servletRequestAttributes = new ServletRequestAttributes(request);
     RequestContextHolder.setRequestAttributes(servletRequestAttributes);
 
     handler.setElasticSocialUserHelper(new ElasticSocialUserHelper(communityUserService));
@@ -177,32 +177,31 @@ public class ProductReviewsResultHandlerTest {
     setAttribute("CM_FRAGMENT_CONTEXT", fragmentContext);
 
     setAttribute("guid", "1234+5");
-    when(communityUserService.getUserById("1234")).thenReturn(user);
+    lenient().when(communityUserService.getUserById("1234")).thenReturn(user);
 
-    when(contentRepository.getContent(IdHelper.formatContentId(contextId))).thenReturn(navigationContent);
-    when(contentBeanFactory.createBeanFor(navigationContent, ContentBean.class)).thenReturn(cmNavigation);
-    when(cmNavigation.getContext()).thenReturn(context);
+    lenient().when(contentRepository.getContent(IdHelper.formatContentId(contextId))).thenReturn(navigationContent);
+    lenient().when(contentBeanFactory.createBeanFor(navigationContent, ContentBean.class)).thenReturn(cmNavigation);
+    lenient().when(cmNavigation.getContext()).thenReturn(context);
 
-    when(elasticSocialPlugin.getElasticSocialConfiguration(any())).thenReturn(elasticSocialConfiguration);
-    when(elasticSocialConfiguration.isFeedbackEnabled()).thenReturn(true);
-    when(elasticSocialConfiguration.getReviewType()).thenReturn(ANONYMOUS);
-    when(elasticSocialConfiguration.isWritingReviewsEnabled()).thenReturn(true);
-    when(elasticSocialConfiguration.isAnonymousReviewingEnabled()).thenReturn(true);
+    lenient().when(elasticSocialPlugin.getElasticSocialConfiguration(any(Object[].class))).thenReturn(elasticSocialConfiguration);
+    lenient().when(elasticSocialConfiguration.isFeedbackEnabled()).thenReturn(true);
+    lenient().when(elasticSocialConfiguration.getReviewType()).thenReturn(ANONYMOUS);
+    lenient().when(elasticSocialConfiguration.isWritingReviewsEnabled()).thenReturn(true);
+    lenient().when(elasticSocialConfiguration.isAnonymousReviewingEnabled()).thenReturn(true);
 
-    resourceBundle = new MockResourceBundle();
-    when(resourceBundleFactory.resourceBundle(any(Navigation.class), nullable(User.class))).thenReturn(resourceBundle);
+    lenient().when(resourceBundleFactory.resourceBundle(any(Navigation.class), nullable(User.class))).thenReturn(resourceBundle);
 
-    when(catalogService.findProductById(any(), any(StoreContext.class))).thenReturn(product);
+    lenient().when(catalogService.findProductById(any(), any(StoreContext.class))).thenReturn(product);
 
     setAttribute(SiteHelper.SITE_KEY, site);
 
     BaseCommerceIdProvider idProvider = TestVendors.getIdProvider("vendor");
 
     CommerceConnection commerceConnection = mock(CommerceConnection.class);
-    when(commerceConnection.getIdProvider()).thenReturn(idProvider);
-    when(commerceConnection.getCatalogService()).thenReturn(catalogService);
+    lenient().when(commerceConnection.getIdProvider()).thenReturn(idProvider);
+    lenient().when(commerceConnection.getCatalogService()).thenReturn(catalogService);
 
-    when(storeContext.getConnection()).thenReturn(commerceConnection);
+    lenient().when(storeContext.getConnection()).thenReturn(commerceConnection);
 
     CurrentStoreContext.set(storeContext, request);
   }
@@ -211,7 +210,7 @@ public class ProductReviewsResultHandlerTest {
     request.setAttribute(key, value);
   }
 
-  @After
+  @AfterEach
   public void cleanUp() {
     UserContext.clear();
     CurrentStoreContext.remove();
@@ -226,20 +225,20 @@ public class ProductReviewsResultHandlerTest {
     when(elasticSocialService.getReviews(product, user)).thenReturn(reviews);
     ModelAndView result = handler.getReviews(contextId, targetId, view, request);
 
-    assertEquals(view, result.getViewName());
-    assertEquals(cmNavigation, result.getModelMap().get(NavigationLinkSupport.ATTR_NAME_CMNAVIGATION));
+    assertThat(result.getViewName()).isEqualTo(view);
+    assertThat(result.getModelMap().get(NavigationLinkSupport.ATTR_NAME_CMNAVIGATION)).isEqualTo(cmNavigation);
 
     ProductReviewsResult productReviewsResult = getModel(result, ProductReviewsResult.class);
     Product target = (Product) productReviewsResult.getTarget();
-    assertEquals(product, target);
+    assertThat(target).isEqualTo(product);
 
     List<Review> reviewsResult = productReviewsResult.getReviews();
 
-    assertEquals(reviews, reviewsResult);
+    assertThat(reviewsResult).isEqualTo(reviews);
     // check if configuration is what configured in setup
-    assertTrue(productReviewsResult.isEnabled());
-    assertTrue(productReviewsResult.isWritingContributionsEnabled());
-    assertTrue(productReviewsResult.isAnonymousContributingEnabled());
+    assertThat(productReviewsResult.isEnabled()).isTrue();
+    assertThat(productReviewsResult.isWritingContributionsEnabled()).isTrue();
+    assertThat(productReviewsResult.isAnonymousContributingEnabled()).isTrue();
     verify(elasticSocialService).getReviews(any(Product.class), any(CommunityUser.class));
 
     // make sure reviews are loaded lazily when getReviews is called
@@ -248,68 +247,68 @@ public class ProductReviewsResultHandlerTest {
   }
 
   @Test
-  public void createReview() {
+  void createReview() {
     when(elasticSocialService.createReview(eq(user), any(Product.class), eq(text), eq(title), eq(rating), eq(ModerationType.POST_MODERATION), nullable(List.class), any(Navigation.class))).thenReturn(review);
     when(elasticSocialConfiguration.getReviewModerationType()).thenReturn(ModerationType.POST_MODERATION);
     ModelAndView modelAndView = handler.createReview(contextId, targetId, text, title, rating, request);
 
     HandlerInfo resultModel = getModel(modelAndView, HandlerInfo.class);
-    assertTrue(resultModel.getErrors().isEmpty());
-    assertEquals(1, resultModel.getMessages().size());
-    assertTrue(resultModel.isSuccess());
+    assertThat(resultModel.getErrors()).isEmpty();
+    assertThat(resultModel.getMessages()).hasSize(1);
+    assertThat(resultModel.isSuccess()).isTrue();
     verify(elasticSocialService).createReview(eq(user), any(Product.class), eq(text), eq(title), eq(rating), eq(ModerationType.POST_MODERATION), nullable(List.class), any(Navigation.class));
-    verifyMessage(ContributionMessageKeys.REVIEW_FORM_SUCCESS);
+    verify(resourceBundle).getString(ContributionMessageKeys.REVIEW_FORM_SUCCESS);
   }
 
   @Test
-  public void createReviewRatingNull() {
+  void createReviewRatingNull() {
     ModelAndView modelAndView = handler.createReview(contextId, targetId, text, title, null, request);
 
     HandlerInfo resultModel = getModel(modelAndView, HandlerInfo.class);
-    assertTrue(resultModel.getErrors().isEmpty());
-    assertEquals(1, resultModel.getMessages().size());
-    assertFalse(resultModel.isSuccess());
+    assertThat(resultModel.getErrors()).isEmpty();
+    assertThat(resultModel.getMessages()).hasSize(1);
+    assertThat(resultModel.isSuccess()).isFalse();
     verify(elasticSocialService, never()).createReview(any(CommunityUser.class), any(Product.class), anyString(), anyString(), anyInt(), any(ModerationType.class), anyList(), any(Navigation.class));
-    verifyNotMessage(ContributionMessageKeys.REVIEW_FORM_SUCCESS);
+    verify(resourceBundle, never()).getString(ContributionMessageKeys.REVIEW_FORM_SUCCESS);
   }
 
   @Test
-  public void createReviewDisabled() {
+  void createReviewDisabled() {
     when(elasticSocialConfiguration.isWritingReviewsEnabled()).thenReturn(false);
     ModelAndView modelAndView = handler.createReview(contextId, targetId, text, title, rating, request);
 
     HandlerInfo resultModel = getModel(modelAndView, HandlerInfo.class);
-    assertTrue(resultModel.getErrors().isEmpty());
-    assertEquals(1, resultModel.getMessages().size());
-    assertFalse(resultModel.isSuccess());
+    assertThat(resultModel.getErrors()).isEmpty();
+    assertThat(resultModel.getMessages()).hasSize(1);
+    assertThat(resultModel.isSuccess()).isFalse();
     verify(elasticSocialService, never()).createReview(any(CommunityUser.class), any(Product.class), anyString(), anyString(), anyInt(), any(ModerationType.class), anyList(), any(Navigation.class));
-    verifyNotMessage(ContributionMessageKeys.REVIEW_FORM_SUCCESS);
+    verify(resourceBundle, never()).getString(ContributionMessageKeys.REVIEW_FORM_SUCCESS);
   }
 
   @Test
-  public void createReviewAnonymousDisabled() {
+  void createReviewAnonymousDisabled() {
     when(elasticSocialConfiguration.isAnonymousReviewingEnabled()).thenReturn(false);
     when(user.isAnonymous()).thenReturn(true);
     ModelAndView modelAndView = handler.createReview(contextId, targetId, text, title, rating, request);
 
     HandlerInfo resultModel = getModel(modelAndView, HandlerInfo.class);
-    assertTrue(resultModel.getErrors().isEmpty());
-    assertEquals(1, resultModel.getMessages().size());
-    assertFalse(resultModel.isSuccess());
+    assertThat(resultModel.getErrors()).isEmpty();
+    assertThat(resultModel.getMessages()).hasSize(1);
+    assertThat(resultModel.isSuccess()).isFalse();
     verify(elasticSocialService, never()).createReview(any(CommunityUser.class), any(Product.class), anyString(), anyString(), anyInt(), any(ModerationType.class), anyList(), any(Navigation.class));
-    verifyNotMessage(ContributionMessageKeys.REVIEW_FORM_SUCCESS);
+    verify(resourceBundle, never()).getString(ContributionMessageKeys.REVIEW_FORM_SUCCESS);
   }
 
   @Test
-  public void getReviewsPlaceholder() {
+  void getReviewsPlaceholder() {
     ProductReviewsResult reviewsResult = handler.getReviews(page, request);
 
-    assertNotNull(reviewsResult);
-    assertEquals(product, reviewsResult.getTarget());
+    assertThat(reviewsResult).isNotNull();
+    assertThat(reviewsResult.getTarget()).isEqualTo(product);
   }
 
   @Test
-  public void buildLink() throws URISyntaxException {
+  void buildLink() throws URISyntaxException {
     Map<String, Object> linkParameters = new HashMap<>();
     List<String> pathList = new ArrayList<>();
     String path = "path/" + contextId;
@@ -325,8 +324,8 @@ public class ProductReviewsResultHandlerTest {
     ProductReviewsResult productReviewsResult = new ProductReviewsResult(product);
     UriComponents uriComponents = handler.buildLink(productReviewsResult, uriTemplate, linkParameters, request);
 
-    assertNotNull(uriComponents);
-    assertEquals(path, uriComponents.getPath());
+    assertThat(uriComponents).isNotNull();
+    assertThat(uriComponents.getPath()).isEqualTo(path);
   }
 
   private <T> T getModel(ModelAndView modelAndView, Class<T> type) {
@@ -338,13 +337,5 @@ public class ProductReviewsResultHandlerTest {
     Object model = modelMap.get(key);
     // assertTrue(model instanceof type);
     return (T) model; // NO_SONAR
-  }
-
-  private void verifyMessage(String key) {
-    assertTrue(resourceBundle.invokedFor(key));
-  }
-
-  private void verifyNotMessage(String key) {
-    assertFalse(resourceBundle.invokedFor(key));
   }
 }

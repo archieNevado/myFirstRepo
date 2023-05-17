@@ -7,6 +7,9 @@ import { AnyFunction } from "@jangaroo/runtime/types";
 import CatalogObject from "./CatalogObject";
 import CatalogObjectPropertyNames from "./CatalogObjectPropertyNames";
 import Store from "./Store";
+import RemoteBeanUtil from "@coremedia/studio-client.client-core/data/RemoteBeanUtil";
+import beanFactory from "@coremedia/studio-client.client-core/data/beanFactory";
+import { defaultPictureService } from "@coremedia/studio-client.default-picture-service";
 
 class CatalogObjectImpl extends RemoteBeanImpl implements CatalogObject, ContentProxy {
 
@@ -22,10 +25,12 @@ class CatalogObjectImpl extends RemoteBeanImpl implements CatalogObject, Content
       return super.get(property);
     } catch (e) {
       if (is(e, Error)) {
-      // catalog objects such as marketing spots do not use stable IDs and may vanish any time :(
+        // catalog objects such as marketing spots do not use stable IDs and may vanish any time :(
         trace("[INFO] ignoring error while accesing property", property, e);
         return null;
-      } else throw e;
+      } else {
+        throw e;
+      }
     }
   }
 
@@ -76,15 +81,22 @@ class CatalogObjectImpl extends RemoteBeanImpl implements CatalogObject, Content
     }
 
     super.invalidate(() => {
+      const extraInvalidations = [];
+
       const content = this.getContent();
-      if (content && content.getIssues()) {
-        content.getIssues().invalidate(callback);
-      } else if (is(callback, Function)) {
-        callback();
+      if (content) {
+        if (content.getIssues()) {
+          extraInvalidations.push(content.getIssues());
+        }
+
+        extraInvalidations.push(beanFactory._.getRemoteBean(defaultPictureService.getUri(content.getUriPath())));
       }
+
+      RemoteBeanUtil.invalidateAll(is(callback, Function) ? callback : () => {}, extraInvalidations);
     });
   }
 }
+
 mixin(CatalogObjectImpl, CatalogObject, ContentProxy);
 
 export default CatalogObjectImpl;

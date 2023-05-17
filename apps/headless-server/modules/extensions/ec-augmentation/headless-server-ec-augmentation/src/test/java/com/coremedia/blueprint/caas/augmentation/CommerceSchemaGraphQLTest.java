@@ -10,10 +10,15 @@ import com.coremedia.caas.media.TransformationServiceConfiguration;
 import com.coremedia.caas.richtext.RichtextTransformerRegistry;
 import com.coremedia.caas.web.controller.graphql.GraphQLController;
 import com.coremedia.caas.wrapper.UrlPathFormater;
+import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.cap.multisite.Site;
+import com.coremedia.cap.multisite.SitesService;
+import com.coremedia.livecontext.asset.AssetSearchService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.solr.client.solrj.SolrClient;
 import org.dataloader.CacheMap;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -33,13 +38,26 @@ import org.springframework.graphql.test.tester.WebGraphQlTester;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import static com.coremedia.blueprint.caas.augmentation.TestRepoConstants.ARTICLE_ID;
 import static com.coremedia.blueprint.caas.augmentation.TestRepoConstants.AUGMENTED_PAGE_EXTERNAL_ID;
 import static com.coremedia.blueprint.caas.augmentation.TestRepoConstants.AUGMENTED_PAGE_ID;
+import static com.coremedia.blueprint.caas.augmentation.TestRepoConstants.CATALOG_ID;
 import static com.coremedia.blueprint.caas.augmentation.TestRepoConstants.CATEGORY_EXTERNAL_ID;
 import static com.coremedia.blueprint.caas.augmentation.TestRepoConstants.CATEGORY_REFERENCE;
+import static com.coremedia.blueprint.caas.augmentation.TestRepoConstants.DOWNLOAD_ID;
+import static com.coremedia.blueprint.caas.augmentation.TestRepoConstants.GRID_NAME;
 import static com.coremedia.blueprint.caas.augmentation.TestRepoConstants.MASTER_SITE_ID;
+import static com.coremedia.blueprint.caas.augmentation.TestRepoConstants.PDPPAGEGRID_CSS_CLASS_NAME;
+import static com.coremedia.blueprint.caas.augmentation.TestRepoConstants.PICTURE_ID;
+import static com.coremedia.blueprint.caas.augmentation.TestRepoConstants.PRODUCT_EXTERNAL_ID;
 import static com.coremedia.blueprint.caas.augmentation.TestRepoConstants.PRODUCT_LIST_ID;
 import static com.coremedia.blueprint.caas.augmentation.TestRepoConstants.ROOT_CHANNEL_SEGMENT;
+import static com.coremedia.blueprint.caas.augmentation.TestRepoConstants.VISUAL_ID;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest(classes = {
         HeadlessAugmentationConfiguration.class,
@@ -75,13 +93,20 @@ class CommerceSchemaGraphQLTest {
   SolrClient solrClient;
   @MockBean
   RichtextTransformerRegistry richtextTransformerRegistry;
+  @MockBean
+  AssetSearchService assetSearchService;
 
+  @Autowired
+  ContentRepository contentRepository;
+  @Autowired
+  SitesService sitesService;
   @Autowired
   private WebTestClient webTestClient;
   private WebGraphQlTester webGraphQlTester;
+  private Site site;
 
   @BeforeAll
-  public void setUp() {
+  void setUp() {
     webGraphQlTester = HttpGraphQlTester.builder(
                     webTestClient
                             .mutate()
@@ -89,6 +114,17 @@ class CommerceSchemaGraphQLTest {
             )
             .header("Content-Type", "application/json")
             .build();
+    site = Objects.requireNonNull(sitesService.getSite(MASTER_SITE_ID));
+  }
+
+  @BeforeEach
+  void setupMocks() {
+    when(assetSearchService.searchAssets("CMPicture", PRODUCT_EXTERNAL_ID, site))
+            .thenReturn(List.of(contentRepository.getContent(PICTURE_ID)));
+    when(assetSearchService.searchAssets("CMDownload", PRODUCT_EXTERNAL_ID, site))
+            .thenReturn(List.of(contentRepository.getContent(DOWNLOAD_ID)));
+    when(assetSearchService.searchAssets("CMVisual", PRODUCT_EXTERNAL_ID, site))
+            .thenReturn(List.of(contentRepository.getContent(VISUAL_ID)));
   }
 
   @ParameterizedTest
@@ -137,9 +173,16 @@ class CommerceSchemaGraphQLTest {
             .path("commerce.categoryAugmentationBySite").hasValue()
             .path("commerce.categoryAugmentationBySite.id").hasValue()
             .path("commerce.categoryAugmentationBySite.grid").hasValue()
+            .path("commerce.categoryAugmentationBySite.grid.name")
+            .entity(String.class).isEqualTo(GRID_NAME)
+            .path("commerce.categoryAugmentationBySite.grid.rows[*]").entityList(Object.class).hasSize(1)
+            .path("commerce.categoryAugmentationBySite.grid.placements[*]").entityList(Object.class).hasSize(1)
+            .path("commerce.categoryAugmentationBySite.grid.placements[*].items[*]")
+            .entityList(Object.class).containsExactly(Map.of("id", ARTICLE_ID))
             .path("commerce.categoryAugmentationBySite.commerceRef").hasValue()
-            .path("commerce.categoryAugmentationBySite.commerceRef.externalId")
-            .entity(String.class).isEqualTo(expected);
+            .path("commerce.categoryAugmentationBySite.commerceRef.catalogId")
+            .entity(String.class).isEqualTo(CATALOG_ID)
+            .path("commerce.categoryAugmentationBySite.commerceRef.externalId").entity(String.class).isEqualTo(expected);
   }
 
   @ParameterizedTest
@@ -158,7 +201,13 @@ class CommerceSchemaGraphQLTest {
             .path("commerce.categoryAugmentationByStore").hasValue()
             .path("commerce.categoryAugmentationByStore.id").hasValue()
             .path("commerce.categoryAugmentationByStore.grid").hasValue()
+            .path("commerce.categoryAugmentationByStore.grid.name").entity(String.class).isEqualTo(GRID_NAME)
+            .path("commerce.categoryAugmentationByStore.grid.rows[*]").entityList(Object.class).hasSize(1)
+            .path("commerce.categoryAugmentationByStore.grid.placements[*].items[*]")
+            .entityList(Object.class).containsExactly(Map.of("id", ARTICLE_ID))
             .path("commerce.categoryAugmentationByStore.commerceRef").hasValue()
+            .path("commerce.categoryAugmentationByStore.commerceRef.catalogId")
+            .entity(String.class).isEqualTo(CATALOG_ID)
             .path("commerce.categoryAugmentationByStore.commerceRef.externalId")
             .entity(String.class).isEqualTo(expected);
   }
@@ -175,10 +224,21 @@ class CommerceSchemaGraphQLTest {
             .variable("siteId", MASTER_SITE_ID)
             .execute()
             .path("commerce.productAugmentationBySite").hasValue()
-            .path("commerce.productAugmentationBySite.grid").hasValue()
+            .path("commerce.productAugmentationBySite.pdpPagegrid.cssClassName")
+            .entity(String.class).isEqualTo(PDPPAGEGRID_CSS_CLASS_NAME)
+            .path("commerce.productAugmentationBySite.pdpPagegrid.rows[*]")
+            .entityList(Object.class).hasSize(1)
+            .path("commerce.productAugmentationBySite.pdpPagegrid.placements[*].items[*]")
+            .entityList(Object.class).containsExactly(Map.of("id", ARTICLE_ID))
             .path("commerce.productAugmentationBySite.commerceRef").hasValue()
             .path("commerce.productAugmentationBySite.commerceRef.externalId")
-            .entity(String.class).isEqualTo(expected);
+            .entity(String.class).isEqualTo(expected)
+            .path("commerce.productAugmentationBySite.downloads")
+            .entityList(Object.class).containsExactly(Map.of("id", DOWNLOAD_ID))
+            .path("commerce.productAugmentationBySite.visuals")
+            .entityList(Object.class).containsExactly(Map.of("id", VISUAL_ID))
+            .path("commerce.productAugmentationBySite.picture")
+            .entity(Map.class).isEqualTo(Map.of("id", PICTURE_ID));
   }
 
   @ParameterizedTest
@@ -195,10 +255,22 @@ class CommerceSchemaGraphQLTest {
             .variable("locale", "en-US")
             .execute()
             .path("commerce.productAugmentationByStore").hasValue()
-            .path("commerce.productAugmentationByStore.grid").hasValue()
+            .path("commerce.productAugmentationByStore.pdpPagegrid").hasValue()
+            .path("commerce.productAugmentationByStore.pdpPagegrid.cssClassName")
+            .entity(String.class).isEqualTo(PDPPAGEGRID_CSS_CLASS_NAME)
+            .path("commerce.productAugmentationByStore.pdpPagegrid.rows[*]")
+            .entityList(Object.class).hasSize(1)
+            .path("commerce.productAugmentationByStore.pdpPagegrid.placements[*].items[*]")
+            .entityList(Object.class).containsExactly(Map.of("id", ARTICLE_ID))
             .path("commerce.productAugmentationByStore.commerceRef").hasValue()
             .path("commerce.productAugmentationByStore.commerceRef.externalId")
-            .entity(String.class).isEqualTo(expected);
+            .entity(String.class).isEqualTo(expected)
+            .path("commerce.productAugmentationByStore.downloads")
+            .entityList(Object.class).containsExactly(Map.of("id", DOWNLOAD_ID))
+            .path("commerce.productAugmentationByStore.visuals")
+            .entityList(Object.class).containsExactly(Map.of("id", VISUAL_ID))
+            .path("commerce.productAugmentationByStore.picture")
+            .entity(Map.class).isEqualTo(Map.of("id", PICTURE_ID));
   }
 
   @Test
@@ -210,7 +282,8 @@ class CommerceSchemaGraphQLTest {
             .execute()
             .path("commerce.externalPage").hasValue()
             .path("commerce.externalPage.id").entity(Integer.class).isEqualTo(AUGMENTED_PAGE_ID)
-            .path("commerce.externalPage.externalId").entity(String.class).isEqualTo(AUGMENTED_PAGE_EXTERNAL_ID);
+            .path("commerce.externalPage.externalId").entity(String.class).isEqualTo(AUGMENTED_PAGE_EXTERNAL_ID)
+            .path("commerce.externalPage.type").entity(String.class).isEqualTo("CMExternalPage");
   }
 
   @ParameterizedTest
@@ -229,7 +302,13 @@ class CommerceSchemaGraphQLTest {
             .execute()
             .path("content.categoryAugmentationBySegment").hasValue()
             .path("content.categoryAugmentationBySegment.grid").hasValue()
+            .path("content.categoryAugmentationBySegment.grid.rows[*]")
+            .entityList(Object.class).hasSize(1)
+            .path("content.categoryAugmentationBySegment.grid.placements[*].items[*]")
+            .entityList(Object.class).containsExactly(Map.of("id", ARTICLE_ID))
             .path("content.categoryAugmentationBySegment.commerceRef").hasValue()
+            .path("content.categoryAugmentationBySegment.commerceRef.catalogId")
+            .entity(String.class).isEqualTo(CATALOG_ID)
             .path("content.categoryAugmentationBySegment.commerceRef.externalId")
             .entity(String.class).isEqualTo(expected);
   }
@@ -250,6 +329,12 @@ class CommerceSchemaGraphQLTest {
             .execute()
             .path("content.categoryAugmentationBySite").hasValue()
             .path("content.categoryAugmentationBySite.grid").hasValue()
+            .path("content.categoryAugmentationBySite.grid.rows[*]")
+            .entityList(Object.class).hasSize(1)
+            .path("content.categoryAugmentationBySite.grid.placements[*].items[*]")
+            .entityList(Object.class).containsExactly(Map.of("id", ARTICLE_ID))
+            .path("content.categoryAugmentationBySite.commerceRef.catalogId")
+            .entity(String.class).isEqualTo(CATALOG_ID)
             .path("content.categoryAugmentationBySite.commerceRef").hasValue()
             .path("content.categoryAugmentationBySite.commerceRef.externalId")
             .entity(String.class).isEqualTo(expected);
@@ -257,44 +342,67 @@ class CommerceSchemaGraphQLTest {
 
   @ParameterizedTest
   @CsvSource(value = {
-          "input                                | expected",
-          "cool-product                         | cool-product",
-          "mock:///catalog/product/cool-product | cool-product",
+          "externalId                           | catalogAlias | expectedExternalId",
+          "cool-product                         | test         | cool-product",
+          "mock:///catalog/product/cool-product | catalog      | cool-product",
   }, useHeadersInDisplayName = true, delimiter = '|')
-  void testProductAugmentationBySegment(String input, String expected) {
+  void testProductAugmentationBySegment(String externalId, String catalogAlias, String expectedExternalId) {
     webGraphQlTester.documentName("content/productAugmentationBySegment")
-            .variable("externalId", input)
+            .variable("externalId", externalId)
             .variable("breadcrumb", "a/b/c")
-            .variable("catalogAlias", "test")
+            .variable("catalogAlias", catalogAlias)
             .variable("rootSegment", ROOT_CHANNEL_SEGMENT)
             .execute()
             .path("content.productAugmentationBySegment").hasValue()
             .path("content.productAugmentationBySegment.id").hasValue()
-            .path("content.productAugmentationBySegment.grid").hasValue()
+            .path("content.productAugmentationBySegment.pdpPagegrid.cssClassName").hasValue()
+            .path("content.productAugmentationBySegment.pdpPagegrid.rows[*]")
+            .entityList(Object.class).hasSize(1)
+            .path("content.productAugmentationBySegment.pdpPagegrid.placements[*].items[*]")
+            .entityList(Object.class).containsExactly(Map.of("id", ARTICLE_ID))
             .path("content.productAugmentationBySegment.commerceRef").hasValue()
+            .path("content.productAugmentationBySegment.commerceRef.catalogId")
+            .entity(String.class).isEqualTo(CATALOG_ID)
             .path("content.productAugmentationBySegment.commerceRef.externalId")
-            .entity(String.class).isEqualTo(expected);
+            .entity(String.class).isEqualTo(expectedExternalId)
+            .path("content.productAugmentationBySegment.downloads")
+            .entityList(Object.class).containsExactly(Map.of("id", DOWNLOAD_ID))
+            .path("content.productAugmentationBySegment.visuals")
+            .entityList(Object.class).containsExactly(Map.of("id", VISUAL_ID))
+            .path("content.productAugmentationBySegment.picture")
+            .entity(Map.class).isEqualTo(Map.of("id", PICTURE_ID));
   }
 
   @ParameterizedTest
   @CsvSource(value = {
-          "input                                | expected",
-          "cool-product                         | cool-product",
-          "mock:///catalog/product/cool-product | cool-product",
+          "externalId                           | catalogAlias | expectedExternalId",
+          "cool-product                         | test         | cool-product",
+          "mock:///catalog/product/cool-product | catalog      | cool-product",
   }, useHeadersInDisplayName = true, delimiter = '|')
-  void testProductAugmentationBySite1(String input, String expected) {
+  void testProductAugmentationBySite1(String externalId, String catalogAlias, String expectedExternalId) {
     webGraphQlTester.documentName("content/productAugmentationBySite")
-            .variable("externalId", input)
+            .variable("externalId", externalId)
             .variable("breadcrumb", "a/b/c")
-            .variable("catalogAlias", "test")
+            .variable("catalogAlias", catalogAlias)
             .variable("siteId", MASTER_SITE_ID)
             .execute()
             .path("content.productAugmentationBySite").hasValue()
             .path("content.productAugmentationBySite.id").hasValue()
-            .path("content.productAugmentationBySite.grid").hasValue()
+            .path("content.productAugmentationBySite.pdpPagegrid.cssClassName")
+            .entity(String.class).isEqualTo(PDPPAGEGRID_CSS_CLASS_NAME)
+            .path("content.productAugmentationBySite.pdpPagegrid.rows[*]")
+            .entityList(Object.class).hasSize(1)
+            .path("content.productAugmentationBySite.pdpPagegrid.placements[*].items[*]")
+            .entityList(Object.class).containsExactly(Map.of("id", ARTICLE_ID))
             .path("content.productAugmentationBySite.commerceRef").hasValue()
             .path("content.productAugmentationBySite.commerceRef.externalId")
-            .entity(String.class).isEqualTo(expected);
+            .entity(String.class).isEqualTo(expectedExternalId)
+            .path("content.productAugmentationBySite.downloads")
+            .entityList(Object.class).containsExactly(Map.of("id", DOWNLOAD_ID))
+            .path("content.productAugmentationBySite.visuals")
+            .entityList(Object.class).containsExactly(Map.of("id", VISUAL_ID))
+            .path("content.productAugmentationBySite.picture")
+            .entity(Map.class).isEqualTo(Map.of("id", PICTURE_ID));
   }
 
   @Test

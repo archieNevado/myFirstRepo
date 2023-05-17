@@ -2,23 +2,21 @@ package com.coremedia.blueprint.elastic.social.cae.controller;
 
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.elastic.social.api.comments.Comment;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-public class HandlerInfoTest {
+class HandlerInfoTest {
 
   private String messageType = "error";
   private String path = "comment";
   private String text = "text";
 
   @Test
-  public void test() {
+  void test() {
     SitesService sitesService = mock(SitesService.class);
 
     Comment comment = mock(Comment.class);
@@ -30,23 +28,23 @@ public class HandlerInfoTest {
     handlerInfo.setModel(comment);
     handlerInfo.setLink(link);
 
-    assertFalse(handlerInfo.isSuccess());
-    assertEquals(comment, handlerInfo.getModel());
-    assertEquals(link, handlerInfo.getLink());
+    assertThat(handlerInfo.isSuccess()).isFalse();
+    assertThat(handlerInfo.getModel()).isEqualTo(comment);
+    assertThat(handlerInfo.getLink()).isEqualTo(link);
     List<HandlerInfo.Message> messages = handlerInfo.getMessages();
-    assertEquals(1, messages.size());
+    assertThat(messages).hasSize(1);
     HandlerInfo.Message message = messages.get(0);
-    assertEquals(messageType, message.getType());
-    assertEquals(path, message.getPath());
-    assertEquals(text, message.getText());
+    assertThat(message.getType()).isEqualTo(messageType);
+    assertThat(message.getPath()).isEqualTo(path);
+    assertThat(message.getText()).isEqualTo(text);
   }
 
   @Test
-  public void testMessage() {
+  void testMessage() {
     HandlerInfo.Message message = new HandlerInfo.Message(path, text, messageType);
-    assertEquals(messageType, message.getType());
-    assertEquals(path, message.getPath());
-    assertEquals(text, message.getText());
+    assertThat(message.getType()).isEqualTo(messageType);
+    assertThat(message.getPath()).isEqualTo(path);
+    assertThat(message.getText()).isEqualTo(text);
 
     String anotherMessageType = "success";
     String noPath = null;
@@ -56,8 +54,8 @@ public class HandlerInfoTest {
     message.setText(anotherText);
     message.setType(anotherMessageType);
 
-    assertEquals(anotherMessageType, message.getType());
-    assertNull(message.getPath());
-    assertEquals(anotherText, message.getText());
+    assertThat(message.getType()).isEqualTo(anotherMessageType);
+    assertThat(message.getPath()).isNull();
+    assertThat(message.getText()).isEqualTo(anotherText);
   }
 }

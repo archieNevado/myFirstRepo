@@ -39,12 +39,12 @@ import Component from "@jangaroo/ext-ts/Component";
 import VBoxLayout from "@jangaroo/ext-ts/layout/container/VBox";
 import Config from "@jangaroo/runtime/Config";
 import ConfigUtils from "@jangaroo/runtime/ConfigUtils";
-import CatalogThumbnailResolver from "../CatalogThumbnailResolver";
 import LivecontextStudioPlugin_properties from "../LivecontextStudioPlugin_properties";
 import CatalogAssetsProperty from "../components/link/CatalogAssetsProperty";
 import CommerceAugmentedPageGridForm from "../desktop/CommerceAugmentedPageGridForm";
 import CommerceDetailsForm from "../desktop/CommerceDetailsForm";
 import CommerceAugmentedCategoryStructureForm from "./CommerceAugmentedCategoryStructureForm";
+import CatalogHelper from "@coremedia-blueprint/studio-client.main.ec-studio/helper/CatalogHelper";
 
 interface CMExternalChannelFormConfig extends Config<DocumentTabPanel> {
 }
@@ -100,7 +100,9 @@ class CMExternalChannelForm extends DocumentTabPanel {
                   plugins: [
                     Config(BindPropertyPlugin, {
                       componentProperty: "src",
-                      bindTo: CatalogThumbnailResolver.imageValueExpression(config.bindTo),
+                      bindTo: ValueExpressionFactory.createFromFunction(() => {
+                        return CatalogHelper.imageValueExpression(config.bindTo).getValue();
+                      }),
                     }),
                   ],
                 }),

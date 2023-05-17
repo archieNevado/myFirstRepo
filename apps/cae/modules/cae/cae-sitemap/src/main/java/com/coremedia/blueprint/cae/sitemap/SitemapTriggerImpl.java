@@ -50,15 +50,15 @@ public class SitemapTriggerImpl implements SitemapTrigger {
     if (sites.isEmpty()) {
       // This sometimes happens on test machines when the first
       // sitemap generation starts before the example content has been imported.
-      LOG.info("Sitemap generation found no sites at all.  Check your content repository and your SitesService configuration.");
+      LOG.info("Sitemap generation found no sites at all. Check your content repository and your SitesService configuration.");
     }
 
     for (Site site : sites) {
       if (sitemapSetupSelector.isSitemapEnabled(site)) {
         try {
-          LOG.info("Start sitemap generation for {}", site);
+          LOG.info("Start sitemap generation for {}.", site);
           String result = generateSitemap(site);
-          LOG.info("Finished sitemap generation for {}: {}", site, result);
+          LOG.info("Finished sitemap generation for {}: {}.", site, result);
         } catch (Exception e) {
           LOG.warn("Sitemap generation for {} failed.", site, e);
         }

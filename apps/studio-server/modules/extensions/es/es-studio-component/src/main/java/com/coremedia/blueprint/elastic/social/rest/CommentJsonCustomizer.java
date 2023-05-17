@@ -47,12 +47,10 @@ public class CommentJsonCustomizer implements JsonCustomizer<Comment> {
         LOG.debug("cannot customize target '{}'", target);
       }
       addCuratedContents(comment, serializedObject);
-    } catch (IllegalArgumentException e) {
-      LOG.warn("An exception '{}' occurred resolving the target reference for the comment with id {}", e, comment.getId());
     } catch (UnresolvableReferenceException e) {
-      LOG.debug("Could not resolve target reference for the comment with id {}", comment.getId(), e);
+      LOG.debug("Could not resolve target reference for the comment with id {}.", comment.getId(), e);
     } catch (RuntimeException e) {
-      LOG.warn("An exception '{}' occurred resolving the target reference for the comment with id {}", e, comment.getId());
+      LOG.warn("An exception '{}' occurred resolving the target reference for the comment with id {}.", e, comment.getId());
     }
     // add customization for special views like to preview URL (if necessary)
   }

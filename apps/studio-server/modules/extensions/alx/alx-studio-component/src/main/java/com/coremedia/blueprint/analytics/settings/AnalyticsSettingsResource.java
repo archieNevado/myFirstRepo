@@ -48,7 +48,7 @@ public class AnalyticsSettingsResource {
         try {
           reportURL = analyticsSettingsProvider.getReportUrlFor(content);
         } catch (RuntimeException e) {
-          LOG.info("ignoring exception while creating report url for service {} and content {}: {}",
+          LOG.info("Ignoring exception while creating report url for service {} and content {}: {}.",
                   analyticsSettingsProvider.getServiceKey(),
                   content,
                   e.getMessage());

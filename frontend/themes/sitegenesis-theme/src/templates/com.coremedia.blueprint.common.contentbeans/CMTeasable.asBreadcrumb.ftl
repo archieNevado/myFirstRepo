@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.navigation.Navigation" -->
+<#-- @ftlvariable name="self" type="com.coremedia.blueprint.common.contentbeans.CMTeasable" -->
 
 <#list cmpage.navigation.navigationPathList>
   <#items as navigation>

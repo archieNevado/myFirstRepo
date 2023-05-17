@@ -54,6 +54,7 @@ class CommerceDetailsForm extends CommerceDetailsFormBase {
               editorType: CKEditorTypes.HTML_VIEWER_EDITOR_TYPE,
               plugins: [
                 Config(BindPropertyPlugin, {
+                  ifUndefined: "",
                   bidirectional: false,
                   bindTo: config.bindTo.extendBy(CatalogObjectPropertyNames.LONG_DESCRIPTION),
                 }),
@@ -85,6 +86,7 @@ class CommerceDetailsForm extends CommerceDetailsFormBase {
                   height: 100,
                   plugins: [
                     Config(BindPropertyPlugin, {
+                      ifUndefined: "",
                       bidirectional: false,
                       bindTo: config.bindTo.extendBy(CatalogObjectPropertyNames.SHORT_DESCRIPTION),
                     }),

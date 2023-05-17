@@ -1,3 +1,4 @@
+import BaseModels_properties from "@coremedia/studio-client.base-models/BaseModels_properties";
 
 /**
  * Interface values for ResourceBundle "EsAnalyticsStudioPlugin".
@@ -35,8 +36,8 @@ const EsAnalyticsStudioPlugin_properties: EsAnalyticsStudioPlugin_properties = {
   chart_time_stamp_unavailable: "-",
   chart_time_range_label: "Interval",
   chart_time_stamp_update: "Last fetched:",
-  shortDateFormat: "Y/m/d",
-  dateFormat: "Y/m/d h:i a",
+  shortDateFormat: BaseModels_properties.shortDateFormat,
+  dateFormat: BaseModels_properties.dateFormat,
   chart_label_page_views: "Page Views",
   chart_label_publications: "Publications",
   chart_last_7_days: "Last 7 Days",

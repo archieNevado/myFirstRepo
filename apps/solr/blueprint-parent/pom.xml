@@ -31,7 +31,6 @@
     <maven.compiler.release>11</maven.compiler.release>
     <sonar.java.source>${maven.compiler.release}</sonar.java.source>
 
-    <google.api.services.analytics.version>v3-rev99-1.19.0</google.api.services.analytics.version>
     <google.api.services.youtube.version>v3-rev152-1.19.0</google.api.services.youtube.version>
 
     <customer>Blueprint</customer>
@@ -70,8 +69,8 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.version>9.0.71</tomcat.version>
-    <cm.solr.core.version>2301.2</cm.solr.core.version>
+    <tomcat.version>9.0.74</tomcat.version>
+    <cm.solr.core.version>2304.1</cm.solr.core.version>
     <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
 
     <showDeprecation>true</showDeprecation>

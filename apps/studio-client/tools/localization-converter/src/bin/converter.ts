@@ -58,6 +58,7 @@ function createPackageJson(basePackageJson: Record<string, string>, jangarooCore
     coremedia,
     publishConfig: {
       "directory": "dist",
+      "linkDirectory": false,
       "exports": {
         "./*": {
           "types": "./src/*.d.ts",

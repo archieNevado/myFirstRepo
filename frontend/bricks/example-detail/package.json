@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@coremedia/brick-dynamic-include": "workspace:1.0.0",
-    "@coremedia/brick-media": "workspace:1.0.0",
-    "@coremedia/brick-slick-carousel": "workspace:1.0.0",
-    "@coremedia/brick-utils": "workspace:1.0.0"
+    "@coremedia/brick-dynamic-include": "workspace:*",
+    "@coremedia/brick-media": "workspace:*",
+    "@coremedia/brick-slick-carousel": "workspace:*",
+    "@coremedia/brick-utils": "workspace:*"
   },
   "coremedia": {
     "type": "brick"

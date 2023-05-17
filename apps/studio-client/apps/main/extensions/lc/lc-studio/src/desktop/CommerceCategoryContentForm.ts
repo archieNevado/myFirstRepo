@@ -1,5 +1,7 @@
-import CatalogObjectPropertyNames from "@coremedia-blueprint/studio-client.main.ec-studio-model/model/CatalogObjectPropertyNames";
-import augmentedCategoryTreeRelation from "@coremedia-blueprint/studio-client.main.ec-studio/tree/augmentedCategoryTreeRelation";
+import CatalogObjectPropertyNames
+  from "@coremedia-blueprint/studio-client.main.ec-studio-model/model/CatalogObjectPropertyNames";
+import augmentedCategoryTreeRelation
+  from "@coremedia-blueprint/studio-client.main.ec-studio/tree/augmentedCategoryTreeRelation";
 import ValueExpression from "@coremedia/studio-client.client-core/data/ValueExpression";
 import ValueExpressionFactory from "@coremedia/studio-client.client-core/data/ValueExpressionFactory";
 import ImageComponent from "@coremedia/studio-client.ext.ui-components/components/ImageComponent";
@@ -9,11 +11,11 @@ import PropertyFieldGroup from "@coremedia/studio-client.main.editor-components/
 import VBoxLayout from "@jangaroo/ext-ts/layout/container/VBox";
 import Config from "@jangaroo/runtime/Config";
 import ConfigUtils from "@jangaroo/runtime/ConfigUtils";
-import CatalogThumbnailResolver from "../CatalogThumbnailResolver";
 import LivecontextStudioPlugin_properties from "../LivecontextStudioPlugin_properties";
 import CatalogAssetsProperty from "../components/link/CatalogAssetsProperty";
 import CommerceAugmentedPageGridForm from "./CommerceAugmentedPageGridForm";
 import CommerceDetailsForm from "./CommerceDetailsForm";
+import CatalogHelper from "@coremedia-blueprint/studio-client.main.ec-studio/helper/CatalogHelper";
 
 interface CommerceCategoryContentFormConfig extends Config<DocumentForm> {
 }
@@ -52,7 +54,7 @@ class CommerceCategoryContentForm extends DocumentForm {
               plugins: [
                 Config(BindPropertyPlugin, {
                   componentProperty: "src",
-                  bindTo: CatalogThumbnailResolver.imageValueExpression(config.bindTo),
+                  bindTo: CatalogHelper.imageValueExpression(config.bindTo),
                 }),
               ],
             }),

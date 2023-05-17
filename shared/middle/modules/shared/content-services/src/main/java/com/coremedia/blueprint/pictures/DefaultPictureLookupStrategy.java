@@ -1,10 +1,11 @@
 package com.coremedia.blueprint.pictures;
 
-import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.common.CapSession;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.content.ContentType;
+import com.coremedia.cms.middle.defaultpicture.DefaultPicture;
+import com.coremedia.cms.middle.defaultpicture.DefaultPictureService;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,13 @@ public class DefaultPictureLookupStrategy {
   private static final String PREFERRED = "preferred";
   private static final String SECONDARY = "secondary";
 
-  public Optional<Blob> computePicture(List<Content> contents) {
+  public DefaultPictureLookupStrategy() {}
+
+  public Optional<DefaultPicture> computePicture(List<Content> contents) {
+    return computePicture(contents, null);
+  }
+
+  public Optional<DefaultPicture> computePicture(List<Content> contents, DefaultPictureService defaultPictureService) {
     if (contents.isEmpty()) {
       return Optional.empty();
     }
@@ -40,22 +47,18 @@ public class DefaultPictureLookupStrategy {
 
       if (separated.containsKey(PREFERRED)) {
         for (Content content : separated.get(PREFERRED)) {
-          Blob data = content.getBlob("data");
-          if (data != null) {
-            return Optional.of(data);
+          DefaultPicture defaultPicture = DefaultPictureService.resolveDefaultPictureWithService(defaultPictureService, content);
+          if (defaultPicture != null) {
+            return Optional.of(defaultPicture);
           }
         }
       }
 
       if (separated.containsKey(SECONDARY)) {
         for (Content content : separated.get(SECONDARY)) {
-          List<Content> pictures = content.getLinks("pictures");
-          if (pictures.isEmpty()) {
-            return Optional.empty();
-          }
-          Blob data = pictures.get(0).getBlob("data");
-          if (data != null) {
-            return Optional.of(data);
+          DefaultPicture defaultPicture = DefaultPictureService.resolveDefaultPictureWithService(defaultPictureService, content);
+          if (defaultPicture != null) {
+            return Optional.of(defaultPicture);
           }
         }
       }

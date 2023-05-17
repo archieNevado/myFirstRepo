@@ -11,15 +11,11 @@ import com.coremedia.springframework.xml.ResourceAwareXmlBeanDefinitionReader;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 
 @AutoConfiguration
-@ComponentScan(basePackages = {
-        "com.coremedia.livecontext.web",
-})
 @ImportResource(value = {
         "classpath:/META-INF/coremedia/calista-handler.xml",
         "classpath:/META-INF/coremedia/livecontext-cae-services.xml",

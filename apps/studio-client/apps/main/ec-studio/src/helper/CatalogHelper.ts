@@ -91,6 +91,8 @@ class CatalogHelper {
 
   static readonly COULD_NOT_FIND_STORE_BEAN = "LC-01006";
 
+  static readonly UNKNOWN_TYPE = "UnknownType";
+
   #storeExpression: ValueExpression = null;
 
   static {
@@ -142,14 +144,28 @@ class CatalogHelper {
     }
   }
 
+  /**
+   * @deprecated since 2301.2, use the server side thumbnail resolving instead.
+   * @param catalogObject
+   */
   getImageUrl(catalogObject: CatalogObject): string {
     if (is(catalogObject, Product)) {
       return cast(Product, catalogObject).getThumbnailUrl();
     } else if (is(catalogObject, Category)) {
       return cast(Category, catalogObject).getThumbnailUrl();
     }
-
     return null;
+  }
+
+  /**
+   * Helper for thumbnail property fields.
+   * @param bindTo the model of the form
+   * @return
+   */
+  static imageValueExpression(bindTo: ValueExpression): ValueExpression {
+    const modelType = CatalogHelper.getInstance().getType(bindTo.getValue());
+    const type = modelType === CatalogHelper.UNKNOWN_TYPE ? null : modelType;
+    return ValueExpressionFactory.createFromFunction((): string => editorContext._.getThumbnailUri(bindTo.getValue(), null));
   }
 
   getType(catalogObject: CatalogObject): string {
@@ -165,7 +181,7 @@ class CatalogHelper {
     } else if (is(catalogObject, Marketing)) {
       beanType = CatalogHelper.#TYPE_MARKETING;
     } else {
-      beanType = "UnknownType";
+      beanType = CatalogHelper.UNKNOWN_TYPE;
     }
 
     return beanType;
@@ -600,16 +616,18 @@ class CatalogHelper {
           }
         } catch (e) {
           if (is(e, NotExistsError)) {
-          // if remote bean could not be loaded (404) local bean shall be displayed
+            // if remote bean could not be loaded (404) local bean shall be displayed
             return beanFactory._.createLocalBean({
               id: id,
               externalId: externalId,
               name: StringUtil.format(invalidMessage, externalId),
             });
-          } else throw e;
+          } else {
+            throw e;
+          }
         }
       })
-      //todo: the catalog objects may be null (why?)
+        //todo: the catalog objects may be null (why?)
         .filter((obj: Bean): boolean => !!obj);
     });
   }

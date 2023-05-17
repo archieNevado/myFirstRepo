@@ -3,14 +3,14 @@ query getProductAugmentationByStore($externalId: String!, $catalogId: String, $s
   commerce {
     productAugmentationByStore(externalId: $externalId, catalogId: $catalogId, storeId: $storeId, locale: $locale) {
       id
-      grid {
+      pdpPagegrid {
         name
+        cssClassName
         placements {
           id
           column
           items {
             id
-            name
           }
         }
         rows {
@@ -21,6 +21,19 @@ query getProductAugmentationByStore($externalId: String!, $catalogId: String, $s
       commerceRef {
         id
         externalId
+        catalogId
+      }
+      content {
+        repositoryPath
+      }
+      downloads {
+        id
+      }
+      visuals {
+        id
+      }
+      picture {
+        id
       }
     }
   }

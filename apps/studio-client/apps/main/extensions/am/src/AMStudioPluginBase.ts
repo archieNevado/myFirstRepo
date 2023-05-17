@@ -45,8 +45,6 @@ class AMStudioPluginBase extends StudioPlugin {
   override init(editorContext: IEditorContext): void {
     super.init(editorContext);
 
-    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create(AssetConstants.DOCTYPE_ASSET, AssetConstants.PROPERTY_ASSET_THUMBNAIL));
-
     editorContext.registerContentInitializer(AssetConstants.DOCTYPE_PICTURE_ASSET, AMStudioPluginBase.#initAMPictureAsset);
     editorContext.registerContentInitializer(AssetConstants.DOCTYPE_VIDEO_ASSET, AMStudioPluginBase.#initAMVideoAsset);
 

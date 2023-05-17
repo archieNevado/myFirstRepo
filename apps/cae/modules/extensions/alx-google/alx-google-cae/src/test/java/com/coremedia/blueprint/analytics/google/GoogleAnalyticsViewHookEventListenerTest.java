@@ -43,7 +43,7 @@ public class GoogleAnalyticsViewHookEventListenerTest {
   public void onViewHook() {
     ViewHookEvent<Page> event = new ViewHookEvent<>(page, VIEW_HOOK_HEAD, Collections.<String, Object>emptyMap());
     Map<String, Object> map = new HashMap<>();
-    map.put("webPropertyId", "UA-12345-678");
+    map.put("measurementId", "G-12345");
     when(settingsService.settingAsMap(GOOGLE_ANALYTICS_SERVICE_KEY, String.class, Object.class, page)).thenReturn(map);
     when(page.getContent()).thenReturn(content);
     RenderNode renderNode = listener.onViewHook(event);

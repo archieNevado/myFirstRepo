@@ -10,7 +10,6 @@ query getCategoryAugmentationBySite($externalId: String!, $catalogId: String, $s
           column
           items {
             id
-            name
           }
         }
         rows {
@@ -21,6 +20,10 @@ query getCategoryAugmentationBySite($externalId: String!, $catalogId: String, $s
       commerceRef {
         id
         externalId
+        catalogId
+      }
+      content {
+        repositoryPath
       }
     }
   }

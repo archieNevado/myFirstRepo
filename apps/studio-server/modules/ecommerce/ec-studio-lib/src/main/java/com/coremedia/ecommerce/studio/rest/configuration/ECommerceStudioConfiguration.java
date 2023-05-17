@@ -1,9 +1,13 @@
 package com.coremedia.ecommerce.studio.rest.configuration;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceServicesConfiguration;
+import com.coremedia.blueprint.base.livecontext.ecommerce.common.CommerceConnectionSupplier;
+import com.coremedia.cap.content.ContentRepository;
 import com.coremedia.cap.multisite.SitesService;
 import com.coremedia.ecommerce.studio.preview.CommerceAppPreviewProvider;
 import com.coremedia.ecommerce.studio.preview.CommerceHeadlessPreviewProvider;
+import com.coremedia.ecommerce.studio.rest.CommerceBeanDefaultPictureResolver;
+import com.coremedia.ecommerce.studio.rest.CommerceContentTypesPictureResolver;
 import com.coremedia.ecommerce.studio.rest.filter.EcStudioFilters;
 import com.coremedia.rest.cap.CapRestServiceConfiguration;
 import com.coremedia.service.previewurl.PreviewProvider;
@@ -37,4 +41,26 @@ public class ECommerceStudioConfiguration {
     return new CommerceAppPreviewProvider(sitesService);
   }
 
+  @Bean
+  public CommerceBeanDefaultPictureResolver commerceBeanDefaultPictureResolver(ContentRepository contentRepository) {
+    return new CommerceBeanDefaultPictureResolver(contentRepository);
+  }
+
+  @Bean
+  public CommerceContentTypesPictureResolver commerceContentTypeCategoryDefaultPictureResolver(CommerceConnectionSupplier commerceConnectionSupplier,
+                                                                                               ContentRepository contentRepository) {
+    return new CommerceContentTypesPictureResolver(commerceConnectionSupplier, contentRepository, CommerceContentTypesPictureResolver.CM_EXTERNAL_CHANNEL);
+  }
+
+  @Bean
+  public CommerceContentTypesPictureResolver commerceContentTypeProductDefaultPictureResolver(CommerceConnectionSupplier commerceConnectionSupplier,
+                                                                                              ContentRepository contentRepository) {
+    return new CommerceContentTypesPictureResolver(commerceConnectionSupplier, contentRepository, CommerceContentTypesPictureResolver.CM_EXTERNAL_PRODUCT);
+  }
+
+  @Bean
+  public CommerceContentTypesPictureResolver commerceContentTypeProductTeaserDefaultPictureResolver(CommerceConnectionSupplier commerceConnectionSupplier,
+                                                                                                    ContentRepository contentRepository) {
+    return new CommerceContentTypesPictureResolver(commerceConnectionSupplier, contentRepository, CommerceContentTypesPictureResolver.CM_PRODUCT_TEASER);
+  }
 }

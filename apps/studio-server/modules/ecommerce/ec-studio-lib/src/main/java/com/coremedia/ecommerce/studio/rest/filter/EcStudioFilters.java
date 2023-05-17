@@ -8,13 +8,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
-import javax.servlet.Filter;
 import java.util.List;
 
 @Configuration(proxyBeanMethods = false)
 public class EcStudioFilters {
 
   private static final String SITE_FILTER = "siteFilter";
+  private static final String SITE_IN_DEFAULT_PICTURE_QUERY_FILTER = "siteInQueryFilter";
 
   @Bean
   public FilterRegistrationBean siteFilterRegistration(SitesService sitesService) {
@@ -22,6 +22,16 @@ public class EcStudioFilters {
             .forFilter(new SiteFilter(sitesService))
             .name(SITE_FILTER)
             .urlPatterns("/api/livecontext/*")
+            .order(900)
+            .build();
+  }
+
+  @Bean
+  public FilterRegistrationBean siteInQueryFilterRegistration(SitesService sitesService) {
+    return RegistrationBeanBuilder
+            .forFilter(new SiteFilter(sitesService))
+            .name(SITE_IN_DEFAULT_PICTURE_QUERY_FILTER)
+            .urlPatterns("/api/defaultpicture/livecontext/*")
             .order(900)
             .build();
   }

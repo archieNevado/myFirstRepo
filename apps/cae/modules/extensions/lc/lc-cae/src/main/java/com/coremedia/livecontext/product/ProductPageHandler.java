@@ -144,11 +144,19 @@ public class ProductPageHandler extends LiveContextPageHandlerBase {
   @LinkPostProcessor(type = ProductInSite.class, order = PostProcessorPrecendences.MAKE_ABSOLUTE)
   public UriComponents makeAbsoluteUri(UriComponents originalUri, ProductInSite product,
                                        Map<String, Object> linkParameters, HttpServletRequest request) {
-    // Native product links are absolute anyway, nothing more to do here.
     Site site = product.getSite();
-    return useCommerceProductLinks(site)
-            ? originalUri
-            : absoluteUri(originalUri, product, product.getSite(), linkParameters, request);
+
+    if (useCommerceProductLinks(site)) {
+      // Native product links are absolute anyway, nothing more to do here.
+      return originalUri;
+    }
+
+    try {
+      return absoluteUri(originalUri, product, site, linkParameters, request);
+    } catch (IllegalStateException e) {
+      LOG.debug("Unable to create absolute URI for {}, {}.", originalUri, e.getMessage());
+      return originalUri;
+    }
   }
 
   @NonNull

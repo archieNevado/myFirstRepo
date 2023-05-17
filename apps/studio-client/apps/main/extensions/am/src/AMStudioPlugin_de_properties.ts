@@ -1,5 +1,6 @@
 import ResourceBundleUtil from "@jangaroo/runtime/l10n/ResourceBundleUtil";
 import AMStudioPlugin_properties from "./AMStudioPlugin_properties";
+import BaseModels_properties from "@coremedia/studio-client.base-models/BaseModels_properties";
 
 /**
  * Overrides of ResourceBundle "AMStudioPlugin" for Locale "de".
@@ -25,7 +26,7 @@ ResourceBundleUtil.override(AMStudioPlugin_properties, {
   Action_createCMPictureFromAMPictureAsset_text: "Lokalisiertes Web-Asset erzeugen",
   Action_createCMVideoFromAMVideoAsset_tooltip: "Erzeuge einen neuen Video-Inhalt aus dem Asset.",
   Action_createCMVideoFromAMVideoAsset_text: "Lokalisiertes Web-Asset erzeugen",
-  ExpirationDate_dateFormat: "d.m.Y",
+  ExpirationDate_dateFormat: BaseModels_properties.shortDateFormat,
   Filter_RightsChannels_text: "Rechte: Kanäle",
   Filter_RightsRegions_text: "Rechte: Regionen",
   Asset_metadata_channels_print_text: "Druck",

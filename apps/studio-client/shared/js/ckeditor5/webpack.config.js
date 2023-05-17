@@ -1,5 +1,5 @@
-const CKEditorWebpackPlugin = require( '@ckeditor/ckeditor5-dev-webpack-plugin' );
-const { styles } = require( '@ckeditor/ckeditor5-dev-utils' );
+const { CKEditorTranslationsPlugin } = require("@ckeditor/ckeditor5-dev-translations");
+const { loaders } = require( "@ckeditor/ckeditor5-dev-utils" );
 const path = require('path');
 
 module.exports = {
@@ -24,7 +24,7 @@ module.exports = {
 
   plugins: [
 
-    new CKEditorWebpackPlugin( {
+    new CKEditorTranslationsPlugin( {
       // See https://ckeditor.com/docs/ckeditor5/latest/features/ui-language.html
       language: 'en',
       additionalLanguages: ['de', 'ja'],
@@ -37,51 +37,12 @@ module.exports = {
 
   module: {
     rules: [
-      {
-        test: /\.js$/,
-        enforce: 'pre',
-        use: ['source-map-loader'],
-      },
-      {
-        test: /\.tsx?$/,
-        loader: 'ts-loader',
-        exclude: /node_modules/,
-        options: {
-          projectReferences: true,
-        }
-      },
-      {
-        test: /\.svg$/,
-        use: ['raw-loader']
-      },
-      {
-        test: /\.css$/,
-        use: [
-          {
-            loader: 'style-loader',
-            options: {
-              injectType: 'singletonStyleTag',
-              attributes: {
-                'data-cke': true
-              }
-            }
-          },
-          {
-            loader: 'css-loader'
-          },
-          {
-            loader: 'postcss-loader',
-            options: {
-              postcssOptions: styles.getPostCssConfig( {
-                themeImporter: {
-                  themePath: require.resolve( '@ckeditor/ckeditor5-theme-lark' )
-                },
-                minify: true
-              })
-            }
-          },
-        ]
-      }
+      loaders.getTypeScriptLoader({ configFile: "src/tsconfig.json" }),
+      loaders.getIconsLoader({ matchExtensionOnly: true }),
+      loaders.getStylesLoader({
+        themePath: require.resolve("@ckeditor/ckeditor5-theme-lark"),
+        minify: true,
+      }),
     ]
   }
 };

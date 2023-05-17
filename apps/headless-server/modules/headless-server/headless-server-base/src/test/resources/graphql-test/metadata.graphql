@@ -1,0 +1,11 @@
+query getMetadata {
+  metadata {
+    types {
+      name
+      fields {
+        name
+        metadata
+      }
+    }
+  }
+}

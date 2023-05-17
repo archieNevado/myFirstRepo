@@ -130,7 +130,7 @@ public class AugmentationFacadeCmsOnly {
     return builder.data(new ProductAugmentationCmsOnly(commerceRef, content)).build();
   }
 
-  @SuppressWarnings("unused") // called from ContentRoot#categoryAugmentationBySegment
+  @SuppressWarnings("unused") // called from ContentRoot#categoryAugmentationBySite
   public DataFetcherResult<CategoryAugmentationCmsOnly> getCategoryAugmentationBySite(@Nullable String externalIdParam,
                                                                                       String[] breadcrumbParam,
                                                                                       @Nullable String catalogAlias,

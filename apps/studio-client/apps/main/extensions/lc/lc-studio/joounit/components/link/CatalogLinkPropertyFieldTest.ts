@@ -1,14 +1,17 @@
 import AbstractCatalogTest from "@coremedia-blueprint/studio-client.main.ec-studio-test-helper/AbstractCatalogTest";
 import ECommerceStudioPlugin from "@coremedia-blueprint/studio-client.main.ec-studio/ECommerceStudioPlugin";
-import CatalogLinkContextMenu from "@coremedia-blueprint/studio-client.main.ec-studio/components/link/CatalogLinkContextMenu";
-import CatalogLinkPropertyField from "@coremedia-blueprint/studio-client.main.ec-studio/components/link/CatalogLinkPropertyField";
-import AbstractProductTeaserComponentsTest from "@coremedia-blueprint/studio-client.main.lc-studio-test-helper/AbstractProductTeaserComponentsTest";
-import CatalogLinkPropertyFieldTestView from "@coremedia-blueprint/studio-client.main.lc-studio-test-helper/components/link/CatalogLinkPropertyFieldTestView";
+import CatalogLinkContextMenu
+  from "@coremedia-blueprint/studio-client.main.ec-studio/components/link/CatalogLinkContextMenu";
+import CatalogLinkPropertyField
+  from "@coremedia-blueprint/studio-client.main.ec-studio/components/link/CatalogLinkPropertyField";
+import AbstractProductTeaserComponentsTest
+  from "@coremedia-blueprint/studio-client.main.lc-studio-test-helper/AbstractProductTeaserComponentsTest";
+import CatalogLinkPropertyFieldTestView
+  from "@coremedia-blueprint/studio-client.main.lc-studio-test-helper/components/link/CatalogLinkPropertyFieldTestView";
 import ActionStep from "@coremedia/studio-client.client-core-test-helper/ActionStep";
 import Step from "@coremedia/studio-client.client-core-test-helper/Step";
 import QtipUtil from "@coremedia/studio-client.ext.ui-components/util/QtipUtil";
 import TableUtil from "@coremedia/studio-client.ext.ui-components/util/TableUtil";
-import editorContext from "@coremedia/studio-client.main.editor-components/sdk/editorContext";
 import Component from "@jangaroo/ext-ts/Component";
 import ComponentManager from "@jangaroo/ext-ts/ComponentManager";
 import Button from "@jangaroo/ext-ts/button/Button";
@@ -16,7 +19,6 @@ import Viewport from "@jangaroo/ext-ts/container/Viewport";
 import Item from "@jangaroo/ext-ts/menu/Item";
 import { as, cast } from "@jangaroo/runtime";
 import Config from "@jangaroo/runtime/Config";
-import CatalogThumbnailResolver from "../../../src/CatalogThumbnailResolver";
 
 class CatalogLinkPropertyFieldTest extends AbstractProductTeaserComponentsTest {
   #link: CatalogLinkPropertyField = null;
@@ -34,7 +36,6 @@ class CatalogLinkPropertyFieldTest extends AbstractProductTeaserComponentsTest {
     QtipUtil.registerQtipFormatter();
 
     this.#createTestling();
-    editorContext._.registerThumbnailResolver(new CatalogThumbnailResolver("CatalogObject"));
   }
 
   override tearDown(): void {

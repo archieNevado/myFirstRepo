@@ -7,7 +7,7 @@ import { cast } from "@jangaroo/runtime";
 import Config from "@jangaroo/runtime/Config";
 import ConfigUtils from "@jangaroo/runtime/ConfigUtils";
 import GoogleAnalyticsStudioPlugin_properties from "./GoogleAnalyticsStudioPlugin_properties";
-import GoogleAnalyticsWebPropertyIdValidator from "./GoogleAnalyticsWebPropertyIdValidator";
+import GoogleAnalyticsMeasurementIdValidator from "./GoogleAnalyticsMeasurementIdValidator";
 
 interface GoogleAnalyticsTrackingFieldsConfig extends Config<PropertyFieldGroup> {
 }
@@ -29,14 +29,13 @@ class GoogleAnalyticsTrackingFields extends PropertyFieldGroup {
           propertyName: "localSettings.googleAnalytics.disabled",
         }),
         Config(StringPropertyField, {
-          propertyName: "localSettings.googleAnalytics.webPropertyId",
+          propertyName: "localSettings.googleAnalytics.measurementId",
           listeners: {
             afterrender: (c: Container): void => {
-              cast(TextField, c.down("textfield")).vtype = GoogleAnalyticsWebPropertyIdValidator.WEB_PROPERTY_ID_KEY;
+              cast(TextField, c.down("textfield")).vtype = GoogleAnalyticsMeasurementIdValidator.MEASUREMENT_ID_KEY;
             },
           },
         }),
-        Config(StringPropertyField, { propertyName: "localSettings.googleAnalytics.domainName" }),
         Config(BooleanPropertyField, {
           dontTransformToInteger: true,
           propertyName: "localSettings.googleAnalytics.disableAdvertisingFeaturesPlugin",

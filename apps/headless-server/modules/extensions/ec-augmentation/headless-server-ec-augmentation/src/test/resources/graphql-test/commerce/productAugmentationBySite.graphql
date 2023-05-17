@@ -3,24 +3,29 @@ query getProductAugmentationBySite($externalId: String!, $catalogId: String, $si
   commerce {
     productAugmentationBySite(externalId: $externalId, catalogId: $catalogId, siteId: $siteId) {
       id
-      grid {
-        name
+      pdpPagegrid {
+        cssClassName
         placements {
-          id
-          column
           items {
             id
-            name
           }
         }
         rows {
           id
-          rowId
         }
       }
       commerceRef {
         id
         externalId
+      }
+      downloads {
+        id
+      }
+      visuals {
+        id
+      }
+      picture {
+        id
       }
     }
   }

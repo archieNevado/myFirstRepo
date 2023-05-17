@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import static com.coremedia.elastic.social.api.ContributionType.ANONYMOUS;
 import static org.junit.Assert.assertEquals;
@@ -89,8 +90,8 @@ public class ReviewsResultHandlerTest {
   @Mock
   private PageResourceBundleFactory resourceBundleFactory;
 
-  // @Mock   Möööp... ResourceBundle is all final, cannot be mocked
-  private MockResourceBundle resourceBundle = new MockResourceBundle();
+  @Mock
+  private ResourceBundle resourceBundle;
 
   @Mock
   private CommunityUserService communityUserService;
@@ -154,10 +155,9 @@ public class ReviewsResultHandlerTest {
     when(contentRepository.getContent(IdHelper.formatContentId(contextId))).thenReturn(navigationContent);
     when(contentBeanFactory.createBeanFor(navigationContent, ContentBean.class)).thenReturn(cmNavigation);
 
-    resourceBundle = new MockResourceBundle();
     when(resourceBundleFactory.resourceBundle(any(Navigation.class), nullable(User.class))).thenReturn(resourceBundle);
 
-    when(elasticSocialPlugin.getElasticSocialConfiguration(any())).thenReturn(elasticSocialConfiguration);
+    when(elasticSocialPlugin.getElasticSocialConfiguration(any(Object[].class))).thenReturn(elasticSocialConfiguration);
 
     when(elasticSocialConfiguration.isFeedbackEnabled()).thenReturn(true);
     when(elasticSocialConfiguration.isWritingReviewsEnabled()).thenReturn(true);
@@ -203,7 +203,7 @@ public class ReviewsResultHandlerTest {
     assertEquals(1, resultModel.getMessages().size());
     assertTrue(resultModel.isSuccess());
     verify(elasticSocialService).createReview(eq(user), any(ContentWithSite.class), eq(text), eq(title), eq(rating), eq(ModerationType.POST_MODERATION), isNull(), any(Navigation.class));
-    verifyMessage(ContributionMessageKeys.REVIEW_FORM_SUCCESS);
+    verify(resourceBundle).getString(ContributionMessageKeys.REVIEW_FORM_SUCCESS);
   }
 
   @Test
@@ -216,7 +216,7 @@ public class ReviewsResultHandlerTest {
     assertEquals(1, resultModel.getMessages().size());
     assertFalse(resultModel.isSuccess());
     verify(elasticSocialService, never()).createReview(eq(user), any(ContentWithSite.class), eq(text), eq(title), eq(rating), eq(ModerationType.POST_MODERATION), nullable(List.class), any(Navigation.class));
-    verifyNotMessage(ContributionMessageKeys.REVIEW_FORM_SUCCESS);
+    verify(resourceBundle, never()).getString(ContributionMessageKeys.REVIEW_FORM_SUCCESS);
   }
 
   @Test
@@ -230,7 +230,7 @@ public class ReviewsResultHandlerTest {
     assertEquals(1, resultModel.getMessages().size());
     assertFalse(resultModel.isSuccess());
     verify(elasticSocialService, never()).createReview(any(CommunityUser.class), any(ContentWithSite.class), anyString(), anyString(), anyInt(), any(ModerationType.class), anyList(), any(Navigation.class));
-    verifyNotMessage(ContributionMessageKeys.REVIEW_FORM_SUCCESS);
+    verify(resourceBundle, never()).getString(ContributionMessageKeys.REVIEW_FORM_SUCCESS);
   }
 
   @Test
@@ -245,7 +245,7 @@ public class ReviewsResultHandlerTest {
     assertEquals(1, resultModel.getMessages().size());
     assertFalse(resultModel.isSuccess());
     verify(elasticSocialService, never()).createReview(any(CommunityUser.class), any(ContentWithSite.class), anyString(), anyString(), anyInt(), any(ModerationType.class), anyList(), any(Navigation.class));
-    verifyNotMessage(ContributionMessageKeys.REVIEW_FORM_SUCCESS);
+    verify(resourceBundle, never()).getString(ContributionMessageKeys.REVIEW_FORM_SUCCESS);
   }
 
   @Test
@@ -296,13 +296,5 @@ public class ReviewsResultHandlerTest {
     Object model = modelMap.get(key);
     // assertTrue(model instanceof type);
     return (T) model; // NO_SONAR
-  }
-
-  private void verifyMessage(String key) {
-    assertTrue(resourceBundle.invokedFor(key));
-  }
-
-  private void verifyNotMessage(String key) {
-    assertFalse(resourceBundle.invokedFor(key));
   }
 }

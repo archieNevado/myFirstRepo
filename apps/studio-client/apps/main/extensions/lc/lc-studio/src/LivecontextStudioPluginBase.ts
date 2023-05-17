@@ -22,7 +22,6 @@ import Bean from "@coremedia/studio-client.client-core/data/Bean";
 import ValueExpression from "@coremedia/studio-client.client-core/data/ValueExpression";
 import ValueExpressionFactory from "@coremedia/studio-client.client-core/data/ValueExpressionFactory";
 import UrlUtil from "@coremedia/studio-client.client-core/util/UrlUtil";
-import ThumbnailResolverFactory from "@coremedia/studio-client.cap-base-models/thumbnails/ThumbnailResolverFactory";
 import StudioPlugin from "@coremedia/studio-client.main.editor-components/configuration/StudioPlugin";
 import EditorContextImpl from "@coremedia/studio-client.main.editor-components/sdk/EditorContextImpl";
 import IEditorContext from "@coremedia/studio-client.main.editor-components/sdk/IEditorContext";
@@ -39,8 +38,6 @@ import FieldContainer from "@jangaroo/ext-ts/form/FieldContainer";
 import { as, bind, cast, is } from "@jangaroo/runtime";
 import Config from "@jangaroo/runtime/Config";
 import { AnyFunction } from "@jangaroo/runtime/types";
-import CatalogTeaserThumbnailResolver from "./CatalogTeaserThumbnailResolver";
-import CatalogThumbnailResolver from "./CatalogThumbnailResolver";
 import LivecontextStudioPlugin_properties from "./LivecontextStudioPlugin_properties";
 import CatalogItemsToToContentConverter from "./converter/CatalogItemsToToContentConverter";
 import CategoryFacetsPropertyFieldBase from "./forms/facets/CategoryFacetsPropertyFieldBase";
@@ -49,7 +46,6 @@ import LivecontextContentTreeRelation from "./library/LivecontextContentTreeRela
 import ShowInCatalogTreeHelper from "./library/ShowInCatalogTreeHelper";
 import StoreNodeRenderer from "./pbe/StoreNodeRenderer";
 import CatalogObjectDragGhostRenderSupport from "./CatalogObjectDragGhostRenderSupport";
-
 
 interface LivecontextStudioPluginBaseConfig extends Config<StudioPlugin> {
 }
@@ -143,22 +139,6 @@ class LivecontextStudioPluginBase extends StudioPlugin {
     DragDropVisualFeedback.addDragGhostRenderSupport(CatalogObjectDragGhostRenderSupport, (item): boolean =>
       is(item, CatalogObject),
     );
-    /**
-     * Apply image link list preview
-     */
-    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(LivecontextStudioPluginBase.CONTENT_TYPE_EXTERNAL_CHANNEL));
-    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(LivecontextStudioPluginBase.CONTENT_TYPE_EXTERNAL_PRODUCT));
-    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create(LivecontextStudioPluginBase.CONTENT_TYPE_EXTERNAL_PAGE, "pictures"));
-    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(LivecontextStudioPluginBase.CONTENT_TYPE_MARKETING_SPOT));
-    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver("CatalogObject"));
-    editorContext.registerThumbnailResolver(new CatalogTeaserThumbnailResolver(LivecontextStudioPluginBase.CONTENT_TYPE_PRODUCT_TEASER));
-    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create(LivecontextStudioPluginBase.CONTENT_TYPE_PRODUCT_TEASER, "pictures"));
-
-    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(CatalogModel.TYPE_CATEGORY));
-    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(CatalogModel.TYPE_MARKETING));
-    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(CatalogModel.TYPE_MARKETING_SPOT));
-    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(CatalogModel.TYPE_PRODUCT));
-    editorContext.registerThumbnailResolver(new CatalogThumbnailResolver(CatalogModel.TYPE_PRODUCT_VARIANT));
 
     /**
      * Register Content initializer

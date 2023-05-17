@@ -1,21 +1,22 @@
 package com.coremedia.blueprint.elastic.social.cae.controller;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.from;
+import static org.assertj.core.api.InstanceOfAssertFactories.type;
 
-public class BlobRefPropertyEditorTest {
+class BlobRefPropertyEditorTest {
 
   @Test
-  public void test() {
-    BlobRefImpl blobRef = new BlobRefImpl("123");
+  void test() {
     BlobRefPropertyEditor editor = new BlobRefPropertyEditor();
     editor.setAsText("123");
 
     Object value = editor.getValue();
 
-    assertTrue(value instanceof BlobRef);
-    assertEquals(blobRef.getId(), ((BlobRef)value).getId());
+    assertThat(value)
+            .asInstanceOf(type(BlobRef.class))
+            .returns("123", from(BlobRef::getId));
   }
 }

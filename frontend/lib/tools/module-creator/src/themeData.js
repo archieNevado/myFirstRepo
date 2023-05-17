@@ -34,7 +34,7 @@ const initPackageJson = (
     version: "1.0.0",
     private: true,
     scripts: {
-      build: "webpack",
+      build: "cross-env NODE_OPTIONS=--openssl-legacy-provider webpack",
       deploy: "cm theme-importer deploy-theme",
       start: "cm monitor",
       prettier: "prettier --write \"src/**/*.{js,json}\"",
@@ -43,8 +43,9 @@ const initPackageJson = (
     ...commentDependencies,
     dependencies: {
       ...dependenciesToActivate,
-      "@coremedia/cm-cli": "workspace:*",
-      "@coremedia/theme-utils": "workspace:*",
+      "@coremedia/cm-cli": "workspace:2.0.0",
+      "@coremedia/theme-utils": "workspace:3.0.0",
+      "cross-env": "^7.0.3",
       webpack: "^4.46.0",
     },
     devDependencies: {

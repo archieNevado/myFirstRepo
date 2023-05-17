@@ -38,7 +38,6 @@ import Component from "@jangaroo/ext-ts/Component";
 import VBoxLayout from "@jangaroo/ext-ts/layout/container/VBox";
 import Config from "@jangaroo/runtime/Config";
 import ConfigUtils from "@jangaroo/runtime/ConfigUtils";
-import CatalogThumbnailResolver from "../CatalogThumbnailResolver";
 import LivecontextStudioPlugin_properties from "../LivecontextStudioPlugin_properties";
 import CommercePricesPropertyFieldGroup from "../components/CommercePricesPropertyFieldGroup";
 import CatalogAssetsProperty from "../components/link/CatalogAssetsProperty";
@@ -46,6 +45,7 @@ import CommerceAttributesForm from "../desktop/CommerceAttributesForm";
 import CommerceAugmentedPageGridForm from "../desktop/CommerceAugmentedPageGridForm";
 import CommerceDetailsForm from "../desktop/CommerceDetailsForm";
 import CommerceProductStructureForm from "../desktop/CommerceProductStructureForm";
+import CatalogHelper from "@coremedia-blueprint/studio-client.main.ec-studio/helper/CatalogHelper";
 
 interface CMExternalProductFormConfig extends Config<DocumentTabPanel> {
 }
@@ -107,7 +107,18 @@ class CMExternalProductForm extends DocumentTabPanel {
                   plugins: [
                     Config(BindPropertyPlugin, {
                       componentProperty: "src",
-                      bindTo: CatalogThumbnailResolver.imageValueExpression(this$.#catalogObjectExpression),
+                      bindTo: ValueExpressionFactory.createFromFunction(() => {
+                        const visuals = this.#catalogObjectExpression.extendBy(CatalogObjectPropertyNames.VISUALS).getValue();
+                        if(visuals === undefined) {
+                          return undefined;
+                        }
+
+                        let url = CatalogHelper.imageValueExpression(config.bindTo).getValue();
+                        if (url) {
+                          url += "?time=" + Date.now();
+                        }
+                        return url;
+                      }),
                     }),
                   ],
                 }),

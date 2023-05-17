@@ -1,5 +1,4 @@
 import Content from "@coremedia/studio-client.cap-rest-client/content/Content";
-import ThumbnailResolverFactory from "@coremedia/studio-client.cap-base-models/thumbnails/ThumbnailResolverFactory";
 import StudioPlugin from "@coremedia/studio-client.main.editor-components/configuration/StudioPlugin";
 import IEditorContext from "@coremedia/studio-client.main.editor-components/sdk/IEditorContext";
 import editorContext from "@coremedia/studio-client.main.editor-components/sdk/editorContext";
@@ -26,9 +25,6 @@ class P13NStudioPluginBase extends StudioPlugin {
     MetaStyleService.setDefaultStyleForMetaData(MetaStyleService.STYLE_GROUP_YELLOW, [
       "CMP13NSearch", "CMP13NSearch",
     ]);
-
-    //TODO: is this line needed?
-    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMSelectionRules", "defaultContent"));
   }
 
   #initP13NSearch(content: Content): void {

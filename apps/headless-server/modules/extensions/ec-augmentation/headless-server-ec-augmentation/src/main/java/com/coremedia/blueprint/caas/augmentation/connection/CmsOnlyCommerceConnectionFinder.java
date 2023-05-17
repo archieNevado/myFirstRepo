@@ -26,9 +26,9 @@ public class CmsOnlyCommerceConnectionFinder implements CommerceConnectionFinder
 
   @Override
   public Optional<CommerceConnection> findConnection(Site site) {
-    LOG.warn("Setting up CmsOnly commerce connection because no other commerce connection could be established. " +
+    LOG.warn("Setting up CmsOnly commerce connection for site '{}' because no other commerce connection could be established. " +
             "The CmsOnly commerce connection is not a fully fledged commerce connection and should only be used " +
-            "for development purposes.");
+            "for development purposes.", site.getId());
     return commerceSettingsHelper.findVendor(site)
             .map(vendor -> new CmsOnlyCommerceConnection(vendor, site, commerceSettingsHelper));
   }

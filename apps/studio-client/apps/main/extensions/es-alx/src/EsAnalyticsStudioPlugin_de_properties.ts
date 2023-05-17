@@ -1,5 +1,6 @@
 import ResourceBundleUtil from "@jangaroo/runtime/l10n/ResourceBundleUtil";
 import EsAnalyticsStudioPlugin_properties from "./EsAnalyticsStudioPlugin_properties";
+import BaseModels_properties from "@coremedia/studio-client.base-models/BaseModels_properties";
 
 /**
  * Overrides of ResourceBundle "EsAnalyticsStudioPlugin" for Locale "de".
@@ -11,8 +12,8 @@ ResourceBundleUtil.override(EsAnalyticsStudioPlugin_properties, {
   chart_time_stamp_unavailable: "-",
   chart_time_range_label: "Zeitintervall",
   chart_time_stamp_update: "Zuletzt abgeholt:",
-  shortDateFormat: "d.m.Y",
-  dateFormat: "d.m.Y H:i",
+  shortDateFormat: BaseModels_properties.shortDateFormat,
+  dateFormat: BaseModels_properties.dateFormat,
   chart_label_page_views: "Seitenaufrufe",
   chart_label_publications: "Publikationen",
   chart_title_page_views: "Seitenaufrufe",

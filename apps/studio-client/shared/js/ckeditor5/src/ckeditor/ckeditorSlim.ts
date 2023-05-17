@@ -1,18 +1,16 @@
-import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
+import { ClassicEditor } from '@ckeditor/ckeditor5-editor-classic';
 
-import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
-//@ts-expect-error
-import DocumentList from '@ckeditor/ckeditor5-list/src/documentlist';
-import Differencing from "@coremedia/ckeditor5-coremedia-differencing/Differencing";
-import CoreMediaStudioEssentials from "@coremedia/ckeditor5-coremedia-studio-essentials/CoreMediaStudioEssentials";
-import CoreMediaFontMapper from '@coremedia/ckeditor5-font-mapper/FontMapper';
+import { Essentials } from '@ckeditor/ckeditor5-essentials';
+import { Differencing } from "@coremedia/ckeditor5-coremedia-differencing";
+import { CoreMediaStudioEssentials } from "@coremedia/ckeditor5-coremedia-studio-essentials";
+import { FontMapper as CoreMediaFontMapper} from '@coremedia/ckeditor5-font-mapper';
 
 import { localization, localize } from "../lang/LocalizationUtils";
 import LocaleUtil from "@coremedia/studio-client.cap-base-models/locale/LocaleUtil";
 import { CKEditorPluginConfig, CreateCKEditorFunction } from "@coremedia/studio-client.ckeditor-common/CKEditorCreateFunctionType";
 import '../theme/custom.css';
-import AutoSave from "@ckeditor/ckeditor5-autosave/src/autosave";
-import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
+import { Autosave } from "@ckeditor/ckeditor5-autosave";
+import { Paragraph } from '@ckeditor/ckeditor5-paragraph';
 
 /**
  * Localization the editor configuration
@@ -41,12 +39,9 @@ export const createSlimCKEditor: CreateCKEditorFunction = (domElement:(string | 
     licenseKey: '',
     placeholder: localize('Type your text here...', language),
     plugins: [
-      AutoSave,
-      //@ts-ignore
+      Autosave,
       CoreMediaStudioEssentials,
-      //@ts-ignore
       CoreMediaFontMapper,
-      //@ts-ignore
       Differencing,
       Essentials,
       Paragraph,

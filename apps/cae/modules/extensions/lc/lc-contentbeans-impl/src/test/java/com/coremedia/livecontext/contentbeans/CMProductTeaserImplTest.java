@@ -1,24 +1,24 @@
 package com.coremedia.livecontext.contentbeans;
 
 import com.coremedia.blueprint.base.settings.SettingsService;
-import com.coremedia.blueprint.common.contentbeans.CMTeasable;
 import com.coremedia.blueprint.common.teaserOverlay.TeaserOverlaySettings;
 import com.coremedia.cap.content.Content;
 import com.coremedia.livecontext.ecommerce.catalog.Product;
 import com.coremedia.xml.Markup;
 import com.coremedia.xml.MarkupUtil;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.coremedia.livecontext.contentbeans.ProductTeasableHelperTest.createMarkup;
-import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 
-public class CMProductTeaserImplTest {
+@ExtendWith(MockitoExtension.class)
+class CMProductTeaserImplTest {
 
   static final String CONTENT_TEASER_TITLE_PROPERTY = "teaserTitle";
   static final String CONTENT_TEASER_TITLE = "content teaser title";
@@ -51,23 +51,15 @@ public class CMProductTeaserImplTest {
   @Mock
   private ProductTeasableHelper productTeasableHelper;
 
-  @Before
+  @BeforeEach
   public void setUp() {
-    initMocks(this);
-
-    when(teaserOverlaySettings.isEnabled()).thenReturn(false);
-
-    when(settingsService.settingAsMap(CMTeasable.TEASER_OVERLAY_SETTINGS_STRUCT_NAME, String.class, Object.class, Content.class))
-            .thenReturn(emptyMap());
-    when(settingsService.createProxy(TeaserOverlaySettings.class, Object.class)).thenReturn(teaserOverlaySettings);
-
     testling = new TestCMProductTeaserImpl(content, mock(Product.class));
     testling.setProductTeasableHelper(productTeasableHelper);
     testling.setSettingsService(settingsService);
   }
 
   @Test
-  public void testTeasableFallbackPropertiesWithNull() {
+  void testTeasableFallbackPropertiesWithNull() {
     when(content.getString(CONTENT_TEASER_TITLE_PROPERTY)).thenReturn(null);
     when(content.getMarkup(CONTENT_TEASER_TEXT_PROPERTY)).thenReturn(null);
     when(content.getString(CONTENT_TITLE_PROPERTY)).thenReturn(CONTENT_TITLE);
@@ -81,14 +73,13 @@ public class CMProductTeaserImplTest {
   }
 
   @Test
-  public void testTeasableFallbackPropertiesWithEmptyValues() {
+  void testTeasableFallbackPropertiesWithEmptyValues() {
     when(content.getString(CONTENT_TEASER_TITLE_PROPERTY)).thenReturn("");
     when(content.getMarkup(CONTENT_TEASER_TEXT_PROPERTY)).thenReturn(EMPTY_MARKUP);
     when(content.getString(CONTENT_TITLE_PROPERTY)).thenReturn(CONTENT_TITLE);
     when(content.getMarkup(CONTENT_DETAIL_TEXT_PROPERTY)).thenReturn(createMarkup(CONTENT_DETAIL_TEXT));
 
-    when(productTeasableHelper.getTeaserTextInternal(testling, null)).thenReturn(EMPTY_MARKUP);
-    when(productTeasableHelper.getTeaserTitleInternal(testling, null)).thenReturn("");
+    when(productTeasableHelper.getTeaserTitleInternal(testling, "")).thenReturn("");
 
     assertThat(testling.getTeaserTitle()).isEqualTo(CONTENT_TITLE);
     assertThat(MarkupUtil.asPlainText(testling.getTeaserText()).trim()).isEqualTo(CONTENT_DETAIL_TEXT);

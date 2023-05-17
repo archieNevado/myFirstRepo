@@ -1,4 +1,5 @@
 import CoreIcons_properties from "@coremedia/studio-client.core-icons/CoreIcons_properties";
+import BaseModels_properties from "@coremedia/studio-client.base-models/BaseModels_properties";
 
 /**
  * Interface values for ResourceBundle "AMStudioPlugin".
@@ -76,7 +77,7 @@ const AMStudioPlugin_properties: AMStudioPlugin_properties = {
   Action_createCMVideoFromAMVideoAsset_icon: CoreIcons_properties.create_type_video,
   Action_createCMVideoFromAMVideoAsset_text: "Create localized web asset",
   Action_createCMVideoFromAMVideoAsset_tooltip: "Create new video content from the given asset.",
-  ExpirationDate_dateFormat: "m/d/Y",
+  ExpirationDate_dateFormat: BaseModels_properties.shortDateFormat,
   Filter_RightsChannels_text: "Rights: Channels",
   Filter_RightsRegions_text: "Rights: Regions",
   Asset_metadata_channels_print_text: "Print",

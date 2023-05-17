@@ -1,11 +1,11 @@
 package com.coremedia.livecontext.fragment;
 
+import com.coremedia.blueprint.base.navigation.context.ContextStrategy;
 import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.blueprint.cae.contentbeans.PageImpl;
 import com.coremedia.blueprint.common.contentbeans.Page;
 import com.coremedia.blueprint.common.navigation.Linkable;
 import com.coremedia.blueprint.common.navigation.Navigation;
-import com.coremedia.cache.Cache;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.user.User;
 import com.coremedia.livecontext.contentbeans.CMExternalPage;
@@ -21,10 +21,12 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collections;
+import java.util.List;
 
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
@@ -37,16 +39,13 @@ public class ExternalPageFragmentHandlerTest extends FragmentHandlerTestBase<Ext
   private Content aboutUsContent;
   @Mock
   private TreeRelation<Content> treeRelation;
+  @Mock
+  private ContextStrategy<String, Content> externalPageContentContextStrategy;
 
   @Before
   public void defaultSetup() {
     super.defaultSetup();
-    ExternalPageContextStrategy contextStrategy = new ExternalPageContextStrategy();
-    contextStrategy.setCache(new Cache("testCache"));
-    contextStrategy.setSitesService(getSitesService());
-    contextStrategy.setTreeRelation(treeRelation);
-    contextStrategy.setContentBeanFactory(contentBeanFactory);
-
+    ExternalPageContextStrategy contextStrategy = new ExternalPageContextStrategy(contentBeanFactory, externalPageContentContextStrategy);
     getTestling().setContextStrategy(contextStrategy);
 
     when(validationService.validate(any())).thenReturn(true);
@@ -88,7 +87,8 @@ public class ExternalPageFragmentHandlerTest extends FragmentHandlerTestBase<Ext
 
   @Test
   public void testAboutUsPageCanBeResolved() {
-    CMExternalChannelCacheKeyTest.channelsFulfilling(Collections.singleton(aboutUsPage.getContent()), contentRepository);
+    doReturn(List.of(aboutUsPage.getContent())).when(externalPageContentContextStrategy)
+            .findContextsFor(eq("aboutUs"), any(Content.class));
 
     FragmentParameters params = getFragmentParametersWithExternalPage("aboutUs");
     ModelAndView modelAndView = getTestling().createModelAndView(params, request);

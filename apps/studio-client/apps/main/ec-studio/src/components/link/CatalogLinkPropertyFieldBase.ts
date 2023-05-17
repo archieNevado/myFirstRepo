@@ -149,7 +149,7 @@ class CatalogLinkPropertyFieldBase extends LinkListGridPanel {
   }
 
   static convertIdLabel(v: string, catalogObject: CatalogObject): string {
-    if (!catalogObject) {
+    if (!catalogObject || !is(catalogObject, CatalogObject)) {
       return undefined;
     }
     const extId = catalogObject.getExternalId();

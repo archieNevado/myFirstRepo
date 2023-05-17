@@ -2,7 +2,6 @@ package com.coremedia.ecommerce.studio.rest.cache;
 
 import com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceServicesConfiguration;
 import com.coremedia.blueprint.base.settings.SettingsService;
-import com.coremedia.rest.cap.config.StudioConfigurationProperties;
 import com.coremedia.rest.linking.Linker;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.slf4j.Logger;
@@ -23,7 +22,7 @@ import static java.lang.invoke.MethodHandles.lookup;
         BaseCommerceServicesConfiguration.class
 })
 @EnableConfigurationProperties({
-        StudioConfigurationProperties.class
+        StudioCommerceCacheConfigurationProperties.class
 })
 public class CommerceCacheConfiguration implements DisposableBean {
 
@@ -43,12 +42,12 @@ public class CommerceCacheConfiguration implements DisposableBean {
                                                                   Linker linker,
                                                                   SettingsService settingsService,
                                                                   CommerceBeanClassResolver commerceBeanClassResolver,
-                                                                  StudioConfigurationProperties studioConfigurationProperties) {
+                                                                  StudioCommerceCacheConfigurationProperties properties) {
     var taskScheduler = taskSchedulerProvider.getIfAvailable(this::createLocalTaskScheduler);
     CommerceCacheInvalidationSource commerceCacheInvalidationSource =
             new CommerceCacheInvalidationSource(taskScheduler, linker, settingsService, commerceBeanClassResolver);
     commerceCacheInvalidationSource.setId("commerceInvalidationSource");
-    commerceCacheInvalidationSource.setCapacity(studioConfigurationProperties.getRest().getCommerceCache().getCapacity());
+    commerceCacheInvalidationSource.setCapacity(properties.getCapacity());
     return commerceCacheInvalidationSource;
   }
 

@@ -3,7 +3,6 @@ import Calendar from "@coremedia/studio-client.client-core/data/Calendar";
 import ObjectUtils from "@coremedia/studio-client.client-core/util/ObjectUtils";
 import CoreIcons_properties from "@coremedia/studio-client.core-icons/CoreIcons_properties";
 import IconColumn from "@coremedia/studio-client.ext.ui-components/grid/column/IconColumn";
-import Editor_properties from "@coremedia/studio-client.main.editor-components/Editor_properties";
 import DateUtil from "@jangaroo/ext-ts/Date";
 import Model from "@jangaroo/ext-ts/data/Model";
 import Store from "@jangaroo/ext-ts/data/Store";
@@ -11,6 +10,7 @@ import Config from "@jangaroo/runtime/Config";
 import ConfigUtils from "@jangaroo/runtime/ConfigUtils";
 import BlueprintDocumentTypes_properties from "../../BlueprintDocumentTypes_properties";
 import Validation_properties from "../../Validation_properties";
+import BaseModels_properties from "@coremedia/studio-client.base-models/BaseModels_properties";
 
 interface ValidityColumnConfig extends Config<IconColumn> {
 }
@@ -39,7 +39,7 @@ class ValidityColumn extends IconColumn {
 
   static readonly #INVALID_PAST: string = "invalid-past";
 
-  static readonly #DATE_FORMAT: string = Editor_properties.dateFormat;
+  static readonly #DATE_FORMAT: string = BaseModels_properties.dateFormat;
 
   protected override calculateIconCls(value: any, metadata: any, record: Model, rowIndex: number, colIndex: number, store: Store): string {
     if (value && value.clsName) {
@@ -77,7 +77,7 @@ class ValidityColumn extends IconColumn {
 
     let clsName = "";
     let dateString: string;
-
+    
     if (!validFrom && validTo && validTo.getDate() && ValidityColumn.#isBeforeToday(validTo)) {
       clsName = ValidityColumn.#INVALID_PAST;
       dateString = DateUtil.format(validTo.getDate(), ValidityColumn.#DATE_FORMAT);

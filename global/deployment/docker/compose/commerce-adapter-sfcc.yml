@@ -37,7 +37,7 @@ x-logging:
 
 services:
   commerce-adapter-sfcc:
-    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-sfcc:${COMMERCE_ADAPTER_SFCC_VERSION:-2.1.3}
+    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-sfcc:${COMMERCE_ADAPTER_SFCC_VERSION:-2.1.4}
     container_name: commerce-adapter-sfcc
     restart: always
     logging: *default-logging
@@ -51,8 +51,7 @@ services:
     cap_drop:
       - ALL
     environment:
-      <<: *default-boot-envs
-      <<: *development-boot-envs
+      <<: [*default-boot-envs, *development-boot-envs]
       SFCC_OCAPI_HOST: ${SFCC_OCAPI_HOST}
       SFCC_OCAPI_SANDBOX: ${SFCC_OCAPI_SANDBOX}
       SFCC_OAUTH_CLIENTID: ${SFCC_OAUTH_CLIENTID}

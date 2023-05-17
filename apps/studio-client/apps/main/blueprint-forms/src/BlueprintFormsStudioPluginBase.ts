@@ -3,7 +3,6 @@ import Content from "@coremedia/studio-client.cap-rest-client/content/Content";
 import ValueExpression from "@coremedia/studio-client.client-core/data/ValueExpression";
 import ValueExpressionFactory from "@coremedia/studio-client.client-core/data/ValueExpressionFactory";
 import Issue from "@coremedia/studio-client.client-core/data/validation/Issue";
-import ThumbnailResolverFactory from "@coremedia/studio-client.cap-base-models/thumbnails/ThumbnailResolverFactory";
 import BindPropertyPlugin from "@coremedia/studio-client.ext.ui-components/plugins/BindPropertyPlugin";
 import ObservableUtil from "@coremedia/studio-client.ext.ui-components/util/ObservableUtil";
 import SiteAwareFeatureUtil from "@coremedia/studio-client.main.bpbase-studio-components/sites/SiteAwareFeatureUtil";
@@ -27,8 +26,7 @@ import Config from "@jangaroo/runtime/Config";
 import BlueprintFormsStudioPlugin from "./BlueprintFormsStudioPlugin";
 import CMChannelExtension from "./CMChannelExtension";
 import ContentInitializer from "./util/ContentInitializer";
-import UploadSettingsService
-  from "@coremedia/studio-client.main.editor-components/sdk/upload/UploadSettingsService";
+import UploadSettingsService from "@coremedia/studio-client.main.editor-components/sdk/upload/UploadSettingsService";
 
 interface BlueprintFormsStudioPluginBaseConfig extends Config<StudioPlugin> {
 }
@@ -82,17 +80,6 @@ class BlueprintFormsStudioPluginBase extends StudioPlugin {
     ]);
     MetaStyleService.setDefaultStyleForMetaData(MetaStyleService.STYLE_GROUP_BLUE, [MetaStyleService.FALLBACK_META_DATA]);
     MetaStyleService.setDefaultStyleForMetaData(MetaStyleService.STYLE_GROUP_NONE, ["folder_"]);
-
-    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMSelectionRules", "defaultContent"));
-    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMCollection", "pictures", "items"));
-    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMTeasable", "pictures"));
-    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMSpinner", "pictures", "sequence"));
-    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMDownload", "data"));
-    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMImage", "data"));
-    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMVideo", "pictures"));
-    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMPicture", "data"));
-    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMSymbol", "icon"));
-    editorContext.registerThumbnailResolver(ThumbnailResolverFactory.create("CMTheme", "icon"));
 
     DocumentPanelNagBar.addNagBarEntry(new CheckedOutDocumentPanelNagBarEntry(1000));
     DocumentPanelNagBar.addNagBarEntry(new UnauthorizedDocumentPanelNagBarEntry(990));

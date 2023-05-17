@@ -26,7 +26,11 @@ import org.slf4j.LoggerFactory;
 
 import static java.lang.invoke.MethodHandles.lookup;
 
+/**
+ * @deprecated use {@link AugmentationPageGridAdapterFactoryCmsOnly} instead
+ */
 @DefaultAnnotation(NonNull.class)
+@Deprecated(since = "2304")
 public class AugmentationPageGridAdapterFactory extends PageGridAdapterFactory {
 
   private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());

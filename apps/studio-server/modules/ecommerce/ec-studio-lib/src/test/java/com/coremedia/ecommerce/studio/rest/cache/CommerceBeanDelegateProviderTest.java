@@ -11,4 +11,10 @@ public class CommerceBeanDelegateProviderTest {
     assertThat(CommerceBeanDelegateProvider.encodePartNumber("I am the /partnumb/er"))
             .isEqualTo("I%20am%20the%20/partnumb/er");
   }
+
+  @Test
+  public void encodePartNumberWithPluses() {
+    assertThat(CommerceBeanDelegateProvider.encodePartNumber("I am+ the /+partnumb/er"))
+            .isEqualTo("I%20am%2B%20the%20/%2Bpartnumb/er");
+  }
 }

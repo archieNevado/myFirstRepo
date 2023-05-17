@@ -1,5 +1,5 @@
-import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
-import GeneralHtmlSupport from '@ckeditor/ckeditor5-html-support/src/generalhtmlsupport';
+import { ClassicEditor } from '@ckeditor/ckeditor5-editor-classic';
+import { GeneralHtmlSupport } from '@ckeditor/ckeditor5-html-support';
 
 import {
   CKEditorPluginConfig,
@@ -36,7 +36,6 @@ export const createHtmlViewerCKEditor: CreateCKEditorFunction = (domElement:(str
     toolbar: {
       items: []
     },
-    //@ts-expect-error ClassicEditor.create(..., EditorConfig), EditorConfig does not know about GeneralHtmlSupport plugin configurations.
     htmlSupport: {
       /**
        * Please note that a misconfiguration of the `htmlSupport` configuration

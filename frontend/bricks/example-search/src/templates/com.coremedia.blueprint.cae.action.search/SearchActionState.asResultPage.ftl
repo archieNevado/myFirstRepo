@@ -20,7 +20,6 @@
 <#assign searchResult=self.result!cm.UNDEFINED/>
 <#assign searchResultHits=searchResult.hits![]/>
 <#assign searchResultView=cm.localParameters().searchResultView!"asSearchResult" />
-<#assign searchResultPageView=cm.localParameters().searchResultPageView!"asSearchResultPage" />
 <#assign searchPagination=bp.setting(self, "searchResultPagination", false) />
 <#assign searchSpellSuggestions=!bp.setting(self, "searchDisableSpellingSuggestions", false) />
 <#assign searchCategories=bp.setting(self, "searchChannelSelect", bp.setting(self, "search.channelselect", []))/>

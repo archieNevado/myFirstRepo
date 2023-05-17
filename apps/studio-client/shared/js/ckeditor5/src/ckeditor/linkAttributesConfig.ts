@@ -1,4 +1,5 @@
-import { LinkAttributesConfig } from "@coremedia/ckeditor5-link-common/LinkAttributesConfig";
+import { LinkAttributesConfig } from "@coremedia/ckeditor5-link-common";
+
 
 /**
  * Configuration that holds all link-related attributes, that are not

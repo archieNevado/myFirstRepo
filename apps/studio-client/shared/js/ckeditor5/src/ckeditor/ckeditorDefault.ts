@@ -1,58 +1,44 @@
-import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
-
-import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
-import Alignment from '@ckeditor/ckeditor5-alignment/src/alignment';
-import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
-import Indent from '@ckeditor/ckeditor5-indent/src/indent';
-import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
-import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote';
-import Code from '@ckeditor/ckeditor5-basic-styles/src/code';
-//@ts-expect-error
-import DocumentList from '@ckeditor/ckeditor5-list/src/documentlist';
-import Heading from '@ckeditor/ckeditor5-heading/src/heading';
-import Link from '@ckeditor/ckeditor5-link/src/link';
+import { Essentials } from '@ckeditor/ckeditor5-essentials';
+import { Alignment } from '@ckeditor/ckeditor5-alignment';
+import { Indent } from '@ckeditor/ckeditor5-indent';
+import { BlockQuote } from '@ckeditor/ckeditor5-block-quote';
+import { Heading } from '@ckeditor/ckeditor5-heading';
+import { AutoLink, Link, LinkImage } from '@ckeditor/ckeditor5-link';
+// ImageInline: See ckeditor/ckeditor5#12027.
 import ImageInline from "@ckeditor/ckeditor5-image/src/imageinline";
+// ImageBlockEditing: See ckeditor/ckeditor5#12027.
 import ImageBlockEditing from "@ckeditor/ckeditor5-image/src/image/imageblockediting";
-import ImageStyle from "@ckeditor/ckeditor5-image/src/imagestyle";
-import ImageToolbar from "@ckeditor/ckeditor5-image/src/imagetoolbar";
-import ImageTextAlternative from "@ckeditor/ckeditor5-image/src/imagetextalternative";
-import AutoLink from "@ckeditor/ckeditor5-link/src/autolink";
-import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
-import Table from '@ckeditor/ckeditor5-table/src/table';
-import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
-import RemoveFormat from '@ckeditor/ckeditor5-remove-format/src/removeformat';
-import Strikethrough from '@ckeditor/ckeditor5-basic-styles/src/strikethrough';
-import Subscript from '@ckeditor/ckeditor5-basic-styles/src/subscript';
-import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript';
-import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
-import ContentClipboard from "@coremedia/ckeditor5-coremedia-content-clipboard/ContentClipboard";
-import PasteContentPlugin from "@coremedia/ckeditor5-coremedia-content-clipboard/paste/PasteContentPlugin";
-import ContentImagePlugin from "@coremedia/ckeditor5-coremedia-images/ContentImagePlugin";
-import ContentLinks from "@coremedia/ckeditor5-coremedia-link/contentlink/ContentLinks";
-import Differencing from "@coremedia/ckeditor5-coremedia-differencing/Differencing";
-import LinkTarget from "@coremedia/ckeditor5-coremedia-link/linktarget/LinkTarget";
-import CoreMediaStudioEssentials from "@coremedia/ckeditor5-coremedia-studio-essentials/CoreMediaStudioEssentials";
-import CoreMediaFontMapper from '@coremedia/ckeditor5-font-mapper/FontMapper';
-import { LinkAttributes } from "@coremedia/ckeditor5-link-common/LinkAttributes";
-import Autoformat from '@ckeditor/ckeditor5-autoformat/src/autoformat';
-import FindAndReplace from '@ckeditor/ckeditor5-find-and-replace/src/findandreplace';
-import CodeBlock from '@ckeditor/ckeditor5-code-block/src/codeblock';
+import { ImageTextAlternative, ImageToolbar, ImageStyle } from "@ckeditor/ckeditor5-image";
+import { Paragraph } from '@ckeditor/ckeditor5-paragraph';
+import { Table, TableToolbar } from '@ckeditor/ckeditor5-table';
+import { RemoveFormat } from '@ckeditor/ckeditor5-remove-format';
+import { Bold, Italic, Code, Strikethrough, Subscript, Superscript, Underline } from '@ckeditor/ckeditor5-basic-styles';
+import { Autoformat } from '@ckeditor/ckeditor5-autoformat';
+import { FindAndReplace } from '@ckeditor/ckeditor5-find-and-replace';
+import { CodeBlock } from '@ckeditor/ckeditor5-code-block';
 
-import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave';
+import { Autosave } from '@ckeditor/ckeditor5-autosave';
 import { icons } from '@ckeditor/ckeditor5-core';
 import { localization, localize } from "../lang/LocalizationUtils";
 import LocaleUtil from "@coremedia/studio-client.cap-base-models/locale/LocaleUtil";
 import { CKEditorPluginConfig, CreateCKEditorFunction } from "@coremedia/studio-client.ckeditor-common/CKEditorCreateFunctionType";
-import { LinkImage } from "@ckeditor/ckeditor5-link";
 import '../theme/custom.css';
 import { PasteFromOffice } from "@ckeditor/ckeditor5-paste-from-office";
 import { SourceEditing } from "@ckeditor/ckeditor5-source-editing";
 import CKEditorFeatureFlags from "@coremedia/studio-client.ckeditor-common/CKEditorFeatureFlags";
-import { COREMEDIA_LINK_CONFIG_KEY } from "@coremedia/ckeditor5-coremedia-link/contentlink/LinkBalloonConfig";
+import { COREMEDIA_LINK_CONFIG_KEY, ContentLinks, LinkTarget } from "@coremedia/ckeditor5-coremedia-link";
 import { linkAttributesConfig } from "./linkAttributesConfig";
+import { ContentClipboard } from "@coremedia/ckeditor5-coremedia-content-clipboard";
+import { ContentImagePlugin } from "@coremedia/ckeditor5-coremedia-images";
+import { CoreMediaStudioEssentials } from "@coremedia/ckeditor5-coremedia-studio-essentials";
+import { Differencing } from "@coremedia/ckeditor5-coremedia-differencing";
+import { LinkAttributes } from "@coremedia/ckeditor5-link-common";
+import { PasteContentPlugin } from "@coremedia/ckeditor5-coremedia-content-clipboard";
+import { DocumentList } from "@ckeditor/ckeditor5-list";
+import { FontMapper as CoreMediaFontMapper} from "@coremedia/ckeditor5-font-mapper";
+import { ClassicEditor } from "@ckeditor/ckeditor5-editor-classic";
 
 const {
-  //@ts-expect-error
   objectInline: withinTextIcon,
   objectLeft: alignLeftIcon,
   objectRight: alignRightIcon,
@@ -176,7 +162,6 @@ export const createDefaultCKEditor: CreateCKEditorFunction = (domElement:(string
       TableToolbar,
       Underline,
     ],
-    //@ts-ignore (ignore instead of expect-error because of other ignores in module) types only expect strings here, but objects are also allowed
     toolbar: defaultToolbarItems,
     heading: {
       options: [
@@ -216,8 +201,8 @@ export const createDefaultCKEditor: CreateCKEditorFunction = (domElement:(string
         keepOpen: {
           // library, quick-search (+buttons in header toolbar)
           ids: ["collection-view-container", "side-panel-window_collection-view-container", "quickSearchDialog", "libraryButton", "QuickSearchButtonId", "controlRoomButtonId"],
-            // input field menus in the library:
-            classes: ["x-boundlist"],
+          // input field menus in the library:
+          classes: ["x-boundlist"],
         },
       },
     },
@@ -246,6 +231,7 @@ export const createDefaultCKEditor: CreateCKEditorFunction = (domElement:(string
             className: 'float--none',
             modelElements: [ 'imageInline' ]
           },
+          //@ts-expect-error missing the attribute modelElements which is optional.
           {
             name: 'inline',
             title: localize('Page default', language),

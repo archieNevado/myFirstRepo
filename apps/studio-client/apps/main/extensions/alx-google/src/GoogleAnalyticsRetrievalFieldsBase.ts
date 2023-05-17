@@ -18,29 +18,29 @@ class GoogleAnalyticsRetrievalFieldsBase extends PropertyFieldGroup {
 
   static readonly #GOOGLE_ANALYTICS: string = "googleAnalytics";
 
-  static readonly #P12_FILE: string = "p12File";
+  static readonly #AUTH_FILE: string = "authFile";
 
   static readonly #LOCAL_SETTINGS: string = "localSettings";
 
   static readonly #CM_DOWNLOAD: string = "CMDownload";
 
-  #p12FileVE: ValueExpression = null;
+  #authFileVE: ValueExpression = null;
 
   #localSettings: RemoteBean = null;
 
   constructor(config: Config<GoogleAnalyticsRetrievalFields> = null) {
     super(config);
-    this.#updateP12FileFromStruct();
-    this.getP12FileVE().addChangeListener(bind(this, this.#updateStruct));
-    this.bindTo.addChangeListener(bind(this, this.#updateP12FileFromStruct));
+    this.#updateAuthFileFromStruct();
+    this.getAuthFileVE().addChangeListener(bind(this, this.#updateStruct));
+    this.bindTo.addChangeListener(bind(this, this.#updateAuthFileFromStruct));
   }
 
   #updateStruct(): void {
-    const value: Array<any> = this.getP12FileVE().getValue();
+    const value: Array<any> = this.getAuthFileVE().getValue();
     if (value && value.length > 0) {
-      this.#applyToStruct(this.bindTo.getValue(), GoogleAnalyticsRetrievalFieldsBase.#CM_DOWNLOAD, GoogleAnalyticsRetrievalFieldsBase.#P12_FILE, value[0]);
+      this.#applyToStruct(this.bindTo.getValue(), GoogleAnalyticsRetrievalFieldsBase.#CM_DOWNLOAD, GoogleAnalyticsRetrievalFieldsBase.#AUTH_FILE, value[0]);
     } else {
-      GoogleAnalyticsRetrievalFieldsBase.#removeLinkFromStruct(this.bindTo.getValue(), GoogleAnalyticsRetrievalFieldsBase.#P12_FILE);
+      GoogleAnalyticsRetrievalFieldsBase.#removeLinkFromStruct(this.bindTo.getValue(), GoogleAnalyticsRetrievalFieldsBase.#AUTH_FILE);
     }
   }
 
@@ -58,14 +58,14 @@ class GoogleAnalyticsRetrievalFieldsBase extends PropertyFieldGroup {
     return struct.get(key);
   }
 
-  protected getP12FileVE(): ValueExpression {
-    if (!this.#p12FileVE) {
-      this.#p12FileVE = ValueExpressionFactory.createFromValue([]);
+  protected getAuthFileVE(): ValueExpression {
+    if (!this.#authFileVE) {
+      this.#authFileVE = ValueExpressionFactory.createFromValue([]);
     }
-    return this.#p12FileVE;
+    return this.#authFileVE;
   }
 
-  #updateP12FileFromStruct(): void {
+  #updateAuthFileFromStruct(): void {
     const c: Content = this.bindTo.getValue();
     c.load((): void => {
       const props = c.getProperties();
@@ -75,22 +75,22 @@ class GoogleAnalyticsRetrievalFieldsBase extends PropertyFieldGroup {
       }
       this.#localSettings = as(props.get(GoogleAnalyticsRetrievalFieldsBase.#LOCAL_SETTINGS), RemoteBean);
       if (init) {
-        this.#localSettings.addPropertyChangeListener(GoogleAnalyticsRetrievalFieldsBase.#GOOGLE_ANALYTICS, bind(this, this.#updateP12FileFromLocalSettings));
+        this.#localSettings.addPropertyChangeListener(GoogleAnalyticsRetrievalFieldsBase.#GOOGLE_ANALYTICS, bind(this, this.#updateAuthFileFromLocalSettings));
       }
       this.#localSettings.load((): void =>
-        this.#updateP12FileFromLocalSettings(),
+        this.#updateAuthFileFromLocalSettings(),
       );
     });
   }
 
-  #updateP12FileFromLocalSettings(): void {
+  #updateAuthFileFromLocalSettings(): void {
     const googleAnalytics = GoogleAnalyticsRetrievalFieldsBase.#getStruct(as(this.#localSettings, Struct), GoogleAnalyticsRetrievalFieldsBase.#GOOGLE_ANALYTICS);
     if (googleAnalytics) {
-      const p12File: Struct = googleAnalytics.get(GoogleAnalyticsRetrievalFieldsBase.#P12_FILE);
-      if (!p12File) {
-        this.getP12FileVE().setValue([]);
+      const authFile: Struct = googleAnalytics.get(GoogleAnalyticsRetrievalFieldsBase.#AUTH_FILE);
+      if (!authFile) {
+        this.getAuthFileVE().setValue([]);
       } else {
-        this.getP12FileVE().setValue([p12File]);
+        this.getAuthFileVE().setValue([authFile]);
       }
     }
   }
@@ -113,14 +113,14 @@ class GoogleAnalyticsRetrievalFieldsBase extends PropertyFieldGroup {
 
     // apply the link again: in case the substruct had to be created previously,
     // we need to notify the component about the missed initialization
-    this.getP12FileVE().setValue([link]);
+    this.getAuthFileVE().setValue([link]);
   }
 
   protected override onDestroy(): void {
     super.onDestroy();
-    this.#localSettings.removePropertyChangeListener(GoogleAnalyticsRetrievalFieldsBase.#GOOGLE_ANALYTICS, bind(this, this.#updateP12FileFromLocalSettings));
-    this.getP12FileVE().removeChangeListener(bind(this, this.#updateStruct));
-    this.bindTo.removeChangeListener(bind(this, this.#updateP12FileFromStruct));
+    this.#localSettings.removePropertyChangeListener(GoogleAnalyticsRetrievalFieldsBase.#GOOGLE_ANALYTICS, bind(this, this.#updateAuthFileFromLocalSettings));
+    this.getAuthFileVE().removeChangeListener(bind(this, this.#updateStruct));
+    this.bindTo.removeChangeListener(bind(this, this.#updateAuthFileFromStruct));
   }
 }
 

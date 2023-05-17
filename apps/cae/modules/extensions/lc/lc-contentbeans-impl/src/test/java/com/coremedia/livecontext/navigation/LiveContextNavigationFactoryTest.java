@@ -70,7 +70,7 @@ public class LiveContextNavigationFactoryTest {
   private ContentBeanFactory contentBeanFactory;
 
   @Mock
-  private ValidationService validationService;
+  private ValidationService<LiveContextNavigation> validationService;
 
   @Mock
   private CommerceConnectionSupplier commerceConnectionSupplier;
@@ -118,7 +118,6 @@ public class LiveContextNavigationFactoryTest {
     when(augmentationService.getContent(categoryToCreateFrom)).thenReturn(content);
 
     LiveContextNavigation actual = testling.createNavigation(categoryToCreateFrom, site);
-    assertThat(actual).as("The returned Navigation must not be null").isNotNull();
     assertThat(actual).isInstanceOf(LiveContextExternalChannelImpl.class);
   }
 

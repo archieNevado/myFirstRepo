@@ -3,6 +3,7 @@ src   = "campaigns.html.tmpl"
 dest  = "/usr/share/nginx/html/assets/campaigns.html"
 keys  = [
          "/campaign/enabled",
+         "/campaign/preview/authorization/id",
          "/campaign/delivery/endpoint",
          "/campaign/delivery/authorization/id",
          "/studio/campaign/app/graphqlendpoint",

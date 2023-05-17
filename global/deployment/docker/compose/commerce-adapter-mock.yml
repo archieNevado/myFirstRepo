@@ -37,7 +37,7 @@ x-logging:
 
 services:
   commerce-adapter-mock:
-    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-mock:${COMMERCE_ADAPTER_MOCK_VERSION:-2.1.3}
+    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-mock:${COMMERCE_ADAPTER_MOCK_VERSION:-2.1.4}
     container_name: commerce-adapter-mock
     restart: always
     logging: *default-logging
@@ -51,8 +51,7 @@ services:
     cap_drop:
       - ALL
     environment:
-      <<: *default-boot-envs
-      <<: *development-boot-envs
+      <<: [*default-boot-envs, *development-boot-envs]
     healthcheck: *default-boot-healthcheck
     volumes:
       - /coremedia/cache

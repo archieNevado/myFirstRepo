@@ -28,6 +28,7 @@
                     <stringProperty name="teaserTitle" value="TeaserTestTitle"/>
                     <stringProperty name="keywords" value="key 1,key2,key3"/>
                     <markupProperty name="localSettings" url="liveContextSettings.xml" grammar="coremedia-struct-2008"/>
+                    <markupProperty name="placement" url="22placement.xml" grammar="coremedia-struct-2008"/>
                     <linkProperty name="children">
                       <link id="1111112"/>
                       <link id="1111116"/>
@@ -67,6 +68,19 @@
                 <document id="1111122" type="CMExternalChannel" name="cool-stuff-augmentation">
                   <version number="1">
                     <stringProperty name="externalId" value="mock:///catalog/category/cool-stuff"/>
+                    <markupProperty name="placement" url="22placement.xml" grammar="coremedia-struct-2008"/>
+                  </version>
+                </document>
+                <document id="1111124" type="CMExternalProduct" name="cool-product-augmentation">
+                  <version number="1">
+                    <stringProperty name="externalId" value="mock:///catalog/product/cool-product"/>
+                    <markupProperty name="pdpPagegrid" url="22placement.xml" grammar="coremedia-struct-2008"/>
+                  </version>
+                </document>
+                <document id="1111126" type="CMExternalProduct" name="cool-product-augmentation-different-catalog-alias">
+                  <version number="1">
+                    <stringProperty name="externalId" value="mock:///catalog/product/catalog:test;cool-product"/>
+                    <markupProperty name="pdpPagegrid" url="22placement.xml" grammar="coremedia-struct-2008"/>
                   </version>
                 </document>
               </folder>
@@ -123,6 +137,40 @@
           </folder>
         </folder>
       </folder>
+      <!-- the layout settings document -->
+      <document id="24" type="CMSettings" name="LayoutSettings">
+        <version number="1">
+          <markupProperty name="settings" url="24settings.xml" grammar="coremedia-struct-2008"/>
+        </version>
+      </document>
+      <!-- section symbols -->
+      <document id="212" type="CMSymbol" name="north">
+        <version number="1">
+          <stringProperty name="description" value="north"/>
+        </version>
+      </document>
+      <!-- content for placement -->
+      <document id="412" type="CMArticle" name="articleNorth">
+        <version number="1">
+          <stringProperty name="teaserTitle" value="articleNorth"/>
+          <markupProperty name="detailText"/>
+        </version>
+      </document>
+      <document name="picture" id="416" type="CMPicture">
+        <version number="1">
+          <markupProperty name="localSettings" grammar="coremedia-struct-2008" url="referenceToProductSettings.xml"/>
+        </version>
+      </document>
+      <document name="download" id="418" type="CMDownload">
+        <version number="1">
+          <markupProperty name="localSettings" grammar="coremedia-struct-2008" url="referenceToProductSettings.xml"/>
+        </version>
+      </document>
+      <document name="visual" id="420" type="CMVisual">
+        <version number="1">
+          <markupProperty name="localSettings" grammar="coremedia-struct-2008" url="referenceToProductSettings.xml"/>
+        </version>
+      </document>
     </folder>
   </content>
 

@@ -15,8 +15,8 @@ Building directly on your workstation provides you with a immediate integration 
 is the preferred way for all frontend developers.
 
 === Prerequisites
-* Node.js `[16.x,)`
-* pnpm `[7.x,)`
+* Node.js `[18.x,)`
+* pnpm `[8.1.x,)`
 
 === Build the Themes
 
@@ -40,7 +40,7 @@ pnpm start
 
 You can run tests via `pnpm test`.
 
-For further instructions consult the _``Frontend Developer Guide''_.
+For further instructions consult the _``Frontend Developer Guide``_.
 
 == Build with Docker
 
@@ -66,11 +66,15 @@ To build and test the frontend workspace just execute
 [source,bash]
 ----
 rm -rf target && mkdir -p target
-DOCKER_BUILDKIT=1 docker build . -o target --secret id=npmrc,src=${NPM_RC_PATH:-~/.npmrc} -f Dockerfile.tasks
+docker buildx build -o target --secret id=npmrc,src=${NPM_RC_PATH:-~/.npmrc} -f Dockerfile.tasks .
 ----
 
 The resulting `frontend.zip` can be found in the `target` folder.
 
+=== Code Completion for FreeMarker Templates
+
+Code completion for FreeMarker templates only works out-of-the-box when using the _``CoreMedia Blueprint Workspace``_. In
+addition to this you need to enable the Maven profile `code-completion` in your IDE.
 
 === Troubleshooting
 
@@ -81,3 +85,4 @@ Error response from daemon: Dockerfile parse error line xxx: Unknown flag: mount
 ----
 
 You need to prefix your `docker build` call with `DOCKER_BUILDKIT=1 docker build`.
+

@@ -1,6 +1,5 @@
 package com.coremedia.lc.studio.lib.validators;
 
-import com.coremedia.cap.common.CapException;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
 import com.coremedia.cap.multisite.ContentSiteAspect;
@@ -12,16 +11,9 @@ import com.coremedia.rest.validation.Severity;
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
-
-import static java.lang.invoke.MethodHandles.lookup;
 
 @DefaultAnnotation(NonNull.class)
 public class MasterLinkInAugmentationValidator extends PossiblyMissingMasterReferenceValidator {
-
-  private static final Logger LOG = LoggerFactory.getLogger(lookup().lookupClass());
 
   private static final String ISSUE_CODE_FROM_MASTER_AUGMENTATION = "possibly_missing_master_reference_from_master_augmentation";
   private static final String ISSUE_CODE_FROM_DERIVED_AUGMENTATION = "possibly_missing_master_reference_from_derived_augmentation";
@@ -56,26 +48,8 @@ public class MasterLinkInAugmentationValidator extends PossiblyMissingMasterRefe
   @Nullable
   @Override
   protected Content getPossiblyRelatedInSite(@NonNull ContentSiteAspect aspectOfValidatedContent, @NonNull Site otherSite, @NonNull SiteRelation relation) {
-    Content content = aspectOfValidatedContent.getContent();
-    String commerceReference = detectCommerceReference(content);
-    if (commerceReference != null) {
-      return augmentationService.getContentByExternalId(commerceReference, otherSite);
-    } else {
-      LOG.warn("Augmenting content is missing the commerce reference '{}'", content);
-    }
-    return null;
+    String commerceReference = aspectOfValidatedContent.getContent().getString(COMMERCE_REFERENCE_PROPERTY_NAME);
+    return augmentationService.getContentByExternalId(commerceReference, otherSite);
   }
 
-  @Nullable
-  private static String detectCommerceReference(@NonNull Content content) {
-    try {
-      String commerceReference = content.getString(COMMERCE_REFERENCE_PROPERTY_NAME);
-      if (StringUtils.hasText(commerceReference)) {
-        return commerceReference;
-      }
-    } catch (CapException e) {
-      LOG.warn("Cannot read the commerce reference of an augmenting content '{}'", content);
-    }
-    return null;
-  }
 }

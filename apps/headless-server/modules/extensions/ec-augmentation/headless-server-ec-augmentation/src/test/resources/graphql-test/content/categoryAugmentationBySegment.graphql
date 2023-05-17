@@ -10,7 +10,6 @@ query getCategoryAugmentationBySegment($externalId: String, $breadcrumb: [String
           column
           items {
             id
-            name
           }
         }
         rows {
@@ -21,6 +20,10 @@ query getCategoryAugmentationBySegment($externalId: String, $breadcrumb: [String
       commerceRef {
         id
         externalId
+        catalogId
+      }
+      content {
+        repositoryPath
       }
     }
   }

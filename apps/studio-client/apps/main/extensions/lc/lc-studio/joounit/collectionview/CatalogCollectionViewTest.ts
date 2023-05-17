@@ -28,7 +28,6 @@ import Step from "@coremedia/studio-client.client-core-test-helper/Step";
 import ValueExpression from "@coremedia/studio-client.client-core/data/ValueExpression";
 import ValueExpressionFactory from "@coremedia/studio-client.client-core/data/ValueExpressionFactory";
 import beanFactory from "@coremedia/studio-client.client-core/data/beanFactory";
-import ThumbnailResolverFactory from "@coremedia/studio-client.cap-base-models/thumbnails/ThumbnailResolverFactory";
 import SwitchingContainer from "@coremedia/studio-client.ext.ui-components/components/SwitchingContainer";
 import BeanRecord from "@coremedia/studio-client.ext.ui-components/store/BeanRecord";
 import ContextMenuEventAdapter from "@coremedia/studio-client.ext.ui-components/util/ContextMenuEventAdapter";
@@ -69,8 +68,6 @@ import { as, bind, cast } from "@jangaroo/runtime";
 import Config from "@jangaroo/runtime/Config";
 import int from "@jangaroo/runtime/int";
 import { AnyFunction } from "@jangaroo/runtime/types";
-import CatalogTeaserThumbnailResolver from "../../src/CatalogTeaserThumbnailResolver";
-import CatalogThumbnailResolver from "../../src/CatalogThumbnailResolver";
 import LivecontextStudioPlugin from "../../src/LivecontextStudioPlugin";
 import LivecontextStudioPluginBase from "../../src/LivecontextStudioPluginBase";
 import LivecontextCollectionViewActionsPlugin from "../../src/library/LivecontextCollectionViewActionsPlugin";
@@ -104,18 +101,6 @@ class CatalogCollectionViewTest extends AbstractLiveContextStudioTest {
     //use ECommerceStudioPlugin to add CatalogRepositoryListContainer, CatalogSearchListContainer etc.
     new ECommerceStudioPlugin();
     new LivecontextCollectionViewActionsPlugin();
-
-    editorContext._.registerThumbnailResolver(new CatalogThumbnailResolver(LivecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_CHANNEL));
-    editorContext._.registerThumbnailResolver(new CatalogThumbnailResolver(LivecontextStudioPlugin.CONTENT_TYPE_EXTERNAL_PAGE));
-    editorContext._.registerThumbnailResolver(new CatalogThumbnailResolver(LivecontextStudioPlugin.CONTENT_TYPE_MARKETING_SPOT));
-    editorContext._.registerThumbnailResolver(new CatalogTeaserThumbnailResolver(LivecontextStudioPlugin.CONTENT_TYPE_PRODUCT_TEASER));
-    editorContext._.registerThumbnailResolver(ThumbnailResolverFactory.create(LivecontextStudioPlugin.CONTENT_TYPE_PRODUCT_TEASER, "pictures"));
-
-    editorContext._.registerThumbnailResolver(new CatalogThumbnailResolver(CatalogModel.TYPE_CATEGORY));
-    editorContext._.registerThumbnailResolver(new CatalogThumbnailResolver(CatalogModel.TYPE_MARKETING));
-    editorContext._.registerThumbnailResolver(new CatalogThumbnailResolver(CatalogModel.TYPE_MARKETING_SPOT));
-    editorContext._.registerThumbnailResolver(new CatalogThumbnailResolver(CatalogModel.TYPE_PRODUCT));
-    editorContext._.registerThumbnailResolver(new CatalogThumbnailResolver(CatalogModel.TYPE_PRODUCT_VARIANT));
 
     // For the sake of the test, let's assume everything can be opened in a tab.
     // Cleaner alternative: Register all tab types.

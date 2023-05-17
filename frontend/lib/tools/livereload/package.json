@@ -7,16 +7,17 @@
   "private": true,
   "version": "1.0.0",
   "engines": {
-    "node": ">=16"
+    "node": "18",
+    "pnpm": "^8.1"
   },
   "dependencies": {
-    "@coremedia/cm-logger": "workspace:1.0.0",
-    "@coremedia/tool-utils": "workspace:1.0.0",
+    "@coremedia/cm-logger": "workspace:*",
+    "@coremedia/tool-utils": "workspace:*",
     "tiny-lr": "^2.0.0"
   },
   "devDependencies": {
     "jest": "^27.5.1",
-    "prettier": "^2.8.1"
+    "prettier": "^2.8.7"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{js,json}\"",

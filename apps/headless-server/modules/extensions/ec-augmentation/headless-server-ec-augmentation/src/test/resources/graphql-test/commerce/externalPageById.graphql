@@ -4,6 +4,7 @@ query getExternalPageById($externalId: String!, $siteId: String!) {
     externalPage(externalId: $externalId, siteId: $siteId) {
       id
       externalId
+      type
     }
   }
 }

@@ -1,0 +1,9 @@
+<Struct xmlns="http://www.coremedia.com/2008/struct">
+  <StructProperty Name="commerce">
+    <Struct>
+      <StringListProperty Name="references">
+        <String>mock:///catalog/product/cool-product</String>
+      </StringListProperty>
+    </Struct>
+  </StructProperty>
+</Struct>

@@ -23,12 +23,15 @@ x-default-boot-healthcheck:
 
 services:
   mysql:
-    image: ${REPOSITORY_PREFIX:-coremedia}/mysql:${MYSQL_TAG:-latest}
+    image: mysql:8.0.32
     container_name: mysql
-    build:
-      context: ../mysql
     volumes:
       - db-data:/var/lib/mysql
+      - ../mysql/initdb.d:/docker-entrypoint-initdb.d/
+      - ../mysql/conf.d:/etc/mysql/conf.d/
+    environment:
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
     networks:
       - backend
     restart: always
@@ -41,12 +44,23 @@ services:
       start_period: 60s
 
   mongodb:
-    image: ${REPOSITORY_PREFIX:-coremedia}/mongodb:${MONGODB_TAG:-latest}
+    image: mongo:6.0.5
     container_name: mongodb
-    build:
-      context: ../mongodb
     volumes:
       - mongo-data:/data/db
+      - ../mongodb/initdb.d:/docker-entrypoint-initdb.d/
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    command:
+      - "mongod"
+      - "--wiredTigerCacheSizeGB=1"
+    healthcheck:
+      test: "mongosh --quiet \"$(hostname --ip-address || echo '127.0.0.1')/test\" --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)' || exit 1"
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
     networks:
       - backend
     restart: always
@@ -311,6 +325,7 @@ services:
       SOLR_URL: http://solr:8983/solr
       ENVIRONMENT_FQDN: ${ENVIRONMENT_FQDN:-docker.localhost}
       CAAS_PREVIEW: "true"
+      CAAS_GRAPHQL_INTROSPECTION_ENABLED: "true"
       GRAPHIQL_ENABLED: "true"
       CAAS_SWAGGER_ENABLED: "true"
       CAAS_SOLR_COLLECTION: preview

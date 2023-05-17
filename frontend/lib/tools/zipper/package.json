@@ -3,14 +3,15 @@
   "version": "1.0.0",
   "private": true,
   "engines": {
-    "node": ">=16"
+    "node": "18",
+    "pnpm": "^8.1"
   },
   "dependencies": {
-    "@coremedia/cm-logger": "workspace:1.0.0",
+    "@coremedia/cm-logger": "workspace:*",
     "archiver": "^5.3.1"
   },
   "devDependencies": {
-    "prettier": "^2.8.1"
+    "prettier": "^2.8.7"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{js,json}\""

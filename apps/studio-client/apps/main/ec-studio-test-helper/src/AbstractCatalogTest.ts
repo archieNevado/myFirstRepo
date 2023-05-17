@@ -1950,7 +1950,7 @@ class AbstractCatalogTest extends AbstractRemoteTest {
     },
     {
       "request": {
-        "uri": "content/1/rights;for=user_1",
+        "uri": "content/1/rights/1",
         "method": "GET",
       },
       "response": {

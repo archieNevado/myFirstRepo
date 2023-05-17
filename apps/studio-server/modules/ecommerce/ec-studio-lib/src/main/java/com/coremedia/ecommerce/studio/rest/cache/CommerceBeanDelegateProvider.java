@@ -9,15 +9,21 @@ import com.coremedia.livecontext.ecommerce.common.CommerceConnection;
 import com.coremedia.livecontext.ecommerce.common.CommerceId;
 import com.coremedia.livecontext.ecommerce.common.StoreContext;
 import com.coremedia.livecontext.ecommerce.common.Vendor;
+import com.coremedia.rest.linking.EntityLinker;
 import com.google.common.annotations.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.springframework.web.util.UriUtils;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Helper class to provide maps that can be used as delegates for commerce beans satisfying the needs of
@@ -75,6 +81,9 @@ class CommerceBeanDelegateProvider {
   @NonNull
   @VisibleForTesting
   static String encodePartNumber(@NonNull String partNumber) {
-    return UriUtils.encodePath(partNumber, StandardCharsets.UTF_8);
+    // path-encode (e.g. replace spaces by %20)
+    String pathEncoded = UriUtils.encodePath(partNumber, StandardCharsets.UTF_8);
+    // in addition, we want + encoded (to align with EntityLinker#link()
+    return pathEncoded.replaceAll("\\+", "%2B");
   }
 }

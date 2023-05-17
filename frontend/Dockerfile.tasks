@@ -1,9 +1,9 @@
 # syntax=docker/dockerfile:1.3
 
-FROM node:16 as tooling-image
+FROM node:18-slim as tooling-image
 
-# pnpm 7.x
-RUN npm install -g pnpm@7.1.5
+# pnpm 8.x
+RUN npm install -g pnpm@8.1.0
 
 
 FROM tooling-image as audit-task

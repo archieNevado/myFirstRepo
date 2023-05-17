@@ -132,26 +132,25 @@ public class ExternalNavigationHandler extends LiveContextPageHandlerBase {
   @LinkPostProcessor(type = LiveContextExternalChannelImpl.class, order = PostProcessorPrecendences.MAKE_ABSOLUTE)
   public UriComponents makeAbsoluteUri(UriComponents originalUri, LiveContextExternalChannelImpl liveContextNavigation,
                                        Map<String, Object> linkParameters, @NonNull HttpServletRequest request) {
-    return doMakeAbsoluteUri(originalUri, liveContextNavigation, linkParameters, request);
+    Site site = ((LiveContextNavigation) liveContextNavigation).getSite();
+
+    if (useCommerceCategoryLinks(site)) {
+      // Native category links are absolute anyway, nothing more to do here.
+      return originalUri;
+    }
+
+    try {
+      return absoluteUri(originalUri, liveContextNavigation, site, linkParameters, request);
+    } catch (IllegalStateException e) {
+      LOG.debug("Unable to create absolute URI for {}, {}.", originalUri, e.getMessage());
+      return originalUri;
+    }
   }
 
   public boolean useCommerceCategoryLinks(@NonNull Site site) {
     return getSettingsService()
             .getSetting(LIVECONTEXT_POLICY_COMMERCE_CATEGORY_LINKS, Boolean.class, site)
             .orElse(false);
-  }
-
-  private UriComponents doMakeAbsoluteUri(UriComponents originalUri,
-                                          @NonNull LiveContextNavigation liveContextNavigation,
-                                          Map<String, Object> linkParameters, @NonNull HttpServletRequest request) {
-    Site site = liveContextNavigation.getSite();
-
-    // Native category links are absolute anyway, nothing more to do here.
-    if (useCommerceCategoryLinks(site)) {
-      return originalUri;
-    }
-
-    return absoluteUri(originalUri, liveContextNavigation, site, linkParameters, request);
   }
 
   @NonNull

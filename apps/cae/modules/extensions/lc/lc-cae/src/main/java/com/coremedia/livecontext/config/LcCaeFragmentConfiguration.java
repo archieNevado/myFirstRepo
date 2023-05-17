@@ -7,7 +7,6 @@ import com.coremedia.blueprint.base.multisite.BlueprintMultisiteConfiguration;
 import com.coremedia.blueprint.base.navigation.context.ContextStrategy;
 import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.blueprint.base.settings.impl.BlueprintSettingsServiceConfiguration;
-import com.coremedia.blueprint.base.tree.TreeRelation;
 import com.coremedia.blueprint.cae.action.search.SearchService;
 import com.coremedia.blueprint.cae.config.BlueprintHandlersCaeBaseLibConfiguration;
 import com.coremedia.blueprint.cae.handlers.NavigationSegmentsUriHelper;
@@ -400,18 +399,9 @@ public class LcCaeFragmentConfiguration {
   }
 
   @Bean
-  public ExternalPageContextStrategy externalPageContextStrategy(Cache cache,
-                                                                 SitesService sitesService,
-                                                                 ContentBeanFactory contentBeanFactory,
-                                                                 TreeRelation<Content> childrenTreeRelation) {
-    ExternalPageContextStrategy contextStrategy = new ExternalPageContextStrategy();
-
-    contextStrategy.setCache(cache);
-    contextStrategy.setSitesService(sitesService);
-    contextStrategy.setContentBeanFactory(contentBeanFactory);
-    contextStrategy.setTreeRelation(childrenTreeRelation);
-
-    return contextStrategy;
+  public ExternalPageContextStrategy externalPageContextStrategy(ContentBeanFactory contentBeanFactory,
+                                                                 ContextStrategy<String, Content> externalPageContentContextStrategy) {
+    return new ExternalPageContextStrategy(contentBeanFactory, externalPageContentContextStrategy);
   }
 
 }

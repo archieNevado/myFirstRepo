@@ -41,7 +41,11 @@ import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.CA
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.PRODUCT;
 import static com.coremedia.livecontext.ecommerce.common.BaseCommerceBeanType.SKU;
 
+/**
+ * @deprecated use {@link AugmentationFacadeCmsOnly} instead
+ */
 @DefaultAnnotation(NonNull.class)
+@Deprecated(since = "2304")
 public class AugmentationFacade {
 
   private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());

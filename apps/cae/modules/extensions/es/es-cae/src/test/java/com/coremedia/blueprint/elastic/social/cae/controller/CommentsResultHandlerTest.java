@@ -25,12 +25,12 @@ import com.coremedia.elastic.social.api.users.CommunityUser;
 import com.coremedia.objectserver.beans.ContentBean;
 import com.coremedia.objectserver.beans.ContentBeanFactory;
 import com.coremedia.objectserver.web.HttpError;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
@@ -42,23 +42,23 @@ import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import static com.coremedia.blueprint.elastic.social.cae.controller.CommentsResultHandler.ERROR_MESSAGE;
 import static com.coremedia.elastic.social.api.ContributionType.ANONYMOUS;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class CommentsResultHandlerTest {
+@ExtendWith(MockitoExtension.class)
+class CommentsResultHandlerTest {
   @InjectMocks
   private CommentsResultHandler handler;
 
@@ -84,8 +84,8 @@ public class CommentsResultHandlerTest {
   @Mock
   private PageResourceBundleFactory resourceBundleFactory;
 
-  // @Mock   Möööp... ResourceBundle is all final, cannot be mocked
-  private MockResourceBundle resourceBundle = new MockResourceBundle();
+  @Mock
+  private ResourceBundle resourceBundle;
 
   @Mock
   private CommunityUser user;
@@ -126,215 +126,209 @@ public class CommentsResultHandlerTest {
   @Mock
   private Site site;
 
-  private String context = "context";
-  private String contextId = "1234";
+  private final String contextId = "1234";
   private String targetId = "12";
-  private String view = "view";
-  private String text = "default comment"; // we could randomize this one :-)
+  private final String view = "view";
+  private final String text = "default comment"; // we could randomize this one :-)
   private String authorName;
   private String replyTo;
-  private String permittedParamName = "test";
-  String uriPath = "helios";
+  private final String permittedParamName = "test";
+  private final String uriPath = "helios";
 
-  @Before
+  @BeforeEach
   public void setup() throws URISyntaxException {
     handler.setPermittedLinkParameterNames(Collections.singletonList(permittedParamName));
 
-    when(contentRepository.getContent(IdHelper.formatContentId(targetId))).thenReturn(content);
-    when(contentBeanFactory.createBeanFor(content, ContentBean.class)).thenReturn(contentBean);
-    when(contentRepository.getContent(IdHelper.formatContentId(contextId))).thenReturn(navigationContent);
-    when(contentBeanFactory.createBeanFor(navigationContent, ContentBean.class)).thenReturn(navigation);
+    lenient().when(contentRepository.getContent(IdHelper.formatContentId(targetId))).thenReturn(content);
+    lenient().when(contentBeanFactory.createBeanFor(content, ContentBean.class)).thenReturn(contentBean);
+    lenient().when(contentRepository.getContent(IdHelper.formatContentId(contextId))).thenReturn(navigationContent);
+    lenient().when(contentBeanFactory.createBeanFor(navigationContent, ContentBean.class)).thenReturn(navigation);
 
-    when(contentBean.getContent()).thenReturn(content);
-    when(content.getId()).thenReturn(targetId);
+    lenient().when(contentBean.getContent()).thenReturn(content);
+    lenient().when(content.getId()).thenReturn(targetId);
 
-    when(contentWithSite.getContent()).thenReturn(content);
-    when(contributionTargetHelper.getContentFromTarget(any())).thenReturn(content);
+    lenient().when(contentWithSite.getContent()).thenReturn(content);
+    lenient().when(contributionTargetHelper.getContentFromTarget(any())).thenReturn(content);
 
     URI uri = new URI(uriPath);
-    when(uriTemplate.expand(any(String.class), any(Integer.class), any())).thenReturn(uri);
-    when(uriHelper.getPathList(navigation)).thenReturn(Collections.singletonList(uriPath));
-    when(contextHelper.contextFor(any(CMLinkable.class))).thenReturn(navigation);
-    when(navigation.getContext()).thenReturn(navigationContext);
-    when(navigationContext.getContentId()).thenReturn(Integer.parseInt(contextId));
+    lenient().when(uriTemplate.expand(any(String.class), any(Integer.class), any())).thenReturn(uri);
+    lenient().when(uriHelper.getPathList(navigation)).thenReturn(Collections.singletonList(uriPath));
+    lenient().when(contextHelper.contextFor(any(CMLinkable.class))).thenReturn(navigation);
+    lenient().when(navigation.getContext()).thenReturn(navigationContext);
+    lenient().when(navigationContext.getContentId()).thenReturn(Integer.parseInt(contextId));
 
-    resourceBundle = new MockResourceBundle();
-    when(resourceBundleFactory.resourceBundle(any(Navigation.class), nullable(User.class))).thenReturn(resourceBundle);
+    lenient().when(resourceBundleFactory.resourceBundle(any(Navigation.class), nullable(User.class))).thenReturn(resourceBundle);
 
-    when(elasticSocialPlugin.getElasticSocialConfiguration(any())).thenReturn(elasticSocialConfiguration);
+    lenient().when(elasticSocialPlugin.getElasticSocialConfiguration(any(Object[].class))).thenReturn(elasticSocialConfiguration);
 
-    when(elasticSocialConfiguration.isFeedbackEnabled()).thenReturn(true);
-    when(elasticSocialConfiguration.getCommentType()).thenReturn(ANONYMOUS);
-    when(elasticSocialConfiguration.isWritingCommentsEnabled()).thenReturn(true);
-    when(elasticSocialConfiguration.isAnonymousCommentingEnabled()).thenReturn(true);
+    lenient().when(elasticSocialConfiguration.isFeedbackEnabled()).thenReturn(true);
+    lenient().when(elasticSocialConfiguration.getCommentType()).thenReturn(ANONYMOUS);
+    lenient().when(elasticSocialConfiguration.isWritingCommentsEnabled()).thenReturn(true);
+    lenient().when(elasticSocialConfiguration.isAnonymousCommentingEnabled()).thenReturn(true);
 
     when(request.getAttribute(SiteHelper.SITE_KEY)).thenReturn(site);
   }
 
   @Test
-  public void getCommentsWithNoTarget() {
+  void getCommentsWithNoTarget() {
     targetId = " ";
     ModelAndView modelAndView = handler.getComments(contextId, targetId, view, request);
 
     HttpError httpError = getModel(modelAndView, HttpError.class);
-    assertEquals(404, httpError.getErrorCode());
+    assertThat(httpError.getErrorCode()).isEqualTo(404);
   }
 
   @Test
-  public void getCommentsWithUnknownTarget() {
+  void getCommentsWithUnknownTarget() {
     targetId = "123";
     ModelAndView modelAndView = handler.getComments(contextId, targetId, view, request);
 
     HttpError httpError = getModel(modelAndView, HttpError.class);
-    assertEquals(404, httpError.getErrorCode());
+    assertThat(httpError.getErrorCode()).isEqualTo(404);
   }
 
   @Test
-  public void getComments() {
+  void getComments() {
     ModelAndView result = handler.getComments(contextId, targetId, view, request);
     CommentsResult commentsResultResult = getModel(result, CommentsResult.class);
 
-    assertNotNull(commentsResultResult);
+    assertThat(commentsResultResult).isNotNull();
     ContentWithSite target = (ContentWithSite) commentsResultResult.getTarget();
-    assertEquals(content, target.getContent());
+    assertThat(target.getContent()).isEqualTo(content);
 
-    assertEquals(view, result.getViewName());
-    assertEquals(navigation, result.getModelMap().get(NavigationLinkSupport.ATTR_NAME_CMNAVIGATION));
-    assertEquals(ANONYMOUS, commentsResultResult.getContributionType());
+    assertThat(result.getViewName()).isEqualTo(view);
+    assertThat(result.getModelMap().get(NavigationLinkSupport.ATTR_NAME_CMNAVIGATION)).isEqualTo(navigation);
+    assertThat(commentsResultResult.getContributionType()).isEqualTo(ANONYMOUS);
   }
 
   @Test
-  public void createComment() {
+  void createComment() {
     when(elasticSocialUserHelper.getCurrentUser()).thenReturn(user);
-
     when(elasticSocialConfiguration.getCommentModerationType()).thenReturn(ModerationType.POST_MODERATION);
 
     ModelAndView modelAndView = handler.createComment(contextId, targetId, text, authorName, replyTo, request);
     HandlerInfo resultModel = getModel(modelAndView, HandlerInfo.class);
 
-    assertTrue(resultModel.getErrors().isEmpty());
-    assertEquals(1, resultModel.getMessages().size());
+    assertThat(resultModel.getErrors()).isEmpty();
+    assertThat(resultModel.getMessages()).hasSize(1);
 
     verify(elasticSocialService).createComment(eq(user), isNull(), any(ContentWithSite.class), any(Navigation.class),
-            eq(text), eq(ModerationType.POST_MODERATION), isNull(), any(List.class));  // NO_SONAR suppress warning
-    verifyMessage(ContributionMessageKeys.COMMENT_FORM_SUCCESS);
+            eq(text), eq(ModerationType.POST_MODERATION), isNull(), anyList());  // NO_SONAR suppress warning
+    verify(resourceBundle).getString(ContributionMessageKeys.COMMENT_FORM_SUCCESS);
   }
 
   @Test
-  public void createCommentForAnonymousNotAllowed() {
+  void createCommentForAnonymousNotAllowed() {
     when(elasticSocialUserHelper.getCurrentUser()).thenReturn(null);
-
     when(elasticSocialConfiguration.isAnonymousCommentingEnabled()).thenReturn(false);
 
     ModelAndView modelAndView = handler.createComment(contextId, targetId, text, authorName, replyTo, request);
     HandlerInfo resultModel = getModel(modelAndView, HandlerInfo.class);
 
-    assertFalse(resultModel.isSuccess());
-    assertEquals(1, resultModel.getMessages().size());
+    assertThat(resultModel.isSuccess()).isFalse();
+    assertThat(resultModel.getMessages()).hasSize(1);
 
     verify(elasticSocialService, never()).createComment(any(CommunityUser.class), isNull(), eq(content), any(Navigation.class),
             eq(text), eq(ModerationType.POST_MODERATION), isNull(), isNull());  // NO_SONAR suppress warning
-    verifyMessage(ContributionMessageKeys.COMMENT_FORM_NOT_LOGGED_IN);
+    verify(resourceBundle).getString(ContributionMessageKeys.COMMENT_FORM_NOT_LOGGED_IN);
   }
 
   @Test
-  public void createCommentForUnknownContent() {
+  void createCommentForUnknownContent() {
     String unknownContentId = "12345";
     ModelAndView modelAndView = handler.createComment(contextId, unknownContentId, text, authorName, replyTo, request);
 
     HttpError httpError = getModel(modelAndView, HttpError.class);
-    assertEquals(404, httpError.getErrorCode());
+    assertThat(httpError.getErrorCode()).isEqualTo(404);
   }
 
   @Test
-  public void createCommentWithPreModeration() {
+  void createCommentWithPreModeration() {
     when(elasticSocialUserHelper.getCurrentUser()).thenReturn(user);
-
     when(elasticSocialConfiguration.getCommentModerationType()).thenReturn(ModerationType.PRE_MODERATION);
 
     ModelAndView modelAndView = handler.createComment(contextId, targetId, text, authorName, replyTo, request);
     HandlerInfo resultModel = getModel(modelAndView, HandlerInfo.class);
 
-    assertEquals(1, resultModel.getMessages().size());
-    assertTrue(resultModel.isSuccess());
+    assertThat(resultModel.getMessages()).hasSize(1);
+    assertThat(resultModel.isSuccess()).isTrue();
     verify(elasticSocialService).createComment(eq(user), isNull(), any(ContentWithSite.class), any(Navigation.class),
-            eq(text), eq(ModerationType.PRE_MODERATION), isNull(), any(List.class));  // NO_SONAR suppress warning
-    verifyMessage(ContributionMessageKeys.COMMENT_FORM_SUCCESS_PREMODERATION);
+            eq(text), eq(ModerationType.PRE_MODERATION), isNull(), anyList());  // NO_SONAR suppress warning
+    verify(resourceBundle).getString(ContributionMessageKeys.COMMENT_FORM_SUCCESS_PREMODERATION);
   }
 
   @Test
-  public void createCommentWithException() {
+  void createCommentWithException() {
     when(elasticSocialUserHelper.getCurrentUser()).thenReturn(user);
     when(elasticSocialService.createComment(eq(user), isNull(), any(ContentWithSite.class), any(Navigation.class),
-            eq(text), eq(ModerationType.POST_MODERATION), isNull(), any(List.class))).thenThrow(new RuntimeException("intended"));
-
+            eq(text), eq(ModerationType.POST_MODERATION), isNull(), anyList())).thenThrow(new RuntimeException("intended"));
     when(elasticSocialConfiguration.getCommentModerationType()).thenReturn(ModerationType.POST_MODERATION);
 
     ModelAndView modelAndView = handler.createComment(contextId, targetId, text, authorName, replyTo, request);
     HandlerInfo resultModel = getModel(modelAndView, HandlerInfo.class);
 
     List<HandlerInfo.Message> messages = resultModel.getMessages();
-    assertEquals(1, messages.size());
-    assertFalse(resultModel.isSuccess());
-    assertEquals(ERROR_MESSAGE, messages.get(0).getType());
+    assertThat(messages).hasSize(1);
+    assertThat(resultModel.isSuccess()).isFalse();
+    assertThat(messages.get(0).getType()).isEqualTo(ERROR_MESSAGE);
 
     verify(elasticSocialService).createComment(eq(user), isNull(), any(ContentWithSite.class), any(Navigation.class),
-            eq(text), eq(ModerationType.POST_MODERATION), isNull(), any(List.class));  // NO_SONAR suppress warning
-    verifyMessage(ContributionMessageKeys.COMMENT_FORM_ERROR);
+            eq(text), eq(ModerationType.POST_MODERATION), isNull(), anyList());  // NO_SONAR suppress warning
+    verify(resourceBundle).getString(ContributionMessageKeys.COMMENT_FORM_ERROR);
   }
 
   @Test
-  public void buildCommentInfoLink() throws URISyntaxException {
+  void buildCommentInfoLink() {
     String notPermittedParamName = "not permitted";
     String paramValue = "value";
     Map<String, Object> linkParameters = Map.of(permittedParamName, paramValue, notPermittedParamName, paramValue);
     CommentsResult commentsResult = new CommentsResult(contentWithSite);
     UriComponents result = handler.buildCommentInfoLink(commentsResult, uriTemplate, linkParameters, request);
 
-    assertNotNull(result);
-    assertEquals(uriPath, result.getPath());
+    assertThat(result).isNotNull();
+    assertThat(result.getPath()).isEqualTo(uriPath);
     MultiValueMap<String, String> queryParams = result.getQueryParams();
-    assertEquals(0, queryParams.size());
+    assertThat(queryParams).isEmpty();
 
     verify(uriTemplate).expand(uriPath, Integer.parseInt(contextId), Integer.parseInt(targetId));
   }
 
   @Test
-  public void buildFragmentLink() throws URISyntaxException {
+  void buildFragmentLink() {
     String notPermittedParamName = "not permitted";
     String paramValue = "value";
     Map<String, Object> linkParameters = Map.of(permittedParamName, paramValue, notPermittedParamName, paramValue);
     CommentsResult commentsResult = new CommentsResult(contentWithSite);
     UriComponents result = handler.buildFragmentLink(commentsResult, uriTemplate, linkParameters, request);
 
-    assertNotNull(result);
-    assertEquals(uriPath, result.getPath());
+    assertThat(result).isNotNull();
+    assertThat(result.getPath()).isEqualTo(uriPath);
     MultiValueMap<String, String> queryParams = result.getQueryParams();
-    assertEquals(1, queryParams.size());
+    assertThat(queryParams).hasSize(1);
     List<String> queryParamValues = queryParams.get(permittedParamName);
-    assertEquals(1, queryParamValues.size());
-    assertEquals(paramValue, queryParamValues.get(0));
+    assertThat(queryParamValues).hasSize(1);
+    assertThat(queryParamValues.get(0)).isEqualTo(paramValue);
     verify(uriTemplate).expand(uriPath, Integer.parseInt(contextId), Integer.parseInt(targetId));
   }
 
   @Test
-  public void anonymousCommentingNotEnabled() {
+  void anonymousCommentingNotEnabled() {
     when(elasticSocialConfiguration.isAnonymousCommentingEnabled()).thenReturn(false);
 
     ModelAndView mv = handler.createComment(contextId, targetId, text, authorName, replyTo, request);
     HandlerInfo result = getModel(mv, HandlerInfo.class);
-    assertFalse(result.isSuccess());
-    assertNotNull(result.getMessages());
-    assertEquals(1, result.getMessages().size());
+    assertThat(result.isSuccess()).isFalse();
+    assertThat(result.getMessages()).isNotNull();
+    assertThat(result.getMessages()).hasSize(1);
   }
 
   @Test
-  public void commentTextBlank() {
+  void commentTextBlank() {
     ModelAndView mv = handler.createComment(contextId, targetId, "", authorName, replyTo, request);
     HandlerInfo result = getModel(mv, HandlerInfo.class);
-    assertFalse(result.isSuccess());
-    assertNotNull(result.getMessages());
-    assertEquals(1, result.getMessages().size());
+    assertThat(result.isSuccess()).isFalse();
+    assertThat(result.getMessages()).isNotNull();
+    assertThat(result.getMessages()).hasSize(1);
   }
 
   private <T> T getModel(ModelAndView modelAndView, Class<T> type) {
@@ -346,9 +340,5 @@ public class CommentsResultHandlerTest {
     Object model = modelMap.get(key);
     // assertTrue(model instanceof type);
     return (T) model; // NO_SONAR
-  }
-
-  private void verifyMessage(String key) {
-    assertTrue(resourceBundle.invokedFor(key));
   }
 }

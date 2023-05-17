@@ -3,7 +3,6 @@ import CatalogLinkContextMenu
   from "@coremedia-blueprint/studio-client.main.ec-studio/components/link/CatalogLinkContextMenu";
 import CatalogLinkPropertyField
   from "@coremedia-blueprint/studio-client.main.ec-studio/components/link/CatalogLinkPropertyField";
-import CatalogThumbnailResolver from "@coremedia-blueprint/studio-client.main.lc-studio/CatalogThumbnailResolver";
 import Content from "@coremedia/studio-client.cap-rest-client/content/Content";
 import StructRemoteBean from "@coremedia/studio-client.cap-rest-client/struct/StructRemoteBean";
 import Step from "@coremedia/studio-client.client-core-test-helper/Step";
@@ -15,7 +14,6 @@ import ReadOnlyStateMixin from "@coremedia/studio-client.ext.ui-components/mixin
 import ContextMenuEventAdapter from "@coremedia/studio-client.ext.ui-components/util/ContextMenuEventAdapter";
 import QtipUtil from "@coremedia/studio-client.ext.ui-components/util/QtipUtil";
 import TableUtil from "@coremedia/studio-client.ext.ui-components/util/TableUtil";
-import editorContext from "@coremedia/studio-client.main.editor-components/sdk/editorContext";
 import Ext from "@jangaroo/ext-ts";
 import Component from "@jangaroo/ext-ts/Component";
 import ComponentManager from "@jangaroo/ext-ts/ComponentManager";
@@ -75,18 +73,17 @@ class InheritReferencesTest extends AbstractCatalogAssetTest {
     //We have to mock QuickTips.getQuickTip as this returns undefined
     this.#getQuickTip = bind(QuickTipManager, QuickTipManager.getQuickTip);
     QuickTipManager.getQuickTip = ((): StatefulQuickTip =>
-      Ext.create(StatefulQuickTip, {})
+        Ext.create(StatefulQuickTip, {})
     );
 
     QtipUtil.registerQtipFormatter();
-    editorContext._.registerThumbnailResolver(new CatalogThumbnailResolver("CatalogObject"));
   }
 
   #setBindTo(path: string): void {
     const picture = as(beanFactory._.getRemoteBean(path), Content);
     //we need to mock the write access
     picture.getRepository().getAccessControl().mayWrite = ((): boolean =>
-      !this.#contentReadOnlyExpression.getValue()
+        !this.#contentReadOnlyExpression.getValue()
     );
     const localSettings = as(beanFactory._.getRemoteBean(path + "/structs/localSettings"), StructRemoteBean);
     //PUT should cause no trouble
