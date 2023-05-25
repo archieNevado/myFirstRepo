@@ -35,11 +35,11 @@
     "@coremedia/brick-utils": "workspace:1.0.0",
     "@coremedia/cm-cli": "workspace:2.0.0",
     "@coremedia/theme-utils": "workspace:3.0.0",
-    "jquery": "^3.6.3",
+    "jquery": "^3.6.4",
     "webpack": "^4.46.0"
   },
   "devDependencies": {
-    "prettier": "^2.8.1"
+    "prettier": "^2.8.7"
   },
   "coremedia": {
     "type": "theme"

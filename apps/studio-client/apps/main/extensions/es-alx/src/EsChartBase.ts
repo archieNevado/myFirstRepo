@@ -36,7 +36,7 @@ class EsChartBase extends FieldContainer {
 
   #switchContainer: SwitchingContainer = null;
 
-  static readonly #MIN_Y_VALUE: number = 10;
+  static readonly #MIN_Y_VALUE: number = 12;
 
   #addedListener: boolean = false;
 
@@ -111,6 +111,7 @@ class EsChartBase extends FieldContainer {
         ymax: EsChartBase.#getYMax(this.getLineChartData()),
         data: this.localizeChartData(this.getLineChartData()),
         lineColors: [this.color ? this.color : this.#DEFAULT_COLOR],
+        yLabelFormat: function(y){return y != Math.round(y)?'':y;},
       };
 
       this.#setLineChart(new Morris.Line(lineChartConfig));

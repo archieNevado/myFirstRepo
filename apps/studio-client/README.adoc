@@ -382,8 +382,7 @@ cd apps/studio-client
 
 STUDIO_CLIENT_TOOLING_IMAGE="cm/studio-client-tooling:latest"
 
-docker build -f Dockerfile.tooling . --no-cache --tag ${STUDIO_CLIENT_TOOLING_IMAGE} \
-  --build-arg SENCHA_COMMAND_SH_ZIP_DOWNLOAD_URL_DIRECTIVE=https://cdn.sencha.com/cmd/7.2.0.84/no-jre/SenchaCmd-7.2.0.84-linux-amd64.sh.zip
+docker buildx build -f Dockerfile.tooling --no-cache --tag ${STUDIO_CLIENT_TOOLING_IMAGE} .
 ----
 
 [#_build_the_studio_client_image]
@@ -404,9 +403,9 @@ cd apps/studio-client
 
 STUDIO_CLIENT_PACKAGE_PATH=<relative/path/to/the/studio-client/zip>
 
-DOCKER_BUILDKIT=1 docker build . \
+docker buildx build \
   --tag coremedia/studio-client:latest \
-  --build-arg STUDIO_CLIENT_PACKAGE_PATH="${STUDIO_CLIENT_PACKAGE_PATH}"
+  --build-arg STUDIO_CLIENT_PACKAGE_PATH="${STUDIO_CLIENT_PACKAGE_PATH}" .
 ----
 
 [#_build_the_studio_client_workspace_and_image]
@@ -421,11 +420,11 @@ execute the following snippet.
 ----
 cd apps/studio-client
 
-DOCKER_BUILDKIT=1 docker build . \
+docker buildx build \
   --tag coremedia/studio-client:latest \
   --secret id=npmrc,src=.npmrc \
   --build-arg TYPE="build" \
-  --build-arg STUDIO_CLIENT_TOOLING_IMAGE="cm/studio-client-tooling:latest"
+  --build-arg STUDIO_CLIENT_TOOLING_IMAGE="cm/studio-client-tooling:latest" .
 ----
 
 === Extended Examples
@@ -438,18 +437,18 @@ folder `modules/extensions` first and pass it to the Studio build process afterw
 The zip file needs to be located below `apps/studio-client`.
 
 [source,bash]
------
+----
 cd modules/extensions
 mkdir -p ../../apps/studio-client/target
 zip -qr ../../apps/studio-client/target/extensions.zip ./*
 cd ../../apps/studio-client
-DOCKER_BUILDKIT=1 docker build . \
+docker buildx build \
   --tag coremedia/studio-client:latest \
   --secret id=npmrc,src=.npmrc \
   --build-arg TYPE="build" \
   --build-arg EXTENSIONS_ZIP="target/extensions.zip" \
   --build-arg STUDIO_CLIENT_TOOLING_IMAGE="cm/studio-client-tooling:latest"
-  --build-arg FROZEN_GENERATED_FILES=false
+  --build-arg FROZEN_GENERATED_FILES=false .
 ----
 
 Please mind that the `FROZEN_GENERATED_FILES` flag needs to be disabled. Due to extensions being handed under a different folder the paths to
@@ -464,9 +463,9 @@ cd apps/studio-client
 BUILD_TARGET_FOLDER="target"
 rm -rf "${BUILD_TARGET_FOLDER}" && mkdir -p "${BUILD_TARGET_FOLDER}"
 
-DOCKER_BUILDKIT=1 docker build -f Dockerfile.tasks . --target test-only-stage \
+docker buildx build -f Dockerfile.tasks --target test-only-stage \
   -o "${BUILD_TARGET_FOLDER}"  \
-  --secret id=npmrc,src=.npmrc
+  --secret id=npmrc,src=.npmrc .
 ----
 
 The tests result can be found in the `${BUILD_TARGET_FOLDER}` folder.
@@ -482,14 +481,15 @@ rm -rf "${BUILD_TARGET_FOLDER}" && mkdir -p "${BUILD_TARGET_FOLDER}"
 
 # First: Build the Studio client
 # You can specify a custom version by setting `--build-arg BUILD_VERSION="1.0.0-SNAPSHOT"`.
-DOCKER_BUILDKIT=1 docker build -f Dockerfile.tasks . --target build-task \
+docker buildx build -f Dockerfile.tasks --target build-task \
   --tag "tmp/studio-client-build:latest" --secret id=npmrc,src=.npmrc \
-  --build-arg STUDIO_CLIENT_TOOLING_IMAGE="cm/studio-client-tooling:latest"
+  --build-arg STUDIO_CLIENT_TOOLING_IMAGE="cm/studio-client-tooling:latest" .
 
 # Second: Test the Studio client
-DOCKER_BUILDKIT=1 docker build -f Dockerfile.tasks . --target test-only-stage \
-  -o "${BUILD_TARGET_FOLDER}"  \
-  --build-arg STUDIO_CLIENT_BUILD_IMAGE="tmp/studio-client-build:latest"
+docker buildx build -f Dockerfile.tasks \
+  --target test-only-stage \
+  -o "${BUILD_TARGET_FOLDER}" \
+  --build-arg STUDIO_CLIENT_BUILD_IMAGE="tmp/studio-client-build:latest" .
 ----
 
 === Docker Build Troubleshooting

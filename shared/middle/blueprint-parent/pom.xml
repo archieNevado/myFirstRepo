@@ -32,12 +32,11 @@
     <maven.compiler.release>11</maven.compiler.release>
     <sonar.java.source>${maven.compiler.release}</sonar.java.source>
 
-    <google.api.services.analytics.version>v3-rev99-1.19.0</google.api.services.analytics.version>
     <google.api.services.youtube.version>v3-rev152-1.19.0</google.api.services.youtube.version>
 
     <customer>Blueprint</customer>
 
-    <cm.middle.core.version>2301.2</cm.middle.core.version>
+    <cm.middle.core.version>2301.3</cm.middle.core.version>
 
     <!--
     | the following *.host properties are defined here for convenience, so that they can be overridden
@@ -71,9 +70,9 @@
     <skip-hybris-tests>true</skip-hybris-tests>
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
-    <tomcat.version>9.0.71</tomcat.version>
-    <cm.middle.core.version>2301.2</cm.middle.core.version>
-    <cm.common.core.version>2301.2</cm.common.core.version>
+    <tomcat.version>9.0.75</tomcat.version>
+    <cm.middle.core.version>2301.3</cm.middle.core.version>
+    <cm.common.core.version>2301.3</cm.common.core.version>
     <cm.common.bp.version>1-SNAPSHOT</cm.common.bp.version>
     <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
 

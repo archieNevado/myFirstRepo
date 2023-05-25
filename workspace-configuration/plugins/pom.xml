@@ -17,7 +17,7 @@
       <plugin>
         <groupId>com.coremedia.maven</groupId>
         <artifactId>coremedia-plugins-maven-plugin</artifactId>
-        <version>1.1.0</version>
+        <version>1.1.1</version>
         <configuration>
           <projectRoot>${projectRoot}</projectRoot>
         </configuration>

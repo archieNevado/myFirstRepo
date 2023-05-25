@@ -2,12 +2,17 @@ package com.coremedia.blueprint.analytics.elastic.google;
 
 import com.coremedia.blueprint.base.analytics.elastic.util.DaysBack;
 import com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil;
-import com.google.api.services.analytics.Analytics;
-import com.google.api.services.analytics.model.GaData;
+import com.coremedia.cap.content.Content;
+import com.google.analytics.data.v1beta.DateRange;
+import com.google.analytics.data.v1beta.DimensionHeader;
+import com.google.analytics.data.v1beta.Metric;
+import com.google.analytics.data.v1beta.MetricHeader;
+import com.google.analytics.data.v1beta.RunReportRequest;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -17,19 +22,15 @@ import java.util.List;
  * <p/>
  * Gathers common parameters, that shape a query to Google's Data Export API
  */
+@DefaultAnnotation(NonNull.class)
 public abstract class GoogleAnalyticsQuery {
 
-  // keys used in queries are prefixed by 'ga:'
-  static final String KEY_PREFIX = "ga:";
-
   // Slots for Google Analytics' "custom vars" (dimension1 ... n)
-  static final String CUSTOMVAR_CONTENT_ID = "dimension1";
-  static final String CUSTOMVAR_CONTENT_TYPE = "dimension2";
-  static final String DIMENSION_CONTENT_ID = KEY_PREFIX + CUSTOMVAR_CONTENT_ID;
-  static final String DIMENSION_CONTENT_TYPE = KEY_PREFIX + CUSTOMVAR_CONTENT_TYPE;
-  static final String DIMENSION_PAGEVIEWS = KEY_PREFIX + "pageviews";
-  static final String METRIC_UNIQUE_PAGEVIEWS = KEY_PREFIX + "uniquePageviews";
-  static final String TRACKING_DATE = KEY_PREFIX + "date";
+  static final String DIMENSION_CONTENT_ID = "customEvent:dimension1";
+  static final String DIMENSION_CONTENT_TYPE = "customEvent:dimension2";
+  static final String DIMENSION_TRACKING_DATE = "date";
+  static final String METRIC_PAGEVIEWS = "screenPageViews"; // unique pageviews are not available in GA4
+  static final String DATE_PATTERN = "yyyy-MM-dd";
 
   // Maximum number of rows to be included in a response allowed by Google. In combination with start-index this can be
   // used to retrieve a subset of elements, or alone to restrict the number of returned elements, starting with the first.
@@ -38,24 +39,23 @@ public abstract class GoogleAnalyticsQuery {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GoogleAnalyticsQuery.class);
 
-  static final String KEY_PID = "pid";
-
-  private final int profileId;
+  static final String KEY_PROPERTY_ID = "propertyId";
+  private final int propertyId;
   private final int timeRange;
   private final int maxResults;
 
   /**
-   * @param profileId  ID of the Google Analytics profile that shall track the visit
+   * @param propertyId ID of the Google Analytics property that shall track the visit
    * @param timeRange  Days from now the query will extend to (e.g. a value of 14 means
    *                   "look back two weeks") Maps to the corresponding document type
    *                   property of 'CMALXBaseList'
    * @param maxResults The number of results this query will be limited to. Maps to the 'CMALXBaseList' document's settings
    *                   property 'limit'. If the property is not set, it defaults to {@link com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil#DEFAULT_LIMIT}
    */
-  protected GoogleAnalyticsQuery(int profileId, int timeRange, int maxResults) {
-    assertGreaterThanZero(profileId, "profileId");
+  protected GoogleAnalyticsQuery(int propertyId, int timeRange, int maxResults) {
+    assertGreaterThanZero(propertyId, KEY_PROPERTY_ID);
 
-    this.profileId = profileId;
+    this.propertyId = propertyId;
     this.timeRange = timeRange > 0 ? timeRange : RetrievalUtil.DEFAULT_TIMERANGE;
     this.maxResults = maxResults > 0 ? maxResults : DEFAULT_MAX_RESULTS;
   }
@@ -74,38 +74,46 @@ public abstract class GoogleAnalyticsQuery {
    *
    * @return the URL that represents the call to Google's Data Export API
    */
-  public final Analytics.Data.Ga.Get getDataQuery(Analytics analytics) throws IOException {
+  public final RunReportRequest.Builder getDataQuery() {
     final DaysBack daysBack = new DaysBack(timeRange);
-    final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    Analytics.Data.Ga.Get get = analytics.data().ga()
-            .get(KEY_PREFIX + profileId,
-                    dateFormat.format(daysBack.getStartDate()),
-                    dateFormat.format(daysBack.getEndDate()),
-                    METRIC_UNIQUE_PAGEVIEWS);
+    final DateFormat DATE_FORMAT = new SimpleDateFormat(DATE_PATTERN);
+    RunReportRequest.Builder runReportRequest = RunReportRequest.newBuilder()
+            .setProperty("properties/" + propertyId)
+            .addMetrics(Metric.newBuilder().setName(METRIC_PAGEVIEWS).build())
+            .addDateRanges(DateRange.newBuilder().setStartDate(DATE_FORMAT.format(daysBack.getStartDate())).setEndDate(DATE_FORMAT.format(daysBack.getEndDate())));
 
     // limit results
     // (no matter when set, the corresponding URL parameter
     // will be always put in front of the parameter list)
     if (maxResults > 0) {
-      get.setMaxResults(maxResults);
+      runReportRequest.setLimit(maxResults);
     }
 
-    customizeQuery(get);
+    customizeQuery(runReportRequest);
 
-    return get;
+    return runReportRequest;
   }
 
   /**
    * Customize the given query
    *
-   * @param query the query to customize
-   * @see com.coremedia.blueprint.analytics.elastic.google.GoogleAnalyticsQuery#getDataQuery(com.google.api.services.analytics.Analytics)
+   * @param queryBuilder the queryBuilder to customize
    */
-  protected void customizeQuery(final Analytics.Data.Ga.Get query) {
+  protected void customizeQuery(RunReportRequest.Builder queryBuilder) {
     // nothing to do
   }
 
-  protected int getColumnIndex(List<GaData.ColumnHeaders> columnHeaders, String columnName) {
+  protected static int getDimensionColumnIndex(List<DimensionHeader> columnHeaders, String columnName) {
+    int columnIndex = -1;
+    for (int index = 0; index < columnHeaders.size(); index++) {
+      if (columnName.equals(columnHeaders.get(index).getName())) {
+        columnIndex = index;
+      }
+    }
+    return columnIndex;
+  }
+
+  protected static int getMetricColumnIndex(List<MetricHeader> columnHeaders, String columnName) {
     int columnIndex = -1;
     for (int index = 0; index < columnHeaders.size(); index++) {
       if (columnName.equals(columnHeaders.get(index).getName())) {
@@ -127,8 +135,8 @@ public abstract class GoogleAnalyticsQuery {
    * @return see superclass' constructor's JavaDoc
    * @see GoogleAnalyticsQuery#GoogleAnalyticsQuery(int, int, int)
    */
-  public int getProfileId() {
-    return profileId;
+  public int getPropertyId() {
+    return propertyId;
   }
 
   /**
@@ -147,10 +155,16 @@ public abstract class GoogleAnalyticsQuery {
    * @return true if and only if all required properties are available
    */
   static boolean canCreateQuery(GoogleAnalyticsSettings settings) {
-    final int profileId = settings.getPid();
+    final int propertyId = settings.getPropertyId();
     boolean ok = true;
-    if (profileId < 1) {
-      LOGGER.info("google analytics profile id must be greater than zero but is : {}, disabling retrieval", profileId);
+    if (propertyId < 1) {
+      LOGGER.info("Google analytics propertyId id must be greater than zero but is : {}, disabling retrieval", propertyId);
+      ok = false;
+    }
+
+    Content authFile = settings.getAuthFile();
+    if (authFile == null) {
+      LOGGER.info("google analytics auth file is not configured, disabling retrieval");
       ok = false;
     }
 

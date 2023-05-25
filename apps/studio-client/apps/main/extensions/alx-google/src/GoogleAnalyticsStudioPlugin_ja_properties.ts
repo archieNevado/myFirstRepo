@@ -14,8 +14,5 @@ ResourceBundleUtil.override(GoogleAnalyticsStudioPlugin_properties, {
   googleanalytics_fav_btn_text: "Google",
   googleanalytics_fav_btn_tooltip: "Googleアナリティクスを開く",
   googleanalytics_preview_btn_tooltip: "Googleアナリティクスレポートを開く",
-  googleanalytics_webpropertyid_val: "^UA\\-\\d+\\-\\d+$",
-  googleanalytics_webpropertyid_mask: "[UA\\d-]",
-  googleanalytics_webpropertyid_text: "無効なウェブプロパティID。有効な値は、「UA-12345678-1」のようになります。",
   googleanalytics_service_provider: "Googleアナリティクス",
 });

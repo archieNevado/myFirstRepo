@@ -1,70 +1,77 @@
 package com.coremedia.blueprint.analytics.elastic.google;
 
-import com.google.api.services.analytics.Analytics;
-import com.google.api.services.analytics.model.GaData;
+import com.google.analytics.data.v1beta.Dimension;
+import com.google.analytics.data.v1beta.DimensionHeader;
+import com.google.analytics.data.v1beta.MetricHeader;
+import com.google.analytics.data.v1beta.OrderBy;
+import com.google.analytics.data.v1beta.Row;
+import com.google.analytics.data.v1beta.RunReportRequest;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.apache.commons.lang3.StringUtils.join;
 
 /**
  * Encapsulates queries to Google's Universal Data Export API</a>
  * that ask for pageviews.
  */
-public final class PageViewQuery extends GoogleAnalyticsListQuery {
+@DefaultAnnotation(NonNull.class)
+public final class PageViewQuery extends GoogleAnalyticsListResultQuery {
 
-  private static final String DIMENSION_TITLE = KEY_PREFIX + "pageTitle";
-  private static final String DIMENSION_PATH = KEY_PREFIX + "pagePath";
-  private static final String DIMENSIONS = join(new Object[]{DIMENSION_TITLE, DIMENSION_PATH, DIMENSION_CONTENT_ID, DIMENSION_CONTENT_TYPE}, ',');
+  static final String DIMENSION_TITLE = "pageTitle";
+  static final String DIMENSION_PATH = "pagePath";
 
   /**
    * Constructor
    *
-   * @param profileId  see superclass' constructor's JavaDoc
+   * @param propertyId  see superclass' constructor's JavaDoc
    * @param timeRange  see superclass' constructor's JavaDoc
    * @param maxResults see superclass' constructor's JavaDoc
    * @see GoogleAnalyticsQuery#GoogleAnalyticsQuery(int, int, int)
    */
-  public PageViewQuery(int profileId,
+  public PageViewQuery(int propertyId,
                        int timeRange,
                        int maxResults) {
-    super(profileId, timeRange, maxResults);
+    super(propertyId, timeRange, maxResults);
   }
 
   public PageViewQuery(GoogleAnalyticsSettings googleAnalyticsSettings) {
-    super(googleAnalyticsSettings.getPid(),
+    super(googleAnalyticsSettings.getPropertyId(),
             googleAnalyticsSettings.getTimeRange(),
             googleAnalyticsSettings.getLimit());
   }
 
   @Override
-  protected void customizeQuery(final Analytics.Data.Ga.Get query) {
+  protected void customizeQuery(final RunReportRequest.Builder queryBuilder) {
     // configure dimensions
-    query.setDimensions(DIMENSIONS);
-
-    // configure sorting
-    query.setMetrics(DIMENSION_PAGEVIEWS);
+    queryBuilder.addDimensions(Dimension.newBuilder().setName(DIMENSION_CONTENT_ID));
 
     // sort descending
-    query.setSort("-" + DIMENSION_PAGEVIEWS);
+    queryBuilder.addOrderBys(OrderBy.newBuilder()
+            .setDesc(true)
+            .setMetric(OrderBy.MetricOrderBy.newBuilder()
+                    .setMetricName(METRIC_PAGEVIEWS)
+            )
+    );
   }
 
   @Override
   public String toString() {
-    return String.format("[query: profileId=%s, timeRange=%s, maxResults=%s]",
-            getProfileId(),
+    return String.format("[query: propertyId=%s, timeRange=%s, maxResults=%s]",
+            getPropertyId(),
             getTimeRange(),
             getMaxResults());
   }
 
   @Override
-  public List<String> process(List<List<String>> dataEntries, List<GaData.ColumnHeaders> columnHeaders) {
-    int index = getColumnIndex(columnHeaders, GoogleAnalyticsQuery.DIMENSION_CONTENT_ID);
+  public List<String> process(List<Row> dataEntries, List<DimensionHeader> dimensionHeaders, List<MetricHeader> metricHeaders) {
+    int indexContentId = getDimensionColumnIndex(dimensionHeaders, GoogleAnalyticsQuery.DIMENSION_CONTENT_ID);
+
     List<String> list = new ArrayList<>();
-    if (index >= 0) {
-      for (List<String> row : dataEntries) {
-        String cell = row.get(index);
+    if (indexContentId >= 0) {
+      for (Row row : dataEntries) {
+        String cell = row.getDimensionValues(indexContentId).getValue();
         list.add(cell);
       }
     }

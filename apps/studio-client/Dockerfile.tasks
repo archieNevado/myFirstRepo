@@ -36,7 +36,7 @@ FROM ${STUDIO_CLIENT_BUILD_IMAGE} as test-task
 WORKDIR /ws-root/apps/studio-client
 RUN mkdir -p /junit-files
 ARG SKIP_TESTS
-RUN if [ "${SKIP_TESTS:-false}" = "true" ] ; then echo "Skip tests." ; else pnpm -r run test --testFailureExitCode 0; fi
+RUN if [ "${SKIP_TESTS:-false}" = "true" ] ; then echo "Skip tests." ; else pnpm -r --workspace-concurrency=2 run test --testFailureExitCode 0; fi
 RUN find /ws-root/apps/studio-client -name "node_modules" -type d -prune -exec rm -rf {} \;
 RUN cd /ws-root/apps/studio-client && find . -type f -name 'junit.xml'  -exec cp --parent -R {} /junit-files \;
 

@@ -439,6 +439,8 @@ services:
     logging: *default-logging
     build:
       context: ../overview
+      args:
+        NGINX_BASE_IMAGE:
     networks:
       backend: null
     environment:

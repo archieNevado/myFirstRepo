@@ -22,24 +22,16 @@ class GoogleAnalyticsRetrievalFields extends GoogleAnalyticsRetrievalFieldsBase 
       itemId: "googleAnalyticsRetrievalForm",
 
       items: [
-        Config(StringPropertyField, {
-          itemId: "applicationName",
-          propertyName: "localSettings.googleAnalytics.applicationName",
-        }),
-        Config(StringPropertyField, {
-          itemId: "serviceAccountEmail",
-          propertyName: "localSettings.googleAnalytics.serviceAccountEmail",
-        }),
         Config(SingleLinkEditor, {
-          itemId: "p12file",
+          itemId: "authfile",
           linkContentType: "CMDownload",
-          bindTo: this$.getP12FileVE(),
+          bindTo: this$.getAuthFileVE(),
           parentContentValueExpression: config.bindTo,
-          linkListLabel: GoogleAnalyticsStudioPlugin_properties.googleanalytics_p12file,
+          linkListLabel: GoogleAnalyticsStudioPlugin_properties.googleanalytics_authfile,
         }),
         Config(IntegerPropertyField, {
-          itemId: "pid",
-          propertyName: "localSettings.googleAnalytics.pid",
+          itemId: "propertyId",
+          propertyName: "localSettings.googleAnalytics.propertyId",
         }),
         Config(IntegerPropertyField, {
           itemId: "limit",

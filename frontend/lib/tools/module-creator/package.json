@@ -13,11 +13,11 @@
     "@coremedia/cm-logger": "workspace:1.0.0",
     "@coremedia/tool-utils": "workspace:1.0.0",
     "glob": "^7.2.3",
-    "semver": "^7.3.8"
+    "semver": "^7.5.0"
   },
   "devDependencies": {
     "jest": "^27.5.1",
-    "prettier": "^2.8.1"
+    "prettier": "^2.8.7"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{js,json}\"",

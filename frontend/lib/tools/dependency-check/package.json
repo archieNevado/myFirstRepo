@@ -5,12 +5,12 @@
   "dependencies": {
     "@coremedia/tool-utils": "workspace:1.0.0",
     "closest-package": "1.0.0",
-    "deepmerge": "^4.2.2",
+    "deepmerge": "^4.3.1",
     "node-sass": "^7.0.3",
-    "semver": "^7.3.8"
+    "semver": "^7.5.0"
   },
   "devDependencies": {
-    "prettier": "^2.8.1"
+    "prettier": "^2.8.7"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.{js,json}\""

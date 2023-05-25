@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -78,9 +77,14 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
       LOG.debug("Cannot transform link. Navigation is null. Link target: {}", bean);
       return UNSUPPORTED_LINK;
     }
+
     // do not generate links to content of a different site, discard the previously generated link
-    if (isContentOfDifferentSite(navigation, request)) {
-      LOG.debug("Cannot transform link to a different site. Link target: {}", bean);
+    CMNavigation targetRootNavigation = navigation.getRootNavigation();
+    Navigation currentNavigation = FindNavigationContext.getNavigation(request);
+    CMNavigation currentRootNavigation = currentNavigation.getRootNavigation();
+    if (!currentRootNavigation.equals(targetRootNavigation)) {
+      LOG.warn("Cannot transform link to a different site. Link target {} ({}), current context {} ({}).",
+              navigation, targetRootNavigation, currentNavigation, currentRootNavigation);
       return UNSUPPORTED_LINK;
     }
 
@@ -134,10 +138,12 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
     }
 
     if (isNotBlank(source)) {
+      LOG.debug("Cannot resolve url for '{}', using source link '{}'.", content, source);
       return source;
     }
 
-    return "#";
+    LOG.warn("Cannot resolve url for '{}', no source link available.", content);
+    return UNSUPPORTED_LINK;
   }
 
   @NonNull
@@ -209,20 +215,6 @@ public class LiveContextLinkTransformer implements LinkTransformer, ApplicationL
     }
 
     return currentContextService.getContext();
-  }
-
-  /**
-   * Return true if this is content of a different site
-   */
-  private static boolean isContentOfDifferentSite(@NonNull Navigation navigation, @NonNull ServletRequest request) {
-    try {
-      CMNavigation targetRootNavigation = navigation.getRootNavigation();
-      Navigation currentNavigation = FindNavigationContext.getNavigation(request);
-      return !currentNavigation.getRootNavigation().equals(targetRootNavigation);
-    } catch (Exception e) {
-      LOG.info("Cannot determine whether the given content belongs to a different site '{}'.", e.getMessage());
-      return false;
-    }
   }
 
   public void setLiveContextLinkResolverList(List<LiveContextLinkResolver> liveContextLinkResolverList) {

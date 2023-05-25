@@ -78,15 +78,20 @@ class ElasticSocialStudioPlugin extends ElasticSocialStudioPluginBase {
             Config(AddItemsPlugin, {
               items: [
                 /*
-            This is an example of how you can add custom components to the comment extension container
-            inside the moderation-tab and access the REST resource.
-             */
-                /*<Panel ui="{PanelSkin.COLLAPSIBLE_200}" title="customStuff">
-              <items>
-                <es:ElasticPluginLabel fieldLabel="Note"
-                                            expression="activeContributionAdministration.displayed.note"/>
-              </items>
-            </Panel>   */
+                This is an example of how you can add custom components to the comment extension container
+                inside the moderation-tab and access the REST resource. See documentation for corresponding server side changes.
+                */
+                /*
+                Config(Panel, {
+                  title: "additionalInformation",
+                  items: [
+                    Config(ElasticPluginLabel, {
+                      fieldLabel: "additional",
+                      expression: "activeContributionAdministration.displayed.additional"
+                    }),
+                  ]
+                }),
+                */
               ],
             }),
           ],
@@ -97,15 +102,20 @@ class ElasticSocialStudioPlugin extends ElasticSocialStudioPluginBase {
             Config(AddItemsPlugin, {
               items: [
                 /*
-            This is an example of how you can add custom components to the user profile extension container
-            inside the moderation-tab and access the REST resource.
-             */
-                /* <Panel ui="{PanelSkin.COLLAPSIBLE_200}" title="customProfileStuff">
-              <items>
-                <es:ElasticPluginLabel fieldLabel="Note"
-                                            expression="activeContributionAdministration.displayed.note"/>
-              </items>
-            </Panel> */
+                This is an example of how you can add custom components to the user profile extension container
+                inside the moderation-tab and access the REST resource. See documentation for corresponding server side changes.
+                */
+                /*
+                Config(Panel, {
+                  title: "additionalProfileInformation",
+                  items: [
+                    Config(ElasticPluginLabel, {
+                      fieldLabel: "additional",
+                      expression: "activeContributionAdministration.displayed.additional"
+                    }),
+                  ]
+                }),
+                */
               ],
             }),
           ],
@@ -116,15 +126,19 @@ class ElasticSocialStudioPlugin extends ElasticSocialStudioPluginBase {
             Config(AddItemsPlugin, {
               items: [
                 /*
-            This is an example of how you can add custom components to the user management window
-            and access the REST resource.
-             */
-                /*<Container>
-              <items>
-                <es:ElasticPluginLabel fieldLabel="Note"
-                                            expression="userAdministration.edited.note"/>
-              </items>
-            </Container> */
+               This is an example of how you can add custom components to the user management window
+               and access the REST resource. See documentation for corresponding server side changes.
+                */
+                /*
+                Config(Container, {
+                  items: [
+                    Config(ElasticPluginLabel, {
+                      fieldLabel: "additional",
+                      expression: "userAdministration.edited.additional"
+                    }),
+                  ]
+                }),
+                */
               ],
             }),
           ],

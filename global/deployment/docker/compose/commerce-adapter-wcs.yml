@@ -36,7 +36,7 @@ x-logging:
 
 services:
   commerce-adapter-wcs:
-    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-wcs:${COMMERCE_ADAPTER_WCS_VERSION:-2.1.2}
+    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-wcs:${COMMERCE_ADAPTER_WCS_VERSION:-2.1.3}
     container_name: commerce-adapter-wcs
     restart: always
     logging: *default-logging
@@ -50,8 +50,7 @@ services:
     cap_drop:
       - ALL
     environment:
-      <<: *default-boot-envs
-      <<: *development-boot-envs
+      <<: [*default-boot-envs, *development-boot-envs]
       WCS_HOST: ${WCS_HOST}
       WCS_LINK_PRODUCT_MAX_URL_SEGMENTS: ${WCS_LINK_PRODUCT_MAX_URL_SEGMENTS:-7}
       WCS_USERNAME: ${WCS_USERNAME}

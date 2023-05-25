@@ -9,11 +9,11 @@ import editorContext from "@coremedia/studio-client.main.editor-components/sdk/e
 import ContentCreationUtil from "@coremedia/studio-client.main.editor-components/sdk/util/ContentCreationUtil";
 import { as } from "@jangaroo/runtime";
 import int from "@jangaroo/runtime/int";
-import trace from "@jangaroo/runtime/trace";
 import { AnyFunction } from "@jangaroo/runtime/types";
 import CreateFromTemplateStudioPluginSettings_properties from "./CreateFromTemplateStudioPluginSettings_properties";
 import PageTemplate from "./model/PageTemplate";
 import ProcessingData from "./model/ProcessingData";
+import Logger from "@coremedia/studio-client.client-core-impl/logging/Logger";
 
 /**
  * Post processor implementation for CMChannel instances.
@@ -29,12 +29,10 @@ class CreateFromTemplateProcessor {
         CreateFromTemplateProcessor.#copyTemplateFiles(data, (contents: Array<any>): void =>
           CreateFromTemplateProcessor.#initializeNewlyCreatedContents(contents, (): void =>
             CreateFromTemplateProcessor.#renameTemplateChannel(data, (): void =>
-              CreateFromTemplateProcessor.#deleteTemplateSymbols(data, (): void =>
-                CreateFromTemplateProcessor.#movePageToNavigation(data, (channel: Content): void =>
-                  CreateFromTemplateProcessor.#linkToList(data, channel, (): void => {
-                    callback.call(null);
-                  }),
-                ),
+              CreateFromTemplateProcessor.#movePageToNavigation(data, (channel: Content): void =>
+                CreateFromTemplateProcessor.#linkToList(data, channel, (): void => {
+                  callback.call(null);
+                }),
               ),
             ),
           ),
@@ -52,7 +50,7 @@ class CreateFromTemplateProcessor {
 
   static #convertToPageTemplate(templateSymbol: Content, callback: AnyFunction): void {
     const folder = templateSymbol.getParent();
-    folder.load((): void =>{
+    folder.load((): void => {
       const pageTemplate = new PageTemplate(folder, templateSymbol);
       const templateChannelDocType = session._.getConnection().getContentRepository().getContentType(CreateFromTemplateStudioPluginSettings_properties.doctype);
 
@@ -103,64 +101,17 @@ class CreateFromTemplateProcessor {
     const folder: Content = data.get(CreateFromTemplateStudioPluginSettings_properties.editorial_folder_property);
     folder.getChild(initializer.getPage().getName(), (copiedChannel: Content): void =>
       copiedChannel.rename(data.getName(), (): void => {
-        trace("INFO", "Renamed template channel \"" + initializer.getPage().getName() + "\" to \"" + data.getName() + "\"");
+        Logger.info("Renamed template channel \"" + initializer.getPage().getName() + "\" to \"" + data.getName() + "\"");
         callback.call(null);
       }),
     );
   }
 
   /**
-   * Deletes the symbol document from the copied template folder.
-   * @param data
-   * @param callback
-   */
-  static #deleteTemplateSymbols(data: ProcessingData,
-    callback: AnyFunction): void {
-    const targetEditorialFolder: Content = data.get(CreateFromTemplateStudioPluginSettings_properties.editorial_folder_property);
-    targetEditorialFolder.invalidate((): void => {
-      const children = targetEditorialFolder.getChildDocuments();
-      let callbackCount: int = children.length;
-      const symbols = [];
-      for (let i = 0; i < children.length; i++) {
-        const child: Content = children[i];
-        child.load((c: Content): void => {
-          callbackCount--;
-          if (c.getName().indexOf(CreateFromTemplateStudioPluginSettings_properties.template_descriptor_name) === 0
-                  && c.getType().getName() === CreateFromTemplateStudioPluginSettings_properties.template_descriptor_type) {
-            symbols.push(c);
-          }
-          if (callbackCount === 0) {
-            CreateFromTemplateProcessor.#deleteDescriptors(symbols, targetEditorialFolder, callback);
-          }
-        });
-      }
-      if (children.length === 0) {
-        callback.call(null);
-      }
-    });
-  }
-
-  static #deleteDescriptors(symbols: Array<any>, targetEditorialFolder: Content, callback: AnyFunction): void {
-    trace("INFO", "Deleting " + symbols.length + " descriptors");
-    let callbackCount: int = symbols.length;
-    for (let i = 0; i < symbols.length; i++) {
-      symbols[i].doDelete((): void => {
-        trace("INFO", "Deleted template descriptor from new editorial folder");
-        callbackCount--;
-        if (callbackCount === 0) {
-          targetEditorialFolder.invalidate((): void => {
-            callback.call(null);
-          });
-        }
-      });
-    }
-    if (symbols.length === 0) {
-      callback.call(null);
-    }
-  }
-
-  /**
    * Moves the copied channel document from the editorial folder to the navigation/selected folder.
+   * By default, the channel document and the other editorial contents are in the same folder.
+   * If the base-folder differs from the navigation folder, the channel document is copied
+   * then again from the base-folder into the selected navigation folder.
    * @param data
    * @param callback
    */
@@ -169,7 +120,8 @@ class CreateFromTemplateProcessor {
     const name = data.getName();
     const sourceFolder = data.getFolder();
     const targetEditorialFolder: Content = data.get(CreateFromTemplateStudioPluginSettings_properties.editorial_folder_property);
-    targetEditorialFolder.getChild(name, (channel: Content): void =>
+    targetEditorialFolder.getChild(name, (channel: Content): void => {
+      const originalPath = channel.getPath();
       channel.moveTo(sourceFolder, (result: FlushResult): void => {
         const movedChannel = as(result.remoteBean, Content);
         movedChannel.invalidate((): void => {
@@ -179,7 +131,7 @@ class CreateFromTemplateProcessor {
           movedChannel.flush();
 
           ValueExpressionFactory.create(ContentPropertyNames.PATH, movedChannel).loadValue((path: string): void => {
-            trace("INFO", "Moved \"" + channel.getPath() + "\" to \"" + path + "\" (" + movedChannel + ")");
+            Logger.info("Moved \"" + originalPath + "\" to \"" + path + "\" (" + movedChannel + ")");
             data.setContent(movedChannel);
 
             //reload folder and invoke callback
@@ -190,12 +142,11 @@ class CreateFromTemplateProcessor {
               sourceFolder.invalidate((): void => {
                 callback.call(null, movedChannel);
               }),
-
             );
           });
         });
-      }),
-    );
+      });
+    });
   }
 
   /**
@@ -209,7 +160,7 @@ class CreateFromTemplateProcessor {
     const folder: Content = data.get(CreateFromTemplateStudioPluginSettings_properties.editorial_folder_property)[0];
     const folderName = data.getExtendedPath(folder);
     //create the target folder...
-    trace("INFO", "Copying template files to new editorial folder \"" + folderName + "\"");
+    Logger.info("Copying template files to new editorial folder \"" + folderName + "\"");
     session._.getConnection().getContentRepository().getChild(folderName, (folder: Content): void => {
       data.set(CreateFromTemplateStudioPluginSettings_properties.editorial_folder_property, folder);
       //...and copy the files.
@@ -219,9 +170,22 @@ class CreateFromTemplateProcessor {
         session._.getConnection().getContentRepository().copyRecursivelyTo(toBeCopied, folder, (result: CopyResult): void => {
           if (result.successful) {
             const contents = result.results.map(CreateFromTemplateProcessor.#toContent);
-            callback(contents);
+            //collect the copies for further processing
+            ValueExpressionFactory.createFromFunction((): Content[] => {
+              const targets: Content[] = [];
+              contents.forEach(c => {
+                const copy = folder.getChild(c.getName());
+                if (copy === undefined || copy.getPath() === undefined) {
+                  return undefined;
+                }
+                if (copy) {
+                  targets.push(copy);
+                }
+              });
+              return targets;
+            }).loadValue(callback);
           } else {
-            trace("[WARN]", "Template copy failed: " + result.error.errorName);
+            Logger.warn("Template copy failed: " + result.error.errorName);
             callback.call(null);
           }
         });

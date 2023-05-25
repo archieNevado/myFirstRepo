@@ -22,14 +22,14 @@ interface GoogleAnalyticsStudioPlugin_properties {
 /**
  * report button in preview
  */
-  googleanalytics_webpropertyid_val: string;
-  googleanalytics_webpropertyid_mask: string;
-  googleanalytics_webpropertyid_text: string;
+  googleanalytics_measurementid_val: string;
+  googleanalytics_measurementid_mask: string;
+  googleanalytics_measurementid_text: string;
 /**
  * display name of the service provider
  */
   googleanalytics_service_provider: string;
-  googleanalytics_p12file: string;
+  googleanalytics_authfile: string;
 }
 
 /**
@@ -45,11 +45,11 @@ const GoogleAnalyticsStudioPlugin_properties: GoogleAnalyticsStudioPlugin_proper
   googleanalytics_fav_btn_text: "Google",
   googleanalytics_fav_btn_tooltip: "Open Google Analytics",
   googleanalytics_preview_btn_tooltip: "Open Google Analytics Report",
-  googleanalytics_webpropertyid_val: "^UA\\-\\d+\\-\\d+$",
-  googleanalytics_webpropertyid_mask: "[UA\\d-]",
-  googleanalytics_webpropertyid_text: "Invalid Web Property ID. A valid value would be 'UA-12345678-1'.",
+  googleanalytics_measurementid_val: "^G\\-$",
+  googleanalytics_measurementid_mask: "[G\\-]",
+  googleanalytics_measurementid_text: "Invalid Measurement ID. A valid value would be 'G-1234ABCD'.",
   googleanalytics_service_provider: "Google Analytics",
-  googleanalytics_p12file: "P12 Key File",
+  googleanalytics_authfile: "Service Account Key File",
 };
 
 export default GoogleAnalyticsStudioPlugin_properties;

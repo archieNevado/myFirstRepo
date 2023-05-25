@@ -40,6 +40,15 @@
 }
 
 /*
+ * FF Bug 418039: fix for unsupported :has() selector in CKE5 styles -> https://bugzilla.mozilla.org/show_bug.cgi?id=418039
+ */
+.x-gecko .ck-dropdown button[data-cke-tooltip-text*="Find and replace"] + .ck-dropdown__panel,
+.x-gecko .ck-dropdown button[data-cke-tooltip-text*="Suchen und ersetzen"] + .ck-dropdown__panel {
+  left: auto !important;
+  right: 0;
+}
+
+/*
  * Add background to blockquotes.
  */
 .ck-editor__editable blockquote {

@@ -4,48 +4,42 @@ import com.coremedia.blueprint.base.settings.SettingsService;
 import com.coremedia.cap.common.Blob;
 import com.coremedia.cap.content.Content;
 import com.coremedia.cap.content.ContentType;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.SecurityUtils;
-import com.google.api.client.util.SslUtils;
-import com.google.api.services.analytics.Analytics;
-import com.google.api.services.analytics.model.GaData;
+import com.coremedia.cap.multisite.ContentSiteAspect;
+import com.coremedia.cap.multisite.SitesService;
+import com.google.analytics.data.v1beta.BetaAnalyticsDataClient;
+import com.google.analytics.data.v1beta.BetaAnalyticsDataSettings;
+import com.google.analytics.data.v1beta.Row;
+import com.google.analytics.data.v1beta.RunReportRequest;
+import com.google.analytics.data.v1beta.RunReportResponse;
+import com.google.api.gax.core.CredentialsProvider;
+import com.google.auth.oauth2.GoogleCredentials;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
-import java.io.InputStream;
-import java.security.KeyStore;
-import java.security.PrivateKey;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.coremedia.blueprint.analytics.elastic.google.ElasticGoogleAnalyticsServiceProvider.GOOGLE_ANALYTICS_SERVICE_KEY;
-import static com.coremedia.blueprint.analytics.elastic.google.GoogleAnalyticsQuery.KEY_PID;
+import static com.coremedia.blueprint.analytics.elastic.google.GoogleAnalyticsQuery.KEY_PROPERTY_ID;
 import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCUMENT_PROPERTY_ACTION;
 import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCUMENT_PROPERTY_ANALYTICS_PROVIDER;
 import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCUMENT_PROPERTY_CATEGORY;
 import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCUMENT_PROPERTY_MAX_LENGTH;
 import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.DOCUMENT_PROPERTY_TIME_RANGE;
 import static com.coremedia.blueprint.base.analytics.elastic.util.RetrievalUtil.KEY_LIMIT;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockConstruction;
@@ -55,16 +49,14 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class ElasticGoogleAnalyticsServiceProviderTest {
 
-  private static final int PID = 1234;
+  private static final int PROPERTY_ID = 1234;
   private static final int TIME_RANGE = 30;
-
-  private static final String TEST_APPLICATION_NAME = "KarHeinzCrop-KarlHeinzSeineKillerApp-42.0";
 
   private static final Map<String, Object> SETTINGS_WITH_TIME_RANGE = Map.of(DOCUMENT_PROPERTY_TIME_RANGE, TIME_RANGE);
   private static final Map<String, Object> SETTINGS_WITH_UNUSED = Map.of("unused", "does not matter");
+  private final Map<String, Object> googleAnalyticsSettings = new HashMap<>();
 
-  @InjectMocks
-  private final ElasticGoogleAnalyticsServiceProvider provider = new ElasticGoogleAnalyticsServiceProvider();
+  private ElasticGoogleAnalyticsServiceProvider provider;
 
   @Mock
   private Content cmAlxBaseList;
@@ -87,10 +79,14 @@ public class ElasticGoogleAnalyticsServiceProviderTest {
   @Mock
   private SettingsService settingsService;
 
-  private final Map<String, Object> googleAnalyticsSettings = new HashMap<>();
+  @Mock
+  private SitesService sitesService;
 
   @Mock
   private Content content;
+
+  @Mock
+  private ContentSiteAspect contentSiteAspect;
 
   @Mock
   private Content contentBlob;
@@ -99,30 +95,36 @@ public class ElasticGoogleAnalyticsServiceProviderTest {
   private Blob blob;
 
   @Mock
-  private PrivateKey privateKey;
+  private BetaAnalyticsDataClient dataClient;
 
   @Mock
-  private NetHttpTransport netHttpTransport;
+  private BetaAnalyticsDataSettings dataSettings;
 
   @Mock
-  private JacksonFactory jacksonFactory;
+  private BetaAnalyticsDataSettings.Builder builder;
 
   @Mock
-  private SSLContext sslContext;
+  private RunReportResponse runReportResponse;
 
   @Mock
-  private Analytics.Data.Ga.Get analyticsQuery;
+  private RunReportRequest.Builder requestBuilder;
 
   @Mock
-  private GaData gaData;
+  private RunReportRequest request;
 
-  private final MockedStatic<SecurityUtils> staticSecurityUtils = mockStatic(SecurityUtils.class);
-  private final MockedStatic<GoogleNetHttpTransport> staticGoogleNetHttpTransport = mockStatic(GoogleNetHttpTransport.class);
-  private final MockedStatic<SslUtils> staticSslUtils = mockStatic(SslUtils.class);
-  private final MockedStatic<JacksonFactory> staticJacksonFactory = mockStatic(JacksonFactory.class);
+  @Mock
+  private GoogleCredentials googleCredentials;
+
+  @Mock
+  private Row row;
+
+  private final MockedStatic<BetaAnalyticsDataClient> staticDataClient = mockStatic(BetaAnalyticsDataClient.class);
+  private final MockedStatic<BetaAnalyticsDataSettings> staticDataSettings = mockStatic(BetaAnalyticsDataSettings.class);
+  private final MockedStatic<GoogleCredentials> staticGoogleCredentials = mockStatic(GoogleCredentials.class);
 
   @Before
-  public void setup() {
+  public void setup() throws IOException {
+    provider = new ElasticGoogleAnalyticsServiceProvider(settingsService, sitesService);
     when(cmAlxBaseList.getType()).thenReturn(baseType);
     when(cmAlxPageList.getType()).thenReturn(pageType);
     when(cmAlxEventList.getType()).thenReturn(eventType);
@@ -142,76 +144,76 @@ public class ElasticGoogleAnalyticsServiceProviderTest {
     lenient().when(cmAlxPageList.getInteger(DOCUMENT_PROPERTY_TIME_RANGE)).thenReturn(null);
     lenient().when(cmAlxEventList.getInteger(DOCUMENT_PROPERTY_TIME_RANGE)).thenReturn(null);
 
-    when(settingsService.setting(eq(DOCUMENT_PROPERTY_ANALYTICS_PROVIDER), eq(String.class), any(Content.class), any(Content.class))).thenReturn(provider.getServiceKey());
-
     when(contentBlob.getBlob("data")).thenReturn(blob);
     when(blob.getSize()).thenReturn(42);
 
-    staticSecurityUtils.when(() -> SecurityUtils.loadPrivateKeyFromKeyStore(nullable(KeyStore.class), nullable(InputStream.class), anyString(), anyString(), anyString())).thenReturn(privateKey);
-    staticGoogleNetHttpTransport.when(GoogleNetHttpTransport::newTrustedTransport).thenReturn(netHttpTransport);
-    staticSslUtils.when(() -> SslUtils.initSslContext(any(SSLContext.class), any(KeyStore.class), any(TrustManagerFactory.class))).thenReturn(sslContext);
-    //noinspection ResultOfMethodCallIgnored
-    staticJacksonFactory.when(JacksonFactory::getDefaultInstance).thenReturn(jacksonFactory);
+    when(settingsService.setting(eq(DOCUMENT_PROPERTY_ANALYTICS_PROVIDER), eq(String.class), any(Content.class), any(Content.class))).thenReturn(provider.getServiceKey());
+    when(sitesService.getContentSiteAspect(any(Content.class))).thenReturn(contentSiteAspect);
+    // no site specific internal settings
+    when(contentSiteAspect.getSite()).thenReturn(null);
+
+    when(dataClient.runReport(request)).thenReturn(runReportResponse);
+    when(runReportResponse.getRowsList()).thenReturn(List.of(row));
+    when(requestBuilder.build()).thenReturn(request);
+
+    staticDataClient.when(() -> BetaAnalyticsDataClient.create(any(BetaAnalyticsDataSettings.class))).thenReturn(dataClient);
+    staticDataSettings.when(BetaAnalyticsDataSettings::newBuilder).thenReturn(builder);
+    when(builder.setCredentialsProvider(any(CredentialsProvider.class))).thenReturn(builder);
+    when(builder.build()).thenReturn(dataSettings);
+    staticGoogleCredentials.when(() -> GoogleCredentials.fromStream(any())).thenReturn(googleCredentials);
   }
 
   @After
   public void tearDown() {
-    staticSecurityUtils.close();
-    staticGoogleNetHttpTransport.close();
-    staticSslUtils.close();
-    staticJacksonFactory.close();
+    staticDataClient.close();
+    staticDataSettings.close();
+    staticGoogleCredentials.close();
   }
 
   @Test
   public void fetchNoDataPageList() {
     List<String> reportDataItems = provider.fetchDataFor(cmAlxPageList, SETTINGS_WITH_TIME_RANGE);
-    assertEquals(0, reportDataItems.size());
+    assertThat(reportDataItems.size()).isEqualTo(0);
   }
 
   @Test
-  public void fetchDataPageList() throws Exception {
+  public void fetchDataPageList() {
     when(settingsService.mergedSettingAsMap(eq(GOOGLE_ANALYTICS_SERVICE_KEY), eq(String.class), eq(Object.class), eq(cmAlxPageList), any(Content.class))).thenReturn(SETTINGS_WITH_TIME_RANGE);
     Map<String, Object> effectiveSettings = provider.computeEffectiveRetrievalSettings(cmAlxPageList, mock(Content.class));
 
     Map<String, Object> expectedEffectiveSettings = getEmptyEffectiveSettings();
     expectedEffectiveSettings.putAll(googleAnalyticsSettings);
-    assertEquals(expectedEffectiveSettings, effectiveSettings);
+    assertThat(effectiveSettings).isEqualTo(expectedEffectiveSettings);
 
     getChangedDefaultSettings();
-    when(analyticsQuery.execute()).thenReturn(gaData);
-    when(gaData.getTotalResults()).thenReturn(1);
-    List<String> pageViews = new ArrayList<>();
-    pageViews.add("1234");
+    List<String> pageViews = List.of("1234");
 
     List<String> reportDataItems;
     try (MockedConstruction<PageViewQuery> ignored =
                  mockConstruction(PageViewQuery.class, (pageViewQuery, context) -> {
-                   when(pageViewQuery.getDataQuery(any(Analytics.class))).thenReturn(analyticsQuery);
-                   when(pageViewQuery.process(anyList(), anyList())).thenReturn(pageViews);
+                   when(pageViewQuery.getDataQuery()).thenReturn(requestBuilder);
+                   when(pageViewQuery.process(anyList(), anyList(), anyList())).thenReturn(pageViews);
                  })) {
       reportDataItems = provider.fetchDataFor(cmAlxPageList, googleAnalyticsSettings);
     }
-    assertEquals(1, reportDataItems.size());
+    assertThat(reportDataItems.size()).isEqualTo(1);
   }
 
   @Test
-  public void fetchDataEventList() throws Exception {
-    when(analyticsQuery.execute()).thenReturn(gaData);
-    List<String> pageViews = new ArrayList<>();
-    pageViews.add("1234");
-    when(gaData.getTotalResults()).thenReturn(1);
+  public void fetchDataEventList() {
+    List<String> pageViews = List.of("1234");
     getChangedDefaultSettings();
 
     List<String> reportDataItems;
     try (MockedConstruction<EventQuery> ignored =
                  mockConstruction(EventQuery.class, (eventQuery, context) -> {
-                   when(eventQuery.getDataQuery(any(Analytics.class))).thenReturn(analyticsQuery);
-                   when(eventQuery.process(anyList(), anyList())).thenReturn(pageViews);
+                   when(eventQuery.getDataQuery()).thenReturn(requestBuilder);
+                   when(eventQuery.process(anyList(), anyList(), anyList())).thenReturn(pageViews);
                  })) {
       reportDataItems = provider.fetchDataFor(cmAlxEventList, googleAnalyticsSettings);
     }
 
-    assertEquals(1, reportDataItems.size());
+    assertThat( reportDataItems.size()).isEqualTo(1);
   }
 
   @Test
@@ -219,37 +221,36 @@ public class ElasticGoogleAnalyticsServiceProviderTest {
     getChangedDefaultSettings();
     List<String> reportDataItems = provider.fetchDataFor(cmAlxBaseList, googleAnalyticsSettings);
 
-    assertEquals("No report data items for invalid contentbean.", 0, reportDataItems.size());
+    assertThat(reportDataItems.size()).withFailMessage("No report data items for invalid contentbean.").isEqualTo(0);
   }
 
   @Test
-  public void fetchPageViews() throws Exception {
+  public void fetchPageViews() {
     String contentId = "12";
     String dateString = "20130713";
     long uniqueViews = 42L;
 
     getChangedDefaultSettings();
-    when(analyticsQuery.execute()).thenReturn(gaData);
-    HashMap<String, Map<String, Long>> processedResult = new HashMap<>();
-    Map<String, Long> map = new HashMap<>();
-    map.put(dateString, uniqueViews);
-    processedResult.put(contentId, map);
-    when(gaData.getTotalResults()).thenReturn(1);
+
+    Map<String, Long> map = Map.of(dateString, uniqueViews);
+    Map<String, Map<String, Long>> processedResult = Map.of(contentId, map);
 
     Map<String, Map<String, Long>> result;
     try (MockedConstruction<PageViewHistoryQuery> ignored1 =
                  mockConstruction(PageViewHistoryQuery.class, (pageViewHistoryQuery, context) -> {
-                   when(pageViewHistoryQuery.getDataQuery(any(Analytics.class))).thenReturn(analyticsQuery);
-                   when(pageViewHistoryQuery.process(anyList(), anyList())).thenReturn(processedResult);
+                   when(pageViewHistoryQuery.getDataQuery()).thenReturn(requestBuilder);
+                   when(pageViewHistoryQuery.process(anyList(), anyList(), anyList())).thenReturn(processedResult);
                  });
          MockedConstruction<OverallPerformanceQuery> ignored2 =
-                 mockConstruction(OverallPerformanceQuery.class, (overallPerformanceQuery, context) ->
-                         when(overallPerformanceQuery.getDataQuery(any(Analytics.class))).thenReturn(analyticsQuery))) {
+                 mockConstruction(OverallPerformanceQuery.class, (overallPerformanceQuery, context) -> {
+                   when(overallPerformanceQuery.getDataQuery()).thenReturn(requestBuilder);
+                   when(overallPerformanceQuery.process(anyList(), anyList(), anyList())).thenReturn(processedResult);
+                 })) {
       result = provider.fetchPageViews(content, googleAnalyticsSettings);
     }
 
-    assertEquals(1, result.size());
-    assertEquals(42L, (Object) result.get(contentId).get(dateString));
+    assertThat(result.size()).isEqualTo(1);
+    assertThat((Object) result.get(contentId).get(dateString)).isEqualTo(42L);
   }
 
   @Test
@@ -257,17 +258,17 @@ public class ElasticGoogleAnalyticsServiceProviderTest {
     when(settingsService.mergedSettingAsMap(eq(GOOGLE_ANALYTICS_SERVICE_KEY), eq(String.class), eq(Object.class), eq(cmAlxBaseList), any(Content.class))).thenReturn(SETTINGS_WITH_TIME_RANGE);
     Map<String, Object> effectiveSettings = getEmptyEffectiveSettings();
     effectiveSettings.putAll(googleAnalyticsSettings);
-    assertEquals(effectiveSettings, provider.computeEffectiveRetrievalSettings(cmAlxBaseList, mock(Content.class)));
+    assertThat(provider.computeEffectiveRetrievalSettings(cmAlxBaseList, mock(Content.class))).isEqualTo(effectiveSettings);
     provider.computeEffectiveRetrievalSettings(cmAlxBaseList, mock(Content.class));
 
     Map<String, Map<String, Long>> result = provider.fetchPageViews(content, googleAnalyticsSettings);
 
-    assertEquals(0, result.size());
+    assertThat(result.size()).isEqualTo(0);
   }
 
   @Test
   public void testServiceKey() {
-    assertEquals(GOOGLE_ANALYTICS_SERVICE_KEY, provider.getServiceKey());
+    assertThat(provider.getServiceKey()).isEqualTo(GOOGLE_ANALYTICS_SERVICE_KEY);
   }
 
   @Test
@@ -277,7 +278,7 @@ public class ElasticGoogleAnalyticsServiceProviderTest {
     Map<String, Object> effectiveSettings = provider.computeEffectiveRetrievalSettings(cmAlxPageList, mock(Content.class));
 
     // expect empty settings when called with empty map
-    assertEquals(Collections.EMPTY_MAP, effectiveSettings);
+    assertThat(effectiveSettings).isEqualTo(Collections.EMPTY_MAP);
   }
 
   @Test
@@ -289,7 +290,7 @@ public class ElasticGoogleAnalyticsServiceProviderTest {
     // expect all the retrieval defaults as settings when map contained any data
     Map<String, Object> expectedEffectiveSettings = new HashMap<>(getEmptyEffectiveSettings());
 
-    assertEquals(expectedEffectiveSettings, effectiveSettings);
+    assertThat(effectiveSettings).isEqualTo(expectedEffectiveSettings);
   }
 
   @Test
@@ -302,7 +303,7 @@ public class ElasticGoogleAnalyticsServiceProviderTest {
     Map<String, Object> expectedEffectiveSettings = new HashMap<>(getEmptyEffectiveSettings());
     expectedEffectiveSettings.put(DOCUMENT_PROPERTY_TIME_RANGE, TIME_RANGE);
 
-    assertEquals(expectedEffectiveSettings, effectiveSettings);
+    assertThat(effectiveSettings).isEqualTo(expectedEffectiveSettings);
   }
 
   @Test
@@ -316,18 +317,16 @@ public class ElasticGoogleAnalyticsServiceProviderTest {
     expectedEffectiveSettings.putAll(getEmptyEffectiveSettings());
     expectedEffectiveSettings.putAll(googleAnalyticsSettings);
 
-    assertEquals(expectedEffectiveSettings, effectiveSettings);
+    assertThat(effectiveSettings).isEqualTo(expectedEffectiveSettings);
   }
 
   private Map<String, Object> getChangedDefaultSettings() {
     googleAnalyticsSettings.put(DOCUMENT_PROPERTY_TIME_RANGE, TIME_RANGE);
     googleAnalyticsSettings.put(DOCUMENT_PROPERTY_ACTION, "myAction");
     googleAnalyticsSettings.put(DOCUMENT_PROPERTY_CATEGORY, "myCategory");
-    googleAnalyticsSettings.put(KEY_PID, PID);
+    googleAnalyticsSettings.put(KEY_PROPERTY_ID, PROPERTY_ID);
     googleAnalyticsSettings.put(KEY_LIMIT, 20);
-    googleAnalyticsSettings.put(ElasticGoogleAnalyticsServiceProvider.SERVICE_ACCOUNT_EMAIL, "abcd@efgh.com");
-    googleAnalyticsSettings.put(ElasticGoogleAnalyticsServiceProvider.P12_FILE, contentBlob);
-    googleAnalyticsSettings.put(ElasticGoogleAnalyticsServiceProvider.APPLICATION_NAME, TEST_APPLICATION_NAME);
+    googleAnalyticsSettings.put(ElasticGoogleAnalyticsServiceProvider.AUTH_FILE, contentBlob);
 
     return googleAnalyticsSettings;
   }

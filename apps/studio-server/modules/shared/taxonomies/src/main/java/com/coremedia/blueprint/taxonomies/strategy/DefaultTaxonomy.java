@@ -137,6 +137,10 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
       return null;
     }
 
+    if (taxonomyCycleValidator.isCyclic(nodeContent, taxonomyContentType)) {
+      return null;
+    }
+
     Content parent = getParent(nodeContent);
     if (parent == null) {
       return null;
@@ -251,17 +255,17 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
   protected boolean shouldMatchBeDisplayed(@NonNull Content match, @NonNull String text) {
     String nodeName = getNodeName(match);
 
-    if(StringUtils.containsIgnoreCase(match.getName(), text) ||
+    if (StringUtils.containsIgnoreCase(match.getName(), text) ||
             StringUtils.containsIgnoreCase(match.getString(VALUE), text) ||
             StringUtils.containsIgnoreCase(nodeName, text)) {
       return true;
     }
 
-    if(this.taxonomyLocalizationStrategy != null && this.taxonomyLocalizationStrategy.isSearchAllLocalesEnabled()) {
+    if (this.taxonomyLocalizationStrategy != null && this.taxonomyLocalizationStrategy.isSearchAllLocalesEnabled()) {
       List<Locale> supportedLocales = this.taxonomyLocalizationStrategy.getSupportedLocales();
       for (Locale supportedLocale : supportedLocales) {
         String localizedValue = this.taxonomyLocalizationStrategy.getDisplayName(match, supportedLocale);
-        if(StringUtils.equalsAnyIgnoreCase(localizedValue, text)) {
+        if (StringUtils.equalsAnyIgnoreCase(localizedValue, text)) {
           return true;
         }
       }
@@ -517,7 +521,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
         return asNode(content);
       }
     } catch (Exception e) { //NOSONAR
-      LOG.error("Error committing {}: {}", node, e.getMessage());
+      LOG.warn("Error committing {}: {}", node, e.getMessage());
     }
     return asNode(content);
   }
@@ -564,7 +568,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     if (maxDocumentsPerFolder > 0) {
       QueryService queryService = folder.getRepository().getQueryService();
       Collection<Content> children = queryService.getContentsFulfilling(folder.getChildDocuments(), "TYPE " + taxonomyContentType.getName() + ": BELOW ?0 AND isInProduction ORDER BY id DESC", rootFolder);
-      if(children.size() < maxDocumentsPerFolder) {
+      if (children.size() < maxDocumentsPerFolder) {
         return folder;
       }
 
@@ -591,6 +595,11 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
 
   private List<Content> getPath(Content content) {
     List<Content> path = new ArrayList<>();
+
+    if (taxonomyCycleValidator.isCyclic(content, taxonomyContentType)) {
+      LOG.warn("Taxonomy cycle found for {}", content.getPath());
+      return path;
+    }
 
     Content parent = content;
     while (parent != null) {
@@ -892,7 +901,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
 
   @NonNull
   protected String getNodeName(@NonNull Content content) {
-    if(this.taxonomyLocalizationStrategy != null) {
+    if (this.taxonomyLocalizationStrategy != null) {
       return taxonomyLocalizationStrategy.getDisplayName(content, null);
     }
 
@@ -974,6 +983,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
 
   /**
    * Collects all nodes
+   *
    * @param folder  The folder to lookup keywords in.
    * @param matches the list that contains all nodes
    */

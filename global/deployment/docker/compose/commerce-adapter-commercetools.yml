@@ -51,8 +51,7 @@ services:
     cap_drop:
       - ALL
     environment:
-      <<: *default-boot-envs
-      <<: *development-boot-envs
+      <<: [*default-boot-envs, *development-boot-envs]
       COMMERCETOOLS_HOST: ${COMMERCETOOLS_HOST}
       COMMERCETOOLS_API_SCOPES: ${COMMERCETOOLS_API_SCOPES}
       COMMERCETOOLS_API_AUTHURL: ${COMMERCETOOLS_API_AUTHURL}

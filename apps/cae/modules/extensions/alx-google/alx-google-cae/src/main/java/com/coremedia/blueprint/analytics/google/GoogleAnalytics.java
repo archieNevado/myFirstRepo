@@ -11,12 +11,10 @@ public class GoogleAnalytics extends AnalyticsProvider {
    */
   public static final String GOOGLE_ANALYTICS_SERVICE_KEY = "googleAnalytics";
 
-  private static final String WEB_PROPERTY_ID_KEY = "webPropertyId";
+  private static final String MEASUREMENT_ID = "measurementId";
 
   // visible for testing
   static final String DISABLE_AD_FEATURES_PLUGIN = "disableAdvertisingFeaturesPlugin";
-  private static final String DOMAIN_NAME_KEY = "domainName";
-  private static final String DEFAULT_DOMAIN_NAME = "auto";
 
   public GoogleAnalytics(Page page, SettingsService settingsService) {
     super(GOOGLE_ANALYTICS_SERVICE_KEY, page, settingsService);
@@ -24,20 +22,15 @@ public class GoogleAnalytics extends AnalyticsProvider {
 
   @Override
   protected boolean isConfigValid() {
-    return isNonEmptyString(getWebPropertyId(), WEB_PROPERTY_ID_KEY);
+    return isNonEmptyString(getMeasurementId(), MEASUREMENT_ID);
   }
 
-  public Object getWebPropertyId() {
-    return getSettings().get(WEB_PROPERTY_ID_KEY);
+  public Object getMeasurementId() {
+    return getSettings().get(MEASUREMENT_ID);
   }
 
   public boolean isAdvertisingFeaturesPluginDisabled() {
     final Object isDisabledAdFeaturesPlugin = getSettings().get(DISABLE_AD_FEATURES_PLUGIN);
-    return isDisabledAdFeaturesPlugin != null && Boolean.valueOf(isDisabledAdFeaturesPlugin.toString());
-  }
-
-  public String getDomainName() {
-    final Object domainName = getSettings().get(DOMAIN_NAME_KEY);
-    return domainName instanceof String ? (String) domainName : DEFAULT_DOMAIN_NAME;
+    return isDisabledAdFeaturesPlugin != null && Boolean.parseBoolean(isDisabledAdFeaturesPlugin.toString());
   }
 }
