@@ -70,7 +70,7 @@
 
     <!-- Version for Spring Boot Apps embedded Tomcat. Tomcat 9 is supported -->
     <tomcat.version>9.0.75</tomcat.version>
-    <cm.solr.core.version>2301.3</cm.solr.core.version>
+    <cm.solr.core.version>2301.4</cm.solr.core.version>
     <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
 
     <showDeprecation>true</showDeprecation>

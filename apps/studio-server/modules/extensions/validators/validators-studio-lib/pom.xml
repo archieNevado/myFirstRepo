@@ -244,6 +244,30 @@
       <groupId>org.apache.tika</groupId>
       <artifactId>tika-parser-microsoft-module</artifactId>
       <scope>runtime</scope>
+      <exclusions>
+        <!-- Exclude jdk15on dependencies. We use newer jdk18on artifacts as replacement dependencies. -->
+        <exclusion>
+          <groupId>org.bouncycastle</groupId>
+          <artifactId>bcmail-jdk15on</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.bouncycastle</groupId>
+          <artifactId>bcprov-jdk15on</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <!-- replacement dependency for exclusion at tika-parser-microsoft-module -->
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcmail-jdk18on</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <!-- replacement dependency for exclusion at tika-parser-microsoft-module -->
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcprov-jdk18on</artifactId>
+      <scope>runtime</scope>
     </dependency>
 
     <dependency>
