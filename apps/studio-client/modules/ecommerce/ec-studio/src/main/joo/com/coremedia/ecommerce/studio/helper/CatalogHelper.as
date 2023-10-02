@@ -18,6 +18,7 @@ import com.coremedia.ecommerce.studio.model.ProductVariant;
 import com.coremedia.ecommerce.studio.model.Store;
 import com.coremedia.ui.data.Bean;
 import com.coremedia.ui.data.RemoteBean;
+import com.coremedia.ui.data.RemoteBeanUtil;
 import com.coremedia.ui.data.ValueExpression;
 import com.coremedia.ui.data.ValueExpressionFactory;
 import com.coremedia.ui.data.beanFactory;
@@ -354,8 +355,13 @@ public class CatalogHelper {
     if (storeExpression) {
       return storeExpression;
     }
-    storeExpression = ValueExpressionFactory.createFromFunction(StoreUtil.getActiveStore);
+    storeExpression = ValueExpressionFactory.createFromFunction(getActiveStore);
     return storeExpression;
+  }
+
+  internal function getActiveStore():Store {
+    var siteId:String = editorContext.getSitesService().getPreferredSiteId();
+    return getValidatedStore(siteId);
   }
 
   public function isActiveCoreMediaStore():Boolean {
@@ -414,7 +420,7 @@ public class CatalogHelper {
         return undefined;
       }
       var siteId:String = editorContext.getSitesService().getSiteIdFor(content);
-      return StoreUtil.getValidatedStore(siteId);
+      return getValidatedStore(siteId);
     });
   }
 
@@ -427,6 +433,27 @@ public class CatalogHelper {
               callback.call(null, store);
             }
     );
+  }
+
+  /**
+   * Return the store for the given siteId if it exists, null otherwise.
+   */
+  internal function getValidatedStore(siteId:String):Store {
+    if (siteId === undefined) {
+      return undefined;
+    }
+    if (siteId === null) {
+      return null;
+    }
+    var workspaceId:String = getExtractedWorkspaceId();
+    var store:Store = beanFactory.getRemoteBean("livecontext/store/" + siteId + "/" + workspaceId) as Store;
+    // only the server knows if the store exists, so load and check if it's ID has some value
+    var accessible:Boolean = RemoteBeanUtil.isAccessible(store);
+    if (accessible === undefined) {
+      return undefined;
+    }
+
+    return accessible ? store : null;
   }
 
   private static function remoteErrorHandler(error:RemoteError, source:Object):void {
