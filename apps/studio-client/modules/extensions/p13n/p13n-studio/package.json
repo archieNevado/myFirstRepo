@@ -1,8 +1,0 @@
-{
-  "studioPlugins": [
-    {
-      "mainClass": "com.coremedia.blueprint.personalization.editorplugin.P13NStudioPlugin",
-      "name": "Personalization"
-    }
-  ]
-}

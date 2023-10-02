@@ -1,8 +1,0 @@
-{
-  "studioPlugins": [
-    {
-      "mainClass": "com.coremedia.catalog.studio.CatalogStudioPlugin",
-      "name": "Catalog Extension"
-    }
-  ]
-}

@@ -27,7 +27,6 @@
     <module>apps/workflow-server</module>
     <module>apps/site-manager</module>
     <module>apps/solr</module>
-    <module>apps/studio-client</module>
     <module>apps/studio-packages-proxy</module>
     <module>apps/studio-server</module>
     <module>apps/user-changes</module>

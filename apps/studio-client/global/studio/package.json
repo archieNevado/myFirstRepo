@@ -1,0 +1,27 @@
+{
+  "name": "@coremedia-blueprint/studio-client.studio",
+  "author": "Blueprint",
+  "version": "1.0.0-SNAPSHOT",
+  "private": true,
+  "dependencies": {
+    "@coremedia-blueprint/studio-client.main.app": "1.0.0-SNAPSHOT"
+  },
+  "devDependencies": {
+    "@jangaroo/build": "^1.0.0",
+    "@jangaroo/core": "^1.0.0",
+    "@jangaroo/publish": "^1.0.0",
+    "@jangaroo/run": "^1.0.0",
+    "rimraf": "^3.0.2"
+  },
+  "scripts": {
+    "clean": "rimraf ./dist",
+    "build": "jangaroo build",
+    "watch": "jangaroo watch",
+    "start": "jangaroo run",
+    "package": "jangaroo package",
+    "publish": "jangaroo publish"
+  },
+  "publishConfig": {
+    "directory": "dist"
+  }
+}

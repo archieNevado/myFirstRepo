@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<componentPackage>
-  <component class="com.coremedia.livecontext.asset.studio.InheritReferencesTestView"/>
-  <component class="com.coremedia.livecontext.asset.studio.SearchProductImagesTestView"/>
-</componentPackage>
