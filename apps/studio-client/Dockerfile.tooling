@@ -28,13 +28,9 @@ USER root
 RUN apt-get update -y -qq > /dev/null && \
     apt-get install -y -qq > /dev/null \
     openjdk-11-jre \
-    ca-certificates \
-    chromium && \
+    ca-certificates && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# use the chromium from apt
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 # sencha cmd 7.2.0.84
 ARG SENCHA_COMMAND_SH_ZIP_DOWNLOAD_URL_DIRECTIVE=https://cdn.sencha.com/cmd/7.2.0.84/no-jre/SenchaCmd-7.2.0.84-linux-amd64.sh.zip
 RUN curl -s -L -o senchacmd.zip ${SENCHA_COMMAND_SH_ZIP_DOWNLOAD_URL_DIRECTIVE} && \

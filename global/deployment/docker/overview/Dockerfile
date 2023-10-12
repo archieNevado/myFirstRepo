@@ -1,4 +1,4 @@
-ARG NGINX_BASE_IMAGE=coremedia/nginx-base:1.0-cm-1.23-alpine
+ARG NGINX_BASE_IMAGE=coremedia/nginx-base:1.2-cm-1.25-alpine
 FROM --platform=$BUILDPLATFORM ${NGINX_BASE_IMAGE}
 ARG BUILDARCH
 ENV CMS_VERSION=unknown \

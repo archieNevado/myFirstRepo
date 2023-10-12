@@ -595,12 +595,6 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
 
   private List<Content> getPath(Content content) {
     List<Content> path = new ArrayList<>();
-
-    if (taxonomyCycleValidator.isCyclic(content, taxonomyContentType)) {
-      LOG.warn("Taxonomy cycle found for {}", content.getPath());
-      return path;
-    }
-
     Content parent = content;
     while (parent != null) {
       path.add(0, parent);
@@ -891,8 +885,7 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     node.setType(taxonomyContentType.getName());
 
     if (buildPathInfo) {
-      List<Content> children = getChildren(content);
-      node.setLeaf(children.isEmpty());
+      node.setLeaf(!hasChildren(content));
       node.setLevel(getPath(content).size());
     }
 
@@ -1009,5 +1002,17 @@ public class DefaultTaxonomy extends TaxonomyBase { // NOSONAR  cyclomatic compl
     QueryService queryService = taxonomy.getRepository().getQueryService();
     Collection<Content> children = queryService.getContentsFulfilling(taxonomy.getLinks("children"), "TYPE " + taxonomyContentType.getName() + ": BELOW ?0 AND isInProduction ORDER BY id DESC", rootFolder);
     return new ArrayList<>(children);
+  }
+
+  /**
+   * Cached reading of children.
+   * The getContentFulfilling takes care that the result is cached on the client.
+   * We only want to know if there are children,
+   * so <code>getContentFulfilling</code> instead of <code>getContentsFulfilling</code> is used.
+   */
+  protected boolean hasChildren(Content taxonomy) {
+    QueryService queryService = taxonomy.getRepository().getQueryService();
+    Content child = queryService.getContentFulfilling(taxonomy.getLinks("children"), "TYPE " + taxonomyContentType.getName() + ": BELOW ?0 AND isInProduction ORDER BY id DESC", rootFolder);
+    return child != null;
   }
 }
