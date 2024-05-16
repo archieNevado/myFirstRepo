@@ -1,0 +1,14 @@
+query getCmDownloadById($id: String!) {
+  content {
+    content(id: $id, type: "CMDownload") {
+      ... on CMDownload {
+        id
+        uuid
+        name
+        type
+        repositoryPath
+        fullyQualifiedUrl
+      }
+    }
+  }
+}

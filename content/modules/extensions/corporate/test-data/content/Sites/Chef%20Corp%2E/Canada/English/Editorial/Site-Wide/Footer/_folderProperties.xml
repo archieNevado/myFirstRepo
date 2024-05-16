@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMFolderProperties folder="/Sites/Chef Corp./Canada/English/Editorial/Site-Wide/Footer" name="_folderProperties" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<externalRefId></externalRefId>
+<locale>en-CA</locale>
+<master>
+<link href="../../../../../United%20Kingdom/English/Editorial/Site-Wide/Footer/_folderProperties.xml" path="/Sites/Chef%20Corp%2E/United%20Kingdom/English/Editorial/Site-Wide/Footer/_folderProperties"/>
+</master>
+<contexts>
+<link href="../../../Navigation/Hidden%20Navigation/Corporate%20Information%20Page.xml" path="/Sites/Chef%20Corp%2E/Canada/English/Navigation/Hidden%20Navigation/Corporate%20Information%20Page"/>
+</contexts>
+</CMFolderProperties>

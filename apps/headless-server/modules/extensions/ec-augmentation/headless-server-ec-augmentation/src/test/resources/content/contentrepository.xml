@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contentRepository xmlns="http://www.coremedia.com/2010/content"
+                   xmlns:xi="http://www.w3.org/2001/XInclude">
+  <xi:include href="classpath:com/coremedia/testing/blueprint-doctypes-xmlrepo.xml"/>
+  <content>
+    <folder id="1" name="">
+      <folder id="11" name="Sites">
+        <folder id="111" name="TestSite">
+          <folder id="1111" name="TestSiteUS">
+            <document id="1112" name="MasterSite" type="CMSite" creationDate="1967-01-10T20:59:42.000+01:00">
+              <version number="1">
+                <linkProperty name="root">
+                  <link id="111112"/>
+                </linkProperty>
+                <stringProperty name="locale" value="en-US"/>
+                <stringProperty name="id" value="the-site-id"/>
+                <stringProperty name="name" value="the-site-name"/>
+              </version>
+            </document>
+            <folder id="11111" name="Content">
+              <folder id="111111" name="Navigation">
+                <document id="111112" name="Root" type="CMChannel" creationDate="1967-01-10T20:59:42.000+01:00">
+                  <version number="1">
+                    <stringProperty name="segment" value="root-en"/>
+                    <stringProperty name="title" value="USHomePage"/>
+                    <stringProperty name="htmlTitle" value="htmlTitle"/>
+                    <stringProperty name="htmlDescription" value="htmlDescription"/>
+                    <stringProperty name="teaserTitle" value="TeaserTestTitle"/>
+                    <stringProperty name="keywords" value="key 1,key2,key3"/>
+                    <markupProperty name="localSettings" url="liveContextSettings.xml" grammar="coremedia-struct-2008"/>
+                    <markupProperty name="placement" url="22placement.xml" grammar="coremedia-struct-2008"/>
+                    <linkProperty name="children">
+                      <link id="1111112"/>
+                      <link id="1111116"/>
+                      <link id="1111118"/>
+                      <link id="1111120"/>
+                    </linkProperty>
+                  </version>
+                </document>
+                <document id="1111112" name="Subpage" type="CMChannel" creationDate="1967-01-10T20:59:42.000+01:00">
+                  <version number="1">
+                    <stringProperty name="segment" value="subpage-en"/>
+                    <stringProperty name="title" value="USSubpage"/>
+                  </version>
+                </document>
+                <document id="1111114" name="HiddenSubpage" type="CMChannel" creationDate="1967-01-10T20:59:42.000+01:00">
+                  <version number="1">
+                    <intProperty name="hidden" value="1"/>
+                    <stringProperty name="segment" value="hidden-subpage-en"/>
+                    <stringProperty name="title" value="USHiddenSubpage"/>
+                  </version>
+                </document>
+                <document id="1111116" type="CMExternalChannel" name="c1-augmentation">
+                  <version number="1">
+                    <stringProperty name="externalId" value="mock:///catalog/category/c1"/>
+                  </version>
+                </document>
+                <document id="1111118" type="CMExternalChannel" name="c2-augmentation">
+                  <version number="1">
+                    <stringProperty name="externalId" value="mock:///catalog/category/c2"/>
+                  </version>
+                </document>
+                <document id="1111120" type="CMExternalPage" name="augmented-page">
+                  <version number="1">
+                    <stringProperty name="externalId" value="augmented-page"/>
+                  </version>
+                </document>
+                <document id="1111122" type="CMExternalChannel" name="cool-stuff-augmentation">
+                  <version number="1">
+                    <stringProperty name="externalId" value="mock:///catalog/category/cool-stuff"/>
+                    <markupProperty name="placement" url="22placement.xml" grammar="coremedia-struct-2008"/>
+                  </version>
+                </document>
+                <document id="1111124" type="CMExternalProduct" name="cool-product-augmentation">
+                  <version number="1">
+                    <stringProperty name="externalId" value="mock:///catalog/product/cool-product"/>
+                    <markupProperty name="pdpPagegrid" url="22placement.xml" grammar="coremedia-struct-2008"/>
+                  </version>
+                </document>
+                <document id="1111126" type="CMExternalProduct" name="cool-product-augmentation-different-catalog-alias">
+                  <version number="1">
+                    <stringProperty name="externalId" value="mock:///catalog/product/catalog:test;cool-product"/>
+                    <markupProperty name="pdpPagegrid" url="22placement.xml" grammar="coremedia-struct-2008"/>
+                  </version>
+                </document>
+              </folder>
+              <document id="111116" type="CMProductList" name="cmProductList">
+                <version number="1">
+                  <stringProperty name="externalId" value="mock:///catalog/category/cool-stuff"/>
+                </version>
+              </document>
+              <document id="6" type="CMExternalChannel" name="augmentedCatalogRoot">
+                <version number="1">
+                  <stringProperty name="externalId" value="vendor:///catalog/category/ROOT"/>
+                </version>
+              </document>
+              <document id="8" type="CMExternalChannel" name="childCategory">
+                <version number="1">
+                  <stringProperty name="externalId" value="vendor:///catalog/category/childCategory"/>
+                </version>
+              </document>
+              <document id="10" type="CMExternalChannel" name="leafCategory">
+                <version number="1">
+                  <stringProperty name="externalId" value="vendor:///catalog/category/leafCategory"/>
+                </version>
+              </document>
+            </folder>
+          </folder>
+          <folder id="1113" name="TestSiteDE">
+            <document id="1114" name="DerivedSite" type="CMSite">
+              <version number="1">
+                <stringProperty name="locale" value="de-DE"/>
+                <stringProperty name="id" value="the-derived-site-id"/>
+                <stringProperty name="name" value="the-derived-site-name"/>
+                <linkProperty name="master">
+                  <link id="1112"/>
+                </linkProperty>
+                <linkProperty name="root">
+                  <link id="11144"/>
+                </linkProperty>
+              </version>
+            </document>
+            <folder id="11141" name="Content">
+              <folder id="11143" name="Navigation">
+                <document id="11144" name="Root" type="CMChannel">
+                  <version number="1">
+                    <linkProperty name="master">
+                      <link id="4"/>
+                    </linkProperty>
+                    <stringProperty name="segment" value="root-de"/>
+                    <stringProperty name="title" value="DEHomePage"/>
+                    <markupProperty name="localSettings" url="liveContextSettings.xml" grammar="coremedia-struct-2008"/>
+                  </version>
+                </document>
+              </folder>
+            </folder>
+          </folder>
+        </folder>
+      </folder>
+      <!-- the layout settings document -->
+      <document id="24" type="CMSettings" name="LayoutSettings">
+        <version number="1">
+          <markupProperty name="settings" url="24settings.xml" grammar="coremedia-struct-2008"/>
+        </version>
+      </document>
+      <!-- section symbols -->
+      <document id="212" type="CMSymbol" name="north">
+        <version number="1">
+          <stringProperty name="description" value="north"/>
+        </version>
+      </document>
+      <!-- content for placement -->
+      <document id="412" type="CMArticle" name="articleNorth">
+        <version number="1">
+          <stringProperty name="teaserTitle" value="articleNorth"/>
+          <markupProperty name="detailText"/>
+        </version>
+      </document>
+      <document name="picture" id="416" type="CMPicture">
+        <version number="1">
+          <markupProperty name="localSettings" grammar="coremedia-struct-2008" url="referenceToProductSettings.xml"/>
+        </version>
+      </document>
+      <document name="download" id="418" type="CMDownload">
+        <version number="1">
+          <markupProperty name="localSettings" grammar="coremedia-struct-2008" url="referenceToProductSettings.xml"/>
+        </version>
+      </document>
+      <document name="visual" id="420" type="CMVisual">
+        <version number="1">
+          <markupProperty name="localSettings" grammar="coremedia-struct-2008" url="referenceToProductSettings.xml"/>
+        </version>
+      </document>
+    </folder>
+  </content>
+
+  <rules>
+    <rule resourceId="1" group="0" doctype="Folder_">
+      <right value="ALL"/>
+    </rule>
+    <rule resourceId="1" group="0" doctype="Document_">
+      <right value="ALL"/>
+    </rule>
+  </rules>
+</contentRepository>

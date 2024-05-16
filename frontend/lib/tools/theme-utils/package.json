@@ -1,0 +1,58 @@
+{
+  "name": "@coremedia/theme-utils",
+  "description": "CoreMedia theme configurations and tasks.",
+  "private": true,
+  "version": "3.0.0",
+  "engines": {
+    "node": "18",
+    "pnpm": "^8.1"
+  },
+  "dependencies": {
+    "@babel/core": "^7.21.4",
+    "@babel/preset-env": "^7.21.4",
+    "@babel/preset-react": "^7.18.6",
+    "@coremedia/cm-logger": "workspace:*",
+    "@coremedia/dependency-check": "workspace:*",
+    "@coremedia/livereload": "workspace:*",
+    "@coremedia/theme-importer": "workspace:*",
+    "@coremedia/tool-utils": "workspace:*",
+    "@coremedia/zipper": "workspace:*",
+    "async": "^3.2.4",
+    "babel-loader": "^8.3.0",
+    "browserslist": "^4.21.5",
+    "clean-webpack-plugin": "^3.0.0",
+    "closest-package": "1.0.0",
+    "copy-webpack-plugin": "^6.4.1",
+    "css-loader": "3.3.0",
+    "escape-string-regexp": "^2.0.0",
+    "eslint": "^7.32.0",
+    "exports-loader": "^0.7.0",
+    "expose-loader": "^0.7.5",
+    "file-loader": "^5.1.0",
+    "glob": "^7.2.3",
+    "imports-loader": "^0.8.0",
+    "loader-utils": "^2.0.4",
+    "lodash": "^4.17.21",
+    "md5-file": "^5.0.0",
+    "mini-css-extract-plugin": "^1.6.2",
+    "node-sass": "^8.0.0",
+    "open": "^8.4.2",
+    "optimize-css-assets-webpack-plugin": "^6.0.1",
+    "resolve-from": "^5.0.0",
+    "resolve-url-loader": "^3.1.5",
+    "sass-loader": "^10.4.1",
+    "source-map-loader": "^1.1.3",
+    "url-loader": "^3.0.0",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-sources": "^1.4.3",
+    "xmlbuilder": "^15.1.1"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.7"
+  },
+  "scripts": {
+    "prettier": "prettier --write \"src/**/*.{js,json}\""
+  },
+  "main": "src/index.js"
+}

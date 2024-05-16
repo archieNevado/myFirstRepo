@@ -1,0 +1,126 @@
+scalar BigDecimal
+
+extend type Query {
+  commerce: CommerceRoot
+}
+
+type CommerceRoot {
+  externalPage(externalId: String!, siteId: String!): CMExternalPage @fetch(from: "@externalPageAugmentationService.getContentByExternalId(#externalId, @sitesService.getSite(#siteId))")
+}
+
+extend type ContentRoot {
+  productList(id: String!): CMProductList @fetch(from: "#this.getContent(#id, 'CMProductList')")
+}
+
+interface CommerceRef {
+  id: ID!
+  externalId: String!
+  catalogId: String!
+  storeId: String!
+  locale: String!
+  siteId: String!
+  internalLink: String!
+}
+
+type ProductRef implements CommerceRef & CollectionItem {
+  id: ID!
+  externalId: String!
+  catalogId: String!
+  storeId: String!
+  locale: String!
+  siteId: String!
+  internalLink: String!
+  remoteLink(siteId:String, context:String): String! @fetch(from: "#this.getInternalLink()")
+}
+
+type CategoryRef implements CommerceRef {
+  id: ID!
+  externalId: String!
+  catalogId: String!
+  storeId: String!
+  locale: String!
+  siteId: String!
+  internalLink: String!
+}
+
+interface CMAbstractCategory @inherit(from: ["CMChannel"]) {
+  externalId: String
+  pdpPagegrid: PageGrid
+}
+
+interface CMProductList @inherit(from: ["CMQueryList"]) {
+  externalId: String
+  categoryRef : CategoryRef
+  limit: Int
+  start: Int
+  productOffset: Int
+  orderBy: String
+  facet: String
+  facets: [String]
+  productItems: [ProductRef]
+}
+
+interface CMExternalPage  @inherit(from: ["CMChannel"]) {
+  externalId: String
+  externalUriPath: String
+}
+
+interface CMProductTeaser @inherit(from: ["CMTeasable"]) {
+  externalId: String
+  productRef: ProductRef
+}
+
+interface CMExternalProduct @inherit(from: ["CMTeasable"]) {
+  externalId: String
+  productRef: ProductRef
+  pdpPagegrid: PageGrid
+}
+
+interface CMExternalChannel @inherit(from: ["CMAbstractCategory"]) {
+  categoryRef : CategoryRef
+}
+
+type CMAbstractCategoryImpl implements CMAbstractCategory @inherit(from: ["CMChannelImpl"]) {
+  externalId: String
+  categoryRef : CategoryRef @fetch(from: "@commerceRefAdapter.getCommerceRef(#this, 'externalId')")
+  pdpPagegrid: PageGrid @fetch(from: "@pageGridAdapter.to(#root,'pdpPagegrid')")
+}
+
+type CMProductListImpl implements CMProductList @inherit(from: ["CMQueryListImpl"]) {
+  externalId: String
+  categoryRef : CategoryRef @fetch(from: "@commerceRefAdapter.getCommerceRef(#this, 'externalId')")
+  limit: Int @fetch(from: "@productListAdapter.to(#root).getLimit()")
+  start: Int @fetch(from: "@productListAdapter.to(#root).getStart()")
+  productOffset: Int @fetch(from: "@productListAdapter.to(#root).getProductOffset()")
+  orderBy: String @fetch(from: "@productListAdapter.to(#root).getOrderBy()")
+  facet: String @fetch(from: "@productListAdapter.to(#root).getFacet()")
+  facets: [String] @fetch(from: "@productListAdapter.to(#root).getFacets()")
+  productItems: [ProductRef] @fetch(from: "@productListAdapter.to(#root,#null).getProductRefs()")
+  items: [CollectionItem] @fetch(from: "@productListAdapter.to(#root).getItems()")
+  itemsPaged(offset: Int, limit: Int): CollectionItemPaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, @productListAdapter.to(#root).getItems())")
+  teasableItems: [CMTeasable] @fetch(from: "@productListAdapter.to(#root).getFixedItems()")
+  teasableItemsPaged(offset: Int, limit: Int): CMTeasablePaginationResult @fetch(from: "@pagingHelper.apply(#offset, #limit, @productListAdapter.to(#root).getFixedItems())")
+}
+
+type CMExternalPageImpl implements CMExternalPage @inherit(from: ["CMChannelImpl"]) {
+  externalId: String
+  externalUriPath: String
+}
+
+type CMProductTeaserImpl implements CMProductTeaser @inherit(from: ["CMTeasableImpl"]) {
+  externalId: String
+  productRef: ProductRef @fetch(from: "@commerceRefAdapter.getCommerceRef(#this, 'externalId')")
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+}
+
+type CMExternalProductImpl implements CMExternalProduct @inherit(from: ["CMTeasableImpl"]) {
+  externalId: String
+  productRef: ProductRef @fetch(from: "@commerceRefAdapter.getCommerceRef(#this, 'externalId')")
+  pdpPagegrid: PageGrid @fetch(from: "@pageGridAdapter.to(#root,'pdpPagegrid')")
+}
+
+type CMExternalChannelImpl implements CMExternalChannel @inherit(from: ["CMAbstractCategoryImpl"]) {
+  externalId: String
+  categoryRef : CategoryRef @fetch(from: "@commerceRefAdapter.getCommerceRef(#this, 'externalId')")
+}

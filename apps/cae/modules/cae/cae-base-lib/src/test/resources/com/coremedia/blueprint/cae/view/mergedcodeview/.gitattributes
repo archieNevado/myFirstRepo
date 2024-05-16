@@ -1,0 +1,2 @@
+# MergedCssResourcesViewTest uses mergedCss.css in a String comparison, so make sure the line-ending is always lf
+mergedCss.css text eol=lf

@@ -1,0 +1,11 @@
+[template]
+src   = "sites.html.tmpl"
+dest  = "/usr/share/nginx/html/assets/sites.html"
+keys  = [
+         "/environment/fqdn",
+         "/commerce/commercetools/enabled",
+         "/commerce/sfcc/enabled",
+         "/commerce/hybris/enabled",
+         "/commerce/wcs/enabled",
+         "/headless/client/enabled"
+]

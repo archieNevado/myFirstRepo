@@ -1,0 +1,15 @@
+interface CMSelectionRules @inherit(from: ["CMDynamicList"]) {
+  defaultContent: [CMTeasable!]!
+  rules: [PersonalizationRule!]!
+}
+
+type CMSelectionRulesImpl implements CMSelectionRules @inherit(from: ["CMDynamicListImpl"]) {
+  defaultContent: [CMTeasable!]!
+  rules: [PersonalizationRule!]! @fetch(from: "@p13nRulesAdapter.to(#root, 'rules').rules()")
+}
+
+type PersonalizationRule {
+  rule: String
+  target: CMTeasable
+  referencedContent: [CMLocalized!]!
+}

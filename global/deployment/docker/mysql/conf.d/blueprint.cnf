@@ -1,0 +1,4 @@
+[mysqld]
+wait_timeout = 15000
+innodb_buffer_pool_size = 512m
+

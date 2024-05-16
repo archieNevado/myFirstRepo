@@ -1,0 +1,12 @@
+query getTaxonomyById($id: String!) {
+  content {
+    taxonomy(id: $id) {
+      id
+      uuid
+      type
+      repositoryPath
+      name
+      value
+    }
+  }
+}

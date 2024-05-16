@@ -1,0 +1,12 @@
+{
+  "properties": [
+    {
+      "name": "cae.hashing.backward-compatibility",
+      "description": "If enabled the deprecated com.coremedia.blueprint.cae.util.DefaultSecureHashCodeGeneratorStrategy will be used for securing blob transformation. If set to false the com.coremedia.blueprint.cae.util.MD5SecureHashCodeGeneratorStrategy will be used."
+    },
+    {
+      "name": "cae.hashing.migration-mode",
+      "description": "If enabled the com.coremedia.blueprint.cae.util.DefaultToMd5MigrationSecureHashCodeGeneratorStrategy will be used for securing blob transformation. This may be used for a smooth migration from com.coremedia.blueprint.cae.util.DefaultSecureHashCodeGeneratorStrategy to com.coremedia.blueprint.cae.util.MD5SecureHashCodeGeneratorStrategy."
+    }
+  ]
+}

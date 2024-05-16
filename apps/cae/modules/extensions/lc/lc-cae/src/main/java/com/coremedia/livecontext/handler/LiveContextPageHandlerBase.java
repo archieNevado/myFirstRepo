@@ -1,0 +1,168 @@
+package com.coremedia.livecontext.handler;
+
+import com.coremedia.blueprint.base.links.UrlPrefixResolver;
+import com.coremedia.blueprint.base.settings.SettingsService;
+import com.coremedia.blueprint.cae.handlers.PageHandlerBase;
+import com.coremedia.blueprint.cae.handlers.PreviewHandler;
+import com.coremedia.cap.content.ContentRepository;
+import com.coremedia.cap.multisite.Site;
+import com.coremedia.livecontext.context.LiveContextNavigation;
+import com.coremedia.livecontext.context.ResolveContextStrategy;
+import com.coremedia.livecontext.ecommerce.common.CommerceBean;
+import com.coremedia.livecontext.handler.util.LiveContextSiteResolver;
+import com.coremedia.livecontext.navigation.LiveContextNavigationFactory;
+import com.coremedia.objectserver.web.links.UriComponentsHelper;
+import edu.umd.cs.findbugs.annotations.NonNull;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.util.UriComponents;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
+import java.util.Optional;
+
+import static com.coremedia.blueprint.base.links.UriConstants.Links.ABSOLUTE_URI_KEY;
+import static com.coremedia.blueprint.base.links.UriConstants.Links.SCHEME_KEY;
+
+public class LiveContextPageHandlerBase extends PageHandlerBase {
+
+  protected static final String SHOP_NAME_VARIABLE = "shop";
+
+  public static final String URL_PROVIDER_URL_TEMPLATE = "urlTemplate";
+  public static final String URL_PROVIDER_QUERY_PARAMS = "queryParams";
+  public static final String URL_PROVIDER_SEO_SEGMENT = "seoSegment";
+  public static final String URL_PROVIDER_IS_STUDIO_PREVIEW = "isStudioPreview";
+  public static final String URL_PROVIDER_IS_INITIAL_STUDIO_REQUEST = "isInitialStudioRequest";
+  public static final String HAS_PREVIEW_TOKEN = "hasPreviewToken";
+  public static final String URL_PROVIDER_SEARCH_TERM = "searchTerm";
+  private static final String REQUEST_PARAMETER_PREVIEW = "preview";
+  public static final String P13N_URI_PARAMETER = "p13n_test";
+
+  private ResolveContextStrategy resolveContextStrategy;
+  private LiveContextNavigationFactory liveContextNavigationFactory;
+  private UrlPrefixResolver urlPrefixResolver;
+  private LiveContextSiteResolver siteResolver;
+  private SettingsService settingsService;
+  private ContentRepository contentRepository;
+
+  public void setSettingsService(SettingsService settingsService) {
+    this.settingsService = settingsService;
+  }
+
+  public void setResolveContextStrategy(ResolveContextStrategy resolveContextStrategy) {
+    this.resolveContextStrategy = resolveContextStrategy;
+  }
+
+  public void setContentRepository(ContentRepository contentRepository) {
+    this.contentRepository = contentRepository;
+  }
+
+  public void setLiveContextNavigationFactory(LiveContextNavigationFactory liveContextNavigationFactory) {
+    this.liveContextNavigationFactory = liveContextNavigationFactory;
+  }
+
+  public void setUrlPrefixResolver(UrlPrefixResolver urlPrefixResolver) {
+    this.urlPrefixResolver = urlPrefixResolver;
+  }
+
+  public void setSiteResolver(LiveContextSiteResolver siteResolver) {
+    this.siteResolver = siteResolver;
+  }
+
+  protected SettingsService getSettingsService() {
+    return settingsService;
+  }
+
+  @Override
+  protected void initialize() {
+    super.initialize();
+    if (contentRepository == null) {
+      throw new IllegalStateException("Required property not set: contentRepository");
+    }
+    if (liveContextNavigationFactory == null) {
+      throw new IllegalStateException("Required property not set: liveContextNavigationFactory");
+    }
+    if (resolveContextStrategy == null) {
+      throw new IllegalStateException("Required property not set: resolveContextStrategy");
+    }
+    if (settingsService == null) {
+      throw new IllegalStateException("Required property not set: settingsService");
+    }
+    if (siteResolver == null) {
+      throw new IllegalStateException("Required property not set: siteResolver");
+    }
+    if (urlPrefixResolver == null) {
+      throw new IllegalStateException("Required property not set: urlPrefixResolver");
+    }
+  }
+
+  @NonNull
+  protected Optional<LiveContextNavigation> getNavigationContext(@NonNull Site site,
+                                                                 @NonNull CommerceBean commerceBean) {
+    try {
+      return resolveContextStrategy.resolveContext(site, commerceBean);
+    } catch (Exception ignored) {
+      // Do not log, means actually just "not found", does not indicate a problem.
+      return Optional.empty();
+    }
+  }
+
+  protected LiveContextNavigationFactory getLiveContextNavigationFactory() {
+    return liveContextNavigationFactory;
+  }
+
+  protected LiveContextSiteResolver getSiteResolver() {
+    return siteResolver;
+  }
+
+  protected UriComponents absoluteUri(UriComponents originalUri, Object bean, @NonNull Site site,
+                                      Map<String, Object> linkParameters, @NonNull ServletRequest request) {
+    if (!isAbsoluteUrlRequested(request)) {
+      return originalUri;
+    }
+
+    String siteId = site.getId();
+    String absoluteUrlPrefix = urlPrefixResolver.getUrlPrefix(siteId, bean, null);
+    if (absoluteUrlPrefix == null) {
+      throw new IllegalStateException("Cannot calculate an absolute URL for " + bean);
+    } else if (!StringUtils.isBlank(absoluteUrlPrefix)) {
+      //explicitly set scheme if it is set in link parameters
+      String scheme = null;
+      if (linkParameters != null) {
+        Object schemeAttribute = linkParameters.get(SCHEME_KEY);
+        if (schemeAttribute != null) {
+          scheme = (String) schemeAttribute;
+        }
+      }
+
+      return UriComponentsHelper.prefixUri(absoluteUrlPrefix, scheme, originalUri);
+    }
+
+    return UriComponentsHelper.prefixUri(absoluteUrlPrefix, null, originalUri);
+  }
+
+  protected boolean isPreview() {
+    return contentRepository.isContentManagementServer();
+  }
+
+  public static boolean isStudioPreviewRequest(@NonNull HttpServletRequest request) {
+    return PreviewHandler.isStudioPreviewRequest(request)
+            || isTrue(request.getAttribute(HAS_PREVIEW_TOKEN))
+            || isTrue(request.getParameter(REQUEST_PARAMETER_PREVIEW))
+            || isTrue(request.getParameter(P13N_URI_PARAMETER));
+  }
+
+  private static boolean isTrue(Object attribute) {
+    return Boolean.valueOf(attribute + "");
+  }
+
+  @NonNull
+  protected String getSiteSegment(@NonNull Site site) {
+    return getContentLinkBuilder().getVanityName(site.getSiteRootDocument());
+  }
+
+  private static boolean isAbsoluteUrlRequested(@NonNull ServletRequest request) {
+    Object absolute = request.getAttribute(ABSOLUTE_URI_KEY);
+    return "true".equals(absolute) || Boolean.TRUE.equals(absolute);
+  }
+}

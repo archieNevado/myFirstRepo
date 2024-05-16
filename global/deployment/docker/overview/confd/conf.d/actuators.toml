@@ -1,0 +1,14 @@
+[template]
+src   = "actuators.html.tmpl"
+dest  = "/usr/share/nginx/html/assets/actuators.html"
+keys  = [
+        "/environment/fqdn",
+        "/user/changes/enabled",
+        "/commerce/mock/enabled",
+        "/commerce/commercetools/enabled",
+        "/commerce/sfcc/enabled",
+        "/commerce/hybris/enabled",
+        "/commerce/wcs/enabled",
+        "/headless/client/enabled",
+        "/grafana/enabled"
+]

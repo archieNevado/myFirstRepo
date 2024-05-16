@@ -1,0 +1,38 @@
+services:
+  hybris-proxy:
+    image: ${REPOSITORY_PREFIX:-coremedia}/hybris-proxy
+    container_name: hybris-proxy
+    restart: always
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"
+    build:
+      context: ../commerce-proxy
+    networks:
+      - backend
+    environment:
+      COMMERCE_SYSTEM: hybris
+      ENVIRONMENT_FQDN: ${ENVIRONMENT_FQDN:-docker.localhost}
+      HYBRIS_HOST: ${HYBRIS_HOST}
+
+  traefik:
+    environment:
+      # Because the mock adapter is a development only feature, we can activate the actuator here
+      ACTUATOR_COMMERCE_ADAPTER_HYBRIS: 'commerce-adapter-hybris'
+    volumes:
+      - ../traefik/dynamic-configuration/development-commerce/hybris-proxy.yml:/etc/traefik/dynamic/commerce/hybris-proxy.yml
+
+  cae-preview:
+    environment:
+      SPRING_PROFILES: ${SPRING_PROFILES:-dev-hybris}
+
+  cae-live:
+    environment:
+      SPRING_PROFILES: ${SPRING_PROFILES:-dev-hybris}
+
+  overview:
+    environment:
+      COMMERCE_HYBRIS_ENABLED: "true"
+      COMMERCE_HYBRIS_HOST: ${HYBRIS_HOST}

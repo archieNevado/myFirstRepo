@@ -1,0 +1,26 @@
+*.iml
+*.ipr
+*.iws
+.idea/
+# maven:
+target/
+overlays/
+# eclipse:
+.classpath
+.project
+.settings/
+# VScode
+.vscode
+# Logs:
+*.log
+*.out
+# git:
+*.orig
+# OS X
+.DS_Store
+/coremedia-licenses/*.zip
+# docker
+/docker-compose*.yml
+/.env
+/plugin-descriptors
+/plugins

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<repository xmlns="http://www.coremedia.com/2005/contentserver/userrepository">
+  <group id="staff" name="staff" contentgroup="true" livegroup="false" administrative="false">
+    <!-- Global group, no corporate specific rules here! -->
+    <members>
+      <group id="global-manager" name="global-manager" contentgroup="true" livegroup="false" administrative="false">
+        <!-- Global group, no corporate specific rules here! -->
+        <members>
+          <group id="global-site-manager-emerald" name="global-site-manager-emerald" contentgroup="true" livegroup="false" administrative="false">
+            <rule content="/Sites/Emerald" type="CMObject" rights="RMDAPS"/>
+            <rule content="/Sites/Emerald" type="Folder_" rights="RMDAPS"/>
+            <!-- in order to define topic pages, global site managers need write access to taxonomies. -->
+            <rule content="/Settings/Taxonomies" type="CMTaxonomy" rights="RMDAP"/>
+            <members>
+              <user id="sanny" name="Sanny" home="/Home/Sanny"/>
+            </members>
+          </group>
+        </members>
+      </group> <!-- global-manager -->
+      <group id="local-manager" name="local-manager" contentgroup="true" livegroup="false" administrative="false">
+        <!-- Global group, no corporate specific rules here! -->
+        <members>
+          <group id="local-site-manager-emerald" name="local-site-manager-emerald" contentgroup="true" livegroup="false" administrative="false">
+            <!-- all local site managers can read the global master site. -->
+            <rule content="/Sites/Emerald/United States/English" type="CMObject" rights="R"/>
+            <rule content="/Sites/Emerald/United States/English" type="Folder_" rights="R"/>
+            <!-- in order to define topic pages, local site managers need write access to taxonomies. -->
+            <rule content="/Settings/Taxonomies" type="CMTaxonomy" rights="RMDAP"/>
+            <members>
+              <group name="manager-emerald-en-US" contentgroup="true" livegroup="false" administrative="false">
+                <rule content="/Sites/Emerald/United States/English" type="CMObject" rights="RMDAP"/>
+                <rule content="/Sites/Emerald/United States/English" type="Folder_" rights="RMDAP"/>
+                <members>
+                  <userref id="sanny"/>
+                </members>
+              </group>
+              <group name="manager-emerald-de-DE" contentgroup="true" livegroup="false" administrative="false">
+                <rule content="/Sites/Emerald/Germany/German" type="CMObject" rights="RMDAP"/>
+                <rule content="/Sites/Emerald/Germany/German" type="Folder_" rights="RMDAP"/>
+              </group>
+            </members>
+          </group> <!-- local-site-manager-emerald -->
+        </members>
+      </group> <!-- local-manager -->
+    </members>
+  </group> <!-- staff -->
+</repository>

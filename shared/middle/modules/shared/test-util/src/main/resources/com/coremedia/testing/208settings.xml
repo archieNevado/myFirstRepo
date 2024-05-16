@@ -1,0 +1,5 @@
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <LinkListProperty LinkType="coremedia:///cap/contenttype/CMTaxonomy" Name="roots">
+    <Link xlink:href="coremedia:///cap/content/202"/>
+  </LinkListProperty>
+</Struct>

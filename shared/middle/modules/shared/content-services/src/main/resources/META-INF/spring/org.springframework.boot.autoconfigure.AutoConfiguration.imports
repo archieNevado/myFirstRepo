@@ -1,0 +1,3 @@
+com.coremedia.blueprint.coderesources.ThemeServiceAutoConfiguration
+com.coremedia.blueprint.segments.SegmentsAutoConfiguration
+com.coremedia.blueprint.pictures.DefaultPictureLookupAutoConfiguration

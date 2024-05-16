@@ -1,0 +1,4543 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+  query: Query
+}
+
+interface Augmentation {
+  commerceRef: CommerceRef!
+  content: Content_
+  downloads: [CMDownload]!
+  grid: PageGrid!
+  id: ID!
+  picture: CMPicture
+  pictures: [CMPicture]!
+  visuals: [CMVisual]!
+}
+
+" interfaces alphabetically"
+interface Banner {
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+}
+
+interface CMAbstractCategory {
+  augmentationLink: String
+  authors: [CMTeasable]
+  children: [CMLinkable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  externalId: String
+  footer: [CMLinkable]
+  grid: PageGrid
+  header: [CMLinkable]
+  hidden: Boolean
+  hiddenInSitemap: Boolean
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  parent: CMNavigation
+  pdpPagegrid: PageGrid
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+"Models the properties of an article content object."
+interface CMArticle {
+  augmentationLink: String
+  authors: [CMTeasable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+interface CMAudio {
+  alt: String
+  augmentationLink: String
+  authors: [CMTeasable]
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  captionReferencedContent(view: String): [Content_!]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  copyright: String
+  creationDate: String!
+  data: Blob
+  dataUrl: String
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  fullyQualifiedUrl: String!
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+"Models the properties of a page content object."
+interface CMChannel {
+  augmentationLink: String
+  authors: [CMTeasable]
+  children: [CMLinkable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  footer: [CMLinkable]
+  grid: PageGrid
+  header: [CMLinkable]
+  hidden: Boolean
+  hiddenInSitemap: Boolean
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  parent: CMNavigation
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+interface CMCollection {
+  augmentationLink: String
+  authors: [CMTeasable]
+  bannerItems: [Banner]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailItems: [Detail]
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  items: [CollectionItem]
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teasableItems: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+interface CMDownload {
+  augmentationLink: String
+  authors: [CMTeasable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  data: Blob
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  filename: String
+  fullyQualifiedUrl: String!
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+interface CMDynamicList {
+  augmentationLink: String
+  authors: [CMTeasable]
+  bannerItems: [Banner]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailItems: [Detail]
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  items: [CollectionItem]
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teasableItems: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+interface CMExternalChannel {
+  augmentationLink: String
+  authors: [CMTeasable]
+  categoryRef: CategoryRef
+  children: [CMLinkable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  externalId: String
+  footer: [CMLinkable]
+  grid: PageGrid
+  header: [CMLinkable]
+  hidden: Boolean
+  hiddenInSitemap: Boolean
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  parent: CMNavigation
+  pdpPagegrid: PageGrid
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+interface CMExternalLink {
+  augmentationLink: String
+  authors: [CMTeasable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  openInNewTab: Boolean
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  url: String
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+interface CMExternalPage {
+  augmentationLink: String
+  authors: [CMTeasable]
+  children: [CMLinkable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  externalId: String
+  externalUriPath: String
+  footer: [CMLinkable]
+  grid: PageGrid
+  header: [CMLinkable]
+  hidden: Boolean
+  hiddenInSitemap: Boolean
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  parent: CMNavigation
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+interface CMExternalProduct {
+  augmentationLink: String
+  authors: [CMTeasable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  externalId: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  pdpPagegrid: PageGrid
+  picture: CMPicture
+  pictures: [CMPicture]
+  productRef: ProductRef
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+interface CMGallery {
+  augmentationLink: String
+  authors: [CMTeasable]
+  bannerItems: [Banner]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailItems: [Detail]
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  items: [CollectionItem]
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  mediaItems: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teasableItems: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+interface CMHTML {
+  alt: String
+  augmentationLink: String
+  authors: [CMTeasable]
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  captionReferencedContent(view: String): [Content_!]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  copyright: String
+  creationDate: String!
+  data: Blob
+  description: String
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  fullyQualifiedUrl: String!
+  html: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+interface CMImage {
+  augmentationLink: String
+  creationDate: String!
+  data: Blob
+  description: String
+  id: ID!
+  ignoreUpdates: Int
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  modificationDate: String!
+  name: String!
+  repositoryPath: String!
+  type: String!
+}
+
+interface CMImageMap {
+  augmentationLink: String
+  authors: [CMTeasable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  displayPicture: Boolean
+  displayShortText: Boolean
+  displayTitle: Boolean
+  extDisplayedDate: String
+  hotZones: [Hotzone]
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  transformedHotZones: [TransformedHotZone]
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+interface CMInteractive {
+  alt: String
+  augmentationLink: String
+  authors: [CMTeasable]
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  captionReferencedContent(view: String): [Content_!]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  copyright: String
+  creationDate: String!
+  data: Blob
+  dataUrl: String
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  fullyQualifiedUrl: String!
+  height: Int
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+  width: Int
+}
+
+interface CMLinkable {
+  augmentationLink: String
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  extDisplayedDate: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  subjectTaxonomy: [CMTaxonomy]
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  viewtype: String
+}
+
+interface CMLocTaxonomy {
+  augmentationLink: String
+  authors: [CMTeasable]
+  children: [CMTaxonomy]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  externalReference: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  latitudeLongitude: String
+  link: Link
+  locChildren: [CMLocTaxonomy]
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  parent: CMTaxonomy
+  pathToRoot: [CMTaxonomy]
+  picture: CMPicture
+  pictures: [CMPicture]
+  postcode: String
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  value: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+interface CMLocalized {
+  augmentationLink: String
+  creationDate: String!
+  id: ID!
+  ignoreUpdates: Int
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  modificationDate: String!
+  name: String!
+  repositoryPath: String!
+  type: String!
+}
+
+interface CMMedia {
+  alt: String
+  augmentationLink: String
+  authors: [CMTeasable]
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  captionReferencedContent(view: String): [Content_!]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  copyright: String
+  creationDate: String!
+  data: Blob
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  fullyQualifiedUrl: String!
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+interface CMNavigation {
+  augmentationLink: String
+  authors: [CMTeasable]
+  children: [CMLinkable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  grid: PageGrid
+  hidden: Boolean
+  hiddenInSitemap: Boolean
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  parent: CMNavigation
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+interface CMObject {
+  augmentationLink: String
+  creationDate: String!
+  id: ID!
+  modificationDate: String!
+  name: String!
+  repositoryPath: String!
+  type: String!
+}
+
+interface CMPerson {
+  augmentationLink: String
+  authors: [CMTeasable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  displayName: String
+  eMail: String
+  extDisplayedDate: String
+  firstName: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  jobTitle: String
+  keywords: String
+  lastName: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  organization: String
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+"Models the properties of a picture content object."
+interface CMPicture {
+  alt: String
+  augmentationLink: String
+  authors: [CMTeasable]
+  base64Images(cropNames: [String!]): [Base64Image]!
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  captionReferencedContent(view: String): [Content_!]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  copyright: String
+  creationDate: String!
+  crops: [Crop!]!
+  data: Blob
+  dataUrl: String
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  fullyQualifiedUrl: String!
+  height: Int
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  uriTemplate(imageFormat: ImageFormat): String
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+  width: Int
+}
+
+interface CMPlaceholder {
+  augmentationLink: String
+  authors: [CMTeasable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+interface CMProduct {
+  augmentationLink: String
+  authors: [CMTeasable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  downloads: [CMDownload]
+  extDisplayedDate: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  price: Float
+  productCode: String
+  productName: String
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+interface CMProductList {
+  augmentationLink: String
+  authors: [CMTeasable]
+  bannerItems: [Banner]
+  categoryRef: CategoryRef
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailItems: [Detail]
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  externalId: String
+  facet: String
+  facets: [String]
+  filteredItems(customFilterQueries: [FilterQueryArg]): [CollectionItem]
+  filteredPagedItems(customFilterQueries: [FilterQueryArg], offset: Int): [CollectionItem]
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  items: [CollectionItem]
+  keywords: String
+  limit: Int
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  orderBy: String
+  pagedItems(offset: Int): [CollectionItem]
+  picture: CMPicture
+  pictures: [CMPicture]
+  productItems: [ProductRef]
+  productOffset: Int
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  start: Int
+  subjectTaxonomy: [CMTaxonomy]
+  teasableItems: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+interface CMProductTeaser {
+  augmentationLink: String
+  authors: [CMTeasable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  externalId: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  productRef: ProductRef
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+interface CMQueryList {
+  augmentationLink: String
+  authors: [CMTeasable]
+  bannerItems: [Banner]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailItems: [Detail]
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  filteredItems(customFilterQueries: [FilterQueryArg]): [CollectionItem]
+  filteredPagedItems(customFilterQueries: [FilterQueryArg], offset: Int): [CollectionItem]
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  items: [CollectionItem]
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  pagedItems(offset: Int): [CollectionItem]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teasableItems: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+interface CMResourceBundle {
+  augmentationLink: String
+  creationDate: String!
+  id: ID!
+  ignoreUpdates: Int
+  locale: String
+  localizations: MapOfString
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  modificationDate: String!
+  name: String!
+  repositoryPath: String!
+  type: String!
+}
+
+interface CMSelectionRules {
+  augmentationLink: String
+  authors: [CMTeasable]
+  bannerItems: [Banner]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  defaultContent: [CMTeasable!]!
+  detailItems: [Detail]
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  items: [CollectionItem]
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  rules: [PersonalizationRule!]!
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teasableItems: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+interface CMSettings {
+  augmentationLink: String
+  creationDate: String!
+  id: ID!
+  identifier: String
+  ignoreUpdates: Int
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  modificationDate: String!
+  name: String!
+  repositoryPath: String!
+  settings(paths: [[String]]): JSON
+  type: String!
+}
+
+interface CMSite {
+  augmentationLink: String
+  creationDate: String!
+  id: ID!
+  ignoreUpdates: Int
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  modificationDate: String!
+  name: String!
+  repositoryPath: String!
+  root: CMNavigation
+  settings(paths: [[String!]!]!): JSON
+  type: String!
+}
+
+interface CMSpinner {
+  alt: String
+  augmentationLink: String
+  authors: [CMTeasable]
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  captionReferencedContent(view: String): [Content_!]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  copyright: String
+  creationDate: String!
+  data: Blob
+  dataUrl: String
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  fullyQualifiedUrl: String!
+  height: Int
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  sequence: [CMPicture]
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+  width: Int
+}
+
+interface CMTaxonomy {
+  augmentationLink: String
+  authors: [CMTeasable]
+  children: [CMTaxonomy]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  externalReference: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  parent: CMTaxonomy
+  pathToRoot: [CMTaxonomy]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  value: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+interface CMTeasable {
+  augmentationLink: String
+  authors: [CMTeasable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+interface CMTeaser {
+  augmentationLink: String
+  authors: [CMTeasable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+interface CMVideo {
+  alt: String
+  augmentationLink: String
+  authors: [CMTeasable]
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  captionReferencedContent(view: String): [Content_!]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  copyright: String
+  creationDate: String!
+  data: Blob
+  dataUrl: String
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  fullyQualifiedUrl: String!
+  height: Int
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  timeLine: TimeLine
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+  width: Int
+}
+
+interface CMVisual {
+  alt: String
+  augmentationLink: String
+  authors: [CMTeasable]
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  captionReferencedContent(view: String): [Content_!]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  copyright: String
+  creationDate: String!
+  data: Blob
+  dataUrl: String
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  extDisplayedDate: String
+  fullyQualifiedUrl: String!
+  height: Int
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+  width: Int
+}
+
+interface CategoryAugmentation {
+  commerceRef: CommerceRef!
+  content: Content_
+  downloads: [CMDownload]!
+  grid: PageGrid!
+  id: ID!
+  picture: CMPicture
+  pictures: [CMPicture]!
+  visuals: [CMVisual]!
+}
+
+interface CollectionItem {
+  remoteLink(context: String, siteId: String): String!
+}
+
+interface CommerceRef {
+  catalogId: String!
+  externalId: String!
+  id: ID!
+  internalLink: String!
+  locale: String!
+  siteId: String!
+  storeId: String!
+}
+
+interface Content_ {
+  augmentationLink: String
+  creationDate: String!
+  id: ID!
+  modificationDate: String!
+  name: String!
+  repositoryPath: String!
+  type: String!
+}
+
+interface Detail {
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Included in the RichText-Type of the detailText field.")
+}
+
+interface HasPageGrid {
+  grid: PageGrid
+}
+
+interface ProductAugmentation {
+  commerceRef: CommerceRef!
+  content: Content_
+  downloads: [CMDownload]!
+  grid: PageGrid!
+  id: ID!
+  pdpPagegrid: PageGrid!
+  picture: CMPicture
+  pictures: [CMPicture]!
+  visuals: [CMVisual]!
+}
+
+type AugmentationImpl implements Augmentation & HasPageGrid {
+  commerceRef: CommerceRef!
+  content: Content_
+  downloads: [CMDownload]!
+  grid: PageGrid!
+  id: ID!
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]!
+  remoteLink(context: String, siteId: String): String!
+  visuals: [CMVisual]!
+}
+
+" types alphabetically"
+type Base64Image {
+  base64: String
+  cropName: String!
+}
+
+type Blob {
+  contentType: String!
+  eTag: String!
+  size: Int!
+  uri: String
+}
+
+type CMAbstractCategoryImpl implements Banner & CMAbstractCategory & CMChannel & CMLinkable & CMLocalized & CMNavigation & CMObject & CMTeasable & CollectionItem & Content_ & Detail & HasPageGrid {
+  augmentationLink: String
+  authors: [CMTeasable]
+  categoryRef: CategoryRef
+  children: [CMLinkable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  externalId: String
+  footer: [CMLinkable]
+  grid: PageGrid
+  header: [CMLinkable]
+  hidden: Boolean
+  hiddenInSitemap: Boolean
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  parent: CMNavigation
+  pdpPagegrid: PageGrid
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMArticleImpl implements Banner & CMArticle & CMLinkable & CMLocalized & CMObject & CMTeasable & CollectionItem & Content_ & Detail {
+  augmentationLink: String
+  authors: [CMTeasable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMAudioImpl implements Banner & CMAudio & CMLinkable & CMLocalized & CMMedia & CMObject & CMTeasable & CollectionItem & Content_ & Detail {
+  alt: String
+  augmentationLink: String
+  authors: [CMTeasable]
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  captionReferencedContent(view: String): [Content_!]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  copyright: String
+  creationDate: String!
+  data: Blob
+  dataUrl: String
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  fullyQualifiedUrl: String!
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMChannelImpl implements Banner & CMChannel & CMLinkable & CMLocalized & CMNavigation & CMObject & CMTeasable & CollectionItem & Content_ & Detail & HasPageGrid {
+  augmentationLink: String
+  authors: [CMTeasable]
+  children: [CMLinkable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  footer: [CMLinkable]
+  grid: PageGrid
+  header: [CMLinkable]
+  hidden: Boolean
+  hiddenInSitemap: Boolean
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  parent: CMNavigation
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMCollectionImpl implements Banner & CMCollection & CMLinkable & CMLocalized & CMObject & CMTeasable & CollectionItem & Content_ & Detail {
+  augmentationLink: String
+  authors: [CMTeasable]
+  bannerItems: [Banner]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailItems: [Detail]
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  items: [CollectionItem]
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teasableItems: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMDownloadImpl implements Banner & CMDownload & CMLinkable & CMLocalized & CMObject & CMTeasable & CollectionItem & Content_ & Detail {
+  augmentationLink: String
+  authors: [CMTeasable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  data: Blob
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  filename: String
+  fullyQualifiedUrl: String!
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMDynamicListImpl implements Banner & CMCollection & CMDynamicList & CMLinkable & CMLocalized & CMObject & CMTeasable & CollectionItem & Content_ & Detail {
+  augmentationLink: String
+  authors: [CMTeasable]
+  bannerItems: [Banner]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailItems: [Detail]
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  items: [CollectionItem]
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teasableItems: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMExternalChannelImpl implements Banner & CMAbstractCategory & CMChannel & CMExternalChannel & CMLinkable & CMLocalized & CMNavigation & CMObject & CMTeasable & CollectionItem & Content_ & Detail & HasPageGrid {
+  augmentationLink: String
+  authors: [CMTeasable]
+  categoryRef: CategoryRef
+  children: [CMLinkable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  externalId: String
+  footer: [CMLinkable]
+  grid: PageGrid
+  header: [CMLinkable]
+  hidden: Boolean
+  hiddenInSitemap: Boolean
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  parent: CMNavigation
+  pdpPagegrid: PageGrid
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMExternalLinkImpl implements Banner & CMExternalLink & CMLinkable & CMLocalized & CMObject & CMTeasable & CollectionItem & Content_ & Detail {
+  augmentationLink: String
+  authors: [CMTeasable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  openInNewTab: Boolean
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  url: String
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMExternalPageImpl implements Banner & CMChannel & CMExternalPage & CMLinkable & CMLocalized & CMNavigation & CMObject & CMTeasable & CollectionItem & Content_ & Detail & HasPageGrid {
+  augmentationLink: String
+  authors: [CMTeasable]
+  children: [CMLinkable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  externalId: String
+  externalUriPath: String
+  footer: [CMLinkable]
+  grid: PageGrid
+  header: [CMLinkable]
+  hidden: Boolean
+  hiddenInSitemap: Boolean
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  parent: CMNavigation
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMExternalProductImpl implements Banner & CMExternalProduct & CMLinkable & CMLocalized & CMObject & CMTeasable & CollectionItem & Content_ & Detail {
+  augmentationLink: String
+  authors: [CMTeasable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  externalId: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  pdpPagegrid: PageGrid
+  picture: CMPicture
+  pictures: [CMPicture]
+  productRef: ProductRef
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMGalleryImpl implements Banner & CMCollection & CMGallery & CMLinkable & CMLocalized & CMObject & CMTeasable & CollectionItem & Content_ & Detail {
+  augmentationLink: String
+  authors: [CMTeasable]
+  bannerItems: [Banner]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailItems: [Detail]
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  items: [CollectionItem]
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  mediaItems: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teasableItems: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMHTMLImpl implements Banner & CMHTML & CMLinkable & CMLocalized & CMMedia & CMObject & CMTeasable & CollectionItem & Content_ & Detail {
+  alt: String
+  augmentationLink: String
+  authors: [CMTeasable]
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  captionReferencedContent(view: String): [Content_!]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  copyright: String
+  creationDate: String!
+  data: Blob
+  description: String
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  fullyQualifiedUrl: String!
+  html: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMImageImpl implements CMImage & CMLocalized & CMObject & Content_ {
+  augmentationLink: String
+  creationDate: String!
+  data: Blob
+  description: String
+  id: ID!
+  ignoreUpdates: Int
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  modificationDate: String!
+  name: String!
+  repositoryPath: String!
+  type: String!
+}
+
+type CMImageMapImpl implements Banner & CMImageMap & CMLinkable & CMLocalized & CMObject & CMTeasable & CMTeaser & CollectionItem & Content_ & Detail {
+  augmentationLink: String
+  authors: [CMTeasable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  displayPicture: Boolean
+  displayShortText: Boolean
+  displayTitle: Boolean
+  extDisplayedDate: String
+  hotZones: [Hotzone]
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  transformedHotZones: [TransformedHotZone]
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMInteractiveImpl implements Banner & CMInteractive & CMLinkable & CMLocalized & CMMedia & CMObject & CMTeasable & CMVisual & CollectionItem & Content_ & Detail {
+  alt: String
+  augmentationLink: String
+  authors: [CMTeasable]
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  captionReferencedContent(view: String): [Content_!]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  copyright: String
+  creationDate: String!
+  data: Blob
+  dataUrl: String
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  fullyQualifiedUrl: String!
+  height: Int
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+  width: Int
+}
+
+type CMLinkableImpl implements CMLinkable & CMLocalized & CMObject & CollectionItem & Content_ {
+  augmentationLink: String
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  extDisplayedDate: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  subjectTaxonomy: [CMTaxonomy]
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  viewtype: String
+}
+
+type CMLocTaxonomyImpl implements Banner & CMLinkable & CMLocTaxonomy & CMLocalized & CMObject & CMTaxonomy & CMTeasable & CollectionItem & Content_ & Detail {
+  augmentationLink: String
+  authors: [CMTeasable]
+  children: [CMTaxonomy]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  externalReference: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  latitudeLongitude: String
+  link: Link
+  locChildren: [CMLocTaxonomy]
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  parent: CMTaxonomy
+  pathToRoot: [CMTaxonomy]
+  picture: CMPicture
+  pictures: [CMPicture]
+  postcode: String
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  value: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMLocalizedImpl implements CMLocalized & CMObject & Content_ {
+  augmentationLink: String
+  creationDate: String!
+  id: ID!
+  ignoreUpdates: Int
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  modificationDate: String!
+  name: String!
+  repositoryPath: String!
+  type: String!
+}
+
+type CMMediaImpl implements Banner & CMLinkable & CMLocalized & CMMedia & CMObject & CMTeasable & CollectionItem & Content_ & Detail {
+  alt: String
+  augmentationLink: String
+  authors: [CMTeasable]
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  captionReferencedContent(view: String): [Content_!]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  copyright: String
+  creationDate: String!
+  data: Blob
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  fullyQualifiedUrl: String!
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMNavigationImpl implements Banner & CMLinkable & CMLocalized & CMNavigation & CMObject & CMTeasable & CollectionItem & Content_ & Detail & HasPageGrid {
+  augmentationLink: String
+  authors: [CMTeasable]
+  children: [CMLinkable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  grid: PageGrid
+  hidden: Boolean
+  hiddenInSitemap: Boolean
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  parent: CMNavigation
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMObjectImpl implements CMObject & Content_ {
+  augmentationLink: String
+  creationDate: String!
+  id: ID!
+  modificationDate: String!
+  name: String!
+  repositoryPath: String!
+  type: String!
+}
+
+type CMPersonImpl implements Banner & CMLinkable & CMLocalized & CMObject & CMPerson & CMTeasable & CollectionItem & Content_ & Detail {
+  augmentationLink: String
+  authors: [CMTeasable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  displayName: String
+  eMail: String
+  extDisplayedDate: String
+  firstName: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  jobTitle: String
+  keywords: String
+  lastName: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  organization: String
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMPictureImpl implements Banner & CMLinkable & CMLocalized & CMMedia & CMObject & CMPicture & CMTeasable & CMVisual & CollectionItem & Content_ & Detail {
+  alt: String
+  augmentationLink: String
+  authors: [CMTeasable]
+  base64Images(cropNames: [String!]): [Base64Image]!
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  captionReferencedContent(view: String): [Content_!]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  copyright: String
+  creationDate: String!
+  crops: [Crop!]!
+  data: Blob
+  dataUrl: String
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  fullyQualifiedUrl: String!
+  height: Int
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  uriTemplate(imageFormat: ImageFormat): String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+  width: Int
+}
+
+type CMPlaceholderImpl implements Banner & CMLinkable & CMLocalized & CMObject & CMPlaceholder & CMTeasable & CollectionItem & Content_ & Detail {
+  augmentationLink: String
+  authors: [CMTeasable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMProductImpl implements Banner & CMLinkable & CMLocalized & CMObject & CMProduct & CMTeasable & CollectionItem & Content_ & Detail {
+  augmentationLink: String
+  authors: [CMTeasable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  downloads: [CMDownload]
+  extDisplayedDate: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  price: Float
+  productCode: String
+  productName: String
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMProductListImpl implements Banner & CMCollection & CMDynamicList & CMLinkable & CMLocalized & CMObject & CMProductList & CMQueryList & CMTeasable & CollectionItem & Content_ & Detail {
+  augmentationLink: String
+  authors: [CMTeasable]
+  bannerItems: [Banner]
+  categoryRef: CategoryRef
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailItems: [Detail]
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  externalId: String
+  facet: String
+  facets: [String]
+  filteredItems(customFilterQueries: [FilterQueryArg]): [CollectionItem]
+  filteredPagedItems(customFilterQueries: [FilterQueryArg], offset: Int): [CollectionItem]
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  items: [CollectionItem]
+  keywords: String
+  limit: Int
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  orderBy: String
+  pagedItems(offset: Int): [CollectionItem]
+  picture: CMPicture
+  pictures: [CMPicture]
+  productItems: [ProductRef]
+  productOffset: Int
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  start: Int
+  subjectTaxonomy: [CMTaxonomy]
+  teasableItems: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMProductTeaserImpl implements Banner & CMLinkable & CMLocalized & CMObject & CMProductTeaser & CMTeasable & CollectionItem & Content_ & Detail {
+  augmentationLink: String
+  authors: [CMTeasable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  externalId: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  productRef: ProductRef
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMQueryListImpl implements Banner & CMCollection & CMDynamicList & CMLinkable & CMLocalized & CMObject & CMQueryList & CMTeasable & CollectionItem & Content_ & Detail {
+  augmentationLink: String
+  authors: [CMTeasable]
+  bannerItems: [Banner]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailItems: [Detail]
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  filteredItems(customFilterQueries: [FilterQueryArg]): [CollectionItem]
+  filteredPagedItems(customFilterQueries: [FilterQueryArg], offset: Int): [CollectionItem]
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  items: [CollectionItem]
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  pagedItems(offset: Int): [CollectionItem]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teasableItems: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMResourceBundleImpl implements CMLocalized & CMObject & CMResourceBundle & Content_ {
+  augmentationLink: String
+  creationDate: String!
+  id: ID!
+  ignoreUpdates: Int
+  locale: String
+  localizations: MapOfString
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  modificationDate: String!
+  name: String!
+  repositoryPath: String!
+  type: String!
+}
+
+type CMSelectionRulesImpl implements Banner & CMCollection & CMDynamicList & CMLinkable & CMLocalized & CMObject & CMSelectionRules & CMTeasable & CollectionItem & Content_ & Detail {
+  augmentationLink: String
+  authors: [CMTeasable]
+  bannerItems: [Banner]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  defaultContent: [CMTeasable!]!
+  detailItems: [Detail]
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  items: [CollectionItem]
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  rules: [PersonalizationRule!]!
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teasableItems: [CMTeasable]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMSettingsImpl implements CMLocalized & CMObject & CMSettings & Content_ {
+  augmentationLink: String
+  creationDate: String!
+  id: ID!
+  identifier: String
+  ignoreUpdates: Int
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  modificationDate: String!
+  name: String!
+  repositoryPath: String!
+  settings(paths: [[String]]): JSON
+  type: String!
+}
+
+type CMSiteImpl implements CMLocalized & CMObject & CMSite & Content_ {
+  augmentationLink: String
+  creationDate: String!
+  id: ID!
+  ignoreUpdates: Int
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  modificationDate: String!
+  name: String!
+  repositoryPath: String!
+  root: CMNavigation
+  settings(paths: [[String!]!]!): JSON
+  type: String!
+}
+
+type CMSpinnerImpl implements Banner & CMLinkable & CMLocalized & CMMedia & CMObject & CMSpinner & CMTeasable & CMVisual & CollectionItem & Content_ & Detail {
+  alt: String
+  augmentationLink: String
+  authors: [CMTeasable]
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  captionReferencedContent(view: String): [Content_!]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  copyright: String
+  creationDate: String!
+  data: Blob
+  dataUrl: String
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  fullyQualifiedUrl: String!
+  height: Int
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  sequence: [CMPicture]
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+  width: Int
+}
+
+type CMTaxonomyImpl implements Banner & CMLinkable & CMLocalized & CMObject & CMTaxonomy & CMTeasable & CollectionItem & Content_ & Detail {
+  augmentationLink: String
+  authors: [CMTeasable]
+  children: [CMTaxonomy]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  externalReference: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  parent: CMTaxonomy
+  pathToRoot: [CMTaxonomy]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  value: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMTeasableImpl implements Banner & CMLinkable & CMLocalized & CMObject & CMTeasable & CollectionItem & Content_ & Detail {
+  augmentationLink: String
+  authors: [CMTeasable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMTeaserImpl implements Banner & CMLinkable & CMLocalized & CMObject & CMTeasable & CMTeaser & CollectionItem & Content_ & Detail {
+  augmentationLink: String
+  authors: [CMTeasable]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  creationDate: String!
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+}
+
+type CMVideoImpl implements Banner & CMLinkable & CMLocalized & CMMedia & CMObject & CMTeasable & CMVideo & CMVisual & CollectionItem & Content_ & Detail {
+  alt: String
+  augmentationLink: String
+  authors: [CMTeasable]
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  captionReferencedContent(view: String): [Content_!]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  copyright: String
+  creationDate: String!
+  data: Blob
+  dataUrl: String
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  fullyQualifiedUrl: String!
+  height: Int
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  timeLine: TimeLine
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+  width: Int
+}
+
+type CMVisualImpl implements Banner & CMLinkable & CMLocalized & CMMedia & CMObject & CMTeasable & CMVisual & CollectionItem & Content_ & Detail {
+  alt: String
+  augmentationLink: String
+  authors: [CMTeasable]
+  caption(view: String): String
+  captionAsTree(view: String): RichTextTree
+  captionReferencedContent(view: String): [Content_!]
+  contentInSetting(paths: [[String!]!]!): [LinkedContentEntry]
+  contentInStruct(paths: [[String!]!]!): [LinkedContentEntry]
+  context: CMNavigation
+  copyright: String
+  creationDate: String!
+  data: Blob
+  dataUrl: String
+  detailText: RichText
+  detailTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  detailTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  detailTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  extDisplayedDate: String
+  fullyQualifiedUrl: String!
+  height: Int
+  htmlDescription: String
+  htmlTitle: String
+  id: ID!
+  ignoreUpdates: Int
+  keywords: String
+  link: Link
+  locale: String
+  localizedVariant(country: String, language: String!, variant: String): CMLocalized
+  localizedVariants: [CMLocalized!]!
+  locationTaxonomy: [CMLocTaxonomy]
+  media: [CMMedia]
+  modificationDate: String!
+  name: String!
+  navigationPath: [CMLinkable]
+  picture: CMPicture
+  pictures: [CMPicture]
+  related: [CMTeasable]
+  remoteLink(context: String, siteId: String): String!
+  repositoryPath: String!
+  root: CMNavigation
+  segment: String
+  settings(paths: [[String!]!]!): JSON
+  spinner: CMSpinner
+  spinners: [CMSpinner]
+  subjectTaxonomy: [CMTaxonomy]
+  teaserOverlaySettings: TeaserOverlaySettings
+  teaserTarget: CMLinkable
+  teaserTargets: [ExtendedTeaserTarget]
+  teaserText(view: String): RichText
+  teaserTextAsTree(view: String): RichTextTree @deprecated(reason : "Replaced by new RichText type")
+  teaserTextLegacy(view: String): String @deprecated(reason : "Replaced by new RichText type")
+  teaserTextReferencedContent(view: String): [Content_!] @deprecated(reason : "Replaced by new RichText type")
+  teaserTitle: String
+  title: String
+  type: String!
+  validFrom: String
+  validTo: String
+  video: CMVideo
+  videos: [CMVideo]
+  viewtype: String
+  width: Int
+}
+
+type CategoryAugmentationImpl implements Augmentation & CategoryAugmentation {
+  children: [CommerceRef]!
+  commerceRef: CommerceRef!
+  content: Content_
+  downloads: [CMDownload]!
+  grid: PageGrid!
+  id: ID!
+  media: [CMMedia]
+  picture: CMPicture
+  pictures: [CMPicture]!
+  remoteLink(context: String, siteId: String): String!
+  visuals: [CMVisual]!
+}
+
+type CategoryRef implements CommerceRef {
+  catalogId: String!
+  externalId: String!
+  id: ID!
+  internalLink: String!
+  locale: String!
+  siteId: String!
+  storeId: String!
+}
+
+type CommerceRoot {
+  augmentationForCommerceIdBySite(commerceId: String!, siteId: String!): Augmentation
+  categoryAugmentationBySite(catalogId: String, externalId: String!, siteId: String!): CategoryAugmentation
+  categoryAugmentationByStore(catalogId: String, externalId: String!, locale: String!, storeId: String!): CategoryAugmentation
+  externalPage(externalId: String!, siteId: String!): CMExternalPage
+  productAugmentationBySite(catalogId: String, externalId: String!, siteId: String!): ProductAugmentation
+  productAugmentationByStore(catalogId: String, externalId: String!, locale: String!, storeId: String!): ProductAugmentation
+}
+
+"The type `ContentRoot` combines access to all content, non commerce related queries."
+type ContentRoot {
+  "Dedicated `article` query, returning a content object of type `CMArticle`, matching the given id."
+  article(
+    "The content id as `integer` or formatted as *coremedia:///cap/content/<id>*."
+    id: String!
+  ): CMArticle
+  categoryAugmentationBySegment(breadcrumb: [String]!, catalogAlias: String, externalId: String, rootSegment: String!): CategoryAugmentation
+  categoryAugmentationBySite(breadcrumb: [String]!, catalogAlias: String, externalId: String, siteId: String!): CategoryAugmentation
+  "The `content` query returns any known content object from the content repository by its content `id`."
+  content(
+    "The content id as `integer` or formatted as *coremedia:///cap/content/<id>*."
+    id: String!,
+    "The expected content type, e.g. `CMArticle`."
+    type: String
+  ): Content_
+  "Dedicated `page` query, returning a content object of type `CMChannel`, matching the given id."
+  page(
+    "The content id as `integer` or formatted as *coremedia:///cap/content/<id>*."
+    id: String!
+  ): CMChannel
+  "The `pageByPath` query with return type `CMChannel` provides access to any page content by its navigation path."
+  pageByPath(
+    "The navigation path to the requested page. A navigation path is a concatenation of segments, separated by '/'."
+    path: String!
+  ): CMChannel
+  "Dedicated `picture` query, returning a content object of type `CMPicture`, matching the given id."
+  picture(
+    "The content id as `integer` or formatted as *coremedia:///cap/content/<id>*."
+    id: String!
+  ): CMPicture
+  productAugmentationBySegment(breadcrumb: [String]!, catalogAlias: String, externalId: String!, rootSegment: String!): ProductAugmentation
+  productAugmentationBySite(breadcrumb: [String]!, catalogAlias: String, externalId: String!, siteId: String!): ProductAugmentation
+  productList(id: String!): CMProductList
+  "Dedicated `queryList` query, returning a content object of type `CMQueryList`, matching the given id."
+  queryList(
+    "The content id as `integer` or formatted as *coremedia:///cap/content/<id>*."
+    id: String!
+  ): CMQueryList
+  "The `search` query provides access to a solr based full text search."
+  search(
+    """
+
+    List of 'FilterQueryArg' objects: [{key1 : ["value1", "value2", ...]}, {key2: ["value1", "value2", ...]}, ...].
+    FilterQueryArg keys must be provided in the bean 'filterQueryDefinitionMap'.
+    """
+    customFilterQueries: [FilterQueryArg],
+    """
+
+    Content types to restrict the search result to. Misspelled content types are ignored.
+    When passing an abstract content type along with the parameter `includeSubTypes` = `true`, the subtypes are also retrieved.
+    The search result does not contain abstract document types.
+    """
+    docTypes: [String],
+    "Flag to include the sub types of the given doc types in the search. Defaults to `false`."
+    includeSubTypes: Boolean,
+    "Limits the size of the search result."
+    limit: Int,
+    "Offset within the search result."
+    offset: Int,
+    """
+
+    The search expression. Supports the operators '+' (mandatory) and '-' (prohibited) to mark terms respectively.
+    Quotes may be used to combine several words into a phrase, which would otherwise be treated as single terms.
+    Any odd (unbalanced) number of quotes are treated as non existent!
+    The wildcard '*' is supported to find partial terms.
+    """
+    query: String!,
+    "The `siteId` can be passed as parameter to restrict search per site."
+    siteId: String,
+    """
+
+    An array of sort fields, concatenated with their sort order by '_', in upper case, e.g. `ID_ASC`.
+
+    The possible values are defined in the enum `SortFieldWithOrder`.
+
+    Possible sort orders are: `ASC`, `DESC`
+    """
+    sortFields: [SortFieldWithOrder]
+  ): SearchResult
+  "Dedicated `site` query, returning a content object of type `Site`, matching the given site id."
+  site(
+    "The root segment of the requested site (of type `String`)."
+    rootSegment: String,
+    "The site id of the requested site (of type `String`)."
+    siteId: String
+  ): Site
+  "The `sites` query delivers an array of type `Site` of all known sites in the content repository w/o any parameter necessary."
+  sites: [Site]!
+  "Get taxonomy by id, type match for subtypes"
+  taxonomy(id: String): CMTaxonomy
+  "Get taxonomy by path segments"
+  taxonomyByPath(
+    "Path segments from root to taxonomy, including the taxonomy value, separated by '/'. Alternatively only the taxonomy value can be provided."
+    pathSegments: String,
+    "The site id for taxonomy lookup in the site root folder. If no site id is given, taxonomies retrieved from the global path (/Settings/Taxonomies)."
+    siteId: String,
+    "Type of taxonomy: CMTaxonomy (default) or CMLocTaxonomy. Will be matched exactly."
+    type: String
+  ): CMTaxonomy
+}
+
+type Content_Impl implements Content_ {
+  augmentationLink: String
+  creationDate: String!
+  id: ID!
+  modificationDate: String!
+  name: String!
+  repositoryPath: String!
+  type: String!
+}
+
+type Crop {
+  aspectRatio: Dimension!
+  minHeight: Int!
+  minWidth: Int!
+  name: String!
+  sizes: [Dimension]!
+}
+
+type Dimension {
+  height: Float!
+  width: Float!
+}
+
+type ExtendedTeaserTarget {
+  callToActionEnabled: Boolean
+  callToActionHash: String
+  callToActionText: String
+  target: CMLinkable
+}
+
+type Hotzone {
+  alt: String
+  coords: String!
+  displayAsInlineOverlay: Boolean
+  inlineOverlayTheme: String
+  linkedContent: CMLinkable
+  shape: String!
+  target: String
+}
+
+type ImageMapCrop {
+  coords: [Point]!
+  name: String!
+}
+
+type Link {
+  id: ID!
+  type: String
+}
+
+type LinkedContentEntry {
+  key: String
+  value: [CMObject]
+}
+
+type MetadataField {
+  metadata: JSON
+  name: String
+}
+
+type MetadataRoot {
+  types: [MetadataType]
+}
+
+type MetadataType {
+  fields: [MetadataField]
+  name: String
+}
+
+type PageGrid {
+  cssClassName: String
+  id: ID!
+  name: String
+  " retrieves the page grid placements as a flat list, optionally filtered by name"
+  placements(excludeNames: [String], names: [String]): [PageGridPlacement]
+  rows: [PageGridRow!]
+}
+
+type PageGridPlacement {
+  colspan: Int!
+  column: Int!
+  id: ID
+  items: [CMLinkable!]!
+  name: String!
+  viewtype: String
+  width: Int!
+}
+
+type PageGridRow {
+  id: ID!
+  placements: [PageGridPlacement!]
+  rowId: Int!
+}
+
+type PersonalizationRule {
+  referencedContent: [CMLocalized!]!
+  rule: String
+  target: CMTeasable
+}
+
+type Point {
+  x: Float
+  y: Float
+}
+
+type ProductAugmentationImpl implements Augmentation & ProductAugmentation {
+  commerceRef: CommerceRef!
+  content: Content_
+  downloads: [CMDownload]!
+  grid: PageGrid!
+  id: ID!
+  media: [CMMedia]
+  pdpPagegrid: PageGrid!
+  picture: CMPicture
+  pictures: [CMPicture]!
+  remoteLink(context: String, siteId: String): String!
+  visuals: [CMVisual]!
+}
+
+type ProductRef implements CollectionItem & CommerceRef {
+  catalogId: String!
+  externalId: String!
+  id: ID!
+  internalLink: String!
+  locale: String!
+  remoteLink(context: String, siteId: String): String!
+  siteId: String!
+  storeId: String!
+}
+
+"The top query root"
+type Query {
+  commerce: CommerceRoot
+  "The content root."
+  content: ContentRoot
+  metadata: MetadataRoot
+}
+
+type RichText {
+  text(view: String): String
+  textAsTree: RichTextTree
+  textReferencedContent: [Content_!]
+}
+
+"Result type of the `search` query, containing metadata of the search result set and the result set itself."
+type SearchResult {
+  numFound: Int!
+  result: [Content_]
+}
+
+"Models the properties of a site object."
+type Site {
+  crops: [Crop]
+  derivedSites: [Site!]!
+  id: ID!
+  locale: String!
+  name: String!
+  repositoryPath: String!
+  root: CMNavigation
+}
+
+type TeaserOverlaySettings {
+  enabled: Boolean
+  positionX: Int
+  positionY: Int
+  style: JSON
+  width: Int
+}
+
+type TimeLine {
+  defaultTarget: CMTeasable
+  sequences: [TimeLineEntry]
+}
+
+type TimeLineEntry {
+  link: CMTeasable
+  startTimeMillis: Int
+}
+
+type TransformedHotZone {
+  alt: String
+  crops: [ImageMapCrop]
+  displayAsInlineOverlay: Boolean
+  inlineOverlayTheme: String
+  linkedContent: CMLinkable
+  points: [Point]
+  shape: String
+  target: String
+}
+
+" enums alphabetically"
+enum ImageFormat {
+  GIF
+  JPEG
+  JPG
+  PNG
+}
+
+"Enum of sort types for the `search` query."
+enum SortFieldWithOrder {
+  CREATION_DATE_ASC
+  CREATION_DATE_DESC
+  DOCUMENTTYPE_ASC
+  DOCUMENTTYPE_DESC
+  EXTERNALLY_DISPLAYED_DATE_ASC
+  EXTERNALLY_DISPLAYED_DATE_DESC
+  ID_ASC
+  ID_DESC
+  MODIFICATION_DATE_ASC
+  MODIFICATION_DATE_DESC
+  TEASER_TITLE_ASC
+  TEASER_TITLE_DESC
+  TITLE_ASC
+  TITLE_DESC
+}
+
+
+"java.math.BigDecimal"
+scalar BigDecimal
+
+"Built-in type for a custom search filter query argument"
+scalar FilterQueryArg
+
+"A JSON scalar"
+scalar JSON
+
+"Built-in map of scalar type"
+scalar MapOfString
+
+"Built-in rich text object tree"
+scalar RichTextTree

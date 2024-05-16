@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMSite folder="/Sites/Emerald/United States/English" name="Emerald [Site]" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<externalRefId></externalRefId>
+<locale>en-US</locale>
+<master>
+</master>
+<id>emeraldenus</id>
+<name>Emerald</name>
+<root>
+<link href="Navigation/Emerald%20Homepage.xml" path="/Sites/Emerald/United%20States/English/Navigation/Emerald%20Homepage"/>
+</root>
+<siteManagerGroup>manager-emerald-en-US</siteManagerGroup>
+<linkedSettings>
+<link href="Options/Settings/SiteSettings.xml" path="/Sites/Emerald/United%20States/English/Options/Settings/SiteSettings"/>
+</linkedSettings>
+</CMSite>

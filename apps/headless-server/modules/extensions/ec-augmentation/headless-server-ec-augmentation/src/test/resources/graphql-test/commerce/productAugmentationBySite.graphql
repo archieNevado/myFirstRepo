@@ -1,0 +1,32 @@
+# test commerce-augmentation-schema-ext.graphql
+query getProductAugmentationBySite($externalId: String!, $catalogId: String, $siteId: String!) {
+  commerce {
+    productAugmentationBySite(externalId: $externalId, catalogId: $catalogId, siteId: $siteId) {
+      id
+      pdpPagegrid {
+        cssClassName
+        placements {
+          items {
+            id
+          }
+        }
+        rows {
+          id
+        }
+      }
+      commerceRef {
+        id
+        externalId
+      }
+      downloads {
+        id
+      }
+      visuals {
+        id
+      }
+      picture {
+        id
+      }
+    }
+  }
+}

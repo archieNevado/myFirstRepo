@@ -1,0 +1,16 @@
+  <div class="cm-hero">
+    <div class="cm-hero__image">
+      <img src="assets/overview.jpg">
+    </div>
+    <div class="cm-hero__content-wrapper">
+      <div class="cm-hero__content">
+        <h1>CoreMedia Content Cloud</h1>
+        <div class="cm-hero__infos">
+          <span>Version: {{ getv "/cms/version" }}</span>
+          {{ if eq (getv "/headless/client/enabled" "true") "true" }}<span>with Spark App</span>{{end}}
+          {{ if eq (getv "/campaign/enabled" "true") "true" }}<span>with Campaign-Service</span>{{end}}
+        </div>
+        <a class="cm-hero__button" href="https://studio.{{ getv "/environment/fqdn" }}" target="_blank" role="button">Open Studio</a>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,10 @@
+# test commerce-reference-schema-ext.graphql
+query getExternalPageById($externalId: String!, $siteId: String!) {
+  commerce {
+    externalPage(externalId: $externalId, siteId: $siteId) {
+      id
+      externalId
+      type
+    }
+  }
+}

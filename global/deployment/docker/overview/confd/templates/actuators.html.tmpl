@@ -1,0 +1,376 @@
+<div id="actuators">
+<h2>Services</h2>
+<table class="box">
+  <thead>
+  <tr>
+    <th>Service</th>
+    <th>Shortcuts</th>
+    <th>Status</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:40181/actuator" data-cm-test="">Content Management Server</a></td>
+    <td>
+      <a href="/content-management-server/info" target="_blank">Info</a> ·
+      {{ if eq (getv "/grafana/enabled" "false") "true" }}
+        <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22exemplar%22:true,%22expr%22:%22%7Bcontainer%3D%5C%22content-management-server%5C%22%7D%22%7D%5D" target="_blank">App Log</a> ·
+      {{ else }}
+      <a href="/content-management-server/logfile" target="_blank">App Log</a> ·
+      {{ end }}
+      <a href="/content-management-server/env" target="_blank">Env</a> ·
+      <a href="/content-management-server/configprops" target="_blank">Config</a>
+    </td>
+    <td>
+      <a href="/content-management-server/health" target="_blank" class="health_check"><span class="check_unknown">Unknown</span></a>
+    </td>
+  </tr>
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:40281/actuator" data-cm-test="">Master Live Server</a></td>
+    <td>
+      <a href="/master-live-server/info" target="_blank">Info</a> ·
+      {{ if eq (getv "/grafana/enabled" "false") "true" }}
+        <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22exemplar%22:true,%22expr%22:%22%7Bcontainer%3D%5C%22master-live-server%5C%22%7D%22%7D%5D" target="_blank">App Log</a> ·
+      {{ else }}
+        <a href="/master-live-server/logfile" target="_blank">App Log</a> ·
+      {{ end }}
+      <a href="/master-live-server/env" target="_blank">Env</a> ·
+      <a href="/master-live-server/configprops" target="_blank">Config</a>
+    </td>
+    <td>
+      <a href="/master-live-server/health" target="_blank" class="health_check"><span class="check_unknown">Unknown</span></a>
+    </td>
+  </tr>
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:40381/actuator" data-cm-test="">Workflow Server</a></td>
+    <td>
+      <a href="/workflow-server/info" target="_blank">Info</a> ·
+      {{ if eq (getv "/grafana/enabled" "false") "true" }}
+        <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22exemplar%22:true,%22expr%22:%22%7Bcontainer%3D%5C%22workflow-server%5C%22%7D%22%7D%5D" target="_blank">App Log</a> ·
+      {{ else }}
+        <a href="/workflow-server/logfile" target="_blank">App Log</a> ·
+      {{ end }}
+      <a href="/workflow-server/env" target="_blank">Env</a> ·
+      <a href="/workflow-server/configprops" target="_blank">Config</a>
+    </td>
+    <td>
+      <a href="/workflow-server/health" target="_blank" class="health_check"><span class="check_unknown">Unknown</span></a>
+    </td>
+  </tr>
+  {{ if eq (getv "/grafana/enabled" "false") "true" }}
+    <tr>
+      <td>Solr</td>
+      <td>
+        <a href="http://{{ getv "/environment/fqdn" }}:40080/solr" target="_blank">Solr Admin</a> ·
+        <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22exemplar%22:true,%22expr%22:%22%7Bcontainer%3D%5C%22solr%5C%22%7D%22%7D%5D" target="_blank">App Log</a> ·
+        <a href="https://grafana.{{ getv "/environment/fqdn" }}/d/solr/service-solr?orgId=1" target="_blank">Grafana Dashboard</a>
+      </td>
+      <td/>
+    </tr>
+  {{ end }}
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:40481/actuator" data-cm-test="">Content Feeder</a></td>
+    <td>
+      <a href="/content-feeder/info" target="_blank">Info</a> ·
+      {{ if eq (getv "/grafana/enabled" "false") "true" }}
+        <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22exemplar%22:true,%22expr%22:%22%7Bcontainer%3D%5C%22content-feeder%5C%22%7D%22%7D%5D" target="_blank">App Log</a> ·
+      {{ else }}
+        <a href="/content-feeder/logfile" target="_blank">App Log</a> ·
+      {{ end }}
+      <a href="/content-feeder/env" target="_blank">Env</a> ·
+      <a href="/content-feeder/configprops" target="_blank">Config</a>
+    </td>
+    <td>
+      <a href="/content-feeder/health" target="_blank" class="health_check"><span class="check_unknown">Unknown</span></a>
+    </td>
+  </tr>
+  {{ if eq (getv "/user/changes/enabled" "true") "true" }}
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:40581/actuator" data-cm-test="">User Changes</a></td>
+    <td>
+      <a href="/user-changes/info" target="_blank">Info</a> ·
+      {{ if eq (getv "/grafana/enabled" "false") "true" }}
+        <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22exemplar%22:true,%22expr%22:%22%7Bcontainer%3D%5C%22user-changes%5C%22%7D%22%7D%5D" target="_blank">App Log</a> ·
+      {{ else }}
+        <a href="/user-changes/logfile" target="_blank">App Log</a> ·
+      {{ end }}
+      <a href="/user-changes/env" target="_blank">Env</a> ·
+      <a href="/user-changes/configprops" target="_blank">Config</a>
+    </td>
+    <td>
+      <a href="/user-changes/health" target="_blank" class="health_check"><span class="check_unknown">Unknown</span></a>
+    </td>
+  </tr>
+  {{ end }}
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:40681/actuator" data-cm-test="">Elastic Worker</a></td>
+    <td>
+      <a href="/elastic-worker/info" target="_blank">Info</a> ·
+      {{ if eq (getv "/grafana/enabled" "false") "true" }}
+        <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22exemplar%22:true,%22expr%22:%22%7Bcontainer%3D%5C%22elastic-worker%5C%22%7D%22%7D%5D" target="_blank">App Log</a> ·
+      {{ else }}
+        <a href="/elastic-worker/logfile" target="_blank">App Log</a> ·
+      {{ end }}
+      <a href="/elastic-worker/env" target="_blank">Env</a> ·
+      <a href="/elastic-worker/configprops" target="_blank">Config</a>
+    </td>
+    <td>
+      <a href="/elastic-worker/health" target="_blank" class="health_check"><span class="check_unknown">Unknown</span></a>
+    </td>
+  </tr>
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:40781/actuator" data-cm-test="">CAE Feeder Preview</a></td>
+    <td>
+      <a href="/cae-feeder-preview/info" target="_blank">Info</a> ·
+      {{ if eq (getv "/grafana/enabled" "false") "true" }}
+        <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22exemplar%22:true,%22expr%22:%22%7Bcontainer%3D%5C%22cae-feeder-preview%5C%22%7D%22%7D%5D" target="_blank">App Log</a> ·
+      {{ else }}
+        <a href="/cae-feeder-preview/logfile" target="_blank">App Log</a> ·
+      {{ end }}
+      <a href="/cae-feeder-preview/env" target="_blank">Env</a> ·
+      <a href="/cae-feeder-preview/configprops" target="_blank">Config</a>
+    </td>
+    <td>
+      <a href="/cae-feeder-preview/health" target="_blank" class="health_check"><span class="check_unknown">Unknown</span></a>
+
+    </td>
+  </tr>
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:40881/actuator" data-cm-test="">CAE Feeder Live</a></td>
+    <td>
+      <a href="/cae-feeder-live/info" target="_blank">Info</a> ·
+      {{ if eq (getv "/grafana/enabled" "false") "true" }}
+        <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22exemplar%22:true,%22expr%22:%22%7Bcontainer%3D%5C%22cae-feeder-live%5C%22%7D%22%7D%5D" target="_blank">App Log</a> ·
+      {{ else }}
+        <a href="/cae-feeder-live/logfile" target="_blank">App Log</a> ·
+      {{ end }}
+      <a href="/cae-feeder-live/env" target="_blank">Env</a> ·
+      <a href="/cae-feeder-live/configprops" target="_blank">Config</a>
+    </td>
+    <td>
+      <a href="/cae-feeder-live/health" target="_blank" class="health_check"><span class="check_unknown">Unknown</span></a>
+
+    </td>
+  </tr>
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:40981/actuator" data-cm-test="">CAE Preview</a></td>
+    <td>
+      <a href="/cae-preview/info" target="_blank">Info</a> ·
+      {{ if eq (getv "/grafana/enabled" "false") "true" }}
+        <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22exemplar%22:true,%22expr%22:%22%7Bcontainer%3D%5C%22cae-preview%5C%22%7D%22%7D%5D" target="_blank">App Log</a> ·
+        <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22exemplar%22:true,%22expr%22:%22%7Btraefik_service%3D~%5C%22cae-preview@file%5C%22,job%3D%5C%22traefik-access-logs%5C%22%7D%22%7D%5D" target="_blank">Access Log</a> ·
+      {{ else }}
+        <a href="/cae-preview/logfile" target="_blank">App Log</a> ·
+      {{ end }}
+      <a href="/cae-preview/env" target="_blank">Env</a> ·
+      <a href="/cae-preview/configprops" target="_blank">Config</a>
+    </td>
+    <td>
+      <a href="/cae-preview/health" target="_blank" class="health_check"><span class="check_unknown">Unknown</span></a>
+    </td>
+  </tr>
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:41081/actuator" data-cm-test="">Studio Server</a></td>
+    <td>
+      <a href="/studio-server/info" target="_blank">Info</a> ·
+      {{ if eq (getv "/grafana/enabled" "false") "true" }}
+      <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22exemplar%22:true,%22expr%22:%22%7Bcontainer%3D%5C%22studio-server%5C%22%7D%22%7D%5D" target="_blank">App Log</a> ·
+      <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22exemplar%22:true,%22expr%22:%22%7Btraefik_service%3D~%5C%22studio-(client%7Cserver)@file%5C%22,job%3D%5C%22traefik-access-logs%5C%22%7D%22%7D%5D" target="_blank">Access Log</a> ·
+      <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22expr%22:%22%7Bcontainer%3D%5C%22studio-server%5C%22,logger%3D%5C%22studio-console%5C%22%7D%22%7D%5D" target="_blank">Browser Log</a> ·
+      {{ else }}
+      <a href="/studio-server/logfile" target="_blank">Logfile</a> ·
+      {{ end }}
+      <a href="/studio-server/env" target="_blank">Env</a> ·
+      <a href="/studio-server/configprops" target="_blank">Config</a>
+    </td>
+    <td>
+      <a href="/studio-server/health" target="_blank" class="health_check"><span class="check_unknown">Unknown</span></a>
+    </td>
+  </tr>
+
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:42181/actuator" data-cm-test="">CAE Live</a></td>
+    <td>
+      <a href="/cae-live/info" target="_blank">Info</a> ·
+      {{ if eq (getv "/grafana/enabled" "false") "true" }}
+        <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22exemplar%22:true,%22expr%22:%22%7Bcontainer%3D%5C%22cae-live%5C%22%7D%22%7D%5D" target="_blank">App Log</a> ·
+        <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22exemplar%22:true,%22expr%22:%22%7Btraefik_service%3D~%5C%22cae-live@file%5C%22,job%3D%5C%22traefik-access-logs%5C%22%7D%22%7D%5D" target="_blank">Access Log</a> ·
+      {{ else }}
+        <a href="/cae-live/logfile" target="_blank">App Log</a> ·
+      {{ end }}
+      <a href="/cae-live/env" target="_blank">Env</a> ·
+      <a href="/cae-live/configprops" target="_blank">Config</a>
+    </td>
+    <td>
+      <a href="/cae-live/health" target="_blank" class="health_check"><span class="check_unknown">Unknown</span></a>
+    </td>
+  </tr>
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:41181/actuator" data-cm-test="">Headless Server Preview</a></td>
+    <td>
+      <a href="/headless-server-preview/info" target="_blank">Info</a> ·
+      {{ if eq (getv "/grafana/enabled" "false") "true" }}
+        <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22exemplar%22:true,%22expr%22:%22%7Bcontainer%3D%5C%22headless-server-preview%5C%22%7D%22%7D%5D" target="_blank">App Log</a> ·
+        <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22exemplar%22:true,%22expr%22:%22%7Btraefik_service%3D~%5C%22headless-server-preview@file%5C%22,job%3D%5C%22traefik-access-logs%5C%22%7D%22%7D%5D" target="_blank">Access Log</a> ·
+      {{ else }}
+        <a href="/headless-server-preview/logfile" target="_blank">App Log</a> ·
+      {{ end }}
+      <a href="/headless-server-preview/env" target="_blank">Env</a> ·
+      <a href="/headless-server-preview/configprops" target="_blank">Config</a>
+    </td>
+    <td>
+      <a href="/headless-server-preview/health" target="_blank" class="health_check"><span class="check_unknown">Unknown</span></a>
+    </td>
+  </tr>
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:41281/actuator" data-cm-test="">Headless Server Live</a></td>
+    <td>
+      <a href="/headless-server-live/info" target="_blank">Info</a> ·
+      {{ if eq (getv "/grafana/enabled" "false") "true" }}
+        <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22exemplar%22:true,%22expr%22:%22%7Bcontainer%3D%5C%22headless-server-live%5C%22%7D%22%7D%5D" target="_blank">App Log</a> ·
+        <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22exemplar%22:true,%22expr%22:%22%7Btraefik_service%3D~%5C%22headless-server-live@file%5C%22,job%3D%5C%22traefik-access-logs%5C%22%7D%22%7D%5D" target="_blank">Access Log</a> ·
+      {{ else }}
+        <a href="/headless-server-live/logfile" target="_blank">App Log</a> ·
+      {{ end }}
+      <a href="/headless-server-live/env" target="_blank">Env</a> ·
+      <a href="/headless-server-live/configprops" target="_blank">Config</a>
+    </td>
+    <td>
+      <a href="/headless-server-live/health" target="_blank" class="health_check"><span class="check_unknown">Unknown</span></a>
+    </td>
+  </tr>
+  {{ if eq (getv "/headless/client/enabled" "true") "true" }}
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:43181/actuator" data-cm-test="">Headless Commerce</a></td>
+    <td>
+      <a href="/headless-server-commerce/info" target="_blank">Info</a> ·
+      <a href="/headless-server-commerce/logfile" target="_blank">Logfile</a> ·
+      <a href="/headless-server-commerce/env" target="_blank">Env</a> ·
+      <a href="/headless-server-commerce/configprops" target="_blank">Config</a>
+    </td>
+    <td>
+      <a href="/headless-server-commerce/health" target="_blank" class="health_check"><span class="check_unknown">Unknown</span></a>
+    </td>
+  </tr>
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:4180/actuator/info" data-cm-test="">Headless Stitching Preview</a></td>
+    <td>
+      <a href="/headless-server-stitching-preview/info" target="_blank">Info</a> ·
+      <a href="/headless-server-stitching-preview/logfile" target="_blank">Logfile</a> ·
+      <a href="/headless-server-stitching-preview/env" target="_blank">Env</a>
+    </td>
+    <td>
+      <a href="/headless-server-stitching-preview/health" target="_blank" class="health_check"><span class="check_unknown">Unknown</span></a>
+    </td>
+  </tr>
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:4280/actuator/info" data-cm-test="">Headless Stitching Live</a></td>
+    <td>
+      <a href="/headless-server-stitching-live/info" target="_blank">Info</a> ·
+      <a href="/headless-server-stitching-live/logfile" target="_blank">Logfile</a> ·
+      <a href="/headless-server-stitching-live/env" target="_blank">Env</a>
+    </td>
+    <td>
+      <a href="/headless-server-stitching-live/health" target="_blank" class="health_check"><span class="check_unknown">Unknown</span></a>
+    </td>
+  </tr>
+  {{ end }}
+
+  {{ if eq (getv "/commerce/mock/enabled" "true") "true" }}
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:44081/actuator" data-cm-test="">Commerce Adapter Mock</a></td>
+    <td>
+      <a href="/commerce-adapter-mock/info" target="_blank">Info</a> ·
+      {{ if eq (getv "/grafana/enabled" "false") "true" }}
+        <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22exemplar%22:true,%22expr%22:%22%7Bcontainer%3D%5C%22commerce-adapter-mock%5C%22%7D%22%7D%5D" target="_blank">App Log</a> ·
+      {{ else }}
+        <a href="/commerce-adapter-mock/logfile" target="_blank">App Log</a> ·
+      {{ end }}
+      <a href="/commerce-adapter-mock/env" target="_blank">Env</a> ·
+      <a href="/commerce-adapter-mock/configprops" target="_blank">Config</a>
+    </td>
+    <td>
+      <a href="/commerce-adapter-mock/health" target="_blank" class="health_check"><span class="check_unknown">Unknown</span></a>
+    </td>
+  </tr>
+  {{end}}
+
+  {{ if eq (getv "/commerce/sfcc/enabled" "true") "true" }}
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:44181/actuator" data-cm-test="">Commerce Adapter Salesforce Commerce Cloud</a></td>
+    <td>
+      <a href="/commerce-adapter-sfcc/info" target="_blank">Info</a> ·
+      {{ if eq (getv "/grafana/enabled" "false") "true" }}
+        <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22exemplar%22:true,%22expr%22:%22%7Bcontainer%3D%5C%22commerce-adapter-sfcc%5C%22%7D%22%7D%5D" target="_blank">App Log</a> ·
+      {{ else }}
+        <a href="/commerce-adapter-sfcc/logfile" target="_blank">App Log</a> ·
+      {{ end }}
+      <a href="/commerce-adapter-sfcc/env" target="_blank">Env</a> ·
+      <a href="/commerce-adapter-sfcc/configprops" target="_blank">Config</a>
+    </td>
+    <td>
+      <a href="/commerce-adapter-sfcc/health" target="_blank" class="health_check"><span class="check_unknown">Unknown</span></a>
+    </td>
+  </tr>
+  {{ end }}
+
+  {{ if eq (getv "/commerce/hybris/enabled" "true") "true" }}
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:44281/actuator" data-cm-test="">Commerce Adapter SAP Commerce Cloud</a></td>
+    <td>
+      <a href="/commerce-adapter-hybris/info" target="_blank">Info</a> ·
+      {{ if eq (getv "/grafana/enabled" "false") "true" }}
+        <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22exemplar%22:true,%22expr%22:%22%7Bcontainer%3D%5C%22commerce-adapter-hybris%5C%22%7D%22%7D%5D" target="_blank">App Log</a> ·
+      {{ else }}
+        <a href="/commerce-adapter-hybris/logfile" target="_blank">App Log</a> ·
+      {{ end }}
+      <a href="/commerce-adapter-hybris/env" target="_blank">Env</a> ·
+      <a href="/commerce-adapter-hybris/configprops" target="_blank">Config</a>
+    </td>
+    <td>
+      <a href="/commerce-adapter-hybris/health" target="_blank" class="health_check"><span class="check_unknown">Unknown</span></a>
+    </td>
+  </tr>
+  {{ end }}
+
+  {{ if eq (getv "/commerce/wcs/enabled" "true") "true" }}
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:44381/actuator" data-cm-test="">Commerce Adapter HCL Commerce</a></td>
+    <td>
+      <a href="/commerce-adapter-wcs/info" target="_blank">Info</a> ·
+      {{ if eq (getv "/grafana/enabled" "false") "true" }}
+        <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22exemplar%22:true,%22expr%22:%22%7Bcontainer%3D%5C%22commerce-adapter-wcs%5C%22%7D%22%7D%5D" target="_blank">App Log</a> ·
+      {{ else }}
+        <a href="/commerce-adapter-wcs/logfile" target="_blank">App Log</a> ·
+      {{ end }}
+      <a href="/commerce-adapter-wcs/env" target="_blank">Env</a> ·
+      <a href="/commerce-adapter-wcs/configprops" target="_blank">Config</a>
+    </td>
+    <td>
+      <a href="/commerce-adapter-wcs/health" target="_blank" class="health_check"><span class="check_unknown">Unknown</span></a>
+    </td>
+  </tr>
+  {{ end }}
+
+  {{ if eq (getv "/commerce/commercetools/enabled" "true") "true" }}
+  <tr>
+    <td><a href="http://{{ getv "/environment/fqdn" }}:44481/actuator" data-cm-test="">Commerce Adapter Commercetools</a></td>
+    <td>
+      <a href="/commerce-adapter-commercetools/info" target="_blank">Info</a> ·
+      {{ if eq (getv "/grafana/enabled" "false") "true" }}
+        <a href="https://grafana.{{ getv "/environment/fqdn" }}/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki%22,%7B%22exemplar%22:true,%22expr%22:%22%7Bcontainer%3D%5C%22commerce-adapter-commercetools%5C%22%7D%22%7D%5D" target="_blank">App Log</a> ·
+      {{ else }}
+        <a href="/commerce-adapter-commercetools/logfile" target="_blank">App Log</a> ·
+      {{ end }}
+      <a href="/commerce-adapter-commercetools/env" target="_blank">Env</a> ·
+      <a href="/commerce-adapter-commercetools/configprops" target="_blank">Config</a>
+    </td>
+    <td>
+      <a href="/commerce-adapter-commercetools/health" target="_blank" class="health_check"><span class="check_unknown">Unknown</span></a>
+    </td>
+  </tr>
+  {{ end }}
+
+  </tbody>
+</table>
+</div>

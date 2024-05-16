@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contentRepository xmlns="http://www.coremedia.com/2010/content"
+                   xmlns:xi="http://www.w3.org/2001/XInclude">
+  <xi:include href="classpath:com/coremedia/testing/blueprint-doctypes-xmlrepo.xml"/>
+  <content>
+    <folder id="1" name="">
+      <folder id="11" name="Sites">
+        <folder id="111" name="TestSite">
+          <folder id="1111" name="TestSiteUS">
+            <document id="1112" name="MasterSite" type="CMSite" creationDate="1967-01-10T20:59:42.000+01:00">
+              <version number="1">
+                <linkProperty name="root">
+                  <link id="111112"/>
+                </linkProperty>
+                <stringProperty name="locale" value="en-US"/>
+                <stringProperty name="id" value="the-site-id"/>
+                <stringProperty name="name" value="the-site-name"/>
+              </version>
+            </document>
+            <folder id="11111" name="Content">
+              <folder id="111111" name="Navigation">
+                <document id="111112" uuid="2b44cbcf-4dca-405f-a274-bae6d9eeadfd" name="Root" type="CMChannel" creationDate="1967-01-10T20:59:42.000+01:00">
+                  <version number="1">
+                    <stringProperty name="segment" value="root-en"/>
+                    <stringProperty name="title" value="USHomePage"/>
+                    <stringProperty name="htmlTitle" value="htmlTitle"/>
+                    <stringProperty name="htmlDescription" value="htmlDescription"/>
+                    <stringProperty name="teaserTitle" value="TeaserTestTitle"/>
+                    <markupProperty name="teaserText" url="4teaserText.xml" grammar="coremedia-richtext-1.0"/>
+                    <stringProperty name="keywords" value="key 1,key2,key3"/>
+                    <markupProperty name="localSettings" url="4settings.xml" grammar="coremedia-struct-2008"/>
+                    <linkProperty name="pictures">
+                      <link id="111114"/>
+                    </linkProperty>
+                    <linkProperty name="children">
+                      <link id="1111112"/>
+                      <link id="1111114"/>
+                    </linkProperty>
+                    <linkProperty name="linkedSettings">
+                      <link id="111124"/>
+                    </linkProperty>
+                  </version>
+                </document>
+                <document id="1111112" name="Subpage" type="CMChannel" creationDate="1967-01-10T20:59:42.000+01:00">
+                  <version number="1">
+                    <stringProperty name="segment" value="subpage-en"/>
+                    <stringProperty name="title" value="USSubpage"/>
+                    <stringProperty name="htmlTitle" value="htmlTitle"/>
+                    <stringProperty name="htmlDescription" value="htmlDescription"/>
+                    <stringProperty name="teaserTitle" value="TeaserTestTitle"/>
+                    <markupProperty name="teaserText" url="4teaserText.xml" grammar="coremedia-richtext-1.0"/>
+                    <stringProperty name="keywords" value="key 1,key2,key3"/>
+                    <markupProperty name="localSettings" url="4settings.xml" grammar="coremedia-struct-2008"/>
+                    <linkProperty name="pictures">
+                      <link id="111114"/>
+                    </linkProperty>
+                  </version>
+                </document>
+                <document id="1111114" name="HiddenSubpage" type="CMChannel" creationDate="1967-01-10T20:59:42.000+01:00">
+                  <version number="1">
+                    <intProperty name="hidden" value="1"/>
+                    <stringProperty name="segment" value="hidden-subpage-en"/>
+                    <stringProperty name="title" value="USHiddenSubpage"/>
+                    <stringProperty name="htmlTitle" value="htmlTitle"/>
+                    <stringProperty name="htmlDescription" value="htmlDescription"/>
+                    <stringProperty name="teaserTitle" value="TeaserTestTitle"/>
+                    <markupProperty name="teaserText" url="4teaserText.xml" grammar="coremedia-richtext-1.0"/>
+                    <stringProperty name="keywords" value="key 1,key2,key3"/>
+                    <markupProperty name="localSettings" url="4settings.xml" grammar="coremedia-struct-2008"/>
+                    <linkProperty name="pictures">
+                      <link id="111114"/>
+                    </linkProperty>
+                  </version>
+                </document>
+              </folder>
+              <folder id="111113" name="Pictures">
+                <document id="111114" uuid="6a454873-f57e-4ef4-8a60-0e2083e9d6d5" type="CMPicture" name="pic16" creationDate="1967-01-10T20:59:42.000+01:00">
+                  <version number="1">
+                    <markupProperty name="caption" url="4teaserText.xml" grammar="coremedia-richtext-1.0"/>
+                    <blobProperty name="data" url="16data.jpg" type="image/jpeg"/>
+                    <markupProperty name="localSettings" url="cropSettings.xml" grammar="coremedia-struct-2008"/>
+                  </version>
+                </document>
+                <document id="111118" uuid="47112af0-97b1-49bd-84e7-80701297422e" type="CMVideo" name="vid18">
+                  <version number="1">
+                    <blobProperty name="data" url="16data.jpg" type="image/jpeg"/>
+                  </version>
+                </document>
+                <document id="111120" uuid="682cffee-6b67-42f4-b608-b56e07dae22b" type="CMDownload" name="pdf20">
+                  <version number="1">
+                    <blobProperty name="data" url="24data.pdf" type="application/pdf"/>
+                  </version>
+                </document>
+                <document id="111122" uuid="0ebe01ee-341c-4667-88a0-67f740c668a0" type="CMHTML" name="html22">
+                  <version number="1">
+                    <stringProperty name="description" value="html description"/>
+                    <markupProperty name="data" url="4teaserText.xml" grammar="coremedia-richtext-1.0"/>
+                  </version>
+                </document>
+              </folder>
+              <folder id="111115" name="Articles">
+                <document id="111116" uuid="a3eef115-05f6-4d62-a784-37218575ff79" type="CMArticle" name="TargetArticle1"
+                          creationDate="1967-01-10T20:59:42.000+01:00">
+                  <version number="1">
+                    <dateProperty name="creationDate" value="10.01.1967"/>
+                    <markupProperty name="detailText" url="4teaserText.xml" grammar="coremedia-richtext-1.0"/>
+                    <markupProperty name="teaserText" url="4teaserText.xml" grammar="coremedia-richtext-1.0"/>
+                  </version>
+                </document>
+                <document name="The Art Of Time Traveling" id="111126" type="CMArticle" creationDate="2022-12-29T11:00:00.000+01:00">
+                  <version number="1">
+                    <dateProperty name="validFrom" value="2099-01-01T00:00:00.000+01:00"/>
+                    <markupProperty name="detailText" url="4teaserText.xml" grammar="coremedia-richtext-1.0"/>
+                    <markupProperty name="teaserText" url="4teaserText.xml" grammar="coremedia-richtext-1.0"/>
+                  </version>
+                </document>
+              </folder>
+              <folder id="111117" name="Settings">
+                <document id="111124" type="CMSettings" name="ClandestineSettings">
+                  <version number="1">
+                    <markupProperty name="settings" url="secretSettings.xml" grammar="coremedia-struct-2008"/>
+                  </version>
+                </document>
+              </folder>
+              <folder id="111119" name="Personalization">
+                <document id="111128" uuid="257e360c-865c-47cd-a3d1-3279640142f5" name="Personalized Teaser" type="CMSelectionRules" creationDate="1967-01-10T20:59:42.000+01:00">
+                  <version number="1">
+                    <markupProperty name="rules" url="selectionRules.xml" grammar="coremedia-richtext-1.0"/>
+                    <linkProperty name="defaultContent">
+                      <link id="111116"/>
+                    </linkProperty>
+                  </version>
+                </document>
+              </folder>
+            </folder>
+          </folder>
+          <folder id="1113" name="TestSiteDE">
+            <document id="1114" name="DerivedSite" type="CMSite">
+              <version number="1">
+                <stringProperty name="locale" value="de-DE"/>
+                <stringProperty name="id" value="the-derived-site-id"/>
+                <stringProperty name="name" value="the-derived-site-name"/>
+                <linkProperty name="master">
+                  <link id="1112"/>
+                </linkProperty>
+                <linkProperty name="root">
+                  <link id="11144"/>
+                </linkProperty>
+              </version>
+            </document>
+            <folder id="11141" name="Content">
+              <folder id="11143" name="Navigation">
+                <document id="11144" uuid="2c0b9846-2d46-47e0-af6a-875e685196e9" name="Root" type="CMChannel">
+                  <version number="1">
+                    <linkProperty name="master">
+                      <link id="111112"/>
+                    </linkProperty>
+                    <stringProperty name="segment" value="root-de"/>
+                    <stringProperty name="title" value="DEHomePage"/>
+                    <stringProperty name="htmlTitle" value="htmlTitle"/>
+                    <stringProperty name="htmlDescription" value="htmlDescription"/>
+                    <stringProperty name="teaserTitle" value="TeaserTestTitle"/>
+                    <markupProperty name="teaserText" url="4teaserText.xml" grammar="coremedia-richtext-1.0"/>
+                    <stringProperty name="keywords" value="key 1,key2,key3"/>
+                    <markupProperty name="localSettings" url="4settings.xml" grammar="coremedia-struct-2008"/>
+                    <linkProperty name="pictures">
+                      <link id="111114"/>
+                    </linkProperty>
+                  </version>
+                </document>
+              </folder>
+            </folder>
+          </folder>
+        </folder>
+      </folder>
+      <folder id="3111" name="Settings">
+        <folder name="Options" id="15">
+          <folder name="Settings" id="151">
+            <document name="Responsive Image Settings" id="1510" type="CMSettings">
+              <version number="1">
+                <markupProperty name="settings" url="responsiveImageSettings.xml" grammar="coremedia-struct-2008"/>
+              </version>
+            </document>
+          </folder>
+        </folder>
+        <folder id="13" name="Taxonomies">
+          <document name="Blog" id="130" uuid="39395448-62e6-412a-a1cb-ad31bff67ed0" type="CMTaxonomy">
+            <version number="1">
+              <stringProperty name="value" value="Blog"/>
+            </version>
+          </document>
+          <document name="America" id="132" type="CMLocTaxonomy">
+            <version number="1">
+              <stringProperty name="value" value="America"/>
+            </version>
+          </document>
+          <document name="Europe" id="134" uuid="062e3060-f135-452f-962b-85a6ef014870" type="CMLocTaxonomy">
+            <version number="1">
+              <stringProperty name="value" value="Europe"/>
+              <linkProperty name="children">
+                <link id="1344"/>
+              </linkProperty>
+            </version>
+          </document>
+          <document name="Germany" id="1344" type="CMLocTaxonomy">
+            <version number="1">
+              <stringProperty name="value" value="Germany"/>
+              <linkProperty name="children">
+                <link id="13444"/>
+              </linkProperty>
+            </version>
+          </document>
+          <document name="Hamburg" id="13444" uuid="3ee8a696-9720-4131-ab87-390c628f4d85" type="CMLocTaxonomy">
+            <version number="1">
+              <stringProperty name="value" value="Hamburg"/>
+            </version>
+          </document>
+          <document name="Asia" id="136" type="CMLocTaxonomy">
+            <version number="1">
+              <stringProperty name="value" value="Asia"/>
+            </version>
+          </document>
+        </folder>
+      </folder>
+    </folder>
+  </content>
+
+  <rules>
+    <rule resourceId="1" group="0" doctype="Folder_">
+      <right value="ALL"/>
+    </rule>
+    <rule resourceId="1" group="0" doctype="Document_">
+      <right value="ALL"/>
+    </rule>
+  </rules>
+</contentRepository>

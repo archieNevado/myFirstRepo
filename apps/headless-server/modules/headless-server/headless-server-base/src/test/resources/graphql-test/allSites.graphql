@@ -1,0 +1,31 @@
+query getAllSites {
+  content {
+    sites {
+      id
+      repositoryPath
+      name
+      locale
+      root {
+        id
+        name
+        title
+        segment
+        link {
+          id
+          type
+        }
+      }
+      crops {
+        name
+        aspectRatio {
+          width
+          height
+        }
+        sizes {
+          width
+          height
+        }
+      }
+    }
+  }
+}

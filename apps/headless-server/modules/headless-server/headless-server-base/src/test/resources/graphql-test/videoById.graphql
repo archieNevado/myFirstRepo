@@ -1,0 +1,14 @@
+query getVideoById($id: String!) {
+  content {
+    content(id: $id, type: "CMVideo") {
+      ... on CMVideo {
+        id
+        uuid
+        repositoryPath
+        fullyQualifiedUrl
+        name
+        type
+      }
+    }
+  }
+}

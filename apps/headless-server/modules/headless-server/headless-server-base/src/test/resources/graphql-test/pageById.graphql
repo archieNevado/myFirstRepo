@@ -1,0 +1,76 @@
+query getPageById($id: String!) {
+  content {
+    page(id: $id) {
+      id
+      uuid
+      type
+      repositoryPath
+      locale
+      title
+      keywords
+      keywordsList
+      htmlTitle
+      htmlDescription
+      teaserText {
+        text
+      }
+      settings(paths: ["testInt"])
+      picture {
+        id
+        uuid
+      }
+      pictures {
+        id
+        uuid
+        title
+        link {
+          id
+        }
+      }
+      picturesPaged(offset: 0, limit : 1) {
+        ... on CMPicturePaginationResult {
+          totalCount
+          result {
+            ... on CMPicture {
+              id
+              uuid
+              name
+              type
+            }
+          }
+        }
+      }
+      children {
+        title
+        id
+        uuid
+        link {
+          id
+        }
+      }
+      localizedVariants {
+        ... on CMChannel {
+          id
+          uuid
+          locale
+        }
+      }
+      localizedVariant(language: "de", country: "de") {
+        ... on CMChannel {
+          id
+          uuid
+          locale
+        }
+      }
+      localizationRoot {
+        id
+        uuid
+        locale
+      }
+#      master {
+#        id
+#        locale
+#      }
+    }
+  }
+}

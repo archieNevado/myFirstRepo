@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contentRepository xmlns="http://www.coremedia.com/2010/content"
+                   xmlns:xi="http://www.w3.org/2001/XInclude">
+  <xi:include href="classpath:com/coremedia/testing/blueprint-doctypes-xmlrepo.xml"/>
+  <content>
+    <folder id="1" name="">
+      <document id="2" type="CMSelectionRules" name="SimpleRuleExample">
+        <version number="1">
+          <markupProperty name="rules" url="rules2.xml" grammar="coremedia-richtext-1.0"/>
+        </version>
+      </document>
+      <document id="1000" type="CMArticle" name="TargetArticle1">
+        <version number="1">
+        </version>
+      </document>
+      <document id="1002" type="CMArticle" name="TargetArticle2">
+        <version number="1">
+        </version>
+      </document>
+    </folder>
+  </content>
+</contentRepository>

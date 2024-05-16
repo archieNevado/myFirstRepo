@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ESDynamicList folder="/Sites/Chef Corp./Canada/English/Editorial/Site-Wide/Integration/Social" name="Most Commented" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<externalRefId></externalRefId>
+<locale>en-CA</locale>
+<master>
+<link href="../../../../../../United%20Kingdom/English/Editorial/Site-Wide/Integration/Social/Most%20Commented.xml" path="/Sites/Chef%20Corp%2E/United%20Kingdom/English/Editorial/Site-Wide/Integration/Social/Most%20Commented"/>
+</master>
+<viewtype>
+</viewtype>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles2>
+</resourceBundles2>
+<segment></segment>
+<title></title>
+<htmlTitle></htmlTitle>
+<keywords></keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle>Most Commented</teaserTitle>
+<pictures>
+</pictures>
+<related>
+</related>
+<authors>
+</authors>
+<items>
+</items>
+<maxLength>5</maxLength>
+<channel>
+<link href="../../../../Navigation/Chef%20Corp%2E.xml" path="/Sites/Chef%20Corp%2E/Canada/English/Navigation/Chef%20Corp%2E"/>
+</channel>
+<type></type>
+<interval>LAST_YEAR</interval>
+<aggregationType>MOST_COMMENTED</aggregationType>
+</ESDynamicList>

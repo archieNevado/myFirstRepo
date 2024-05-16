@@ -1,0 +1,11 @@
+fragment QuickInfo on CMTeasable {
+  ... Reference
+  # the following should included if displayAsInlineOverlay is false:
+  teaserTitle
+  teaserText {
+    text
+  }
+  picture {
+    ... Picture
+  }
+}

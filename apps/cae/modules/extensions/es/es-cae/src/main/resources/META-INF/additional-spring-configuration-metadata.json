@@ -1,0 +1,11 @@
+{
+  "properties": [
+    {
+      "name": "keep.https.after.logout",
+      "deprecation": {
+        "level": "warning",
+        "replacement": "elastic.social.keep-https-after-logout"
+      }
+    }
+  ]
+}

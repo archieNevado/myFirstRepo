@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                                  http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <import resource="classpath:/com/coremedia/cap/transform/transform-services.xml"/>
+
+  <bean id="imageTransformationConfiguration"
+        class="com.coremedia.blueprint.image.transformation.ImageTransformationConfiguration"/>
+
+
+  <!-- example how to add a fixed image transformation -->
+  <!--<bean class="com.coremedia.cap.transform.Transformation">
+    <property name="name" value="landscape_ratio4x3"/>
+    <property name="widthRatio" value="4"/>
+    <property name="heightRatio" value="3"/>
+    <property name="minWidth" value="400"/>
+    <property name="minHeight" value="300"/>
+    <property name="previewWidth" value="400" />
+  </bean>-->
+
+</beans>

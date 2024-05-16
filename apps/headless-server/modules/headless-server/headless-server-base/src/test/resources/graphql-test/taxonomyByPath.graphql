@@ -1,0 +1,12 @@
+query getTaxonomyByPath($pathSegments: String, $type: String, $siteId: String) {
+  content {
+    taxonomyByPath(pathSegments: $pathSegments, type: $type, siteId: $siteId) {
+      id
+      uuid
+      type
+      repositoryPath
+      name
+      value
+    }
+  }
+}

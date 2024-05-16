@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.coremedia.blueprint</groupId>
+  <artifactId>plugins-tool-config</artifactId>
+  <version>1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <properties>
+    <projectRoot>../..</projectRoot>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.coremedia.maven</groupId>
+        <artifactId>coremedia-plugins-maven-plugin</artifactId>
+        <version>1.1.1</version>
+        <configuration>
+          <projectRoot>${projectRoot}</projectRoot>
+        </configuration>
+        <executions>
+          <execution>
+            <id>sync-plugins</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>sync</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

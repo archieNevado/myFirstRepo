@@ -1,0 +1,7 @@
+#!/bin/sh
+set -e
+# make sure all existing workflows are converted accordingly, if you run this script you need to make sure
+# that the content-management-server is up and running.
+
+./confd ./tools/bin/cm workflowconverter -c
+exec ./$@

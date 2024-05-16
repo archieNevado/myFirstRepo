@@ -1,0 +1,11 @@
+[template]
+src   = "loglevel.html.tmpl"
+dest  = "/usr/share/nginx/html/assets/loglevel.html"
+keys  = [
+        "/user/changes/enabled",
+        "/commerce/mock/enabled",
+        "/commerce/commercetools/enabled",
+        "/commerce/sfcc/enabled",
+        "/commerce/hybris/enabled",
+        "/commerce/wcs/enabled"
+]

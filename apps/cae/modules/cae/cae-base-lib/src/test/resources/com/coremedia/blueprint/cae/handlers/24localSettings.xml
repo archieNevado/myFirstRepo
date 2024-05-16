@@ -1,0 +1,4 @@
+<Struct xmlns="http://www.coremedia.com/2008/struct">
+  <BooleanProperty Name="useCMDownloadFilename">true</BooleanProperty>
+  <BlobProperty Name="propertyName" RequiredContentType="*/*" Etag="3E725F3FDEEFBD62BCDF68EA08FC4803" ContentType="image/png" Size="202" Url="file:/16data.jpg"/>
+</Struct>

@@ -1,0 +1,13 @@
+<Struct xmlns="http://www.coremedia.com/2008/struct">
+  <StringListProperty Name="administrationGroups">
+    <String>global-manager</String>
+    <String>developer</String>
+  </StringListProperty>
+  <StringListProperty Name="translations">
+    <String>de</String>
+    <String>en</String>
+    <String>en-US</String>
+    <String>ja</String>
+  </StringListProperty>
+  <StringProperty Name="defaultLocale">en</StringProperty>
+</Struct>

@@ -1,0 +1,12 @@
+query getPageSettingsByWildcard($id: String!) {
+  content {
+    page(id: $id) {
+      id
+      type
+      repositoryPath
+      locale
+      title
+      settings(paths: "*")
+    }
+  }
+}

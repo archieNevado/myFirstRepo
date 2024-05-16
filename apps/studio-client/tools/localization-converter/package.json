@@ -1,0 +1,33 @@
+{
+  "name": "@coremedia-blueprint/studio-client.tools.localization-converter",
+  "author": "CoreMedia GmbH",
+  "version": "1.0.0-SNAPSHOT",
+  "license": "CoreMedia Open Source License",
+  "private": true,
+  "scripts": {
+    "clean": "rimraf ./dist",
+    "build": "tsc --build src && babel ./src --out-dir ./dist --extensions \".ts\"",
+    "convert": "node ./dist/bin/converter.js"
+  },
+  "dependencies": {
+    "@babel/core": "^7.22.9",
+    "@babel/types": "^7.22.5",
+    "@coremedia/studio-client.tools.svg-icon-merger": "2304.2.0",
+    "find-up": "^5.0.0",
+    "fs-extra": "^9.1.0",
+    "js-yaml": "^4.1.0",
+    "json5": "^2.2.3",
+    "yargs": "^16.2.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.22.9",
+    "@babel/preset-env": "^7.22.9",
+    "@babel/preset-typescript": "^7.22.5",
+    "@types/fs-extra": "^9.0.13",
+    "@types/js-yaml": "^4.0.5",
+    "@types/node": "^18.16.19",
+    "@types/yargs": "^15.0.15",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.9.5"
+  }
+}

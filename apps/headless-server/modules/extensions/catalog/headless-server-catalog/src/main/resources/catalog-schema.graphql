@@ -1,0 +1,13 @@
+interface CMProduct @inherit(from: ["CMTeasable"]) {
+  downloads: [CMDownload]
+  price: Float
+  productCode: String
+  productName: String
+}
+
+type CMProductImpl implements CMProduct @inherit(from: ["CMTeasableImpl"]) {
+  downloads: [CMDownload]
+  price: Float @fetch(from: "localSettings?.price")
+  productCode: String
+  productName: String
+}

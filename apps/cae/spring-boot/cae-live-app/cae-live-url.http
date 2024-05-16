@@ -1,0 +1,9 @@
+### get url
+POST http://localhost:42181/internal/service/url
+Content-Type: application/json
+Accept: application/json
+
+[{
+  "id": "42",
+  "siteId": "abffe57734feeee"
+}]

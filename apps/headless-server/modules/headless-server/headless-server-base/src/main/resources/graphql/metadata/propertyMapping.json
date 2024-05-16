@@ -1,0 +1,51 @@
+{
+  "CMCollection": {
+    "teasableItems": "properties.items",
+    "bannerItems": "properties.items",
+    "detailItems": "properties.items"
+  },
+  "CMGallery": {
+    "mediaItems": "properties.items"
+  },
+  "CMImageMap": {
+    "displayPicture": "properties.localSettings.overlay.displayPicture",
+    "displayShortText": "properties.localSettings.overlay.displayShortText",
+    "displayTitle": "properties.localSettings.overlay.displayTitle",
+    "hotZones": "properties.localSettings.image-map"
+  },
+  "CMLocTaxonomy": {
+    "locChildren": "properties.children"
+  },
+  "CMMedia": {
+    "captionAsTree": "properties.caption"
+  },
+  "CMNavigation": {
+    "grid": "properties.placement"
+  },
+  "CMQueryList": {
+    "pagedItems": "properties.items",
+    "teasableItems" : "properties.items",
+    "bannerItems": "properties.items",
+    "detailItems": "properties.items"
+  },
+  "CMTeasable": {
+    "detailTextAsTree": "properties.detailText",
+    "media": "properties.pictures",
+    "picture": "properties.pictures[0]",
+    "spinner": "properties.pictures[0]",
+    "spinners": "properties.pictures",
+    "teaserTextAsTree": "properties.teaserText",
+    "video": "properties.pictures[0]",
+    "videos": "properties.pictures"
+  },
+  "CMTeaser": {
+    "teaserTargets": "properties.targets"
+  },
+  "Content_": {
+    "id": "id_",
+    "type": "type_",
+    "creationDate": "creationDate_",
+    "modificationDate": "modificationDate_",
+    "name": "name_"
+  }
+}

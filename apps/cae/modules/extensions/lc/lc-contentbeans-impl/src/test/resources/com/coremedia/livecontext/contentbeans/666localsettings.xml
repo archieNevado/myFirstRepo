@@ -1,0 +1,10 @@
+<Struct xmlns="http://www.coremedia.com/2008/struct">
+  <StructProperty Name="productList">
+    <Struct>
+      <IntProperty Name="maxLength"></IntProperty>
+      <IntProperty Name="offset"></IntProperty>
+      <StructProperty Name="filterFacets"></StructProperty>
+      <StringProperty Name="orderBy"></StringProperty>
+    </Struct>
+  </StructProperty>
+</Struct>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMPicture folder="/Sites/SFRA/United States/English/Editorial/Pictures" name="Lilly and Janina with clouds background" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<externalRefId></externalRefId>
+<locale>en-US</locale>
+<master>
+<link href="../../../../United%20Kingdom/English/Editorial/Pictures/Lilly%20and%20Janina%20with%20clouds%20background.xml" path="/Sites/SFRA/United%20Kingdom/English/Editorial/Pictures/Lilly%20and%20Janina%20with%20clouds%20background"/>
+</master>
+<ignoreUpdates>0</ignoreUpdates>
+<viewtype>
+</viewtype>
+<localSettings>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructProperty Name="isDefault">
+<Struct>
+<StringProperty Name="landscape_ratio16x9">false</StringProperty>
+<StringProperty Name="landscape_ratio4x3">false</StringProperty>
+<StringProperty Name="landscape_ratio8x3">false</StringProperty>
+<StringProperty Name="portrait_ratio1x1">false</StringProperty>
+<StringProperty Name="portrait_ratio2x3">false</StringProperty>
+</Struct>
+</StructProperty>
+<StructProperty Name="relative">
+<Struct>
+<StringProperty Name="landscape_ratio16x9">position;x1=0.031512605042016806;y1=0.0914826498422713;x2=0.9360650060234397;y2=0.8548895899053628</StringProperty>
+<StringProperty Name="landscape_ratio4x3">position;x1=0.0819327731092437;y1=0;x2=0.89210522316182;y2=0.9116719242902208</StringProperty>
+<StringProperty Name="landscape_ratio8x3">position;x1=0.021008403361344536;y1=0.22082018927444794;x2=0.9517255432141309;y2=0.7444794952681387</StringProperty>
+<StringProperty Name="portrait_ratio1x1">position;x1=0.11554621848739495;y1=0;x2=0.750508363597805;y2=0.9526813880126183</StringProperty>
+<StringProperty Name="portrait_ratio2x3">position;x1=0.15126050420168072;y1=0;x2=0.595593837535014;y2=1</StringProperty>
+</Struct>
+</StructProperty>
+<StructProperty Name="transforms">
+<Struct>
+<StringProperty Name="landscape_ratio16x9">b;a=0;c=1/crop;width=3618;height=2035;x=126;y=244</StringProperty>
+<StringProperty Name="landscape_ratio4x3">b;a=0;c=1/crop;width=3241;height=2431;x=328;y=0</StringProperty>
+<StringProperty Name="landscape_ratio8x3">b;a=0;c=1/crop;width=3723;height=1396;x=84;y=589</StringProperty>
+<StringProperty Name="portrait_ratio1x1">b;a=0;c=1/crop;width=2540;height=2540;x=462;y=0</StringProperty>
+<StringProperty Name="portrait_ratio2x3">b;a=0;c=1/crop;width=1777;height=2666;x=605;y=0</StringProperty>
+</Struct>
+</StructProperty>
+<StructProperty Name="enlarge">
+<Struct>
+<BooleanProperty Name="landscape_ratio16x9">false</BooleanProperty>
+<BooleanProperty Name="landscape_ratio4x3">false</BooleanProperty>
+<BooleanProperty Name="landscape_ratio8x3">false</BooleanProperty>
+<BooleanProperty Name="portrait_ratio1x1">false</BooleanProperty>
+<BooleanProperty Name="portrait_ratio2x3">false</BooleanProperty>
+</Struct>
+</StructProperty>
+<StructProperty Name="focusArea">
+<Struct>
+<StringProperty Name="x1">0.0007352941176470587</StringProperty>
+<StringProperty Name="y1">0</StringProperty>
+<StringProperty Name="x2">0.9986344537815126</StringProperty>
+<StringProperty Name="y2">1</StringProperty>
+</Struct>
+</StructProperty>
+</Struct>
+</localSettings>
+<linkedSettings>
+</linkedSettings>
+<resourceBundles2>
+</resourceBundles2>
+<segment></segment>
+<title>Lilly and Janina with clouds background</title>
+<htmlTitle></htmlTitle>
+<keywords></keywords>
+<htmlDescription></htmlDescription>
+<subjectTaxonomy>
+</subjectTaxonomy>
+<locationTaxonomy>
+</locationTaxonomy>
+<contexts>
+</contexts>
+<teaserTitle></teaserTitle>
+<pictures>
+</pictures>
+<related>
+</related>
+<authors>
+</authors>
+<alt>Lilly and Janina with clouds background</alt>
+<copyright></copyright>
+<dataUrl></dataUrl>
+<data md5="1725f36284c94b19282617a0262c99c3" size="709632" href="../../../../../../__blob/1725f36284c94b19282617a0262c99c3.blob" mimetype="image/jpeg"/>
+<asset>
+</asset>
+</CMPicture>

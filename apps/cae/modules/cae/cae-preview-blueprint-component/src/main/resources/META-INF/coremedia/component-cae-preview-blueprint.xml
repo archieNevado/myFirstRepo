@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:customize="http://www.coremedia.com/2007/coremedia-spring-beans-customization"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.coremedia.com/2007/coremedia-spring-beans-customization
+                           http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd"
+       default-init-method="validateConfig">
+
+  <import resource="classpath:/framework/spring/blueprint-services.xml"/>
+  <import resource="classpath:/com/coremedia/cae/link-services.xml"/>
+
+  <bean id="previewHandler" class="com.coremedia.blueprint.cae.handlers.PreviewHandler">
+    <description>
+      Preview Controller for Studio and Swing Editor
+    </description>
+    <property name="contentBeanFactory" ref="contentBeanFactory"/>
+    <property name="dataViewFactory">
+      <description>
+        Don't use dataviews here because we will run into trouble with non-contentbean generated classes otherwise
+      </description>
+      <null/>
+    </property>
+    <property name="idProvider" ref="idProvider"/>
+    <property name="linkFormatter" ref="linkFormatter" />
+  </bean>
+
+  <bean id="developerModeAppendingLinkTransformer" class="com.coremedia.objectserver.web.links.ParameterAppendingLinkTransformer">
+    <description>
+      LinkTransformer that adds the request parameters for developer mode to links.
+    </description>
+    <property name="parameterName" value="userVariant"/>
+  </bean>
+
+  <customize:prepend id="previewLinkTransformerCustomizer" bean="linkTransformers">
+    <list>
+      <ref bean="previewDateAppendingLinkTransformer"/>
+      <ref bean="developerModeAppendingLinkTransformer"/>
+    </list>
+  </customize:prepend>
+
+  <bean id="channelValidityInterceptor"
+        class="com.coremedia.blueprint.cae.web.ChannelValidityInterceptor" >
+    <property name="treeRelation" ref="navigationTreeRelation"/>
+  </bean>
+
+  <customize:prepend id="blueprintPreviewControllerInterceptors" bean="handlerInterceptors">
+    <list>
+      <ref bean="channelValidityInterceptor"/>
+    </list>
+  </customize:prepend>
+
+</beans>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <style type="text/css">
+    @media screen {
+      #small {
+        display: initial;
+      }
+      #medium, #large {
+        display: none;
+      }
+    }
+    @media screen and (min-width: 24px) {
+      #small {
+        display: none;
+      }
+      #medium {
+        display: initial;
+      }
+    }
+    @media screen and (min-width: 32px) {
+      #medium {
+        display: none;
+      }
+      #large {
+        display: initial;
+      }
+    }
+  </style>
+  <svg id="small" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  	 viewBox="0 0 16 16" enable-background="new 0 0 16 16">
+  <g>
+  	<rect x="1" y="3" fill="#3D4242" width="14" height="1"/>
+  	<g>
+  		<rect x="1" y="5" fill="#3D4242" width="4" height="8"/>
+  		<g>
+  			<rect x="6" y="5" fill="#3D4242" width="9" height="3"/>
+  			<rect x="6" y="9" fill="#3D4242" width="9" height="4"/>
+  		</g>
+  	</g>
+  </g>
+  </svg>
+  
+  <svg id="medium" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  	 viewBox="0 0 24 24" enable-background="new 0 0 24 24">
+  <g>
+  	<rect x="1" y="4" fill="#3D4242" width="22" height="2"/>
+  	<g>
+  		<rect x="1" y="8" fill="#3D4242" width="6" height="12"/>
+  		<g>
+  			<rect x="8" y="8" fill="#3D4242" width="6" height="5"/>
+  		</g>
+  		<g>
+  			<rect x="15" y="8" fill="#3D4242" width="8" height="5"/>
+  			<rect x="8" y="14" fill="#3D4242" width="15" height="6"/>
+  		</g>
+  		<rect x="14" y="8" fill="#3D4242" width="1" height="5"/>
+  	</g>
+  </g>
+  </svg>
+  
+  <svg id="large" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  	 viewBox="0 0 32 32" enable-background="new 0 0 32 32">
+  <g>
+  	<rect x="1" y="5" fill="#3D4242" width="30" height="2"/>
+  	<g>
+  		<rect x="1" y="9" fill="#3D4242" width="9" height="18"/>
+  		<g>
+  			<rect x="11" y="9" fill="#3D4242" width="8" height="8"/>
+  			<rect x="11" y="18" fill="#3D4242" width="20" height="9"/>
+  		</g>
+  		<g>
+  			<rect x="20" y="9" fill="#3D4242" width="11" height="8"/>
+  		</g>
+  		<rect x="19" y="9" fill="#3D4242" width="1" height="8"/>
+  	</g>
+  </g>
+  </svg>
+  
+</svg>

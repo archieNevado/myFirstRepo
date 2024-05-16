@@ -1,0 +1,10 @@
+{
+  "properties": [
+    {
+      "name": "livecontext.augmentation.path",
+      "type": "java.lang.String",
+        "description": "Configures the path below the site folder where augmentation documents are stored. This folder is hidden by default. It can be made visible via editor preferences.",
+      "defaultValue": "Augmentation"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+services:
+  wcs-proxy:
+    image: ${REPOSITORY_PREFIX:-coremedia}/wcs-proxy
+    container_name: wcs-proxy
+    restart: always
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"
+    build:
+      context: ../commerce-proxy
+    networks:
+        - backend
+    environment:
+      COMMERCE_SYSTEM: wcs
+      ENVIRONMENT_FQDN: ${ENVIRONMENT_FQDN:-docker.localhost}
+      WCS_HOST: ${WCS_HOST}
+
+  traefik:
+    environment:
+      # Because the mock adapter is a development only feature, we can activate the actuator here
+      ACTUATOR_COMMERCE_ADAPTER_WCS: 'commerce-adapter-wcs'
+    volumes:
+      - ../traefik/dynamic-configuration/development-commerce/wcs-proxy.yml:/etc/traefik/dynamic/commerce/wcs-proxy.yml
+      - ../traefik/dynamic-configuration/development-commerce/wcs-cae-live.yml:/etc/traefik/dynamic/commerce/wcs-cae-live.yml
+
+  cae-preview:
+    environment:
+      SPRING_PROFILES: ${SPRING_PROFILES:-dev-wcs}
+      COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_ENVIRONMENT: preview
+
+  cae-live:
+    environment:
+      SPRING_PROFILES: ${SPRING_PROFILES:-dev-wcs}
+      COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_ENVIRONMENT: live
+
+  studio-server:
+    environment:
+      SPRING_PROFILES: ${SPRING_PROFILES:-dev-wcs}
+      COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_ENVIRONMENT: preview
+
+  overview:
+    environment:
+      COMMERCE_WCS_ENABLED: "true"
+      COMMERCE_WCS_HOST: ${WCS_HOST}
+      COMMERCE_WCS_VERSION: ${WCS_VERSION}

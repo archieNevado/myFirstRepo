@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMSettings folder="/Settings/Options/Settings" name="TaxonomySettings" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<externalRefId></externalRefId>
+<locale></locale>
+<master>
+</master>
+<settings>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StringListProperty Name="translations">
+<String>en</String>
+<String>de</String>
+<String>ja</String>
+</StringListProperty>
+<StringProperty Name="defaultLocale">en</StringProperty>
+</Struct>
+</settings>
+<identifier></identifier>
+</CMSettings>

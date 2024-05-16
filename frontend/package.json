@@ -1,0 +1,29 @@
+{
+  "name": "@coremedia/frontend",
+  "version": "3.0.0",
+  "private": true,
+  "scripts": {
+    "preinstall": "node ./lib/tools/pnpm-check/index.js",
+    "test": "pnpm -r test",
+    "build": "pnpm -r build",
+    "build-frontend-zip": "node ./lib/tools/cm-cli/bin/cm-cli.js build-frontend-zip",
+    "deploy": "pnpm -r deploy",
+    "create-theme": "node ./lib/tools/cm-cli/bin/cm-cli.js create-theme",
+    "create-brick": "node ./lib/tools/cm-cli/bin/cm-cli.js create-brick",
+    "eject": "node ./lib/tools/cm-cli/bin/cm-cli.js eject",
+    "prettier": "pnpm -r prettier"
+  },
+  "engines": {
+    "node": "18",
+    "pnpm": "^8.1"
+  },
+  "coremedia": {
+    "type": "workspace"
+  },
+  "pnpm": {
+    "overrides": {
+      "glob-parent@<5.1.2": ">=5.1.2",
+      "loader-utils@<1.4.2": ">=2.0.4"
+    }
+  }
+}

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMSettings folder="/Settings/Options/Settings/Multi Preview" name="Local Preview" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<externalRefId></externalRefId>
+<locale>en-US</locale>
+<master>
+</master>
+<settings>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructListProperty Name="previews">
+<Struct>
+<StringProperty Name="id">localAppPreview</StringProperty>
+<StringProperty Name="providerId">genericStudioPreviewProvider</StringProperty>
+<StringProperty Name="displayName">App (local)</StringProperty>
+<BooleanProperty Name="enabled">false</BooleanProperty>
+<StringListProperty Name="userGroupAllowList">
+<String>administrator</String>
+<String>developer</String>
+</StringListProperty>
+<StructProperty Name="config">
+<Struct>
+<StringProperty Name="uriTemplate">http://localhost:3000/preview/{rootSegment}/{numericContentId}/</StringProperty>
+</Struct>
+</StructProperty>
+</Struct>
+<Struct>
+<StringProperty Name="id">localCAEPreview</StringProperty>
+<StringProperty Name="providerId">genericStudioPreviewProvider</StringProperty>
+<StringProperty Name="displayName">CAE Preview (local)</StringProperty>
+<BooleanProperty Name="enabled">false</BooleanProperty>
+<StringListProperty Name="userGroupAllowList">
+<String>administrator</String>
+<String>developer</String>
+</StringListProperty>
+<StructProperty Name="config">
+<Struct>
+<StringProperty Name="uriTemplate">http://localhost:40980/blueprint/servlet/preview?id={numericContentId}</StringProperty>
+</Struct>
+</StructProperty>
+</Struct>
+<Struct>
+<StringProperty Name="id">localCommerceAppPreview</StringProperty>
+<StringProperty Name="providerId">commerceAppPreviewProvider</StringProperty>
+<StringProperty Name="displayName">App (local)</StringProperty>
+<BooleanProperty Name="enabled">false</BooleanProperty>
+<StringListProperty Name="userGroupAllowList">
+<String>administrator</String>
+<String>developer</String>
+</StringListProperty>
+<StructProperty Name="config">
+<Struct>
+<StringProperty Name="uriTemplate">http://localhost:3000/commercepreview/{rootSegment}/{type}/{externalId}/</StringProperty>
+</Struct>
+</StructProperty>
+</Struct>
+</StructListProperty>
+</Struct>
+</settings>
+<identifier></identifier>
+</CMSettings>

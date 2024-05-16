@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.coremedia.blueprint</groupId>
+    <artifactId>content-server.spring-boot</artifactId>
+    <version>1-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>content-server-app</artifactId>
+
+  <description>
+    To start the content-server-app run: mvn spring-boot:run. By default this is a content-management-server.
+    To start a master-live or replication-live server use the maven profile 'mls' or 'rls'.
+
+    = Container Image Build =
+    Image building is skipped by default. To build the image, activate the default-image maven profile.
+    In addition, you can set jib.goal to "build" to directly build the image in the registry without docker.
+    i.e. mvn clean install -Pdefault-image -Djib.goal=build
+  </description>
+
+  <properties>
+    <content-server.mode>cms</content-server.mode>
+    <content-server.spring.profiles>dev,${content-server.mode}-dev,local,${content-server.mode}-local</content-server.spring.profiles>
+
+    <jib.skip>true</jib.skip>
+    <jib.goal>dockerBuild</jib.goal>
+    <application.image-base>coremedia/java-application-base:1.3-cm-11.0-corretto</application.image-base>
+    <application.image-prefix>coremedia</application.image-prefix>
+    <application.image-suffix>content-server</application.image-suffix>
+    <application.image-tag>${project.version}</application.image-tag>
+
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.coremedia.blueprint</groupId>
+      <artifactId>blueprint-spring-boot-autoconfigure</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>contentserver-blueprint-component</artifactId>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-autoconfigure</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-actuator</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-tomcat</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>content-server</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <profiles>${content-server.spring.profiles}</profiles>
+          <layers>
+            <enabled>true</enabled>
+          </layers>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-maven-plugin</artifactId>
+        <configuration>
+          <from>
+            <image>${application.image-base}</image>
+          </from>
+          <to>
+            <image>${application.image-prefix}/${application.image-suffix}</image>
+            <tags>
+              <tag>${application.image-tag}</tag>
+            </tags>
+          </to>
+          <container>
+            <appRoot>/coremedia</appRoot>
+            <workingDirectory>/coremedia</workingDirectory>
+            <ports>
+              <!--Servlet Container Port -->
+              <port>8080</port>
+              <!--Actuator Port-->
+              <port>8081</port>
+            </ports>
+            <volumes>
+              <volume>/coremedia/cache</volume>
+              <volume>/var/tmp</volume>
+            </volumes>
+          </container>
+        </configuration>
+        <executions>
+          <execution>
+            <id>build-container-image</id>
+            <goals>
+              <goal>${jib.goal}</goal>
+            </goals>
+            <phase>install</phase>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>default-image</id>
+      <properties>
+        <jib.skip>false</jib.skip>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <!--
+                 | This is a workaround to fix permission rights, see
+                 | https://github.com/GoogleContainerTools/jib-extensions/tree/master/first-party/jib-ownership-extension-maven
+                 | make sure to not use extraDirectories with from/into paths. Instead create an empty dir tree
+                 -->
+                <id>create-empty-dirs</id>
+                <phase>generate-sources</phase>
+                <configuration>
+                  <target>
+                    <mkdir dir="${project.build.directory}/empty-dirs/coremedia"/>
+                  </target>
+                </configuration>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>com.google.cloud.tools</groupId>
+            <artifactId>jib-maven-plugin</artifactId>
+            <configuration>
+              <container>
+                <entrypoint>INHERIT</entrypoint>
+                <args>
+                  <arg>application</arg>
+                </args>
+                <user>coremedia:coremedia</user>
+                <environment>
+                  <JAVA_HEAP>384m</JAVA_HEAP>
+                  <JAVA_PARALLEL_GC>true</JAVA_PARALLEL_GC>
+                  <SPRING_BOOT_EXPLODED_APP>true</SPRING_BOOT_EXPLODED_APP>
+                  <SPRING_BOOT_EXPLODED_MAINCLASS>@jib-main-class-file</SPRING_BOOT_EXPLODED_MAINCLASS>
+                  <SPRING_BOOT_EXPLODED_CLASSPATH>@jib-classpath-file</SPRING_BOOT_EXPLODED_CLASSPATH>
+                </environment>
+                <ports>
+                  <!--Prometheus Agent Port-->
+                  <port>8199</port>
+                </ports>
+              </container>
+              <extraDirectories>
+                <paths>
+                  <path>target/empty-dirs</path>
+                </paths>
+              </extraDirectories>
+              <pluginExtensions>
+                <pluginExtension>
+                  <implementation>com.google.cloud.tools.jib.maven.extension.ownership.JibOwnershipExtension
+                  </implementation>
+                  <configuration implementation="com.google.cloud.tools.jib.maven.extension.ownership.Configuration">
+                    <rules>
+                      <rule>
+                        <glob>/coremedia**</glob>
+                        <ownership>1000:1000</ownership>
+                      </rule>
+                    </rules>
+                  </configuration>
+                </pluginExtension>
+                <pluginExtension>
+                  <implementation>com.google.cloud.tools.jib.maven.extension.layerfilter.JibLayerFilterExtension</implementation>
+                  <configuration implementation="com.google.cloud.tools.jib.maven.extension.layerfilter.Configuration">
+                    <filters>
+                      <!-- Delete pom.xml.jar file falsely added by jib, see https://github.com/GoogleContainerTools/jib/issues/3736-->
+                      <filter>
+                        <glob>/coremedia/libs/pom.xml.jar</glob>
+                      </filter>
+                    </filters>
+                  </configuration>
+                </pluginExtension>
+              </pluginExtensions>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>mls</id>
+      <properties>
+        <content-server.mode>mls</content-server.mode>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>rls</id>
+      <properties>
+        <content-server.mode>rls</content-server.mode>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>dev</id>
+      <activation>
+        <property>
+          <name>installation.host</name>
+        </property>
+      </activation>
+    </profile>
+  </profiles>
+</project>

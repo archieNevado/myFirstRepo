@@ -1,0 +1,27 @@
+<Struct xmlns="http://www.coremedia.com/2008/struct">
+  <StructProperty Name="productList">
+    <Struct>
+      <StructProperty Name="filterFacets">
+        <Struct>
+          <StructProperty Name="facet_key">
+            <Struct>
+              <StringListProperty Name="queries">
+                <String>price=(20..50)</String>
+              </StringListProperty>
+            </Struct>
+          </StructProperty>
+          <StructProperty Name="Color">
+            <Struct>
+              <StringListProperty Name="queries">
+                  <String>color=brown</String>
+                  <String>color=white</String>
+              </StringListProperty>
+            </Struct>
+          </StructProperty>
+        </Struct>
+      </StructProperty>
+      <IntProperty Name="maxLength">42</IntProperty>
+      <IntProperty Name="offset">6</IntProperty>
+    </Struct>
+  </StructProperty>
+</Struct>

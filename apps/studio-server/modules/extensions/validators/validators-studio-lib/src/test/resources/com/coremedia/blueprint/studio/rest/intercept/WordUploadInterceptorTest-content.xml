@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contentRepository xmlns="http://www.coremedia.com/2010/content"
+                   xmlns:xi="http://www.w3.org/2001/XInclude">
+  <xi:include href="classpath:com/coremedia/testing/blueprint-doctypes-xmlrepo.xml"/>
+  <content>
+    <folder id="1" name="" placeApproved="true" published="true" modificationDate="2009-06-01T20:59:42.000+01:00">
+      <folder id="999" name="Sites">
+        <folder id="997" name="Site">
+          <document id="886" type="CMArticle" name="Article">
+            <version number="1">
+              <stringProperty name="segment" value="foo"/>
+            </version>
+          </document>
+        </folder>
+      </folder>
+    </folder>
+  </content>
+
+  <rules>
+    <rule resourceId="1" group="0" doctype="Folder_">
+      <right value="ALL"/>
+    </rule>
+    <rule resourceId="1" group="0" doctype="Document_">
+      <right value="ALL"/>
+    </rule>
+  </rules>
+</contentRepository>

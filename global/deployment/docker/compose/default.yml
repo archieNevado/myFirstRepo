@@ -1,0 +1,399 @@
+x-logging:
+  &default-logging
+  options:
+    max-size: '12m'
+    max-file: '5'
+  driver: json-file
+
+# default environment variables for all spring-boot services
+x-default-boot-envs:
+  &default-boot-envs
+  # extracts the app at startup to speed up the annotation and property scanning of the classpath. The startup improvements
+  # are around 2-3x faster. It is also the recommended way by Spring. With Spring-Boot 2.3 the spring-maven-plugin will
+  # be able to build images with exploded layout.
+  SPRING_BOOT_EXPLODED_APP: "${SPRING_BOOT_EXPLODED_APP:-true}"
+
+x-default-boot-healthcheck:
+  &default-boot-healthcheck
+  test: [ "CMD", "curl", "-Lf", "http://localhost:8081/actuator/health" ]
+  interval: 30s
+  timeout: 10s
+  retries: 3
+  start_period: 40s
+
+services:
+  mysql:
+    image: mysql:8.0.33
+    container_name: mysql
+    volumes:
+      - db-data:/var/lib/mysql
+      - ../mysql/initdb.d:/docker-entrypoint-initdb.d/
+      - ../mysql/conf.d:/etc/mysql/conf.d/
+    environment:
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+    networks:
+      - backend
+    restart: always
+    logging: *default-logging
+    healthcheck:
+      test: out=$$(mysqladmin ping -h localhost -P 3306 -u root --password=$${MYSQL_ROOT_PASSWORD} 2>&1); echo $$out | grep 'mysqld is alive' || { echo $$out; exit 1; }
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+
+  mongodb:
+    image: mongo:6.0.5
+    container_name: mongodb
+    volumes:
+      - mongo-data:/data/db
+      - ../mongodb/initdb.d:/docker-entrypoint-initdb.d/
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    command:
+      - "mongod"
+      - "--wiredTigerCacheSizeGB=1"
+    healthcheck:
+      test: "mongosh --quiet \"$(hostname --ip-address || echo '127.0.0.1')/test\" --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)' || exit 1"
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    networks:
+      - backend
+    restart: always
+    logging: *default-logging
+
+  solr:
+    image: ${REPOSITORY_PREFIX:-coremedia}/solr:${SOLR_TAG:-latest}
+    container_name: solr
+    read_only: true
+    cap_drop:
+      - ALL
+    environment:
+      GC_TUNE: >-
+        -XX:+UseG1GC
+        -XX:+PerfDisableSharedMem
+        -XX:+ParallelRefProcEnabled
+        -XX:MaxGCPauseMillis=250
+        -XX:+AlwaysPreTouch
+    volumes:
+      - solr-data:/var/solr
+    networks:
+      - backend
+    restart: always
+    logging: *default-logging
+
+  content-management-server:
+    image: ${REPOSITORY_PREFIX:-coremedia}/content-server:${CONTENT_MANAGEMENT_SERVER_TAG:-latest}
+    container_name: content-management-server
+    restart: always
+    logging: *default-logging
+    networks:
+      - backend
+    read_only: true
+    cap_drop:
+      - ALL
+    environment:
+      << : *default-boot-envs
+      SPRING_APPLICATION_NAME: 'content-management-server'
+      CAP_SERVER_LICENSE: "${CMS_LICENSE_URL:-/coremedia/licenses/cms-license.zip}"
+      COM_COREMEDIA_CORBA_SERVER_HOST: content-management-server
+      CAP_SERVER_SEARCH_ENABLE: "true"
+    healthcheck: *default-boot-healthcheck
+
+  master-live-server:
+    image: ${REPOSITORY_PREFIX:-coremedia}/content-server:${MASTER_LIVE_SERVER_TAG:-latest}
+    container_name: master-live-server
+    restart: always
+    logging: *default-logging
+    networks:
+      - backend
+    read_only: true
+    cap_drop:
+      - ALL
+    environment:
+      << : *default-boot-envs
+      SPRING_APPLICATION_NAME: 'master-live-server'
+      CAP_SERVER_LICENSE: "${MLS_LICENSE_URL:-/coremedia/licenses/mls-license.zip}"
+      COM_COREMEDIA_CORBA_SERVER_HOST: master-live-server
+    command:
+      - application
+    healthcheck: *default-boot-healthcheck
+
+  replication-live-server:
+    image: ${REPOSITORY_PREFIX:-coremedia}/content-server:${REPLICATION_LIVE_SERVER_TAG:-latest}
+    container_name: replication-live-server
+    restart: always
+    logging: *default-logging
+    networks:
+      - backend
+    volumes:
+      # keep in sync with replicator.tmp-dir property
+      - replicator-tmp:/coremedia/var/tmp
+    read_only: true
+    cap_drop:
+      - ALL
+    environment:
+      << : *default-boot-envs
+      SPRING_APPLICATION_NAME: 'replication-live-server'
+      CAP_SERVER_LICENSE: "${RLS_LICENSE_URL:-/coremedia/licenses/rls-license.zip}"
+      COM_COREMEDIA_CORBA_SERVER_HOST: replication-live-server
+      MANAGEMENT_HEALTH_REPLICATOR_ENABLED: "true"
+    command:
+      - application
+    healthcheck: *default-boot-healthcheck
+
+  workflow-server:
+    image: ${REPOSITORY_PREFIX:-coremedia}/workflow-server:${WORKFLOW_SERVER_TAG:-latest}
+    container_name: workflow-server
+    restart: always
+    logging: *default-logging
+    networks:
+      - backend
+    read_only: true
+    cap_drop:
+      - ALL
+    environment:
+      << : *default-boot-envs
+      MONGODB_CLIENTURI: mongodb://coremedia:coremedia@mongodb:27017
+    command:
+      - workflowconverter
+      - application
+    healthcheck: *default-boot-healthcheck
+    volumes:
+      # for the workflowconverter /coremedia/tools/properties/corem/workflowserver.properties
+      - /coremedia/tools/properties/corem
+
+  content-feeder:
+    image: ${REPOSITORY_PREFIX:-coremedia}/content-feeder:${CONTENT_FEEDER_TAG:-latest}
+    container_name: content-feeder
+    restart: always
+    logging: *default-logging
+    networks:
+      - backend
+    read_only: true
+    cap_drop:
+      - ALL
+    environment:
+      << : *default-boot-envs
+    healthcheck: *default-boot-healthcheck
+
+  cae-feeder-preview:
+    image: ${REPOSITORY_PREFIX:-coremedia}/cae-feeder:${CAE_FEEDER_PREVIEW_TAG:-latest}
+    container_name: cae-feeder-preview
+    restart: always
+    logging: *default-logging
+    networks:
+      - backend
+    read_only: true
+    cap_drop:
+      - ALL
+    environment:
+      << : *default-boot-envs
+      SPRING_APPLICATION_NAME: 'cae-feeder-preview'
+    healthcheck: *default-boot-healthcheck
+
+  cae-feeder-live:
+    image: ${REPOSITORY_PREFIX:-coremedia}/cae-feeder:${CAE_FEEDER_LIVE_TAG:-latest}
+    container_name: cae-feeder-live
+    restart: always
+    logging: *default-logging
+    networks:
+      - backend
+    read_only: true
+    cap_drop:
+      - ALL
+    environment:
+      << : *default-boot-envs
+      SPRING_APPLICATION_NAME: 'cae-feeder-live'
+    healthcheck: *default-boot-healthcheck
+
+  user-changes:
+    image: ${REPOSITORY_PREFIX:-coremedia}/user-changes:${USER_CHANGES_TAG:-latest}
+    container_name: user-changes
+    restart: always
+    logging: *default-logging
+    read_only: true
+    cap_drop:
+      - ALL
+    environment:
+      << : *default-boot-envs
+      MONGODB_CLIENTURI: mongodb://coremedia:coremedia@mongodb:27017
+    networks:
+      - backend
+    healthcheck: *default-boot-healthcheck
+
+  elastic-worker:
+    image: ${REPOSITORY_PREFIX:-coremedia}/elastic-worker:${ELASTIC_WORKER_TAG:-latest}
+    container_name: elastic-worker
+    restart: always
+    logging: *default-logging
+    networks:
+      - backend
+    read_only: true
+    cap_drop:
+      - ALL
+    environment:
+      << : *default-boot-envs
+      ELASTIC_SOCIAL_MAIL_SMTP_SERVER: ${ELASTIC_SOCIAL_MAIL_SMTP_SERVER:-localhost}
+      MONGODB_CLIENTURI: mongodb://coremedia:coremedia@mongodb:27017
+    healthcheck: *default-boot-healthcheck
+
+  studio-server:
+    image: ${REPOSITORY_PREFIX:-coremedia}/studio-server:${STUDIO_REST_TAG:-latest}
+    container_name: studio-server
+    restart: always
+    logging: *default-logging
+    networks:
+      - backend
+    read_only: true
+    cap_drop:
+      - ALL
+    environment:
+      << : *default-boot-envs
+      ENVIRONMENT_FQDN: ${ENVIRONMENT_FQDN:-docker.localhost}
+      MONGODB_CLIENTURI: mongodb://coremedia:coremedia@mongodb:27017
+    healthcheck: *default-boot-healthcheck
+    volumes:
+      - /coremedia/themeimporter-apiKeyStore
+
+  studio-client:
+    image: ${REPOSITORY_PREFIX:-coremedia}/studio-client:${STUDIO_CLIENT_TAG:-latest}
+    container_name: studio-client
+    restart: always
+    logging: *default-logging
+    networks:
+      - backend
+
+  cae-preview:
+    image: ${REPOSITORY_PREFIX:-coremedia}/cae-preview:${CAE_PREVIEW_TAG:-latest}
+    container_name: cae-preview
+    restart: always
+    logging: *default-logging
+    networks:
+      - backend
+    read_only: true
+    cap_drop:
+      - ALL
+    environment:
+      << : *default-boot-envs
+      ENVIRONMENT_FQDN: ${ENVIRONMENT_FQDN:-docker.localhost}
+      MONGODB_CLIENTURI: mongodb://coremedia:coremedia@mongodb:27017
+    healthcheck: *default-boot-healthcheck
+
+  cae-live:
+    image: ${REPOSITORY_PREFIX:-coremedia}/cae-live:${CAE_LIVE_TAG:-latest}
+    container_name: cae-live
+    restart: always
+    logging: *default-logging
+    networks:
+      - backend
+    read_only: true
+    cap_drop:
+      - ALL
+    environment:
+      << : *default-boot-envs
+      ENVIRONMENT_FQDN: ${ENVIRONMENT_FQDN:-docker.localhost}
+      MONGODB_CLIENTURI: mongodb://coremedia:coremedia@mongodb:27017
+    healthcheck: *default-boot-healthcheck
+
+  site-manager:
+    image: ${REPOSITORY_PREFIX:-coremedia}/site-manager:${SITEMANAGER_WEB_TAG:-latest}
+    container_name: site-manager
+    restart: always
+    logging: *default-logging
+    networks:
+      - backend
+
+  headless-server-preview:
+    image: ${REPOSITORY_PREFIX:-coremedia}/headless-server:${HEADLESS_SERVER_PREVIEW_TAG:-latest}
+    container_name: headless-server-preview
+    restart: always
+    logging: *default-logging
+    networks:
+      - backend
+    read_only: true
+    cap_drop:
+      - ALL
+    environment:
+      << : *default-boot-envs
+      SPRING_APPLICATION_NAME: 'headless-server-preview'
+      REPOSITORY_URL: http://content-management-server:8080/ior
+      SOLR_URL: http://solr:8983/solr
+      ENVIRONMENT_FQDN: ${ENVIRONMENT_FQDN:-docker.localhost}
+      CAAS_PREVIEW: "true"
+      CAAS_GRAPHQL_INTROSPECTION_ENABLED: "true"
+      GRAPHIQL_ENABLED: "true"
+      CAAS_SWAGGER_ENABLED: "true"
+      CAAS_SOLR_COLLECTION: preview
+      CAAS_REMOTE_BASEURL: http://cae-preview:8081/internal/service/url
+      LINK_URLPREFIXTYPE: preview
+      PREVIEWCLIENT_URL: https://headless-server-preview.${ENVIRONMENT_FQDN:-docker.localhost}/preview
+      COMMERCE_HUB_DATA_CUSTOMENTITYPARAMS_CATALOGVERSION: Staged
+    healthcheck: *default-boot-healthcheck
+
+  headless-server-live:
+    image: ${REPOSITORY_PREFIX:-coremedia}/headless-server:${HEADLESS_SERVER_LIVE_TAG:-latest}
+    container_name: headless-server-live
+    restart: always
+    logging: *default-logging
+    networks:
+      - backend
+    read_only: true
+    cap_drop:
+      - ALL
+    environment:
+      << : *default-boot-envs
+      SPRING_APPLICATION_NAME: 'headless-server-live'
+      ENVIRONMENT_FQDN: ${ENVIRONMENT_FQDN:-docker.localhost}
+      REPOSITORY_URL: http://replication-live-server:8080/ior
+      SOLR_URL: http://solr:8983/solr
+      CAAS_SOLR_COLLECTION: live
+      CAAS_REMOTE_BASEURL: http://cae-live:8081/internal/service/url
+      LINK_URLPREFIXTYPE: live
+    healthcheck: *default-boot-healthcheck
+
+  traefik:
+    image: traefik:2.6.3
+    container_name: traefik
+    restart: always
+    logging: *default-logging
+    networks:
+      - web
+      - backend
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ../traefik/certificates/:/etc/traefik/certificates/
+      - ../traefik/dynamic-configuration/ssl-redirect.yml:/etc/traefik/dynamic/ssl-redirect.yml
+      - ../traefik/dynamic-configuration/tls.yml:/etc/traefik/dynamic/tls.yml
+      - ../traefik/dynamic-configuration/path-transformations.yml:/etc/traefik/dynamic/path-transformations.yml
+      - ../traefik/dynamic-configuration/default/:/etc/traefik/dynamic/default/
+    environment:
+      ENVIRONMENT_FQDN: ${ENVIRONMENT_FQDN:-docker.localhost}
+      TRAEFIK_PROVIDERS_FILE_DIRECTORY: /etc/traefik/dynamic/
+      TRAEFIK_GLOBAL_CHECKNEWVERSION: "false"
+      TRAEFIK_GLOBAL_SENDANONYMOUSUSAGE: "false"
+      TRAEFIK_ENTRYPOINTS_WEBACCESSINSECURE_ADDRESS: ":80"
+      TRAEFIK_ENTRYPOINTS_WEBACCESSINSECURE_TRANSPORT_RESPONDINGTIMEOUTS_IDLETIMEOUT: 360
+      TRAEFIK_ENTRYPOINTS_WEBACCESSSECURE_ADDRESS: ":443"
+      TRAEFIK_ENTRYPOINTS_WEBACCESSSECURE_HTTP_TLS: "true"
+      TRAEFIK_ENTRYPOINTS_WEBACCESSSECURE_TRANSPORT_RESPONDINGTIMEOUTS_IDLETIMEOUT: 360
+      TRAEFIK_PILOT_DASHBOARD: "false"
+      TRAEFIK_LOG_FORMAT: json
+networks:
+  backend:
+    driver: bridge
+  web:
+    driver: bridge
+
+volumes:
+  db-data: {}
+  mongo-data: {}
+  solr-data: {}
+  replicator-tmp: {}

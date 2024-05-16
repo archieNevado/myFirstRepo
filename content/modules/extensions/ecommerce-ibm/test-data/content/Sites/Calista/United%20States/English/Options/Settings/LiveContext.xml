@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMSettings folder="/Sites/Calista/United States/English/Options/Settings" name="LiveContext" xmlns:cmexport="http://www.coremedia.com/2012/cmexport">
+<externalRefId></externalRefId>
+<locale>en-US</locale>
+<master>
+</master>
+<settings>
+<Struct xmlns="http://www.coremedia.com/2008/struct" xmlns:xlink="http://www.w3.org/1999/xlink">
+<StructProperty Name="commerce">
+<Struct>
+<StringProperty Name="endpoint">${commerce.hub.data.endpoints.wcs}</StringProperty>
+<StringProperty Name="vendor">ibm</StringProperty>
+<StringProperty Name="currency">USD</StringProperty>
+<StringProperty Name="locale">en-US</StringProperty>
+<StructProperty Name="storeConfig">
+<Struct>
+<StringProperty Name="id">12051</StringProperty>
+<StringProperty Name="name">CalistaESite</StringProperty>
+</Struct>
+</StructProperty>
+<StructProperty Name="catalogConfig">
+<Struct>
+<StringProperty Name="id">11001</StringProperty>
+</Struct>
+</StructProperty>
+</Struct>
+</StructProperty>
+<BooleanProperty Name="livecontext.contentLed">true</BooleanProperty>
+<BooleanProperty Name="livecontext.policy.commerce-category-links">true</BooleanProperty>
+<BooleanProperty Name="livecontext.manageHeader">true</BooleanProperty>
+<BooleanProperty Name="livecontext.manageFooter">true</BooleanProperty>
+<BooleanProperty Name="livecontext.manageFooterNavigation">true</BooleanProperty>
+<LinkProperty Name="cartAction" LinkType="coremedia:///cap/contenttype/CMAction" xlink:href="coremedia:///cap/resources/Actions/CartAction.xml" cmexport:path="/Sites/Calista/United%20States/English/Options/Settings/Actions/CartAction"/>
+</Struct>
+</settings>
+<identifier></identifier>
+</CMSettings>

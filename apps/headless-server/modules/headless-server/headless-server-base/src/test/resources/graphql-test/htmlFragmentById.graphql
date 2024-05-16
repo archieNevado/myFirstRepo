@@ -1,0 +1,18 @@
+query getHtmlFragmentById($id: String!) {
+  content {
+    content(id: $id) {
+      ... on CMHTML {
+        id
+        uuid
+        type
+        name
+        description
+        html
+        repositoryPath
+        data {
+          uri
+        }
+      }
+    }
+  }
+}

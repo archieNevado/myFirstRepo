@@ -1,0 +1,21 @@
+query getPageByPath($path: String!) {
+  content {
+    pageByPath(path: $path) {
+      id
+      title
+      repositoryPath
+      children {
+        ... on CMExternalChannel {
+          id
+         # augmentationLink -- test fails because this is undefined
+          categoryRef {
+            id
+            externalId
+            catalogId
+            storeId
+          }
+        }
+      }
+    }
+  }
+}

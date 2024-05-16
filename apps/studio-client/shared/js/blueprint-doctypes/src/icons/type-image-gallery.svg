@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <style type="text/css">
+    @media screen {
+      #small {
+        display: initial;
+      }
+      #medium, #large {
+        display: none;
+      }
+    }
+    @media screen and (min-width: 24px) {
+      #small {
+        display: none;
+      }
+      #medium {
+        display: initial;
+      }
+    }
+    @media screen and (min-width: 32px) {
+      #medium {
+        display: none;
+      }
+      #large {
+        display: initial;
+      }
+    }
+  </style>
+  <svg id="small" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  	 viewBox="0 0 16 16" enable-background="new 0 0 16 16">
+  <g>
+  	<path fill="#3D4242" d="M1,13h10V6H1V13z M2,7h8v5H2V7z"/>
+  	<rect x="3" y="8" fill="#3D4242" width="6" height="3"/>
+  	<polygon fill="#3D4242" points="3,4 3,5 12,5 12,11 13,11 13,5 13,4 12,4 	"/>
+  	<polygon fill="#3D4242" points="14,2 5,2 5,3 14,3 14,9 15,9 15,3 15,2 	"/>
+  </g>
+  </svg>
+  
+  <svg id="medium" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  	 viewBox="0 0 24 24" enable-background="new 0 0 24 24">
+  <g>
+  	<path fill="#3D4242" d="M1,21h18V8H1V21z M2,9h16v11H2V9z"/>
+  	<rect x="3" y="10" fill="#3D4242" width="14" height="9"/>
+  	<polygon fill="#3D4242" points="3,6 3,7 20,7 20,19 21,19 21,7 21,6 20,6 	"/>
+  	<polygon fill="#3D4242" points="22,4 5,4 5,5 22,5 22,17 23,17 23,5 23,4 	"/>
+  </g>
+  </svg>
+  
+  <svg id="large" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  	 viewBox="0 0 32 32" enable-background="new 0 0 32 32">
+  <g>
+  	<path fill="#3D4242" d="M1,27h24V10H1V27z M3,12h20v13H3V12z"/>
+  	<rect x="5" y="14" fill="#3D4242" width="16" height="9"/>
+  	<polygon fill="#3D4242" points="4,7 4,9 26,9 26,24 28,24 28,9 28,7 26,7 	"/>
+  	<polygon fill="#3D4242" points="29,4 7,4 7,6 29,6 29,21 31,21 31,6 31,4 	"/>
+  </g>
+  </svg>
+  
+</svg>

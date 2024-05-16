@@ -1,0 +1,11 @@
+<Struct xmlns="http://www.coremedia.com/2008/struct">
+  <StructProperty Name="translations">
+    <Struct>
+      <StringProperty Name="de">Artikeltyp (de)</StringProperty>
+      <StringProperty Name="de-DE">Artikeltyp (de_DE)</StringProperty>
+      <StringProperty Name="en">Artikeltyp (en)</StringProperty>
+      <StringProperty Name="en-US">Artikeltyp (en_US)</StringProperty>
+      <StringProperty Name="en-GB">Artikeltyp (en_GB)</StringProperty>
+    </Struct>
+  </StructProperty>
+</Struct>

@@ -1,0 +1,55 @@
+<div id="logging">
+  <h3>Change Log Level</h3>
+  <form id="log-level-change" action="#" method="post">
+    <label for="service">Service:</label>
+    <input list="services" id="service" name="service" size="25">
+    <datalist id="services">
+      <option value="content-management-server">
+      <option value="master-live-server">
+      <option value="workflow-server">
+      <option value="content-feeder">
+      <option value="cae-feeder-preview">
+      <option value="cae-feeder-live">
+      <option value="cae-live">
+      <option value="cae-preview">
+      <option value="studio-server">
+      <option value="elastic-worker">
+      {{ if eq (getv "/user/changes/enabled" "true") "true" }}
+      <option value="user-changes">
+      {{end}}
+      <option value="headless-server-preview">
+      <option value="headless-server-live">
+      {{ if eq (getv "/commerce/commercetools/enabled" "true") "true" }}
+      <option value="commerce-adapter-commercetools">
+      {{end}}
+      {{ if eq (getv "/commerce/sfcc/enabled" "true") "true" }}
+      <option value="commerce-adapter-sfcc">
+      {{end}}
+      {{ if eq (getv "/commerce/wcs/enabled" "true") "true" }}
+      <option value="commerce-adapter-wcs">
+      {{end}}
+      {{ if eq (getv "/commerce/hybris/enabled" "true") "true" }}
+      <option value="commerce-adapter-hybris">
+      {{end}}
+      {{ if eq (getv "/commerce/mock/enabled" "true") "true" }}
+      <option value="commerce-adapter-mock">
+      {{end}}
+    </datalist>
+
+    <label for="logger">Logger:</label>
+    <input list="loggers" type="text" size="25" id="logger" name="logger"/>
+    <datalist id="loggers"></datalist>
+
+    <label for="level">Log Level:</label>
+    <select id="level" name="level" size="1">
+      <option value="error">ERROR</option>
+      <option value="warn">WARN</option>
+      <option value="info">INFO</option>
+      <option value="debug">DEBUG</option>
+      <option value="trace">TRACE</option>
+    </select>
+
+    <button type="submit">Set</button>
+  </form>
+  <div id="logger-message"></div>
+</div>

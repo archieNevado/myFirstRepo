@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CMSite folder="/Sites/Commercetools Sunrise/Germany/German" name="Commercetools Sunrise [Site]" xmlns:cmexport="http://www.coremedia.com/2012/cmexport" translationState="up-to-date">
+<externalRefId></externalRefId>
+<locale>de-DE</locale>
+<master>
+<link href="../../United%20States/English/Commercetools%20Sunrise%20%5BSite%5D.xml" path="/Sites/Commercetools%20Sunrise/United%20States/English/Commercetools%20Sunrise%20%5BSite%5D"/>
+</master>
+<id>commercetoolsde</id>
+<name>Commercetools Sunrise</name>
+<root>
+<link href="Navigation/Commercetools%20Sunrise.xml" path="/Sites/Commercetools%20Sunrise/Germany/German/Navigation/Commercetools%20Sunrise"/>
+</root>
+<siteManagerGroup>manager-commercetools-de-DE,administratoren</siteManagerGroup>
+<linkedSettings>
+<link href="Options/Settings/SiteSettings.xml" path="/Sites/Commercetools%20Sunrise/Germany/German/Options/Settings/SiteSettings"/>
+</linkedSettings>
+</CMSite>

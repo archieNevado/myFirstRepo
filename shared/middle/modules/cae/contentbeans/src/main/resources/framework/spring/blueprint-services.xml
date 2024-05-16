@@ -1,0 +1,27 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <import resource="classpath:/framework/spring/blueprint-contextstrategy.xml"/>
+  <import resource="classpath:/com/coremedia/cae/dataview-services.xml"/>
+  <import resource="classpath:/com/coremedia/blueprint/base/pagegrid/impl/bpbase-pagegrid-services.xml"/>
+  <import resource="classpath:/framework/spring/search/solr-search.xml"/>
+
+  <bean class="com.coremedia.blueprint.viewtype.configuration.ViewtypeServiceConfiguration"/>
+  <bean class="com.coremedia.blueprint.cae.configuration.BlueprintValidationConfiguration" />
+
+  <bean id="currentContextService" class="com.coremedia.blueprint.common.services.context.CurrentContextServiceImpl"/>
+
+  <bean id="contextHelper" class="com.coremedia.blueprint.common.services.context.ContextHelper">
+    <property name="contextStrategy" ref="contextStrategy"/>
+    <property name="dataViewFactory" ref="dataViewFactory"/>
+    <property name="currentContextService" ref="currentContextService"/>
+  </bean>
+
+  <bean id="pageGridService" class="com.coremedia.blueprint.cae.layout.PageGridServiceImpl">
+    <property name="contentBackedPageGridService" ref="contentBackedPageGridService"/>
+    <property name="validationService" ref="validationService"/>
+    <property name="viewtypeService" ref="viewtypeService"/>
+    <property name="visibilityValidator" ref="validityPeriodValidator"/>
+  </bean>
+</beans>

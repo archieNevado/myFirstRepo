@@ -1,0 +1,35 @@
+query getPictureById($id: String!) {
+  content {
+    picture(id: $id) {
+      id
+      uuid
+      repositoryPath
+      locale
+      name
+      caption
+      captionReferencedContent {
+        id
+      }
+      type
+      uriTemplate
+      crops {
+        name
+        minWidth
+      }
+      ...MainNavigationFragment
+    }
+  }
+}
+
+fragment MainNavigationFragment on CMTeasable {
+  mainNavigation: root {
+    children {
+      id
+      name
+      segment
+      ... on CMNavigation {
+        hidden
+      }
+    }
+  }
+}

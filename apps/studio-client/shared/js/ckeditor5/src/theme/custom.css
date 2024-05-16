@@ -1,0 +1,76 @@
+@import "sitemanager.css";
+
+:root {
+  /* CoreMedia colors */
+  --cm-color-lightblue: #eff9ff;
+  --cm-color-turquoise: #6fc3b8;
+  --cm-color-grey: #3f3f3f;
+
+  /* set modal z-index to be higher than Studio's default windows in order to make balloons visible if the editor is rendered in a window */
+  --ck-z-modal: 9001;
+
+  /* toolbar button states */
+  --ck-color-button-default-active-background: var(--cm-color-lightblue);
+  --ck-color-button-on-background: var(--cm-color-lightblue);
+  --ck-color-button-on-color: var(--cm-color-grey);
+  --ck-color-button-on-hover-background: var(--cm-color-lightblue);
+  --ck-color-button-on-active-background: var(--cm-color-lightblue);
+
+
+  /* change hover color of table and image widgets */
+  --ck-color-widget-hover-border: var(--cm-color-turquoise);
+
+  /* change button focus border */
+  --ck-focus-outer-shadow-geometry: 0 0 1px;
+  --ck-focus-ring: 1px solid var(--cm-color-grey);
+}
+
+
+/*
+ * This rule overrides the dropdown menu position on the find-and-replace button in the editor toolbar.
+ * We cannot automatically adjust the position by changing the css class in the dropdown from
+ * "ck-dropdown__panel_se" to "ck-dropdown__panel_sw", so we have to apply the styles manually.
+ *
+ * Overflowing the premular's middle splitter does not work due to how ExtJS layouts work.
+ * This is why we need to open the menu to the left to prevent layout issues.
+ */
+.ck-dropdown__panel:has(.ck-find-and-replace-form) {
+  left: auto !important;
+  right: 0;
+}
+
+/*
+ * FF Bug 418039: fix for unsupported :has() selector in CKE5 styles -> https://bugzilla.mozilla.org/show_bug.cgi?id=418039
+ */
+.x-gecko .ck-dropdown button[data-cke-tooltip-text*="Find and replace"] + .ck-dropdown__panel,
+.x-gecko .ck-dropdown button[data-cke-tooltip-text*="Suchen und ersetzen"] + .ck-dropdown__panel {
+  left: auto !important;
+  right: 0;
+}
+
+/*
+ * Add background to blockquotes.
+ */
+.ck-editor__editable blockquote {
+  background-color: #EBEBEB;
+  padding: 12px;
+  border-radius: 2px;
+}
+
+/*
+ * Remove margin top if editor content starts with heading.
+ */
+.ck.ck-editor__editable > .p--heading-1:first-child,
+.ck.ck-editor__editable > h1:first-child,
+.ck.ck-editor__editable > .p--heading-2:first-child,
+.ck.ck-editor__editable > h2:first-child,
+.ck.ck-editor__editable > .p--heading-3:first-child,
+.ck.ck-editor__editable > h3:first-child,
+.ck.ck-editor__editable > .p--heading-4:first-child,
+.ck.ck-editor__editable > h4:first-child,
+.ck.ck-editor__editable > .p--heading-5:first-child,
+.ck.ck-editor__editable > h5:first-child,
+.ck.ck-editor__editable > .p--heading-6:first-child,
+.ck.ck-editor__editable > h6:first-child {
+  margin-top: 0;
+}

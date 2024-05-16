@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+  <import resource="classpath:/META-INF/coremedia/livecontext-site-services.xml"/>
+  <import resource="classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml"/>
+  <import resource="livecontext-handlers.xml"/>
+
+  <bean id="managedPagePartsRestHandler" class="com.coremedia.livecontext.handler.ManagedPagePartsRestHandler">
+    <constructor-arg index="0" name="siteResolver" ref="liveContextSiteResolver"/>
+    <constructor-arg index="1" name="settingsService" ref="settingsService"/>
+  </bean>
+
+  <bean id="cartHandler" class="com.coremedia.livecontext.handler.CartHandler" parent="ecommerceHandlerBase">
+    <property name="resolveContextStrategy" ref="resolveLivecontextContextStrategy"/>
+    <property name="liveContextNavigationFactory" ref="liveContextNavigationFactory"/>
+    <property name="permittedLinkParameterNames">
+      <list>
+        <value>targetView</value>
+      </list>
+    </property>
+  </bean>
+</beans>

@@ -1,0 +1,53 @@
+import ResourceBundleUtil from "@jangaroo/runtime/l10n/ResourceBundleUtil";
+import AlxWebtrendsDocTypes_properties from "./AlxWebtrendsDocTypes_properties";
+
+/**
+ * Overrides of ResourceBundle "AlxWebtrendsDocTypes_properties" for locale "de".
+ * @see AlxWebtrendsDocTypes_properties
+ */
+ResourceBundleUtil.override(AlxWebtrendsDocTypes_properties, {
+  CMChannel_localSettings_webtrends_dcssip_displayName: "Name der Website innerhalb der Multisite Umgebung",
+  CMChannel_localSettings_webtrends_dcssip_emptyText: "Geben Sie hier den Website Namen aus der Multisite Umgebung ein.",
+  CMChannel_localSettings_webtrends_dcsid_displayName: "Webtrends DCSID",
+  CMChannel_localSettings_webtrends_dcsid_emptyText: "Geben Sie hier Ihre Webtrends DCSID ein.",
+  CMChannel_localSettings_webtrends_disabled_true_displayName: "Deaktiviert",
+  CMChannel_localSettings_webtrends_homeUrl_emptyText: "Geben Sie hier die Webtrends Home URL ein.",
+  CMChannel_localSettings_webtrends_reportUrlPrefix_displayName: "Report URL Prefix",
+  CMChannel_localSettings_webtrends_reportUrlPrefix_emptyText: "Geben Sie hier das Report URL Prefix ein.",
+  CMChannel_localSettings_webtrends_spaceId_displayName: "Space ID",
+  CMChannel_localSettings_webtrends_spaceId_emptyText: "Geben Sie hier die Webtrends Space ID ein.",
+  CMChannel_localSettings_webtrends_reportId_displayName: "Report ID",
+  CMChannel_localSettings_webtrends_reportId_emptyText: "Geben Sie hier die Webtrends Report ID ein.",
+  CMChannel_localSettings_webtrends_profileId_displayName: "Profile ID",
+  CMChannel_localSettings_webtrends_profileId_emptyText: "Geben Sie hier die Webtrends Profil ID ein.",
+  CMChannel_localSettings_webtrends_liveUrlPrefix_displayName: "Live URL Prefix",
+  CMChannel_localSettings_webtrends_liveUrlPrefix_emptyText: "Geben Sie hier das Prefix Ihrer Live CAE URLs ein.",
+  CMChannel_localSettings_webtrends_userName_displayName: "Username",
+  CMChannel_localSettings_webtrends_userName_emptyText: "Geben Sie hier Ihren Benutzernamen ein.",
+  CMChannel_localSettings_webtrends_accountName_displayName: "Account Name",
+  CMChannel_localSettings_webtrends_accountName_emptyText: "Geben Sie hier Ihren Account Namen ein.",
+  CMChannel_localSettings_webtrends_password_displayName: "Password",
+  CMChannel_localSettings_webtrends_password_emptyText: "Geben Sie hier Ihr Kennwort ein.",
+  CMChannel_localSettings_webtrends_sortByMeasure_displayName: "Sortierkriterium",
+  CMChannel_localSettings_webtrends_sortByMeasure_emptyText: "Geben Sie hier den Namen des Messwerts ein, nach dem sortiert werden soll.",
+  CMChannel_localSettings_webtrends_limit_displayName: "Retrieval Limit",
+  CMChannel_localSettings_webtrends_limit_emptyText: "Geben Sie die maximale Anzahl der zu holenden Datensätze an.",
+  CMChannel_localSettings_webtrends_interval_displayName: "Retrieval Intervall",
+  CMChannel_localSettings_webtrends_interval_emptyText: "Geben Sie hier das Intervall (in Minuten) an, in dem Daten geholt werden sollen. 0 deaktiviert das Retrieval.",
+  CMALXBaseList_localSettings_webtrends_userName_displayName: "Username",
+  CMALXBaseList_localSettings_webtrends_userName_emptyText: "Geben Sie hier Ihren Benutzernamen ein.",
+  CMALXBaseList_localSettings_webtrends_accountName_displayName: "Account Name",
+  CMALXBaseList_localSettings_webtrends_accountName_emptyText: "Geben Sie hier Ihren Account Namen ein.",
+  CMALXBaseList_localSettings_webtrends_password_displayName: "Password",
+  CMALXBaseList_localSettings_webtrends_password_emptyText: "Geben Sie hier Ihr Kennwort ein.",
+  CMALXBaseList_localSettings_webtrends_reportId_displayName: "Report ID",
+  CMALXBaseList_localSettings_webtrends_reportId_emptyText: "Geben Sie hier die Webtrends Report ID ein.",
+  CMALXBaseList_localSettings_webtrends_profileId_displayName: "Profile ID",
+  CMALXBaseList_localSettings_webtrends_profileId_emptyText: "Geben Sie hier die Webtrends Profil ID ein.",
+  CMALXBaseList_localSettings_webtrends_sortByMeasure_displayName: "Sortierkriterium",
+  CMALXBaseList_localSettings_webtrends_sortByMeasure_emptyText: "Geben Sie hier den Namen des Messwerts ein, nach dem sortiert werden soll.",
+  CMALXBaseList_localSettings_webtrends_limit_displayName: "Retrieval Limit",
+  CMALXBaseList_localSettings_webtrends_limit_emptyText: "Geben Sie die maximale Anzahl der zu holenden Datensätze an.",
+  CMALXBaseList_localSettings_webtrends_interval_displayName: "Retrieval Intervall",
+  CMALXBaseList_localSettings_webtrends_interval_emptyText: "Geben Sie hier das Intervall (in Minuten) an, in dem Daten geholt werden sollen. 0 deaktiviert das Retrieval.",
+});

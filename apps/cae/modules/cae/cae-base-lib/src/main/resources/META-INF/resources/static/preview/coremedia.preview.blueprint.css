@@ -1,0 +1,34 @@
+/*! CoreMedia Studio - Styles for Preview */
+
+.cm-preview-missing-key {
+  font-weight: bold;
+  background-color: #DD342B;
+}
+
+/* display developer-mode symbol on top right */
+.cm-preview-developer-mode {
+  position: fixed;
+  top: 70px;
+  right: 0;
+  z-index: 999;
+  background-color: #DD342B;
+  padding: 7px 9px;
+  border-radius: 5px 0 0 5px;
+  cursor: default;
+}
+
+.cm-preview-developer-mode:hover {
+  background-color: #892F25;
+  transition: background-color 0.3s ease-out;
+}
+
+.cm-preview-developer-mode__icon {
+  display: block;
+  background: url("theme-icon.svg") left center no-repeat;
+  width: 24px;
+  height: 24px;
+}
+
+.cm-preview-developer-mode__icon span {
+  display: none;
+}

@@ -1,0 +1,71 @@
+package com.coremedia.blueprint.cae.handlers;
+
+import com.coremedia.blueprint.common.contentbeans.CMTheme;
+import com.coremedia.objectserver.web.HandlerHelper;
+import com.coremedia.objectserver.web.links.Link;
+import edu.umd.cs.findbugs.annotations.Nullable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.Map;
+
+import static com.coremedia.blueprint.base.links.UriConstants.Patterns.PATTERN_NUMBER;
+import static com.coremedia.blueprint.base.links.UriConstants.RequestParameters.VIEW_PARAMETER;
+import static com.coremedia.blueprint.base.links.UriConstants.Segments.SEGMENT_ID;
+import static com.coremedia.blueprint.links.BlueprintUriConstants.Prefixes.PREFIX_RESOURCE;
+import static com.coremedia.objectserver.web.HandlerHelper.notFound;
+
+/**
+ * Controller and LinkScheme for
+ * {@link CMTheme themes}
+ */
+@Link
+@RequestMapping
+public class ThemeHandler extends HandlerBase {
+
+  private static final String URI_PREFIX = "theme";
+
+  public static final String URI_PATTERN =
+          '/' + PREFIX_RESOURCE +
+                  "/" + URI_PREFIX +
+                  "/{" + SEGMENT_ID + ":" + PATTERN_NUMBER + "}";
+
+  // --- Handlers ------------------------------------------------------------------------------------------------------
+
+  /**
+   * @param view the name of the view
+   *             <p>
+   *             Not vulnerable to <i>Spring View SPEL Injection</i>: request param value is only used as
+   *             view name and must match an existing view - see {@link ModelAndView#setViewName(String)}.
+   */
+  @GetMapping(value = URI_PATTERN)
+  public ModelAndView handleRequest(@org.springframework.lang.Nullable @PathVariable(SEGMENT_ID) CMTheme theme,
+                                    @RequestParam(value = VIEW_PARAMETER, required = false) String view) {
+    if (theme == null) {
+      return notFound();
+    }
+
+    return HandlerHelper.createModelWithView(theme, view);
+  }
+
+
+  // --- LinkSchemes ---------------------------------------------------------------------------------------------------
+
+  @Link(type = CMTheme.class, uri = URI_PATTERN)
+  public UriComponents buildLink(CMTheme bean, @Nullable String viewName) {
+    UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.newInstance().path(URI_PATTERN);
+
+    if (viewName != null) {
+      uriComponentsBuilder.queryParam(VIEW_PARAMETER, viewName);
+    }
+
+    Map<String, Object> parameters = Map.of(SEGMENT_ID, bean.getContentId());
+
+    return uriComponentsBuilder.buildAndExpand(parameters);
+  }
+}

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+
+
+                           http://www.springframework.org/schema/context
+                           https://www.springframework.org/schema/context/spring-context.xsd">
+
+  <description>
+    LinkSchemes and Controllers
+  </description>
+
+  <context:annotation-config />
+
+  <import resource="classpath:/com/coremedia/cae/contentbean-services.xml"/>
+  <import resource="classpath:/com/coremedia/cae/dataview-services.xml"/>
+  <import resource="classpath:/com/coremedia/mimetype/mimetype-service.xml"/>
+  <import resource="classpath:/com/coremedia/cache/cache-services.xml"/>
+  <import resource="classpath:/com/coremedia/blueprint/base/links/bpbase-links-services.xml"/>
+  <import resource="classpath:/framework/spring/blueprint-services.xml"/>
+  <import resource="classpath:/com/coremedia/blueprint/base/settings/impl/bpbase-settings-services.xml"/>
+  <import resource="classpath:/com/coremedia/cap/multisite/multisite-services.xml"/>
+
+  <import resource="blueprint-i18n.xml"/>
+  <import resource="blueprint-l10n.xml"/>
+
+  <!-- Java Config -->
+  <bean class="com.coremedia.blueprint.cae.config.BlueprintHandlersCaeBaseLibConfiguration"/>
+
+  <!-- Abstract beans -->
+
+  <!-- Duplicates BlueprintHandlersCaeBaseLibConfiguration.configureHandlerBase -->
+  <bean id="handlerBase" class="com.coremedia.blueprint.cae.handlers.HandlerBase" abstract="true">
+    <description>
+      Abstract Handler that all page based handlers should inherit from if they extend PageHandlerBase
+    </description>
+    <property name="mimeTypeService" ref="mimeTypeService"/>
+    <property name="urlPathFormattingHelper" ref="urlPathFormattingHelper"/>
+    <property name="dataViewFactory" ref="dataViewFactory"/>
+    <property name="contentLinkBuilder" ref="contentLinkBuilder"/>
+  </bean>
+
+  <!-- Duplicates BlueprintHandlersCaeBaseLibConfiguration.configurePageHandlerBase -->
+  <bean id="pageHandlerBase" class="com.coremedia.blueprint.cae.handlers.PageHandlerBase" parent="handlerBase" abstract="true">
+    <description>
+      Abstract Handler that all page based handlers should inherit from if they extend PageHandlerBase
+    </description>
+    <property name="contextHelper" ref="contextHelper"/>
+    <property name="navigationSegmentsUriHelper" ref="navigationSegmentsUriHelper"/>
+    <property name="contentLinkBuilder" ref="contentLinkBuilder"/>
+    <property name="contentBeanFactory" ref="contentBeanFactory"/>
+    <property name="sitesService" ref="sitesService"/>
+    <property name="cache" ref="cache"/>
+  </bean>
+
+  <!-- Duplicates BlueprintHandlersCaeBaseLibConfiguration.configureDefaultPageHandler -->
+  <bean id="defaultPageHandler" class="com.coremedia.blueprint.cae.handlers.DefaultPageHandler" abstract="true" parent="pageHandlerBase">
+    <description>
+      Handles HTML page resources
+    </description>
+    <property name="permittedLinkParameterNames">
+      <list>
+        <value>index</value>
+      </list>
+    </property>
+    <property name="navigationResolver" ref="navigationResolver"/>
+    <property name="topicPageContextFinder" ref="uapiTopicpageContextFinder"/>
+    <property name="settingsService" ref="settingsService"/>
+    <property name="viewToBean" ref="pageHandlerViewToBean"/>
+  </bean>
+
+  <!-- Duplicates BlueprintHandlersCaeBaseLibConfiguration.configureDefaultPageActionHandler -->
+  <bean id="defaultPageActionHandler" class="com.coremedia.blueprint.cae.handlers.DefaultPageActionHandler" abstract="true" parent="pageHandlerBase">
+    <description>
+      Handles actions
+    </description>
+    <property name="permittedLinkParameterNames">
+      <list>
+        <!-- required by elastic webflows -->
+        <value>next</value>
+        <value>userName</value>
+      </list>
+    </property>
+    <property name="flowRunner" ref="flowRunner"/>
+    <property name="resourceBundleInterceptor" ref="pageResourceBundlesInterceptor"/>
+  </bean>
+
+</beans>

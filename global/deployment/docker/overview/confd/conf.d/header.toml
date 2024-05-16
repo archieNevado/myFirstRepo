@@ -1,0 +1,6 @@
+[template]
+src   = "header.html.tmpl"
+dest  = "/usr/share/nginx/html/assets/header.html"
+keys  = [
+         "/campaign/enabled"
+]

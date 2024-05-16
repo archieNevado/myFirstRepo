@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:customize="http://www.coremedia.com/2007/coremedia-spring-beans-customization"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.coremedia.com/2007/coremedia-spring-beans-customization http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd">
+
+  <import resource="classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-services.xml"/>
+  <import resource="classpath:/com/coremedia/blueprint/base/multisite/bpbase-multisite-cae-services.xml"/>
+  <import resource="classpath:/com/coremedia/cap/common/uapi-services.xml"/>
+
+  <bean class="com.coremedia.blueprint.base.livecontext.ecommerce.common.BaseCommerceServicesConfiguration"/>
+  <bean class="com.coremedia.blueprint.ecommerce.cae.config.ECommerceCaeConfiguration"/>
+
+  <!-- Duplicates ECommerceCaeConfiguration.configureStoreContextInterceptor -->
+  <bean id="storeContextInterceptor" class="com.coremedia.blueprint.ecommerce.cae.AbstractCommerceContextInterceptor" abstract="true">
+    <property name="siteResolver" ref="siteResolver"/>
+    <property name="commerceConnectionSupplier" ref="commerceConnectionSupplier"/>
+  </bean>
+
+  <!-- add commerce context interceptors to the beginning -->
+  <customize:prepend id="appendCommerceInterceptors" bean="handlerInterceptors" order="9999999">
+    <list>
+      <ref bean="mappedWebCommerceContextInterceptor"/>
+    </list>
+  </customize:prepend>
+</beans>
+

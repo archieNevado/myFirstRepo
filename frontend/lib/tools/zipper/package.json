@@ -1,0 +1,20 @@
+{
+  "name": "@coremedia/zipper",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": "18",
+    "pnpm": "^8.1"
+  },
+  "dependencies": {
+    "@coremedia/cm-logger": "workspace:*",
+    "archiver": "^5.3.1"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.7"
+  },
+  "scripts": {
+    "prettier": "prettier --write \"src/**/*.{js,json}\""
+  },
+  "main": "src/index.js"
+}

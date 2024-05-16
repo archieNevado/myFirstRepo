@@ -1,0 +1,10 @@
+@if $cm-include-taxonomy-letter-list-panel {
+
+  .cm-taxonomy-row {
+    &:hover {
+      background-color: #E7F0F9;
+      color: #4F4F4F;
+    }
+  }
+
+}

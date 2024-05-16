@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:customize="http://www.coremedia.com/2007/coremedia-spring-beans-customization"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           https://www.springframework.org/schema/context/spring-context.xsd http://www.coremedia.com/2007/coremedia-spring-beans-customization http://www.coremedia.com/2007/coremedia-spring-beans-customization.xsd">
+
+  <description>
+    Blueprint specific definitions of the CAE View layer.
+  </description>
+
+  <context:annotation-config />
+
+  <bean class="com.coremedia.blueprint.cae.config.BlueprintViewsCaeBaseLibConfiguration"/>
+
+  <customize:append id="addViewlookupExcludes" bean="viewLookupPredicate" property="excludes"
+                    enabled="${cae.view.filter-lookup-by-predicate:true}">
+    <description>
+      Exclude these interfaces in ViewLookups (otherwise, all Interfaces would be used).
+    </description>
+    <list>
+      <value>com.coremedia.blueprint.common.contentbeans.BelowRootNavigation</value>
+      <value>com.coremedia.blueprint.common.contentbeans.HasViewtype</value>
+      <value>com.coremedia.blueprint.common.datevalidation.ValidityPeriod</value>
+    </list>
+  </customize:append>
+</beans>

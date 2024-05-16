@@ -1,0 +1,51 @@
+package com.coremedia.blueprint.cae.view;
+
+import com.coremedia.blueprint.common.util.ContextAttributes;
+import com.coremedia.objectserver.view.dynamic.DynamicIncludeRenderNodeDecoratorProvider;
+import com.coremedia.objectserver.web.HandlerHelper;
+import org.springframework.web.servlet.ModelAndView;
+
+import static com.coremedia.blueprint.base.links.UriConstants.Segments.PREFIX_DYNAMIC;
+
+/**
+ * Is used to detect dynamic include loops.
+ */
+public class DynamicIncludeHelper {
+  private static final String ATTR_NAME_DYNAMIC_INCLUDE = "cm_dynamic_include";
+  public static final String PLACEMENT_FRAGMENT_ROOT_INDICATOR_VIEW = "_delegate";
+
+  private static final String PATTERN_DYNAMIC = "/" + PREFIX_DYNAMIC + "/";
+  private static final String PATTERN_AJAX = "ajax=true";
+
+  /**
+   * Checks if the current request is a dynamic include request.
+   */
+  public static boolean isAlreadyIncludedDynamically() {
+    var request = ContextAttributes.findRequest().orElse(null);
+    if (request == null) {
+      throw new IllegalStateException("Servlet request not available.");
+    }
+    Object value = request.getAttribute(ATTR_NAME_DYNAMIC_INCLUDE);
+    if (value instanceof Boolean) {
+      return ((Boolean) value);
+    }
+    String requestUri = request.getRequestURI();
+    boolean isDynamic = requestUri.contains(PATTERN_DYNAMIC) || requestUri.contains(PATTERN_AJAX);
+    request.setAttribute(ATTR_NAME_DYNAMIC_INCLUDE, isDynamic);
+    return isDynamic;
+  }
+
+  /**
+   * Create a wrapper to to bypass the loop/root protection in {@link DynamicIncludeRenderNodeDecoratorProvider}.
+   * Needed in case you want to deliver a whole fragment (root) as dynamic include.
+   *
+   * @param model the model you want to render
+   * @param view the view you want to render
+   * @return a wrapper which is transparently rendered by the technical template "DynamicInclude._delegate.ftl"
+   */
+  public static ModelAndView createDynamicIncludeRootDelegateModelAndView(Object model, String view){
+    DynamicInclude delegatingModelAndView = new DynamicInclude(model, view);
+    return HandlerHelper.createModelWithView(delegatingModelAndView, PLACEMENT_FRAGMENT_ROOT_INDICATOR_VIEW);
+  }
+
+}

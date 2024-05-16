@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.coremedia</groupId>
+    <artifactId>cms-blueprint-parent</artifactId>
+    <version>2.0.0</version>
+    <relativePath />
+  </parent>
+
+  <groupId>com.coremedia.blueprint</groupId>
+  <artifactId>blueprint</artifactId>
+  <version>1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <properties>
+    <owasp-dependency-check-maven-plugin.version>8.4.0</owasp-dependency-check-maven-plugin.version>
+    <nvdFeedsMirror>https://nvd.nist.gov/feeds</nvdFeedsMirror>
+  </properties>
+
+  <modules>
+    <module>shared/common</module>
+    <module>shared/middle</module>
+
+    <module>apps/cae</module>
+    <module>apps/elastic-worker</module>
+    <module>apps/content-feeder</module>
+    <module>apps/cae-feeder</module>
+    <module>apps/content-server</module>
+    <module>apps/headless-server</module>
+    <module>apps/workflow-server</module>
+    <module>apps/site-manager</module>
+    <module>apps/solr</module>
+    <module>apps/studio-server</module>
+    <module>apps/user-changes</module>
+
+    <module>frontend</module>
+
+    <module>global/management-tools</module>
+  </modules>
+
+  <repositories>
+    <repository>
+      <id>coremedia.external.releases</id>
+      <name>CoreMedia CMS</name>
+      <url>https://repository.coremedia.com/nexus/content/groups/cms/</url>
+      <layout>default</layout>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>coremedia.external.releases</id>
+      <name>CoreMedia CMS</name>
+      <url>https://repository.coremedia.com/nexus/content/groups/cms/</url>
+      <layout>default</layout>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <profiles>
+    <profile>
+      <id>with-content</id>
+      <activation>
+        <property>
+          <name>!skipContent</name>
+          <value>!true</value>
+        </property>
+      </activation>
+      <modules>
+        <module>content</module>
+      </modules>
+    </profile>
+
+    <profile>
+      <id>check-dependencies-owasp</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.owasp</groupId>
+            <artifactId>dependency-check-maven</artifactId>
+            <version>${owasp-dependency-check-maven-plugin.version}</version>
+            <configuration>
+              <skipArtifactType>pom|coremedia-application</skipArtifactType>
+              <skipProvidedScope>true</skipProvidedScope>
+              <skipSystemScope>true</skipSystemScope>
+              <failOnError>true</failOnError>
+              <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
+              <nodeAnalyzerEnabled>false</nodeAnalyzerEnabled>
+              <nodeAuditAnalyzerEnabled>false</nodeAuditAnalyzerEnabled>
+              <cveUrlBase>${nvdFeedsMirror}/json/cve/1.1/nvdcve-1.1-%d.json.gz</cveUrlBase>
+              <cveUrlModified>${nvdFeedsMirror}/json/cve/1.1/nvdcve-1.1-modified.json.gz</cveUrlModified>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>

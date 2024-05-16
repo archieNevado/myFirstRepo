@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <style type="text/css">
+    @media screen {
+      #small {
+        display: initial;
+      }
+      #medium, #large {
+        display: none;
+      }
+    }
+    @media screen and (min-width: 24px) {
+      #small {
+        display: none;
+      }
+      #medium {
+        display: initial;
+      }
+    }
+    @media screen and (min-width: 32px) {
+      #medium {
+        display: none;
+      }
+      #large {
+        display: initial;
+      }
+    }
+  </style>
+  <svg version="1.1" id="small" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+       viewBox="0 0 16 16" enable-background="new 0 0 16 16">
+    <path fill="#3D4242" d="M1,2v12h14V2H1z M5,13H2V7h3V13z M12,13H6v-3h6V13z M12,9H6V7h6V9z M12,6H2V5h10V6z M14,6l-3-3h3V6z"/>
+  </svg>
+  <svg version="1.1" id="medium" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+       viewBox="0 0 24 24" enable-background="new 0 0 24 24">
+    <path fill="#3D4242" d="M1,3v18h22V3H1z M7,19H3v-9h4V19z M19,19H8v-4h11V19z M19,14H8v-4h11V14z M19,9H3V7h16V9z M22,8l-4-4h4V8z"
+    />
+  </svg>
+  <svg version="1.1" id="large" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+       viewBox="0 0 32 32" enable-background="new 0 0 32 32">
+    <path fill="#3D4242" d="M1,3v26h30V3H1z M11,26H4V12h7V26z M27,26H12v-7h15V26z M27,18H12v-6h15V18z M27,11H4V9h23V11z M30,10l-6-6
+	h6V10z"/>
+  </svg>
+</svg>

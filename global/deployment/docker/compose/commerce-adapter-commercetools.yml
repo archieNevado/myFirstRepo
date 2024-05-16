@@ -1,0 +1,89 @@
+# default environment variables
+x-default-boot-envs:
+  &default-boot-envs
+  # extracts the app at startup to speed up the annotation and property scanning of the classpath. The startup improvements
+  # are around 2-3x faster. It is also the recommended way by Spring. With Spring-Boot 2.3 the spring-maven-plugin will
+  # be able to build images with exploded layout.
+  SPRING_BOOT_EXPLODED_APP: "${SPRING_BOOT_EXPLODED_APP:-true}"
+
+# default environment variables for development
+x-development-boot-envs:
+  &development-boot-envs
+  DEVELOPMENT_SETUP: "${DEVELOPMENT_SETUP:-false}"
+  JAVA_DEBUG: "${JAVA_DEBUG:-false}"
+  JAVA_DEBUG_SUSPEND: "${JAVA_DEBUG_SUSPEND:-false}"
+  # enable entrypoint debugging i.e. set -x
+  DEBUG_ENTRYPOINT: "${DEBUG_ENTRYPOINT:-false}"
+  # writes heapdumps to /coremedia/heapdumps on oom exceptions. restart the container or mount a volume to
+  # that directory to inspect the heapdumps
+  HEAP_DUMP_ON_OOM: "${HEAP_DUMP_ON_OOM:-true}"
+  JAVA_OPTS: "-Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses -XX:MetaspaceSize=64m -XX:MaxMetaspaceSize=192m -XX:TieredStopAtLevel=1"
+
+x-default-boot-healthcheck:
+  &default-boot-healthcheck
+  test: [ "CMD", "curl", "-Lf", "http://localhost:8081/actuator/health" ]
+  interval: 30s
+  timeout: 10s
+  retries: 3
+  start_period: 40s
+
+# default logging configuration
+x-logging:
+  &default-logging
+  options:
+    max-size: '12m'
+    max-file: '5'
+  driver: json-file
+
+services:
+  commerce-adapter-commercetools:
+    image: ${COMMERCE_REPOSITORY_PREFIX:-coremedia}/commerce-adapter-commercetools:${COMMERCE_ADAPTER_COMMERCETOOLS_VERSION:-2.1.1}
+    container_name: commerce-adapter-commercetools
+    restart: always
+    logging: *default-logging
+    networks:
+      - backend
+    ports:
+      - 44465:6565
+      - 44481:8081
+      - 44405:5005
+    read_only: true
+    cap_drop:
+      - ALL
+    environment:
+      <<: [*default-boot-envs, *development-boot-envs]
+      COMMERCETOOLS_HOST: ${COMMERCETOOLS_HOST}
+      COMMERCETOOLS_API_SCOPES: ${COMMERCETOOLS_API_SCOPES}
+      COMMERCETOOLS_API_AUTHURL: ${COMMERCETOOLS_API_AUTHURL}
+      COMMERCETOOLS_API_CLIENTID: ${COMMERCETOOLS_API_CLIENTID}
+      COMMERCETOOLS_API_CLIENTSECRET: ${COMMERCETOOLS_API_CLIENTSECRET}
+      COMMERCETOOLS_API_APIURL: ${COMMERCETOOLS_API_APIURL}
+      COMMERCETOOLS_API_PROJECTKEY: ${COMMERCETOOLS_API_PROJECTKEY}
+      MANAGEMENT_HEALTH_CATALOGS_ENABLED: ${MANAGEMENT_HEALTH_CATALOGS_ENABLED:-true}
+    healthcheck: *default-boot-healthcheck
+    volumes:
+      # to reuse the cache, the cache needs to be copied to the volume before starting the adapter.
+      # the write access needs to be exclusive. An existing cache can be copied from a common shared location
+      # by using a script that is run before the application script.
+      - /coremedia/cache
+      - /coremedia/log
+      - /var/tmp
+
+  studio-server:
+    environment:
+      COMMERCE_HUB_DATA_ENDPOINTS_COMMERCETOOLS: ${COMMERCE_HUB_DATA_ENDPOINTS_COMMERCETOOLS:-commerce-adapter-commercetools:6565}
+  cae-preview:
+    environment:
+      COMMERCE_HUB_DATA_ENDPOINTS_COMMERCETOOLS: ${COMMERCE_HUB_DATA_ENDPOINTS_COMMERCETOOLS:-commerce-adapter-commercetools:6565}
+  cae-live:
+    environment:
+      COMMERCE_HUB_DATA_ENDPOINTS_COMMERCETOOLS: ${COMMERCE_HUB_DATA_ENDPOINTS_COMMERCETOOLS:-commerce-adapter-commercetools:6565}
+  headless-server-preview:
+    environment:
+      COMMERCE_HUB_DATA_ENDPOINTS_COMMERCETOOLS: ${COMMERCE_HUB_DATA_ENDPOINTS_COMMERCETOOLS:-commerce-adapter-commercetools:6565}
+  headless-server-live:
+    environment:
+      COMMERCE_HUB_DATA_ENDPOINTS_COMMERCETOOLS: ${COMMERCE_HUB_DATA_ENDPOINTS_COMMERCETOOLS:-commerce-adapter-commercetools:6565}
+  content-feeder:
+    environment:
+      COMMERCE_HUB_DATA_ENDPOINTS_COMMERCETOOLS: ${COMMERCE_HUB_DATA_ENDPOINTS_COMMERCETOOLS:-commerce-adapter-commercetools:6565}

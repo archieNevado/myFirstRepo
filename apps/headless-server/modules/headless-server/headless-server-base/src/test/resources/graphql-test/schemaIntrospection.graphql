@@ -1,0 +1,12 @@
+{
+  __schema {
+    types {
+      interfaces {
+        fields {name}
+      }
+    }
+    types {
+      fields {name}
+    }
+  }
+}

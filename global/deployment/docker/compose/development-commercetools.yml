@@ -1,0 +1,13 @@
+services:
+  commerce-adapter-commercetools:
+    environment:
+      SPRING_APPLICATION_NAME: 'commerce-adapter-commercetools'
+
+  traefik:
+    environment:
+      ACTUATOR_COMMERCE_ADAPTER_TOOLS: 'commerce-adapter-commercetools'
+
+  overview:
+    environment:
+      COMMERCE_COMMERCETOOLS_ENABLED: "true"
+      COMMERCE_COMMERCETOOLS_HOST: ${COMMERCETOOLS_HOST}
